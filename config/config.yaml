@@ -1,0 +1,19 @@
+#----------------------------------------------------------------------------------------------------------------------------
+# Dockerfile for a Python application
+#----------------------------------------------------------------------------------------------------------------------------
+# This file is used to configure the application settings.
+# It is recommended to use environment variables to override these settings in production.
+#----------------------------------------------------------------------------------------------------------------------------
+# Example configuration file for a Python application
+#----------------------------------------------------------------------------------------------------------------------------
+
+ollama:
+  base_url: "http://localhost:11434"
+  model: "deepseek-r1:latest"
+
+whisper:
+  model_name: "base"
+
+audio:
+  sample_rate: 16000
+  channels: 1
