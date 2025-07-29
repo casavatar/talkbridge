@@ -1,0 +1,6 @@
+numpy>=1.21.0
+matplotlib>=3.5.0
+sounddevice>=0.4.5
+scipy>=1.7.0
+requests>=2.25.0
+wave>=0.0.2
