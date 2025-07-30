@@ -14,6 +14,9 @@ librosa>=0.10.0,<1.0.0
 soundfile>=0.12.0,<1.0.0
 pygame>=2.5.0,<3.0.0
 
+# Speech-to-Text (STT)
+openai-whisper>=20231117
+
 # Machine Learning and AI
 torch>=1.12.0,<2.0.0
 torchaudio>=0.12.0,<1.0.0

@@ -70,7 +70,13 @@ class DemoSTTAPI:
         if not is_demo_mode():
             raise RuntimeError("Demo mode not enabled")
         
-        return self.demo_runner.simulate_transcription(audio_data)
+        # Use the new STT module for real transcription in demo mode
+        try:
+            from src.stt import transcribe_audio as stt_transcribe
+            return stt_transcribe(audio_data, language="es")
+        except Exception as e:
+            # Fallback to simulation if STT module fails
+            return self.demo_runner.simulate_transcription(audio_data)
     
     def get_transcription_info(self) -> Dict:
         """Get demo transcription information."""

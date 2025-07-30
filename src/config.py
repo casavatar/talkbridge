@@ -1,14 +1,43 @@
 #!/usr/bin/env python3
-"""
-TalkBridge Configuration
-
-Central configuration file for the TalkBridge offline AI voice assistant system.
-Defines all system settings, paths, and flags using only standard Python libraries.
-
-Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
-"""
+#-------------------------------------------------------------------------------------------------
+# description: TalkBridge Configuration
+#-------------------------------------------------------------------------------------------------
+#
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#
+# requirements:
+# - os Python package
+# - sys Python package
+# - pathlib Python package
+# - typing Python package
+#-------------------------------------------------------------------------------------------------
+# functions:
+# - PROJECT_ROOT: Project root directory
+# - SRC_DIR: Source directory
+# - DATA_DIR: Data directory
+# - DOCS_DIR: Documentation directory
+# - TEST_DIR: Test directory
+# - SYSTEM_CONFIG: System configuration
+# - PATH_CONFIG: Path configuration
+# - AUDIO_CONFIG: Audio configuration
+# - STT_CONFIG: Speech-to-Text configuration
+# - TTS_CONFIG: Text-to-Speech configuration
+# - LLM_CONFIG: Language Model configuration
+# - TRANSLATION_CONFIG: Translation configuration
+# - ANIMATION_CONFIG: Animation configuration
+# - UI_CONFIG: Web interface configuration
+# - DEMO_CONFIG: Demo configuration
+# - SECURITY_CONFIG: Security configuration 
+# - DEV_CONFIG: Development configuration
+# - get_config: Get configuration for a specific environment
+# - ensure_directories: Ensure all required directories exist
+# - get_path: Get a path from PATH_CONFIG
+# - get_setting: Get a setting from a specific configuration category
+# - is_demo_mode: Check if demo mode is enabled
+# - is_debug_mode: Check if debug mode is enabled
+#-------------------------------------------------------------------------------------------------
 
 import os
 import sys
@@ -19,7 +48,6 @@ from typing import Dict, Any, Optional
 PROJECT_ROOT = Path(__file__).parent.parent
 SRC_DIR = PROJECT_ROOT / "src"
 DATA_DIR = PROJECT_ROOT / "data"
-LOGS_DIR = PROJECT_ROOT / "logs"
 DOCS_DIR = PROJECT_ROOT / "doc"
 TEST_DIR = PROJECT_ROOT / "test"
 
@@ -33,11 +61,9 @@ SYSTEM_CONFIG = {
     # Debug and logging
     "debug": os.getenv("DEBUG", "false").lower() == "true",
     "log_level": os.getenv("LOG_LEVEL", "INFO"),
-    "log_file": LOGS_DIR / "app.log",
-    "error_log_file": LOGS_DIR / "errors.log",
     
     # Demo mode
-    "demo_mode": os.getenv("DEMO_MODE", "false").lower() == "true",
+    "demo_mode": os.getenv("DEMO_MODE", "false").lower() == "false",
     "demo_files_dir": SRC_DIR / "demo" / "samples",
     
     # Performance settings
@@ -57,7 +83,6 @@ PATH_CONFIG = {
     "project_root": PROJECT_ROOT,
     "src_dir": SRC_DIR,
     "data_dir": DATA_DIR,
-    "logs_dir": LOGS_DIR,
     "docs_dir": DOCS_DIR,
     "test_dir": TEST_DIR,
     
@@ -70,8 +95,6 @@ PATH_CONFIG = {
     
     # Module directories
     "audio_module": SRC_DIR / "audio",
-    "stt_module": SRC_DIR / "stt",
-    "tts_module": SRC_DIR / "tts",
     "ollama_module": SRC_DIR / "ollama",
     "translation_module": SRC_DIR / "translation",
     "animation_module": SRC_DIR / "animation",
@@ -85,10 +108,10 @@ PATH_CONFIG = {
     "readme_file": PROJECT_ROOT / "README.md",
     
     # Log files
-    "app_log": LOGS_DIR / "app.log",
-    "error_log": LOGS_DIR / "errors.log",
-    "demo_log": LOGS_DIR / "demo.log",
-    "conversation_log": LOGS_DIR / "conversations.jsonl",
+    "app_log": DATA_DIR /  "logs"  / "app.log",
+    "error_log": DATA_DIR / "logs" / "errors.log",
+    "demo_log": DATA_DIR / "logs" / "demo.log",
+    "conversation_log": DATA_DIR / "logs" / "conversations.jsonl",
 }
 
 # Audio Configuration
