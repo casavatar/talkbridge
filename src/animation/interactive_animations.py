@@ -1,9 +1,28 @@
-"""
-Interactive Animations Module
-
-Provides interactive animations including particle systems, geometric animations,
-and interactive visualizations for the application.
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Interactive Animations Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - numpy Python package
+# - matplotlib Python package
+# - threading Python package
+# - time Python package
+# - typing Python package
+# - math Python package
+# - random Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - ParticleSystem: Particle system animation
+# - GeometricAnimation: Geometric shape animations
+# - WaveformAnimation: Waveform animation with interactive controls
+# - InteractiveAnimations: Main class for managing interactive animations
+# - AnimationDemo: Demo class for interactive animations
+#----------------------------------------------------------------------------------------------------------------------------       
 
 import numpy as np
 import matplotlib.pyplot as plt

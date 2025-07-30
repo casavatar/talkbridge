@@ -1,12 +1,25 @@
-"""
-Prompt Engineer for Ollama
-
-Provides prompt engineering capabilities including:
-- Prompt templates and management
-- Prompt optimization and testing
-- Context-aware prompt generation
-- Prompt performance analysis
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Prompt Engineer Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - ollama Python package
+# - json Python package
+# - time Python package
+# - threading Python package
+# - typing Python package
+# - dataclasses Python package  
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - PromptTemplate: Prompt template data class
+# - PromptResult: Prompt result data class
+# - PromptEngineer: Prompt engineer class
+#----------------------------------------------------------------------------------------------------------------------------
 
 import json
 import time

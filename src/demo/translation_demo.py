@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
-"""
-Offline Translation Demo
-
-This script demonstrates the offline translation capabilities of the translation module.
-It shows how to use the translate_to_spanish function and the OfflineTranslator class.
-
-Usage:
-    python translation_demo.py
-"""
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Offline Translation Demo
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - argos-translate Python package
+# - transformers Python package
+# - sentencepiece Python package
+# - torch Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - test_basic_translation: Test basic translation functionality
+# - test_performance: Test translation performance
+# - test_different_languages: Test translation from different source languages
+# - test_error_handling: Test error handling with invalid inputs
+# - show_system_info: Show system information and available engines
+#----------------------------------------------------------------------------------------------------------------------------
 
 import time
 import sys

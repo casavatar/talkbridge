@@ -1,13 +1,27 @@
-"""
-Advanced Audio Synthesizer Module
-
-Provides advanced audio synthesis capabilities including:
-- ADSR envelopes
-- Filters (low-pass, high-pass, band-pass)
-- Modulation (LFO, FM, AM)
-- Polyphonic synthesis
-- Real-time synthesis
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Audio Synthesizer Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - numpy Python package
+# - sounddevice Python package
+# - soundfile Python package
+# - scipy Python package
+# - seaborn Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - ADSREnvelope: ADSR envelope generator
+# - Filter: Audio filter base class
+# - LowPassFilter: Low-pass filter implementation
+# - HighPassFilter: High-pass filter implementation
+# - LFO: Low Frequency Oscillator for modulation
+# - AudioSynthesizer: Advanced audio synthesizer with modulation and filtering
+#----------------------------------------------------------------------------------------------------------------------------   
 
 import numpy as np
 import sounddevice as sd

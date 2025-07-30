@@ -1,12 +1,24 @@
-"""
-Ollama Model Manager
-
-Provides comprehensive model management capabilities including:
-- Model installation and removal
-- Model information and statistics
-- Model optimization and configuration
-- Model performance monitoring
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Ollama Model Manager Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - ollama Python package
+# - json Python package
+# - time Python package
+# - threading Python package
+# - typing Python package
+# - dataclasses Python package  
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - ModelInfo: Model information data class
+# - OllamaModelManager: Ollama model manager class
+#----------------------------------------------------------------------------------------------------------------------------
 
 import json
 import time

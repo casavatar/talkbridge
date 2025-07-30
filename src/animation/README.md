@@ -1,292 +1,297 @@
-# Animation Module for TalkBridge
+# Animation Module
 
-This module provides comprehensive animation capabilities for the TalkBridge application, including audio visualizations, loading animations, and interactive visualizations.
+A comprehensive animation module for TalkBridge that provides real-time facial animation, lip sync, audio visualization, and interactive animations.
 
 ## Features
 
-### 🎵 Audio Visualizations
-- **Real-time audio visualization** with multiple styles
-- **Bar charts, waveforms, circular displays, and spectrum analyzers**
-- **Customizable color schemes and animation parameters**
-- **Thread-safe audio processing**
-
-### ⏳ Loading Animations
-- **Spinner animations** with multiple styles (dots, arrows, bars)
-- **Progress bars** with ETA calculations
-- **Pulse animations** for processing indicators
-- **Wave animations** for loading states
-- **Animation manager** for coordinating multiple animations
-
-### 🎨 Interactive Animations
-- **Particle systems** with physics simulation
-- **Geometric animations** (circles, squares, triangles, polygons)
-- **Waveform animations** with multiple wave types
-- **Interactive controls** and real-time parameter adjustment
+- **Real-time Facial Animation**: Live facial landmark detection and animation
+- **Lip Sync**: Synchronized lip movements with audio playback
+- **Eye Blinking**: Natural eye blinking animations
+- **Webcam Support**: Real-time webcam input processing
+- **Avatar Support**: Static avatar image animation
+- **Audio Visualization**: Real-time audio waveform visualization
+- **Interactive Animations**: Dynamic visual effects and transitions
+- **Cross-platform**: Works on Windows and macOS
 
 ## Installation
 
-Make sure you have the required dependencies:
+### Prerequisites
 
-```bash
-pip install numpy matplotlib sounddevice scipy requests
-```
-
-## Quick Start
-
-### Basic Usage
-
-```python
-from animation import AudioVisualizer, LoadingAnimation, InteractiveAnimations
-
-# Create a loading spinner
-spinner = LoadingAnimation("Processing...")
-spinner.start()
-# ... do some work ...
-spinner.stop()
-
-# Create an audio visualizer
-visualizer = AudioVisualizer("bars")
-visualizer.start_visualization(audio_callback)
-```
-
-### Loading Animations
-
-```python
-from animation.loading_animation import SpinnerAnimation, ProgressBar, PulseAnimation
-
-# Spinner with different styles
-spinner = SpinnerAnimation("Loading...", style="dots")
-spinner.start()
-time.sleep(2)
-spinner.stop()
-
-# Progress bar
-progress = ProgressBar(100, 50, "Processing files")
-progress.start()
-for i in range(0, 101, 10):
-    progress.update(i)
-    time.sleep(0.1)
-progress.stop()
-
-# Pulse animation
-pulse = PulseAnimation("Processing data...")
-pulse.start()
-time.sleep(3)
-pulse.stop()
-```
-
-### Audio Visualizations
-
-```python
-from animation.audio_visualizer import AudioVisualizer
-
-# Create visualizer with different styles
-styles = ['bars', 'wave', 'circular', 'spectrum']
-
-for style in styles:
-    visualizer = AudioVisualizer(style)
-    
-    def audio_callback():
-        # Return your audio data here
-        import numpy as np
-        return np.random.rand(1024) * 0.5
-    
-    visualizer.start_visualization(audio_callback)
-    time.sleep(5)
-    visualizer.stop()
-```
-
-### Interactive Animations
-
-```python
-from animation.interactive_animations import ParticleSystem, GeometricAnimation, WaveformAnimation
-
-# Particle system
-particles = ParticleSystem(100)
-particles.start()
-time.sleep(5)
-particles.stop()
-
-# Geometric animations
-shapes = ['circle', 'square', 'triangle', 'polygon']
-for shape in shapes:
-    geo_anim = GeometricAnimation(shape)
-    geo_anim.start()
-    time.sleep(3)
-    geo_anim.stop()
-
-# Waveform animation
-wave_anim = WaveformAnimation(frequency=2.0, amplitude=1.0)
-wave_anim.start()
-time.sleep(5)
-wave_anim.stop()
-```
-
-### Animation Manager
-
-```python
-from animation.interactive_animations import InteractiveAnimations
-
-# Create animation manager
-manager = InteractiveAnimations()
-
-# Create different animations
-manager.create_particle_system("particles", 50)
-manager.create_geometric_animation("circle", "circle")
-manager.create_waveform_animation("waves", 1.5, 0.8)
-
-# Start animations
-for name in manager.list_animations():
-    manager.start_animation(name)
-    time.sleep(2)
-    manager.stop_animation(name)
-```
-
-## Integration with TalkBridge
-
-### Audio Processing Integration
-
-```python
-from animation.audio_visualizer import AudioVisualizer
-from audio.capture import AudioCapture
-
-def audio_callback(indata, frames, time_info, status):
-    # Process audio data and return for visualization
-    return indata.flatten()
-
-# Initialize audio capture and visualizer
-audio = AudioCapture()
-visualizer = AudioVisualizer("bars")
-
-# Start both audio capture and visualization
-audio.start_input_stream(audio_callback)
-visualizer.start_visualization(audio_callback)
-```
-
-### Loading States for LLM Operations
-
-```python
-from animation.loading_animation import SpinnerAnimation
-from llm.ollama_client import OllamaClient
-
-def process_with_llm():
-    spinner = SpinnerAnimation("Generating response...", style="dots")
-    spinner.start()
-    
-    try:
-        client = OllamaClient()
-        response = client.generate("Hello, how are you?")
-        return response
-    finally:
-        spinner.stop()
-```
-
-## Configuration
-
-### Audio Visualizer Settings
-
-```python
-visualizer = AudioVisualizer(
-    style="bars",  # 'bars', 'wave', 'circular', 'spectrum'
-)
-
-# Customize parameters
-visualizer.bar_count = 64
-visualizer.max_amplitude = 2.0
-visualizer.smoothing_factor = 0.9
-```
-
-### Loading Animation Settings
-
-```python
-spinner = SpinnerAnimation(
-    message="Loading...",
-    style="dots",  # 'dots', 'arrows', 'bars', 'dots2'
-    speed=0.1
-)
-
-progress = ProgressBar(
-    total=100,
-    width=50,
-    message="Progress"
-)
-```
-
-## Demo
-
-Run the comprehensive demo to see all animations in action:
-
-```bash
-cd src
-python animation_demo.py
-```
-
-This will showcase:
-- All loading animation styles
-- Interactive particle systems
-- Geometric shape animations
-- Waveform visualizations
-- Audio visualizer styles
-
-## API Reference
-
-### AudioVisualizer
-
-- `__init__(style="bars")` - Initialize with animation style
-- `start_visualization(audio_callback)` - Start visualization with audio data callback
-- `stop()` - Stop visualization
-- `change_style(style)` - Change animation style
-
-### LoadingAnimation (Base Class)
-
-- `__init__(message="Loading...", speed=0.1)` - Initialize with message and speed
-- `start()` - Start animation
-- `stop()` - Stop animation
-
-### SpinnerAnimation
-
-- `__init__(message="Loading...", style="dots")` - Initialize spinner
-- Available styles: 'dots', 'arrows', 'bars', 'dots2'
-
-### ProgressBar
-
-- `__init__(total=100, width=50, message="Progress")` - Initialize progress bar
-- `update(value)` - Update progress value
-
-### InteractiveAnimations
-
-- `create_particle_system(name, num_particles)` - Create particle system
-- `create_geometric_animation(name, shape)` - Create geometric animation
-- `create_waveform_animation(name, frequency, amplitude)` - Create waveform
-- `start_animation(name)` - Start specific animation
-- `stop_animation(name)` - Stop specific animation
-- `list_animations()` - List all animations
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Matplotlib backend errors**: Use `matplotlib.use('TkAgg')` or `matplotlib.use('Agg')` for headless environments
-2. **Audio device errors**: Ensure sounddevice is properly installed and audio devices are available
-3. **Performance issues**: Reduce animation complexity or increase update intervals
+- Python 3.8 or higher
+- Webcam (for real-time face sync)
+- Audio output device
 
 ### Dependencies
 
-Make sure all required packages are installed:
+Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Contributing
+The animation module requires these additional packages:
+- `mediapipe>=0.10.0` - Facial landmark detection
+- `opencv-python>=4.8.0` - Computer vision and video processing
+- `pygame>=2.5.0` - Audio playback and timing
 
-To add new animation types:
+## Quick Start
 
-1. Create a new class inheriting from `LoadingAnimation` or appropriate base class
-2. Implement the required methods (`_animate()` for loading animations)
-3. Add the new class to the appropriate `__init__.py` file
-4. Update this README with usage examples
+### Basic Face Sync
+
+```python
+from src.animation import FaceSync
+
+# Create face sync with webcam
+face_sync = FaceSync(use_webcam=True)
+
+# Run face sync with audio
+face_sync.run_face_sync("audio_file.wav")
+```
+
+### Avatar Face Sync
+
+```python
+from src.animation import FaceSync
+
+# Create face sync with static avatar
+face_sync = FaceSync(use_webcam=False, avatar_path="avatar.jpg")
+
+# Run face sync with audio
+face_sync.run_face_sync("audio_file.wav")
+```
+
+### Facial Landmark Detection
+
+```python
+from src.animation import FaceSync
+
+# Create face sync for landmark detection
+face_sync = FaceSync(use_webcam=True)
+
+# Get current frame
+frame = face_sync.get_frame()
+
+# Detect landmarks
+landmarks_data = face_sync.detect_facial_landmarks(frame)
+
+if landmarks_data:
+    print(f"Mouth opening: {landmarks_data['mouth_open']}")
+    print(f"Eye blink: {landmarks_data['eye_blink']}")
+```
+
+## API Reference
+
+### FaceSync Class
+
+The main class for real-time facial animation and lip sync.
+
+#### `__init__(use_webcam=True, avatar_path=None)`
+
+Initialize the face sync system.
+
+**Parameters:**
+- `use_webcam` (bool): Whether to use webcam input (True) or static avatar (False)
+- `avatar_path` (str, optional): Path to static avatar image (used when use_webcam=False)
+
+#### `run_face_sync(audio_path)`
+
+Main function to run face sync with audio.
+
+**Parameters:**
+- `audio_path` (str): Path to audio file for lip sync
+
+**Returns:**
+- `bool`: True if face sync completed successfully
+
+#### `detect_facial_landmarks(frame)`
+
+Detect facial landmarks using MediaPipe.
+
+**Parameters:**
+- `frame` (np.ndarray): Input image frame
+
+**Returns:**
+- `Dict[str, Any]` or `None`: Facial landmark data or None if no face detected
+
+#### `load_audio(audio_path)`
+
+Load audio file for lip sync.
+
+**Parameters:**
+- `audio_path` (str): Path to audio file
+
+**Returns:**
+- `bool`: True if audio loaded successfully
+
+#### `get_frame()`
+
+Get current frame from webcam or avatar.
+
+**Returns:**
+- `np.ndarray` or `None`: Current frame as numpy array
+
+#### `process_frame(frame, animation_state)`
+
+Process frame with facial animation overlays.
+
+**Parameters:**
+- `frame` (np.ndarray): Input frame
+- `animation_state` (Dict[str, Any]): Current animation state
+
+**Returns:**
+- `np.ndarray`: Processed frame with animations
+
+#### `stop()`
+
+Stop the face sync process and cleanup resources.
+
+## Facial Landmark Detection
+
+The module uses MediaPipe for real-time facial landmark detection:
+
+### Landmark Indices
+
+- **Lip Landmarks**: 61, 84, 17, 314, 405, 320, 307, 375, 321, 308, 324, 318
+- **Left Eye**: 362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387
+- **Right Eye**: 33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158
+
+### Features Extracted
+
+- **Mouth Opening**: Calculated from vertical distance between upper and lower lip
+- **Eye Blink**: Calculated using Eye Aspect Ratio (EAR)
+- **Facial Expressions**: Basic expression classification based on audio features
+
+## Audio Analysis
+
+The module analyzes audio for lip sync:
+
+### Audio Features
+
+- **Energy**: RMS energy for mouth opening intensity
+- **Frame Rate**: 30 FPS for smooth animation
+- **Synchronization**: Audio playback synchronized with visual animation
+
+### Animation State
+
+```python
+animation_state = {
+    'mouth_open': 0.0,      # 0.0 to 1.0
+    'eye_blink': 0.0,       # 0.0 to 1.0
+    'expression': 'neutral'  # 'neutral', 'speaking', 'quiet'
+}
+```
+
+## Integration with TTS
+
+The face sync module integrates seamlessly with the TTS module:
+
+```python
+from src.tts import synthesize_voice
+from src.animation import FaceSync
+
+# Generate audio with TTS
+audio_bytes = synthesize_voice("Hello, this is a test message.")
+
+# Save audio to file
+with open("tts_output.wav", "wb") as f:
+    f.write(audio_bytes)
+
+# Use with face sync
+face_sync = FaceSync(use_webcam=True)
+face_sync.run_face_sync("tts_output.wav")
+```
+
+## Performance Optimization
+
+### For Real-time Use
+
+1. **GPU Acceleration**: MediaPipe automatically uses GPU if available
+2. **Frame Rate**: 30 FPS for smooth animation
+3. **Landmark Caching**: Reuses landmark detection for efficiency
+4. **Audio Preprocessing**: Audio features extracted once for entire duration
+
+### Memory Management
+
+- Automatic cleanup of video capture and audio resources
+- Efficient landmark detection with MediaPipe
+- Minimal memory footprint for real-time processing
+
+## Error Handling
+
+The module includes comprehensive error handling:
+
+```python
+try:
+    face_sync = FaceSync(use_webcam=True)
+    success = face_sync.run_face_sync("audio.wav")
+except RuntimeError as e:
+    print(f"Face sync failed: {e}")
+except FileNotFoundError as e:
+    print(f"Audio file not found: {e}")
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Webcam Not Found**
+   - Ensure webcam is connected and not in use by other applications
+   - Check webcam permissions on macOS
+
+2. **Audio Playback Issues**
+   - Verify audio file format (WAV, MP3 supported)
+   - Check audio device settings
+
+3. **Performance Issues**
+   - Reduce frame rate if needed
+   - Close other applications to free resources
+   - Use GPU acceleration if available
+
+4. **Landmark Detection Issues**
+   - Ensure good lighting conditions
+   - Position face clearly in camera view
+   - Check MediaPipe installation
+
+### System Requirements
+
+- **Minimum**: 4GB RAM, 2GB free disk space
+- **Recommended**: 8GB RAM, GPU with 2GB VRAM
+- **OS**: Windows 10+ or macOS 10.14+
+
+## Demo
+
+Run the demo script to see the module in action:
+
+```bash
+cd src/animation
+python face_sync_demo.py
+```
+
+This will:
+- Test facial landmark detection
+- Demonstrate webcam face sync
+- Show avatar face sync (if avatar image provided)
+- Create test audio files
+
+## Examples
+
+See `src/animation_example.py` for comprehensive usage examples:
+
+```bash
+cd src
+python animation_example.py
+```
 
 ## License
 
-This animation module is part of the TalkBridge project and follows the same license terms. 
+This module is part of the TalkBridge project and follows the same license terms.
+
+## Contributing
+
+When contributing to the animation module:
+
+1. Follow the existing code style
+2. Add comprehensive error handling
+3. Include docstrings for new functions
+4. Test on both Windows and macOS
+5. Update this README for new features 

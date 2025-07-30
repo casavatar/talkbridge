@@ -1,9 +1,29 @@
 #!/usr/bin/env python3
-"""
-Ollama Integration Demo Script for TalkBridge
-
-This script demonstrates all the Ollama integration capabilities of the TalkBridge application.
-"""
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Ollama Integration Demo Script for TalkBridge
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - ollama Python package
+# - json Python package
+# - time Python package
+# - threading Python package
+# - typing Python package
+# - dataclasses Python package  
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - demo_basic_client: Demo the basic Ollama client capabilities
+# - demo_model_manager: Demo the model manager capabilities
+# - demo_conversation_manager: Demo the conversation manager capabilities
+# - demo_prompt_engineer: Demo the prompt engineer capabilities
+# - demo_streaming_client: Demo the streaming client capabilities
+# - demo_integration: Demo the integration between different Ollama components
+# - demo_advanced_features: Demo advanced Ollama features
+#----------------------------------------------------------------------------------------------------------------------------
 
 import time
 import sys

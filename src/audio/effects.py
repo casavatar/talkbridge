@@ -1,13 +1,23 @@
-"""
-Audio Effects Module
-
-Provides various audio effects and processing capabilities including:
-- Reverb and delay effects
-- Distortion and overdrive
-- Chorus and flanger
-- Compression and limiting
-- EQ and filtering
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Audio Effects Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - numpy Python package
+# - sounddevice Python package
+# - soundfile Python package
+# - scipy Python package
+# - seaborn Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - AudioEffects: Audio effects class
+# - AudioEffectsDemo: Demo class for audio effects
+#----------------------------------------------------------------------------------------------------------------------------
 
 import numpy as np
 import sounddevice as sd

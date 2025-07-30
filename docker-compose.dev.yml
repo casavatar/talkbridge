@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  talkbridge:
+    environment:
+      # Development settings
+      - DEMO_MODE=true
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+      - ENVIRONMENT=development
+      - DEVELOPMENT_MODE=true
+      - AUTO_RELOAD=true
+      - VERBOSE_LOGGING=true
+      
+      # Debug settings
+      - DEBUG_AUDIO=true
+      - DEBUG_MODELS=true
+      - DEBUG_UI=true
+      
+      # Testing settings
+      - TEST_MODE=true
+      
+      # Performance settings (more relaxed for development)
+      - MAX_WORKERS=2
+      - CHUNK_SIZE=512
+      - BUFFER_SIZE=2048
+      
+      # Timeout settings (longer for development)
+      - REQUEST_TIMEOUT=60.0
+      - AUDIO_TIMEOUT=20.0
+      - MODEL_TIMEOUT=120.0
+    volumes:
+      # Development volumes
+      - ./src:/app/src
+      - ./test:/app/test
+      - ./doc:/app/doc
+      - ./requirements.txt:/app/requirements.txt
+    ports:
+      # Additional ports for development
+      - "8502:8501"  # Different port to avoid conflicts
+    command: ["streamlit", "run", "src/demo/demo_ui.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"] 

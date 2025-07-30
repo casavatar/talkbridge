@@ -1,0 +1,16 @@
+# Local installation
+python src/config.py  # Initialize configuration
+streamlit run src/ui/web_interface.py
+
+# Docker deployment
+docker build -t talkbridge .
+docker run -p 8501:8501 talkbridge
+
+# Docker Compose (demo mode)
+docker-compose up -d
+
+# Docker Compose (production)
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# Development mode
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d

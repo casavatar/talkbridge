@@ -1,13 +1,23 @@
-"""
-Audio Generator Module
-
-Provides various audio generation capabilities including:
-- Sine wave generation
-- White/pink noise generation
-- Frequency sweeps
-- Audio tone generation
-- Custom waveform synthesis
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Audio Generator Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - numpy Python package
+# - sounddevice Python package
+# - soundfile Python package
+# - scipy Python package
+# - seaborn Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - AudioGenerator: Audio generator class
+# - AudioGeneratorDemo: Demo class for audio generator
+#----------------------------------------------------------------------------------------------------------------------------
 
 import numpy as np
 import sounddevice as sd

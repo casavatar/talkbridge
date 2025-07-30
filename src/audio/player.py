@@ -1,13 +1,23 @@
-"""
-Audio Player Module
-
-Provides audio playback capabilities including:
-- Audio streaming and playback
-- Playlist management
-- Real-time audio processing
-- Audio format support
-- Volume and playback controls
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Audio Player Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - numpy Python package
+# - sounddevice Python package
+# - soundfile Python package
+# - scipy Python package
+# - seaborn Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - AudioPlayer: Audio player class
+# - AudioPlayerDemo: Demo class for audio player
+#----------------------------------------------------------------------------------------------------------------------------
 
 import numpy as np
 import sounddevice as sd

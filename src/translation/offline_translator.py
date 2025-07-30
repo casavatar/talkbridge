@@ -1,23 +1,23 @@
-"""
-Offline Translation Module
-
-This module provides offline translation capabilities using local translation models.
-It supports multiple translation engines and can work completely offline once models are downloaded.
-
-Author: AI Assistant
-Date: 2024
-Version: 1.0
-
-Requirements:
-- argos-translate (for primary offline translation)
-- transformers (for HuggingFace models as fallback)
-- sentencepiece (for tokenization)
-- torch (for PyTorch models)
-
-First run setup:
-- Models will be automatically downloaded on first use
-- Internet connection required only for initial model download
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Offline Translation Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - argos-translate Python package
+# - transformers Python package
+# - sentencepiece Python package
+# - torch Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - OfflineTranslator: Offline translation class
+# - TranslationError: Custom exception for translation errors
+# - translate_to_spanish: Convenience function to translate text to Spanish
+#----------------------------------------------------------------------------------------------------------------------------   
 
 import os
 import logging

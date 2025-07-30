@@ -1,12 +1,25 @@
-"""
-Ollama Streaming Client
-
-Provides real-time streaming capabilities for Ollama interactions including:
-- Real-time response streaming
-- Event callbacks and handlers
-- Streaming conversation management
-- Performance monitoring
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Ollama Streaming Client Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - ollama Python package
+# - json Python package
+# - time Python package
+# - threading Python package
+# - typing Python package
+# - dataclasses Python package  
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - StreamingEvent: Streaming event data class
+# - StreamingCallback: Base class for streaming callbacks
+# - OllamaStreamingClient: Ollama streaming client class
+#----------------------------------------------------------------------------------------------------------------------------
 
 import json
 import time

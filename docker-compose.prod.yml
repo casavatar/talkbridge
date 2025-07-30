@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  talkbridge:
+    environment:
+      # Production settings
+      - DEMO_MODE=false
+      - DEBUG=false
+      - LOG_LEVEL=WARNING
+      - ENVIRONMENT=production
+      - DEVELOPMENT_MODE=false
+      - AUTO_RELOAD=false
+      - VERBOSE_LOGGING=false
+      
+      # Security settings
+      - AUTH_ENABLED=true
+      - SESSION_TIMEOUT=1800
+      - MAX_LOGIN_ATTEMPTS=3
+      - PASSWORD_MIN_LENGTH=12
+      - PASSWORD_REQUIRE_SPECIAL=true
+      - PASSWORD_REQUIRE_NUMBERS=true
+      
+      # Performance settings (optimized for production)
+      - MAX_WORKERS=8
+      - CHUNK_SIZE=2048
+      - BUFFER_SIZE=8192
+      
+      # Timeout settings (shorter for production)
+      - REQUEST_TIMEOUT=15.0
+      - AUDIO_TIMEOUT=5.0
+      - MODEL_TIMEOUT=30.0
+      
+      # UI settings
+      - UI_THEME=dark
+      - SIDEBAR_STATE=collapsed
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    command: ["streamlit", "run", "src/ui/web_interface.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"] 

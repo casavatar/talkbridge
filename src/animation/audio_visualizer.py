@@ -1,8 +1,24 @@
-"""
-Audio Visualizer Animation Module
-
-Provides real-time audio visualization animations using matplotlib and numpy.
-"""
+#!/usr/bin/env python3
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Audio Visualizer Animation Module
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+# 
+# requirements:
+# - numpy Python package
+# - matplotlib Python package
+# - sounddevice Python package
+# - soundfile Python package
+# - scipy Python package
+# - seaborn Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - AudioVisualizer: Audio visualization animations
+# - AudioVisualizerDemo: Demo class to showcase different audio visualization animations
+#----------------------------------------------------------------------------------------------------------------------------
 
 import numpy as np
 import matplotlib.pyplot as plt

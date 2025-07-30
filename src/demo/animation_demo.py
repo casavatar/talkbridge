@@ -1,9 +1,27 @@
 #!/usr/bin/env python3
-"""
-Animation Demo Script for TalkBridge
-
-This script demonstrates all the animation capabilities of the TalkBridge application.
-"""
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Animation Demo Script for TalkBridge
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# 
+# requirements:
+# - numpy Python package
+# - matplotlib Python package
+# - sounddevice Python package
+# - soundfile Python package
+# - scipy Python package
+# - seaborn Python package
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - demo_audio_visualizer: Demo the audio visualizer animations
+# - demo_loading_animations: Demo the loading animations
+# - demo_interactive_animations: Demo the interactive animations
+# - demo_animation_manager: Demo the animation manager
+#----------------------------------------------------------------------------------------------------------------------------
 
 import time
 import sys

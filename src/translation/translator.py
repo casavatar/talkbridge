@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #-----------------------------------------------------------------------------
 # description: This module provides a Translator class that interfaces with the Ollama API
 # for text translation. It reads configuration from a YAML file and sends translation requests.
@@ -10,7 +11,10 @@
 # requirements:
 # - requests
 # - pyyaml
-#------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - Translator: Translator class
+#----------------------------------------------------------------------------------------------------------------------------
 
 import requests
 import time
