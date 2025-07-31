@@ -12,7 +12,7 @@ ollama:
   model: "deepseek-r1:latest"
 
 whisper:
-  model_name: "base"
+  model_name: "DeepSeek R1 0528 Qwen3 8B"
 
 audio:
   sample_rate: 16000

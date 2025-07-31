@@ -57,12 +57,12 @@ RUN pip install --no-cache-dir TTS==0.13.3
 # Stage 5: Install remaining packages
 RUN pip install --no-cache-dir \
     openai-whisper==20231117 \
-    mediapipe==0.10.3 \
+    mediapipe==0.10.11 \
     opencv-python==4.8.0.76 \
     pillow==9.5.0 \
     streamlit-webrtc==0.47.1 \
     plotly==5.15.0 \
-    cryptography==3.4.8 \
+    cryptography>=42.0.0 \
     bcrypt==4.0.1 \
     passlib==1.7.4 \
     jsonschema==4.17.3 \
