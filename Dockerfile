@@ -35,14 +35,50 @@ RUN apt-get update && apt-get install -y \
     # Clean up
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Copy requirements files
+COPY requirements-minimal.txt requirements.txt
+COPY requirements-docker.txt requirements-full.txt
 
-# Install Python dependencies with fallback for problematic packages
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt || \
-    (pip install --no-cache-dir TTS==0.14.3 && \
-     pip install --no-cache-dir -r requirements.txt)
+# Install Python dependencies in stages
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Stage 1: Install core dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Stage 2: Install ML dependencies separately to avoid conflicts
+RUN pip install --no-cache-dir torch==1.13.1 torchaudio==0.13.1 --index-url https://download.pytorch.org/whl/cpu
+
+# Stage 3: Install remaining dependencies
+RUN pip install --no-cache-dir transformers==4.21.3 sentencepiece==0.1.99
+
+# Stage 4: Install TTS separately
+RUN pip install --no-cache-dir TTS==0.13.3
+
+# Stage 5: Install remaining packages
+RUN pip install --no-cache-dir \
+    openai-whisper==20231117 \
+    mediapipe==0.10.3 \
+    opencv-python==4.8.0.76 \
+    pillow==9.5.0 \
+    streamlit-webrtc==0.47.1 \
+    plotly==5.15.0 \
+    cryptography==3.4.8 \
+    bcrypt==4.0.1 \
+    passlib==1.7.4 \
+    jsonschema==4.17.3 \
+    structlog==22.3.0 \
+    colorlog==6.7.0 \
+    pytest==7.3.1 \
+    pytest-cov==4.1.0 \
+    black==23.3.0 \
+    isort==5.12.0 \
+    flake8==6.0.0 \
+    mypy==1.3.0
+
+# Stage 6: Install translation alternatives (argos-translate not available for Python 3.8)
+RUN pip install --no-cache-dir \
+    googletrans==4.0.0rc1 \
+    translate==3.6.1
 
 # Copy application code
 COPY . .
