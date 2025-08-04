@@ -51,7 +51,7 @@ logger = logging.getLogger(__name__)
 class AuthManager:
     """Manages user authentication using local JSON file."""
     
-    def __init__(self, users_file: str = "/json/users.json"):
+    def __init__(self, users_file: str = "../ui/json/users.json"):
         """
         Initialize the authentication manager.
         

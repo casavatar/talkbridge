@@ -41,8 +41,10 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 
 try:
     from animation import FaceSync
+    ANIMATION_AVAILABLE = True
 except ImportError:
     logging.warning("Animation module not available")
+    ANIMATION_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +77,10 @@ class AnimationAPI:
             True if initialization successful
         """
         try:
+            if not ANIMATION_AVAILABLE:
+                logger.error("Animation module not available")
+                return False
+                
             self.face_sync = FaceSync(use_webcam=use_webcam, avatar_path=avatar_path)
             self.animation_settings["use_webcam"] = use_webcam
             self.animation_settings["avatar_path"] = avatar_path

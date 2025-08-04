@@ -164,12 +164,12 @@ def _synthesize_default_voice(text: str,
                 language=language
             )
             
-                            # Convert to bytes
-                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
-                    sf.write(temp_file.name, audio_data, AUDIO_CONFIG["sample_rate"])
-                    with open(temp_file.name, 'rb') as f:
-                        audio_bytes = f.read()
-                    os.unlink(temp_file.name)
+            # Convert to bytes
+            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+                sf.write(temp_file.name, audio_data, AUDIO_CONFIG["sample_rate"])
+                with open(temp_file.name, 'rb') as f:
+                    audio_bytes = f.read()
+                os.unlink(temp_file.name)
             
             logger.info(f"Generated audio: {len(audio_bytes)} bytes")
             return audio_bytes

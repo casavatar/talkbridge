@@ -41,17 +41,17 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Import local modules
-from auth.auth_manager import AuthManager
-from components.dashboard import Dashboard
-from components.login import LoginComponent
-from components.audio_recorder import AudioRecorder
-from components.chat_interface import ChatInterface
-from components.avatar_display import AvatarDisplay
-from api.tts_api import TTSAPI
-from api.stt_api import STTAPI
-from api.llm_api import LLMAPI
-from api.translation_api import TranslationAPI
-from api.animation_api import AnimationAPI
+from ui.auth.auth_manager import AuthManager
+from ui.components.dashboard import Dashboard
+from ui.components.login import LoginComponent
+from ui.components.audio_recorder import AudioRecorder
+from ui.components.chat_interface import ChatInterface
+from ui.components.avatar_display import AvatarDisplay
+from ui.api.tts_api import TTSAPI
+from ui.api.stt_api import STTAPI
+from ui.api.llm_api import LLMAPI
+from ui.api.translation_api import TranslationAPI
+from ui.api.animation_api import AnimationAPI
 
 
 class TalkBridgeWebInterface:

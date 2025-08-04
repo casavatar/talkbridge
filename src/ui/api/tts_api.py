@@ -42,8 +42,10 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 
 try:
     from tts import synthesize_voice, setup_voice_cloning, get_synthesis_info
+    TTS_AVAILABLE = True
 except ImportError:
     logging.warning("TTS module not available")
+    TTS_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +80,10 @@ class TTSAPI:
             Audio data as bytes or None if failed
         """
         try:
+            if not TTS_AVAILABLE:
+                logger.error("TTS module not available")
+                return None
+                
             if not text.strip():
                 logger.warning("Empty text provided for synthesis")
                 return None

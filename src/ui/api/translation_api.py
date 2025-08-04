@@ -38,8 +38,10 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 
 try:
     from translation import translate_text
+    TRANSLATION_AVAILABLE = True
 except ImportError:
     logging.warning("Translation module not available")
+    TRANSLATION_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +80,10 @@ class TranslationAPI:
             Translated text or None if failed
         """
         try:
+            if not TRANSLATION_AVAILABLE:
+                logger.error("Translation module not available")
+                return None
+                
             if not text.strip():
                 logger.warning("Empty text provided for translation")
                 return None

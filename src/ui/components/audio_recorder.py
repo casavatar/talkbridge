@@ -143,7 +143,8 @@ class AudioRecorder:
         with col2:
             self.recording_settings["duration"] = st.slider(
                 "Max Duration (seconds)",
-                1, 60, 10
+                1, 60, 10,
+                key="recording_duration"
             )
             
             self.recording_settings["format"] = st.selectbox(

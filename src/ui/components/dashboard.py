@@ -116,8 +116,8 @@ class Dashboard:
             )
             
             # Voice settings
-            voice_speed = st.slider("Voice Speed", 0.5, 2.0, 1.0, 0.1)
-            voice_pitch = st.slider("Voice Pitch", -12, 12, 0, 1)
+            voice_speed = st.slider("Voice Speed", 0.5, 2.0, 1.0, 0.1, key="voice_speed_chat")
+            voice_pitch = st.slider("Voice Pitch", -12, 12, 0, 1, key="voice_pitch_chat")
             
             # Auto-translate toggle
             auto_translate = st.checkbox("Auto-translate", value=True)
@@ -274,8 +274,8 @@ class Dashboard:
             
             # Avatar appearance
             st.markdown("**Appearance:**")
-            avatar_scale = st.slider("Scale", 0.5, 2.0, 1.0, 0.1)
-            avatar_brightness = st.slider("Brightness", 0.5, 1.5, 1.0, 0.1)
+            avatar_scale = st.slider("Scale", 0.5, 2.0, 1.0, 0.1, key="avatar_scale_tab")
+            avatar_brightness = st.slider("Brightness", 0.5, 1.5, 1.0, 0.1, key="avatar_brightness_tab")
             
             if st.button("🔄 Apply Avatar Settings", use_container_width=True):
                 st.success("Avatar settings applied!")
@@ -331,8 +331,8 @@ class Dashboard:
             st.markdown("#### 🎤 Voice Settings")
             
             voice_model = st.selectbox("Voice Model", ["Default", "Male", "Female", "Custom"])
-            voice_speed = st.slider("Voice Speed", 0.5, 2.0, 1.0, 0.1)
-            voice_pitch = st.slider("Voice Pitch", -12, 12, 0, 1)
+            voice_speed = st.slider("Voice Speed", 0.5, 2.0, 1.0, 0.1, key="voice_speed_settings")
+            voice_pitch = st.slider("Voice Pitch", -12, 12, 0, 1, key="voice_pitch_settings")
         
         # Language settings
         st.markdown("#### 🌐 Language Settings")
