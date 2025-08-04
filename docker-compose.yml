@@ -3,6 +3,7 @@ version: '3.8'
 services:
   talkbridge:
     build: .
+    image: talkbridge-app
     container_name: talkbridge-app
     ports:
       - "8501:8501"
@@ -67,7 +68,7 @@ networks:
     driver: bridge
 
 volumes:
-  # redis_data:  # Uncomment if using Redis
+  redis_data:
 
 # Usage:
 # docker-compose up -d

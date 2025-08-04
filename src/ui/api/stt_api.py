@@ -17,15 +17,21 @@ import logging
 from typing import Optional, Dict, Any
 from pathlib import Path
 
-# Import the new STT module
-from src.stt import (
-    transcribe_audio,
-    transcribe_file,
-    load_model,
-    get_supported_languages,
-    is_language_supported,
-    get_engine_status
-)
+# Add src to path for imports
+import sys
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
+try:
+    from stt import (
+        transcribe_audio,
+        transcribe_file,
+        load_model,
+        get_supported_languages,
+        is_language_supported,
+        get_engine_status
+    )
+except ImportError:
+    logging.warning("STT module not available")
 
 # Set up logging
 logger = logging.getLogger(__name__)
