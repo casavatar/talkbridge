@@ -1,5 +1,5 @@
-# TalkBridge Docker Requirements
-# Simplified version to avoid dependency conflicts
+# TalkBridge Docker Requirements - Minimal Version
+# Simplified to avoid dependency conflicts for Python 3.8
 
 # Core dependencies
 numpy==1.21.6
@@ -10,7 +10,7 @@ requests==2.28.2
 # Audio processing
 sounddevice==0.4.6
 wave==0.0.2
-librosa==0.10.1
+librosa==0.10.0
 soundfile==0.12.1
 pygame==2.5.2
 
@@ -24,16 +24,16 @@ transformers==4.21.3
 sentencepiece==0.1.99
 
 # Text-to-Speech (TTS) - Using compatible version
-TTS==0.13.3
+TTS==0.14.3
 
 # Translation (argos-translate not available for Python 3.8)
 # Using alternative translation libraries
 googletrans==4.0.0rc1
 translate==3.6.1
 
-# Computer Vision and Animation
-mediapipe==0.10.3
-opencv-python==4.8.0.76
+# Computer Vision and Animation (optional - can be installed separately)
+# mediapipe==0.10.11
+# opencv-python==4.8.0.76
 pillow==9.5.0
 
 # Web Interface

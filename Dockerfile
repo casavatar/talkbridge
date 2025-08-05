@@ -35,36 +35,38 @@ RUN apt-get update && apt-get install -y \
     # Clean up
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements files
-COPY requirements-minimal.txt requirements.txt
-COPY requirements-docker.txt requirements-full.txt
-
 # Install Python dependencies in stages
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
 # Stage 1: Install core dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir \
+    numpy==1.21.6 \
+    matplotlib==3.5.3 \
+    scipy==1.7.3 \
+    requests==2.28.2 \
+    pandas==1.5.3
 
-# Stage 2: Install ML dependencies separately to avoid conflicts
+# Stage 2: Install audio processing
+RUN pip install --no-cache-dir \
+    sounddevice==0.4.6 \
+    wave==0.0.2 \
+    librosa==0.10.0 \
+    soundfile==0.12.1 \
+    pygame==2.5.2
+
+# Stage 3: Install ML dependencies
 RUN pip install --no-cache-dir torch==1.13.1 torchaudio==0.13.1 --index-url https://download.pytorch.org/whl/cpu
-
-# Stage 3: Install remaining dependencies
 RUN pip install --no-cache-dir transformers==4.21.3 sentencepiece==0.1.99
 
-# Stage 4: Install TTS separately
-RUN pip install --no-cache-dir TTS==0.13.3
-
-# Stage 5: Install remaining packages
+# Stage 4: Install web interface and other dependencies
 RUN pip install --no-cache-dir \
-    openai-whisper==20231117 \
-    mediapipe==0.10.11 \
-    opencv-python==4.8.0.76 \
-    pillow==9.5.0 \
+    streamlit==1.28.1 \
     streamlit-webrtc==0.47.1 \
     plotly==5.15.0 \
     cryptography>=42.0.0 \
     bcrypt==4.0.1 \
     passlib==1.7.4 \
+    pyyaml==6.0.1 \
     jsonschema==4.17.3 \
     structlog==22.3.0 \
     colorlog==6.7.0 \
@@ -73,12 +75,22 @@ RUN pip install --no-cache-dir \
     black==23.3.0 \
     isort==5.12.0 \
     flake8==6.0.0 \
-    mypy==1.3.0
+    mypy==1.3.0 \
+    python-dotenv==1.0.0 \
+    click==8.1.3 \
+    rich==13.3.5 \
+    tqdm==4.65.0
 
-# Stage 6: Install translation alternatives (argos-translate not available for Python 3.8)
+# Stage 5: Install translation alternatives
 RUN pip install --no-cache-dir \
     googletrans==4.0.0rc1 \
     translate==3.6.1
+
+# Stage 6: Install optional computer vision dependencies
+RUN pip install --no-cache-dir \
+    mediapipe==0.10.11 \
+    opencv-python==4.8.0.76 \
+    pillow==9.5.0
 
 # Copy application code
 COPY . .
