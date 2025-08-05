@@ -49,6 +49,36 @@ _whisper_model = None
 _model_loaded = False
 
 
+class MockWhisperModel:
+    """
+    Mock Whisper model for fallback when openai-whisper is not installed.
+    Provides basic functionality to prevent application crashes.
+    """
+    
+    def __init__(self):
+        self.name = "mock-whisper"
+        logger.info("Initialized MockWhisperModel for fallback functionality")
+    
+    def transcribe(self, audio_path, **kwargs):
+        """
+        Mock transcription that returns a placeholder message.
+        
+        Args:
+            audio_path: Path to audio file
+            **kwargs: Additional arguments (ignored)
+            
+        Returns:
+            Dictionary with mock transcription result
+        """
+        logger.warning("Using mock transcription - Whisper not installed")
+        return {
+            "text": "[Mock transcription - Whisper not installed]",
+            "language": "en",
+            "segments": [],
+            "language_probability": 1.0
+        }
+
+
 class WhisperEngine:
     """
     Whisper-based Speech-to-Text engine.
@@ -137,8 +167,14 @@ class WhisperEngine:
             return True
             
         except ImportError:
-            logger.error("Whisper not installed. Please install with: pip install openai-whisper")
-            return False
+            logger.warning("Whisper not installed. Using fallback transcription mode.")
+            logger.info("To enable full transcription, install with: pip install openai-whisper")
+            # Create a mock model for fallback functionality
+            self.model = MockWhisperModel()
+            self.is_loaded = True
+            _whisper_model = self.model
+            _model_loaded = True
+            return True
         except Exception as e:
             logger.error(f"Failed to load Whisper model: {e}")
             return False

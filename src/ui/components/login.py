@@ -59,8 +59,8 @@ class LoginComponent:
         
         # Create login form
         with st.form("login_form"):
-                    username = st.text_input("👤 Username", placeholder="Enter your username", key="username_login")
-        password = st.text_input("🔒 Password", type="password", placeholder="Enter your password", key="password_login")
+            username = st.text_input("👤 Username", placeholder="Enter your username", key="username_login")
+            password = st.text_input("🔒 Password", type="password", placeholder="Enter your password", key="password_login")
             
             col1, col2, col3 = st.columns([1, 2, 1])
             
