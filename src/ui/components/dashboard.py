@@ -120,7 +120,7 @@ class Dashboard:
             voice_pitch = st.slider("Voice Pitch", -12, 12, 0, 1, key="voice_pitch_chat")
             
             # Auto-translate toggle
-            auto_translate = st.checkbox("Auto-translate", value=True)
+            auto_translate = st.checkbox("Auto-translate", value=True, key="auto_translate_chat")
             
             if st.button("🔄 Apply Settings", use_container_width=True):
                 st.success("Settings applied!")
@@ -157,7 +157,7 @@ class Dashboard:
         col1, col2 = st.columns([3, 1])
         
         with col1:
-            manual_text = st.text_area("Type your message:", height=100)
+            manual_text = st.text_area("Type your message:", height=100, key="manual_text_chat")
         
         with col2:
             st.markdown("<br>", unsafe_allow_html=True)
@@ -194,10 +194,10 @@ class Dashboard:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            filter_type = st.selectbox("Filter by Type", ["All", "User", "Assistant"])
+            filter_type = st.selectbox("Filter by Type", ["All", "User", "Assistant"], key="filter_type_history")
         
         with col2:
-            filter_language = st.selectbox("Filter by Language", ["All", "English", "Spanish", "French", "German"])
+            filter_language = st.selectbox("Filter by Language", ["All", "English", "Spanish", "French", "German"], key="filter_language_history")
         
         with col3:
             if st.button("🗑️ Clear History", use_container_width=True):
@@ -268,9 +268,9 @@ class Dashboard:
             
             # Animation settings
             st.markdown("**Animation Settings:**")
-            lip_sync = st.checkbox("Lip Sync", value=True)
-            eye_blink = st.checkbox("Eye Blink", value=True)
-            head_movement = st.checkbox("Head Movement", value=False)
+            lip_sync = st.checkbox("Lip Sync", value=True, key="lip_sync_avatar")
+            eye_blink = st.checkbox("Eye Blink", value=True, key="eye_blink_avatar")
+            head_movement = st.checkbox("Head Movement", value=False, key="head_movement_avatar")
             
             # Avatar appearance
             st.markdown("**Appearance:**")
@@ -309,9 +309,9 @@ class Dashboard:
             
             # Change password section
             st.markdown("**Change Password:**")
-            old_password = st.text_input("Current Password", type="password")
-            new_password = st.text_input("New Password", type="password")
-            confirm_password = st.text_input("Confirm New Password", type="password")
+            old_password = st.text_input("Current Password", type="password", key="old_password_settings")
+            new_password = st.text_input("New Password", type="password", key="new_password_settings")
+            confirm_password = st.text_input("Confirm New Password", type="password", key="confirm_password_settings")
             
             if st.button("🔑 Change Password", use_container_width=True):
                 if new_password == confirm_password and len(new_password) >= 6:
@@ -323,14 +323,14 @@ class Dashboard:
             # Audio settings
             st.markdown("#### 🎵 Audio Settings")
             
-            audio_device = st.selectbox("Audio Input Device", ["Default", "Microphone", "System Audio"])
-            sample_rate = st.selectbox("Sample Rate", [16000, 22050, 44100], index=1)
-            audio_channels = st.selectbox("Audio Channels", [1, 2], index=0)
+            audio_device = st.selectbox("Audio Input Device", ["Default", "Microphone", "System Audio"], key="audio_device_settings")
+            sample_rate = st.selectbox("Sample Rate", [16000, 22050, 44100], index=1, key="sample_rate_settings")
+            audio_channels = st.selectbox("Audio Channels", [1, 2], index=0, key="audio_channels_settings")
             
             # Voice settings
             st.markdown("#### 🎤 Voice Settings")
             
-            voice_model = st.selectbox("Voice Model", ["Default", "Male", "Female", "Custom"])
+            voice_model = st.selectbox("Voice Model", ["Default", "Male", "Female", "Custom"], key="voice_model_settings")
             voice_speed = st.slider("Voice Speed", 0.5, 2.0, 1.0, 0.1, key="voice_speed_settings")
             voice_pitch = st.slider("Voice Pitch", -12, 12, 0, 1, key="voice_pitch_settings")
         
@@ -341,13 +341,13 @@ class Dashboard:
         
         with lang_col1:
             default_source = st.selectbox("Default Source Language", 
-                                        ["English", "Spanish", "French", "German", "Japanese", "Chinese"])
-            auto_detect = st.checkbox("Auto-detect language", value=True)
+                                        ["English", "Spanish", "French", "German", "Japanese", "Chinese"], key="default_source_language")
+            auto_detect = st.checkbox("Auto-detect language", value=True, key="auto_detect_language")
         
         with lang_col2:
             default_target = st.selectbox("Default Target Language", 
-                                        ["English", "Spanish", "French", "German", "Japanese", "Chinese"])
-            auto_translate = st.checkbox("Auto-translate", value=True)
+                                        ["English", "Spanish", "French", "German", "Japanese", "Chinese"], key="default_target_language")
+            auto_translate = st.checkbox("Auto-translate", value=True, key="auto_translate_settings")
         
         # System settings
         st.markdown("#### 💻 System Settings")
@@ -355,12 +355,12 @@ class Dashboard:
         sys_col1, sys_col2 = st.columns(2)
         
         with sys_col1:
-            theme = st.selectbox("Theme", ["Light", "Dark", "Auto"])
-            language = st.selectbox("Interface Language", ["English", "Spanish", "French"])
+            theme = st.selectbox("Theme", ["Light", "Dark", "Auto"], key="theme_settings")
+            language = st.selectbox("Interface Language", ["English", "Spanish", "French"], key="interface_language_settings")
         
         with sys_col2:
-            notifications = st.checkbox("Enable notifications", value=True)
-            auto_save = st.checkbox("Auto-save chat history", value=True)
+            notifications = st.checkbox("Enable notifications", value=True, key="enable_notifications")
+            auto_save = st.checkbox("Auto-save chat history", value=True, key="auto_save_chat")
         
         # Save settings
         if st.button("💾 Save Settings", use_container_width=True, type="primary"):

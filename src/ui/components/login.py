@@ -59,8 +59,8 @@ class LoginComponent:
         
         # Create login form
         with st.form("login_form"):
-            username = st.text_input("👤 Username", placeholder="Enter your username")
-            password = st.text_input("🔒 Password", type="password", placeholder="Enter your password")
+                    username = st.text_input("👤 Username", placeholder="Enter your username", key="username_login")
+        password = st.text_input("🔒 Password", type="password", placeholder="Enter your password", key="password_login")
             
             col1, col2, col3 = st.columns([1, 2, 1])
             
@@ -134,9 +134,9 @@ class LoginComponent:
         st.markdown("### 👥 Register New User")
         
         with st.form("register_form"):
-            new_username = st.text_input("👤 New Username", placeholder="Enter new username")
-            new_password = st.text_input("🔒 New Password", type="password", placeholder="Enter new password")
-            confirm_password = st.text_input("🔒 Confirm Password", type="password", placeholder="Confirm password")
+            new_username = st.text_input("👤 New Username", placeholder="Enter new username", key="new_username_register")
+            new_password = st.text_input("🔒 New Password", type="password", placeholder="Enter new password", key="new_password_register")
+            confirm_password = st.text_input("🔒 Confirm Password", type="password", placeholder="Confirm password", key="confirm_password_register")
             email = st.text_input("📧 Email (optional)", placeholder="Enter email address")
             
             col1, col2, col3 = st.columns([1, 2, 1])
@@ -197,10 +197,10 @@ class LoginComponent:
         st.markdown("### 🔑 Reset Password")
         
         with st.form("forgot_password_form"):
-            username = st.text_input("👤 Username", placeholder="Enter your username")
-            old_password = st.text_input("🔒 Current Password", type="password", placeholder="Enter current password")
-            new_password = st.text_input("🔒 New Password", type="password", placeholder="Enter new password")
-            confirm_password = st.text_input("🔒 Confirm New Password", type="password", placeholder="Confirm new password")
+            username = st.text_input("👤 Username", placeholder="Enter your username", key="username_change_password")
+            old_password = st.text_input("🔒 Current Password", type="password", placeholder="Enter current password", key="old_password_change")
+            new_password = st.text_input("🔒 New Password", type="password", placeholder="Enter new password", key="new_password_change")
+            confirm_password = st.text_input("🔒 Confirm New Password", type="password", placeholder="Confirm new password", key="confirm_password_change")
             
             col1, col2, col3 = st.columns([1, 2, 1])
             

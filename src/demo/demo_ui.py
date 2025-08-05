@@ -122,7 +122,7 @@ def render_demo_transcription():
     
     # Display transcription
     if st.session_state.get("demo_transcription"):
-        st.text_area("Transcribed Text:", st.session_state.demo_transcription, height=100)
+        st.text_area("Transcribed Text:", st.session_state.demo_transcription, height=100, key="transcribed_text_demo")
 
 
 def render_demo_translation():
@@ -182,7 +182,7 @@ def render_demo_llm_response():
     
     # Display response
     if st.session_state.get("demo_response"):
-        st.text_area("AI Response:", st.session_state.demo_response, height=150)
+        st.text_area("AI Response:", st.session_state.demo_response, height=150, key="ai_response_demo")
 
 
 def render_demo_voice_synthesis():
@@ -343,7 +343,7 @@ def render_demo_settings():
     with col2:
         synthesis_delay = st.slider("Voice Synthesis Delay (s)", 0.0, 5.0, get_demo_setting("delay_voice_synthesis", 2.5))
         avatar_delay = st.slider("Avatar Animation Delay (s)", 0.0, 2.0, get_demo_setting("delay_avatar_animation", 0.5))
-        simulate_delays = st.checkbox("Simulate Delays", value=get_demo_setting("simulate_delays", True))
+        simulate_delays = st.checkbox("Simulate Delays", value=get_demo_setting("simulate_delays", True), key="simulate_delays_demo")
     
     # Demo file info
     st.write("**Demo Files:**")

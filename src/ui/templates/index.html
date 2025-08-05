@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkBridge - Real-time Voice & Video Communication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .hardware-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .hardware-section h2 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .permission-status {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .permission-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .permission-granted {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .permission-denied {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .permission-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .media-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .video-container, .audio-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .video-container h3, .audio-container h3 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+
+        .audio-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            border: 1px solid #2196f3;
+        }
+
+        .audio-indicator .icon {
+            font-size: 24px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 20px;
+        }
+
+        .device-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .device-info h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .device-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .device-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+        }
+
+        .device-list li:last-child {
+            border-bottom: none;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active {
+            background: #28a745;
+        }
+
+        .status-inactive {
+            background: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .media-container {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎤 TalkBridge</h1>
+            <p>Real-time Voice & Video Communication Platform</p>
+        </div>
+
+        <div class="main-content">
+            <div class="hardware-section">
+                <h2>🔧 Hardware Access</h2>
+                
+                <!-- Permission Status -->
+                <div class="permission-status" id="permissionStatus">
+                    <div class="permission-badge permission-pending">
+                        <span class="status-indicator status-inactive"></span>
+                        🎤 Microphone: Pending
+                    </div>
+                    <div class="permission-badge permission-pending">
+                        <span class="status-indicator status-inactive"></span>
+                        📹 Camera: Pending
+                    </div>
+                </div>
+
+                <!-- Error Messages -->
+                <div id="errorContainer" style="display: none;"></div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button class="btn btn-primary" id="requestMicrophone">
+                        🎤 Request Microphone
+                    </button>
+                    <button class="btn btn-warning" id="requestCamera">
+                        📹 Request Camera
+                    </button>
+                    <button class="btn btn-success" id="requestBoth">
+                        🎥 Request Both
+                    </button>
+                    <button class="btn btn-danger" id="stopAll">
+                        🛑 Stop All
+                    </button>
+                    <button class="btn btn-info" id="checkPermissions">
+                        🔍 Check Permissions
+                    </button>
+                </div>
+
+                <!-- Media Display -->
+                <div class="media-container">
+                    <div class="video-container">
+                        <h3>📹 Camera Feed</h3>
+                        <video id="videoElement" autoplay playsInline muted style="display: none;"></video>
+                        <div id="videoPlaceholder" style="text-align: center; padding: 40px; color: #6c757d;">
+                            <div style="font-size: 48px; margin-bottom: 10px;">📹</div>
+                            <p>Camera feed will appear here</p>
+                        </div>
+                    </div>
+
+                    <div class="audio-container">
+                        <h3>🎤 Audio Stream</h3>
+                        <audio id="audioElement" autoplay muted style="display: none;"></audio>
+                        <div id="audioPlaceholder" class="audio-indicator">
+                            <div class="icon">🎤</div>
+                            <div>
+                                <strong>Audio Status:</strong>
+                                <span id="audioStatus">Inactive</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device Information -->
+                <div class="device-info" id="deviceInfo" style="display: none;">
+                    <h4>📋 Available Devices</h4>
+                    <div id="deviceList"></div>
+                </div>
+            </div>
+
+            <!-- Application Content -->
+            <div id="appContent" style="display: none;">
+                <h2>🚀 Application Ready</h2>
+                <p>Hardware access granted! The application is now ready to use.</p>
+                <!-- Additional application content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the hardware access manager -->
+    <script src="assets/hardware_access.js"></script>
+    
+    <script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const hardwareManager = window.hardwareAccessManager;
+            
+            // Update permission status
+            function updatePermissionStatus() {
+                const status = hardwareManager.getStatus();
+                const permissionElements = document.querySelectorAll('.permission-badge');
+                
+                permissionElements[0].className = `permission-badge ${status.permissions.microphone ? 'permission-granted' : 'permission-denied'}`;
+                permissionElements[0].innerHTML = `
+                    <span class="status-indicator ${status.permissions.microphone ? 'status-active' : 'status-inactive'}"></span>
+                    🎤 Microphone: ${status.permissions.microphone ? 'Granted' : 'Denied'}
+                `;
+                
+                permissionElements[1].className = `permission-badge ${status.permissions.camera ? 'permission-granted' : 'permission-denied'}`;
+                permissionElements[1].innerHTML = `
+                    <span class="status-indicator ${status.permissions.camera ? 'status-active' : 'status-inactive'}"></span>
+                    📹 Camera: ${status.permissions.camera ? 'Granted' : 'Denied'}
+                `;
+            }
+
+            // Show/hide video element
+            function updateVideoDisplay(hasVideo) {
+                const videoElement = document.getElementById('videoElement');
+                const videoPlaceholder = document.getElementById('videoPlaceholder');
+                
+                if (hasVideo) {
+                    videoElement.style.display = 'block';
+                    videoPlaceholder.style.display = 'none';
+                } else {
+                    videoElement.style.display = 'none';
+                    videoPlaceholder.style.display = 'block';
+                }
+            }
+
+            // Show/hide audio indicator
+            function updateAudioDisplay(hasAudio) {
+                const audioPlaceholder = document.getElementById('audioPlaceholder');
+                const audioStatus = document.getElementById('audioStatus');
+                
+                if (hasAudio) {
+                    audioStatus.textContent = 'Active';
+                    audioPlaceholder.style.background = '#d4edda';
+                    audioPlaceholder.style.borderColor = '#28a745';
+                } else {
+                    audioStatus.textContent = 'Inactive';
+                    audioPlaceholder.style.background = '#e3f2fd';
+                    audioPlaceholder.style.borderColor = '#2196f3';
+                }
+            }
+
+            // Show error message
+            function showError(message) {
+                const errorContainer = document.getElementById('errorContainer');
+                errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+                errorContainer.style.display = 'block';
+                
+                setTimeout(() => {
+                    errorContainer.style.display = 'none';
+                }, 5000);
+            }
+
+            // Update device information
+            async function updateDeviceInfo() {
+                try {
+                    const devices = await hardwareManager.getAvailableDevices();
+                    const deviceInfo = document.getElementById('deviceInfo');
+                    const deviceList = document.getElementById('deviceList');
+                    
+                    if (devices.audioInputs.length > 0 || devices.videoInputs.length > 0) {
+                        let html = '';
+                        
+                        if (devices.audioInputs.length > 0) {
+                            html += '<div><strong>🎤 Audio Inputs:</strong><ul class="device-list">';
+                            devices.audioInputs.forEach(device => {
+                                html += `<li>${device.label || 'Unknown Audio Device'}</li>`;
+                            });
+                            html += '</ul></div>';
+                        }
+                        
+                        if (devices.videoInputs.length > 0) {
+                            html += '<div><strong>📹 Video Inputs:</strong><ul class="device-list">';
+                            devices.videoInputs.forEach(device => {
+                                html += `<li>${device.label || 'Unknown Camera'}</li>`;
+                            });
+                            html += '</ul></div>';
+                        }
+                        
+                        deviceList.innerHTML = html;
+                        deviceInfo.style.display = 'block';
+                    }
+                } catch (error) {
+                    console.error('Error updating device info:', error);
+                }
+            }
+
+            // Set up callbacks
+            hardwareManager.setCallbacks({
+                onAudioAccess: (stream) => {
+                    console.log('Audio access granted');
+                    document.getElementById('audioElement').srcObject = stream;
+                    updateAudioDisplay(true);
+                    updatePermissionStatus();
+                    updateDeviceInfo();
+                },
+                onVideoAccess: (stream) => {
+                    console.log('Video access granted');
+                    document.getElementById('videoElement').srcObject = stream;
+                    updateVideoDisplay(true);
+                    updatePermissionStatus();
+                    updateDeviceInfo();
+                },
+                onError: (type, error) => {
+                    console.error(`${type} access error:`, error);
+                    showError(`Error accessing ${type}: ${error.message}`);
+                    updatePermissionStatus();
+                }
+            });
+
+            // Set up button event listeners
+            document.getElementById('requestMicrophone').addEventListener('click', async () => {
+                try {
+                    await hardwareManager.requestMicrophoneAccess();
+                } catch (error) {
+                    showError(`Microphone access failed: ${error.message}`);
+                }
+            });
+
+            document.getElementById('requestCamera').addEventListener('click', async () => {
+                try {
+                    await hardwareManager.requestWebcamAccess();
+                } catch (error) {
+                    showError(`Camera access failed: ${error.message}`);
+                }
+            });
+
+            document.getElementById('requestBoth').addEventListener('click', async () => {
+                try {
+                    await hardwareManager.requestBothAccess();
+                } catch (error) {
+                    showError(`Media access failed: ${error.message}`);
+                }
+            });
+
+            document.getElementById('stopAll').addEventListener('click', () => {
+                hardwareManager.stopAllStreams();
+                updateVideoDisplay(false);
+                updateAudioDisplay(false);
+                updatePermissionStatus();
+            });
+
+            document.getElementById('checkPermissions').addEventListener('click', async () => {
+                try {
+                    const permissions = await hardwareManager.checkPermissions();
+                    console.log('Current permissions:', permissions);
+                    updatePermissionStatus();
+                } catch (error) {
+                    console.error('Error checking permissions:', error);
+                }
+            });
+
+            // Auto-request permissions on page load
+            setTimeout(async () => {
+                try {
+                    console.log('Auto-requesting media access...');
+                    await hardwareManager.requestBothAccess();
+                    
+                    // Show application content when hardware is ready
+                    const appContent = document.getElementById('appContent');
+                    appContent.style.display = 'block';
+                } catch (error) {
+                    console.log('Auto-request failed, user will need to manually grant permissions');
+                }
+            }, 1000);
+
+            // Initial setup
+            updatePermissionStatus();
+            updateDeviceInfo();
+        });
+    </script>
+</body>
+</html> 

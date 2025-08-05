@@ -173,10 +173,10 @@ class ChatInterface:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            filter_type = st.selectbox("Filter by Type", ["All", "User", "Assistant"])
+            filter_type = st.selectbox("Filter by Type", ["All", "User", "Assistant"], key="filter_type_chat")
         
         with col2:
-            filter_language = st.selectbox("Filter by Language", ["All", "English", "Spanish", "French", "German"])
+            filter_language = st.selectbox("Filter by Language", ["All", "English", "Spanish", "French", "German"], key="filter_language_chat")
         
         with col3:
             if st.button("🗑️ Clear History", use_container_width=True):
