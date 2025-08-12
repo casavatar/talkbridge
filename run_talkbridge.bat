@@ -6,6 +6,6 @@ echo Starting TalkBridge with conda environment...
 echo.
 
 REM Run the application with conda Python directly
-C:\Users\ingek\miniconda3\envs\talkbridge\python.exe app.py
+C:\Users\ingek\miniconda3\envs\talkbridge\src\python.exe app.py
 
 pause 
