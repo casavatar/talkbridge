@@ -1,0 +1,37 @@
+[Unit]
+Description=TalkBridge Streamlit Application
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=talkbridge
+Group=talkbridge
+WorkingDirectory=/srv/talkbridge
+Environment="PYTHONUNBUFFERED=1"
+Environment="STREAMLIT_SERVER_HEADLESS=true"
+Environment="STREAMLIT_SERVER_ENABLE_CORS=false"
+Environment="STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=true"
+EnvironmentFile=-/srv/talkbridge/.env
+
+# Comando con activación de conda
+ExecStart=/bin/bash -lc 'source /home/talkbridge/miniconda3/etc/profile.d/conda.sh && conda activate talkbridge && streamlit run src/ui/web_interface.py --server.port=8000 --server.address=127.0.0.1 --server.maxUploadSize=200 --server.enableCORS=false --server.enableXsrfProtection=true'
+
+# Configuración de reinicio
+Restart=always
+RestartSec=3
+TimeoutStartSec=60
+TimeoutStopSec=30
+
+# Señales para manejo graceful
+KillMode=mixed
+KillSignal=SIGTERM
+SendSIGKILL=no
+
+# Logs
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=talkbridge
+
+[Install]
+WantedBy=multi-user.target
