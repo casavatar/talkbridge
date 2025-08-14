@@ -1,0 +1,202 @@
+# TalkBridge Desktop Requirements
+# ====================================
+# 
+# Specific dependencies for the desktop application
+# based on PyQt6. Install after the base dependencies.
+#
+# Installation:
+# pip install -r requirements-desktop.txt
+
+# ==========================================
+# GRAPHICAL USER INTERFACE FRAMEWORK
+# ==========================================
+
+# PyQt6 - Main UI framework
+PyQt6>=6.5.0,<6.7.0
+
+# PyQt6 Qt6 bindings
+PyQt6-Qt6>=6.5.0,<6.7.0
+
+# PyQt6 SIP bindings
+PyQt6-sip>=13.5.0,<14.0.0
+
+# PyQt6 development tools (optional for development)
+pyqt6-tools>=6.4.2,<6.6.0
+
+# ==========================================
+# CONFIGURATION PROCESSING
+# ==========================================
+
+# YAML for configuration files
+PyYAML>=6.0,<7.0
+
+# JSON schema validation (optional for config validation)
+jsonschema>=4.17.0,<5.0.0
+
+# ==========================================
+# THREADING AND CONCURRENCY
+# ==========================================
+
+# Enhanced concurrent futures
+concurrent-futures>=3.1.1; python_version<"3.2"
+
+# Threading utilities
+threading2>=0.1.2; python_version<"3.3"
+
+# ==========================================
+# SYSTEM AND PATHS
+# ==========================================
+
+# Path manipulation utilities
+pathlib2>=2.3.7; python_version<"3.4"
+
+# Operating system utilities
+psutil>=5.9.0,<6.0.0
+
+# ==========================================
+# LOGGING AND DEBUGGING
+# ==========================================
+
+# Advanced logging
+loguru>=0.7.0,<1.0.0
+
+# Pretty printing for debugging
+pprint2>=1.0.0
+
+# ==========================================
+# VALIDATION AND TYPES
+# ==========================================
+
+# Runtime type checking
+typeguard>=3.0.0,<5.0.0
+
+# Pydantic for data validation
+pydantic>=2.0.0,<3.0.0
+
+# ==========================================
+# TIME UTILITIES
+# ==========================================
+
+# Date parsing
+python-dateutil>=2.8.0,<3.0.0
+
+# Timezone handling
+pytz>=2023.3
+
+# ==========================================
+# PERSISTENCE AND STORAGE
+# ==========================================
+
+# SQLite utilities (for persistent configurations)
+sqlite-utils>=3.34.0,<4.0.0
+
+# Extended pickle
+dill>=0.3.6,<1.0.0
+
+# ==========================================
+# COMMUNICATION AND NETWORKING
+# ==========================================
+
+# HTTP requests for external APIs
+requests>=2.31.0,<3.0.0
+
+# WebSocket client (for service communication)
+websocket-client>=1.6.0,<2.0.0
+
+# ==========================================
+# COMPRESSION AND FILES
+# ==========================================
+
+# File compression
+zipfile2>=0.2.1
+
+# Temporary file manipulation
+tempfile2>=1.1
+
+# ==========================================
+# MULTIMEDIA (For audio/video preview)
+# ==========================================
+
+# Pillow for image handling
+Pillow>=9.5.0,<11.0.0
+
+# Basic audio manipulation (optional)
+pydub>=0.25.1,<1.0.0
+
+# ==========================================
+# DEVELOPMENT AND TESTING (DEV ONLY)
+# ==========================================
+
+# Testing framework
+pytest>=7.4.0,<8.0.0
+pytest-qt>=4.2.0,<5.0.0
+
+# Mocking
+pytest-mock>=3.11.0,<4.0.0
+
+# Coverage
+coverage>=7.2.0,<8.0.0
+
+# Code formatting
+black>=23.0.0,<24.0.0
+
+# Linting
+flake8>=6.0.0,<7.0.0
+
+# Type checking
+mypy>=1.5.0,<2.0.0
+
+# ==========================================
+# PACKAGING (OPTIONAL FOR DISTRIBUTION)
+# ==========================================
+
+# PyInstaller to create executables
+PyInstaller>=5.13.0,<6.0.0
+
+# Auto-py-to-exe GUI for PyInstaller (optional)
+auto-py-to-exe>=2.34.0,<3.0.0
+
+# ==========================================
+# COMPATIBILITY
+# ==========================================
+
+# Compatibility with Python 3.8+
+importlib-metadata>=6.8.0; python_version<"3.10"
+
+# Typing extensions
+typing-extensions>=4.7.0
+
+# ==========================================
+# INSTALLATION NOTES
+# ==========================================
+
+# WINDOWS:
+# --------
+# On Windows, it may be necessary to install Visual C++ Redistributable
+# Download from: https://visualstudio.microsoft.com/downloads/
+# 
+# Also check that Python is in the system PATH
+
+# LINUX:
+# ------
+# On Debian/Ubuntu-based distributions:
+# sudo apt-get install python3-pyqt6 python3-pyqt6-dev
+# 
+# On Red Hat/Fedora-based distributions:
+# sudo dnf install python3-PyQt6 python3-PyQt6-devel
+
+# MACOS:
+# ------
+# PyQt6 should install correctly with pip
+# If there are issues, use homebrew:
+# brew install pyqt@6
+
+# ==========================================
+# POST-INSTALLATION VERIFICATION
+# ==========================================
+
+# To verify that PyQt6 was installed correctly, run:
+# python -c "from PyQt6.QtWidgets import QApplication; print('PyQt6 OK')"
+#
+# To verify the rest of the dependencies:
+# python -c "import yaml, logging, pathlib; print('Basic dependencies OK')"

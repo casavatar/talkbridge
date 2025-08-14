@@ -1,0 +1,177 @@
+/*
+TalkBridge Desktop - Simplified Styles
+=====================================
+*/
+
+/* Base Application */
+QApplication {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10pt;
+}
+
+/* Main Window */
+QMainWindow {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+
+QWidget {
+    background-color: #2b2b2b;
+    color: #ffffff;
+}
+
+/* Buttons */
+QPushButton {
+    background-color: #0078d4;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+    min-height: 20px;
+}
+
+QPushButton:hover {
+    background-color: #106ebe;
+}
+
+QPushButton:pressed {
+    background-color: #005a9e;
+}
+
+QPushButton:disabled {
+    background-color: #555555;
+    color: #888888;
+}
+
+/* Labels */
+QLabel {
+    color: #ffffff;
+    background-color: transparent;
+}
+
+/* Input Fields */
+QLineEdit {
+    background-color: #3c3c3c;
+    border: 2px solid #555555;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #ffffff;
+    min-height: 16px;
+}
+
+QLineEdit:focus {
+    border-color: #0078d4;
+}
+
+/* Group Box */
+QGroupBox {
+    background-color: transparent;
+    border: 2px solid #555555;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 12px 0px;
+    padding-top: 16px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    padding: 0 8px;
+    color: #ffffff;
+    background-color: #2b2b2b;
+}
+
+/* Frames */
+QFrame {
+    background-color: #3c3c3c;
+    border: 1px solid #555555;
+    border-radius: 6px;
+}
+
+/* Service Cards */
+QWidget#serviceCard {
+    background-color: #3c3c3c;
+    border: 2px solid #555555;
+    border-radius: 12px;
+}
+
+QWidget#serviceCard:hover {
+    border-color: #0078d4;
+    background-color: #404040;
+}
+
+QPushButton#cardActionButton {
+    background-color: #0078d4;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+QPushButton#cardActionButton:hover {
+    background-color: #106ebe;
+}
+
+QPushButton#cardActionButton:disabled {
+    background-color: #555555;
+    color: #888888;
+}
+
+/* Menu Bar */
+QMenuBar {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    border-bottom: 1px solid #555555;
+}
+
+QMenuBar::item {
+    background-color: transparent;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected {
+    background-color: #0078d4;
+}
+
+/* Menu */
+QMenu {
+    background-color: #3c3c3c;
+    border: 1px solid #555555;
+    border-radius: 6px;
+    color: #ffffff;
+}
+
+QMenu::item {
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+QMenu::item:selected {
+    background-color: #0078d4;
+}
+
+/* Status Bar */
+QStatusBar {
+    background-color: #3c3c3c;
+    color: #cccccc;
+    border-top: 1px solid #555555;
+}
+
+/* Progress Bar */
+QProgressBar {
+    background-color: #3c3c3c;
+    border: 2px solid #555555;
+    border-radius: 6px;
+    text-align: center;
+    color: #ffffff;
+    min-height: 20px;
+}
+
+QProgressBar::chunk {
+    background-color: #0078d4;
+    border-radius: 4px;
+}

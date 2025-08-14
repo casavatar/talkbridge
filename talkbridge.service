@@ -14,16 +14,16 @@ Environment="STREAMLIT_SERVER_ENABLE_CORS=false"
 Environment="STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION=true"
 EnvironmentFile=-/srv/talkbridge/.env
 
-# Comando con activación de conda
+# Conda activation command
 ExecStart=/bin/bash -lc 'source /home/talkbridge/miniconda3/etc/profile.d/conda.sh && conda activate talkbridge && streamlit run src/ui/web_interface.py --server.port=8000 --server.address=127.0.0.1 --server.maxUploadSize=200 --server.enableCORS=false --server.enableXsrfProtection=true'
 
-# Configuración de reinicio
+# Restart settings
 Restart=always
 RestartSec=3
 TimeoutStartSec=60
 TimeoutStopSec=30
 
-# Señales para manejo graceful
+# Graceful Management Signals
 KillMode=mixed
 KillSignal=SIGTERM
 SendSIGKILL=no
