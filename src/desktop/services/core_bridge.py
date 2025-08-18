@@ -1,14 +1,19 @@
-"""
-TalkBridge Desktop - Core Bridge Service
-=======================================
-
-Bridge between the user interface and TalkBridge core modules.
-Provides a unified API with proper threading for asynchronous operations
-and service state management.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#! /src/desktop/services/core_bridge.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Core service bridge for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - create_service: Create a new service instance
+# - get_service: Retrieve an existing service instance
+# - remove_service: Remove a service instance
+#----------------------------------------------------------------------------------------------------------------------------
 
 import logging
 from typing import Dict, Any, Optional, Callable, List

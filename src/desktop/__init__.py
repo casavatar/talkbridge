@@ -1,24 +1,20 @@
-"""
-TalkBridge Desktop Application Package
-=====================================
-
-Modern desktop interface for TalkBridge using PyQt6.
-
-Author: TalkBridge Team
-Version: 1.0.0
-Date: 2025
-
-Main components:
-- Application: Application lifecycle management
-- StateManager: Centralized state management
-- CoreBridge: Bridge between UI and core services
-- Dashboard: Main view with service status
-- LoginDialog: User authentication
-
-Usage:
-    from src.desktop.main import main
-    main()
-"""
+#! /src/desktop/windows/dashboard.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Dashboard UI for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - setup_application_settings: Configure global Qt application settings
+# - setup_application_logging: Configure logging for the application
+# - check_dependencies: Check for critical dependencies
+# - show_error_dialog: Display an error dialog
+#----------------------------------------------------------------------------------------------------------------------------
 
 __version__ = "1.0.0"
 __author__ = "TalkBridge Team"

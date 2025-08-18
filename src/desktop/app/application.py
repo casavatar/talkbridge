@@ -1,14 +1,20 @@
-"""
-TalkBridge Desktop Application - Main Application Class
-======================================================
-
-Main application class that manages the full lifecycle,
-including service initialization, window management, and coordination
-between components.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#! /src/desktop/windows/dashboard.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Dashboard UI for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - setup_ui: Set up the user interface for the dashboard
+# - load_user_data: Load user-specific data for the dashboard
+# - refresh_data: Refresh the displayed data
+# - show_error: Display an error message
+#----------------------------------------------------------------------------------------------------------------------------
 
 import sys
 import logging

@@ -1,13 +1,19 @@
-"""
-TalkBridge Desktop - Main Dashboard
-===================================
-
-Main dashboard of the application with an overview of service status,
-quick access buttons, and main controls.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#!/src/desktop/windows/dashboard.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Dashboard UI for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - setup_ui: Configure the user interface
+# - update_status: Update the service status
+# - show_error: Display an error message
+#----------------------------------------------------------------------------------------------------------------------------
 
 import logging
 from typing import Dict, Optional, Any

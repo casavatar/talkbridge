@@ -1,14 +1,25 @@
-"""
-TalkBridge Desktop - State Manager
-=================================
-
-Centralized state manager for the desktop application.
-Handles configuration, user preferences, service status,
-and data persistence.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#! /src/desktop/app/state_manager.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: State Manager for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - initialize: Initialize the state manager
+# - load_config: Load application configuration
+# - save_config: Save application configuration
+# - get_user_session: Get the current user session
+# - set_user_session: Set the current user session
+# - get_service_status: Get the status of a specific service
+# - set_service_status: Set the status of a specific service
+# - get_ui_preference: Get a UI preference value
+# - set_ui_preference: Set a UI preference value
+#----------------------------------------------------------------------------------------------------------------------------
 
 import os
 import json

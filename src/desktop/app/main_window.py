@@ -1,14 +1,21 @@
 
-"""
-TalkBridge Desktop - Main Window
-===============================
-
-Main application window with MenuBar, StatusBar,
-and management of secondary windows.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#! /src/desktop/app/main_window.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Main application window for TalkBridge Desktop
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - setup_ui: Set up the user interface for the main window
+# - load_user_data: Load user-specific data for the main window
+# - refresh_data: Refresh the displayed data
+# - show_error: Display an error message
+#----------------------------------------------------------------------------------------------------------------------------
 
 import logging
 from typing import Optional

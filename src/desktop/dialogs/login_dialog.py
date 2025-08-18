@@ -1,13 +1,19 @@
-"""
-TalkBridge Desktop - Login Dialog
-================================
-
-Modal dialog for user authentication with integration
-to the existing TalkBridge authentication system.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#! /src/desktop/dialogs/login_dialog.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Login dialog for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - create_login_dialog: Create and display the login dialog
+# - handle_login: Process the login credentials
+# - show_login_error: Display an error message for failed login attempts
+#----------------------------------------------------------------------------------------------------------------------------
 
 import logging
 from typing import Optional

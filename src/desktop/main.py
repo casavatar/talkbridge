@@ -1,15 +1,20 @@
-#!/usr/bin/env python3
-"""
-TalkBridge Desktop Application - Entry Point
-=============================================
-
-Main entry point for the TalkBridge desktop application.
-Handles application initialization, logging setup,
-and launching the main interface.
-
-Author: TalkBridge Team
-Date: 2025
-"""
+#! /src/desktop/windows/dashboard.py
+#----------------------------------------------------------------------------------------------------------------------------
+# description: Dashboard UI for TalkBridge Desktop application
+#----------------------------------------------------------------------------------------------------------------------------
+# author: ingekastel
+# date: 2025-06-02
+# version: 1.0
+#----------------------------------------------------------------------------------------------------------------------------
+# requirements:
+# - PyQt6
+#----------------------------------------------------------------------------------------------------------------------------
+# functions:
+# - setup_application_settings: Configure global Qt application settings
+# - setup_application_logging: Configure logging for the application
+# - check_dependencies: Check for critical dependencies
+# - show_error_dialog: Display an error dialog
+#----------------------------------------------------------------------------------------------------------------------------
 
 import sys
 import os
