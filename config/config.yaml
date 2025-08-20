@@ -1,19 +1,49 @@
-#----------------------------------------------------------------------------------------------------------------------------
-# Dockerfile for a Python application
-#----------------------------------------------------------------------------------------------------------------------------
-# This file is used to configure the application settings.
-# It is recommended to use environment variables to override these settings in production.
-#----------------------------------------------------------------------------------------------------------------------------
-# Example configuration file for a Python application
-#----------------------------------------------------------------------------------------------------------------------------
+# ============================================================
+# TalkBridge Desktop - Configuration File
+# ============================================================
+# Application settings for TalkBridge Desktop
+# Override these settings using environment variables in production
+# ============================================================
 
+# ==========================================
+# OLLAMA CONFIGURATION
+# ==========================================
 ollama:
   base_url: "http://localhost:11434"
   model: "deepseek-r1:latest"
+  timeout: 30
+  max_retries: 3
 
+# ==========================================
+# WHISPER STT CONFIGURATION
+# ==========================================
 whisper:
-  model_name: "DeepSeek R1 0528 Qwen3 8B"
+  model_name: "base"  # Options: tiny, base, small, medium, large
+  language: "auto"    # Auto-detect or specify language code
+  device: "auto"      # auto, cpu, cuda
 
+# ==========================================
+# AUDIO CONFIGURATION
+# ==========================================
 audio:
   sample_rate: 16000
   channels: 1
+  chunk_size: 1024
+  format: "int16"
+
+# ==========================================
+# DESKTOP UI CONFIGURATION
+# ==========================================
+ui:
+  theme: "dark"
+  window_size: [1200, 800]
+  language: "en"
+  
+# ==========================================
+# LOGGING CONFIGURATION
+# ==========================================
+logging:
+  level: "INFO"
+  file: "logs/app.log"
+  max_size: "10MB"
+  backup_count: 5

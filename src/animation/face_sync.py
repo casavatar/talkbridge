@@ -1,28 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Face Sync Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#---------------------------------------------------------------------------------------------------------------------------- 
-#  
-# requirements:
-# - numpy Python package
-# - mediapipe Python package
-# - pygame Python package
-# - librosa Python package
-# - opencv-python Python package
-# - soundfile Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------       
-# functions:
-# - FaceSync: Face sync class
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge Animation - Face Sync
+================================
+
+Módulo face_sync para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- mediapipe
+- opencv-python
+======================================================================
+Functions:
+- __init__: Initialize the face sync system.
+- load_audio: Load audio file for lip sync.
+- _extract_audio_features: Extract audio features for lip sync animation.
+- detect_facial_landmarks: Detect facial landmarks using MediaPipe.
+- _calculate_mouth_opening: Calculate mouth opening based on lip landmarks.
+- _calculate_eye_blink: Calculate eye blink based on eye landmarks.
+- update_animation_state: Update animation state based on audio features.
+- get_frame: Get current frame from webcam or avatar.
+- process_frame: Process frame with facial animation overlays.
+- _draw_landmarks: Draw facial landmarks on frame.
+======================================================================
+"""
 
 import cv2
 import numpy as np

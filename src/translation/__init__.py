@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Translation Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - argos-translate Python package (or googletrans as fallback)
-# - transformers Python package
-# - sentencepiece Python package
-# - torch Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - Translator: Online translation using Ollama API     
-# - OfflineTranslator: Offline translation using local models
-# - translate_to_spanish: Convenience function for offline translation to Spanish
-# - translate_text: General translation function
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge Translation -   Init   - Package Initialization
+==========================================================
+
+Inicialización del paquete
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- googletrans
+======================================================================
+Functions:
+- translate_text: General translation function that the API expects.
+======================================================================
+"""
 
 from .translator import Translator
 from .offline_translator import OfflineTranslator, translate_to_spanish, TranslationError

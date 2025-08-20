@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Audio Effects Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - AudioEffects: Audio effects class
-# - AudioEffectsDemo: Demo class for audio effects
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Audio - Effects
+==========================
+
+Módulo effects para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- sounddevice
+- numpy
+======================================================================
+Functions:
+- __init__: Initialize audio effects processor.
+- apply_reverb: Apply reverb effect.
+- apply_delay: Apply delay effect.
+- apply_distortion: Apply distortion effect.
+- apply_chorus: Apply chorus effect.
+- apply_flanger: Apply flanger effect.
+- apply_compressor: Apply compression effect.
+- apply_limiter: Apply limiting effect.
+- apply_eq: Apply 3-band EQ.
+- apply_bit_crusher: Apply bit crusher effect.
+======================================================================
+"""
 
 import numpy as np
 import sounddevice as sd

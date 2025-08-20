@@ -1,19 +1,30 @@
 #! /src/desktop/services/core_bridge.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Core service bridge for TalkBridge Desktop application
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - create_service: Create a new service instance
-# - get_service: Retrieve an existing service instance
-# - remove_service: Remove a service instance
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Desktop - Core Bridge
+================================
+
+Módulo core_bridge para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- __init__: Función __init__
+- run: Executes the operation in the thread pool.
+- cancel: Cancels the operation.
+- __init__: Función __init__
+- synthesize_async: Asynchronously synthesizes text to speech.
+- _do_synthesis: Performs the actual voice synthesis.
+- _get_default_voice_settings: Returns default voice configuration.
+- _cleanup_worker: Cleans up a completed worker.
+- cancel_all_synthesis: Cancels all ongoing synthesis operations.
+- __init__: Función __init__
+======================================================================
+"""
 
 import logging
 from typing import Dict, Any, Optional, Callable, List

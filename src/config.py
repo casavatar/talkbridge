@@ -1,43 +1,27 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: TalkBridge Configuration
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - os Python package
-# - sys Python package
-# - pathlib Python package
-# - typing Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - PROJECT_ROOT: Project root directory
-# - SRC_DIR: Source directory
-# - DATA_DIR: Data directory
-# - DOCS_DIR: Documentation directory
-# - TEST_DIR: Test directory
-# - SYSTEM_CONFIG: System configuration
-# - PATH_CONFIG: Path configuration
-# - AUDIO_CONFIG: Audio configuration
-# - STT_CONFIG: Speech-to-Text configuration
-# - TTS_CONFIG: Text-to-Speech configuration
-# - LLM_CONFIG: Language Model configuration
-# - TRANSLATION_CONFIG: Translation configuration
-# - ANIMATION_CONFIG: Animation configuration
-# - UI_CONFIG: Web interface configuration
-# - DEMO_CONFIG: Demo configuration
-# - SECURITY_CONFIG: Security configuration 
-# - DEV_CONFIG: Development configuration
-# - get_config: Get configuration for a specific environment
-# - ensure_directories: Ensure all required directories exist
-# - get_path: Get a path from PATH_CONFIG
-# - get_setting: Get a setting from a specific configuration category
-# - is_demo_mode: Check if demo mode is enabled
-# - is_debug_mode: Check if debug mode is enabled
-#-------------------------------------------------------------------------------------------------
+"""
+Config
+======
+
+Configuración del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- None
+======================================================================
+Functions:
+- get_config: Get configuration for a specific environment.
+- ensure_directories: Ensure all required directories exist.
+- get_path: Get a path from PATH_CONFIG.
+- get_setting: Get a setting from a specific configuration category.
+- is_demo_mode: Check if demo mode is enabled.
+- is_debug_mode: Check if debug mode is enabled.
+- is_development_mode: Check if development mode is enabled.
+======================================================================
+"""
 
 import os
 import sys

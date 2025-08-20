@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Ollama Client Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - requests Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - OllamaClient: Ollama client class
-#----------------------------------------------------------------------------------------------------------------------------       
+"""
+TalkBridge Ollama - Ollama Client
+=================================
+
+Cliente para conexiones externas
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+======================================================================
+Functions:
+- __init__: Initialize Ollama client.
+- ping: Verify if the Ollama server is available.
+- get_server_info: Get server information.
+- list_models: List available models.
+- generate: Generate text using Ollama.
+- _generate_stream: Generate streaming response.
+- chat: Chat with Ollama model.
+- _chat_stream: Chat with streaming response.
+- pull_model: Pull a model from Ollama.
+- delete_model: Delete a model.
+======================================================================
+"""
 
 import requests
 import json

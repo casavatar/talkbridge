@@ -1,28 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Interactive Animations Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - matplotlib Python package
-# - threading Python package
-# - time Python package
-# - typing Python package
-# - math Python package
-# - random Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - ParticleSystem: Particle system animation
-# - GeometricAnimation: Geometric shape animations
-# - WaveformAnimation: Waveform animation with interactive controls
-# - InteractiveAnimations: Main class for managing interactive animations
-# - AnimationDemo: Demo class for interactive animations
-#----------------------------------------------------------------------------------------------------------------------------       
+"""
+TalkBridge Animation - Interactive Animations
+=============================================
+
+Módulo interactive_animations para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- mediapipe
+- opencv-python
+======================================================================
+Functions:
+- __init__: Initialize particle system.
+- _initialize_particles: Initialize particle positions and velocities.
+- start: Start the particle system animation.
+- _setup_animation: Setup matplotlib animation.
+- _update_particles: Update particle positions and velocities.
+- stop: Stop the particle system.
+- __init__: Initialize geometric animation.
+- start: Start the geometric animation.
+- _setup_animation: Setup matplotlib animation.
+- _update_animation: Update the geometric animation.
+======================================================================
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt

@@ -1,30 +1,16 @@
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Ollama Python Client
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - requests Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#-----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - OllamaClient: Advanced Ollama client with streaming
-# - OllamaModelManager: Model management and operations
-# - ConversationManager: Conversation management
-# - PromptEngineer: Prompt engineering tools
-# - OllamaStreamingClient: Ollama streaming client
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge Ollama -   Init   - Package Initialization
+=====================================================
+
+Inicialización del paquete
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+"""
 
 from .ollama_client import OllamaClient
 from .model_manager import OllamaModelManager

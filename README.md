@@ -110,11 +110,16 @@ talkbridge/
 - **Webcam** (for facial animation)
 - **Microphone** (for voice input)
 
-### Installation
+### Installation Options
+
+TalkBridge supports two installation methods to best suit your needs:
+
+#### 🐍 **Option 1: Traditional pip Installation (Web Interface)**
+Best for web-based usage and development:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-repo/talkbridge.git
+   git clone https://github.com/casavatar/talkbridge.git
    cd talkbridge
    ```
 
@@ -123,23 +128,56 @@ talkbridge/
    pip install -r requirements.txt
    ```
 
-3. **Generate secure users** (optional)
-   ```bash
-   cd src/ui/json
-   python generate_secure_users.py
-   ```
-
-4. **Run the web interface**
+3. **Run the web interface**
    ```bash
    cd src/ui
    python run_web_interface.py
    ```
 
-5. **Access the application**
-   - Open your browser and go to: `http://localhost:8501`
-   - Default credentials:
-     - **Admin**: `admin` / `[generated password]`
-     - **User**: `user` / `[generated password]`
+4. **Access the application**: `http://localhost:8501`
+
+#### 🐳 **Option 2: Conda Installation (Desktop Application) - RECOMMENDED**
+Best for desktop GUI application with optimized dependencies:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/casavatar/talkbridge.git
+   cd talkbridge
+   ```
+
+2. **Quick setup with conda**
+   ```bash
+   # Windows
+   start_desktop.bat
+   
+   # Linux/macOS
+   ./start_desktop.sh
+   ```
+
+3. **Or manual conda setup**
+   ```bash
+   python config/setup_conda_desktop.py
+   ```
+
+4. **Run the desktop application**
+   ```bash
+   conda activate talkbridge-desktop
+   python src/desktop/main.py
+   ```
+
+#### 🎯 **Which option should you choose?**
+
+| Feature | pip Installation | Conda Installation |
+|---------|------------------|-------------------|
+| **Web Interface** | ✅ Primary focus | ✅ Compatible |
+| **Desktop GUI** | ⚠️ Basic support | ✅ **Optimized** |
+| **PyQt6 Stability** | ⚠️ May have issues | ✅ **Rock solid** |
+| **GPU Support** | ⚠️ Manual setup | ✅ **Auto-configured** |
+| **Scientific Libraries** | ⚠️ Slower install | ✅ **Pre-compiled** |
+| **Dependency Conflicts** | ⚠️ Possible | ✅ **Isolated** |
+| **Installation Speed** | ⚠️ Can be slow | ✅ **Faster** |
+
+**Recommendation**: Use **conda** for desktop application development and production use.
 
 ## 🔧 Configuration
 

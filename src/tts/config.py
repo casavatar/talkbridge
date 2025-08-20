@@ -1,31 +1,25 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: TTS Module Configuration
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - os Python package
-# - typing Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - DEFAULT_MODEL: Default TTS model configuration
-# - AUDIO_CONFIG: Audio configuration
-# - VOICE_CLONING_CONFIG: Voice cloning configuration
-# - PERFORMANCE_CONFIG: Performance configuration
-# - SUPPORTED_LANGUAGES: Supported languages
-# - ERROR_CONFIG: Error handling configuration
-# - PATHS_CONFIG: File paths configuration
-# - MODEL_CONFIGS: Model-specific configurations
-# - get_config: Get the complete configuration dictionary
-# - get_model_config: Get configuration for a specific model
-# - update_config: Update configuration with new values
-# - create_directories: Create necessary directories for the TTS module
-# - validate_config: Validate the current configuration
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge TTS - Config
+=======================
+
+Configuración del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- TTS
+======================================================================
+Functions:
+- get_config: Get the complete configuration dictionary.
+- get_model_config: Get configuration for a specific model.
+- update_config: Update configuration with new values.
+- create_directories: Create necessary directories for the TTS module.
+- validate_config: Validate the current configuration.
+======================================================================
+"""
 
 import os
 from typing import Dict, Any

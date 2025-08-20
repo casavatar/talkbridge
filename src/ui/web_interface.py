@@ -1,30 +1,28 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: TalkBridge Web Interface
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - streamlit Python package
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - main: Main function to run the web interface
-# - show_login_page: Show the login page
-# - show_dashboard: Show the dashboard
-# - run: Run the web interface
-# - setup_page_config: Setup the page configuration
-# - load_custom_css: Load the custom CSS
-# - AvatarDisplay: Avatar display class
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Web Interface
+=============================
+
+Interfaz del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- main: Main entry point for the web interface.
+- __init__: Initialize the web interface.
+- setup_page_config: Configure the Streamlit page.
+- load_custom_css: Load custom CSS from assets folder.
+- run: Main application loop.
+- show_login_page: Display the login page.
+- show_dashboard: Display the main dashboard.
+======================================================================
+"""
 
 import streamlit as st
 import os

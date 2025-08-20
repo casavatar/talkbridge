@@ -1,23 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Offline Translation Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - argos-translate Python package
-# - transformers Python package
-# - sentencepiece Python package
-# - torch Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - OfflineTranslator: Offline translation class
-# - TranslationError: Custom exception for translation errors
-# - translate_to_spanish: Convenience function to translate text to Spanish
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge Translation - Offline Translator
+===========================================
+
+Módulo offline_translator para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- googletrans
+======================================================================
+Functions:
+- translate_to_spanish: Convenience function to translate text to Spanish.
+- __init__: Initialize the offline translator.
+- _download_argos_model: Download argos-translate model for the specified language pair.
+- _load_argos_model: Load or download argos-translate model.
+- _load_hf_model: Load HuggingFace MarianMT model.
+- translate_to_spanish: Translate text to Spanish.
+- _translate_with_argos: Translate using argos-translate.
+- _translate_with_hf: Translate using HuggingFace MarianMT.
+- get_supported_languages: Get list of supported language pairs for each engine.
+- is_available: Check if any translation engine is available.
+======================================================================
+"""
 
 import os
 import logging

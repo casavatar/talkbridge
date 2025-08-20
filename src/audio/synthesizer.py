@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Audio Synthesizer Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - ADSREnvelope: ADSR envelope generator
-# - Filter: Audio filter base class
-# - LowPassFilter: Low-pass filter implementation
-# - HighPassFilter: High-pass filter implementation
-# - LFO: Low Frequency Oscillator for modulation
-# - AudioSynthesizer: Advanced audio synthesizer with modulation and filtering
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge Audio - Synthesizer
+==============================
+
+Módulo synthesizer para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- sounddevice
+- numpy
+======================================================================
+Functions:
+- __init__: Initialize ADSR envelope.
+- generate: Generate ADSR envelope.
+- __init__: Initialize filter.
+- process: Process audio through filter. Override in subclasses.
+- process: Apply low-pass filter to audio.
+- process: Apply high-pass filter to audio.
+- __init__: Initialize LFO.
+- generate: Generate LFO signal.
+- __init__: Initialize audio synthesizer.
+- create_voice: Create a new synthesizer voice.
+======================================================================
+"""
 
 import numpy as np
 import sounddevice as sd

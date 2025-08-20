@@ -1,29 +1,28 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Login Component
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - streamlit Python package
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - LoginComponent: Login component class
-# - _handle_login: Handle login attempt
-# - _show_register_form: Show user registration form
-# - _handle_register: Handle user registration
-# - _show_forgot_password_form: Show forgot password form
-# - _handle_password_reset: Handle password reset
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge UI - Login
+=====================
+
+Módulo login para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the login component.
+- render: Render the login interface.
+- _handle_login: Handle login attempt.
+- _show_register_form: Show user registration form.
+- _handle_register: Handle user registration.
+- _show_forgot_password_form: Show forgot password form.
+- _handle_password_reset: Handle password reset.
+======================================================================
+"""
 
 import streamlit as st
 from typing import Tuple, Optional

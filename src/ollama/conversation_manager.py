@@ -1,27 +1,29 @@
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Conversation Manager for Ollama
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - uuid Python package
-# - typing Python package
-# - dataclasses Python package
-# - datetime Python package
-# - logging Python package
-# - threading Python package
-#-----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - Message: Message data class
-# - Conversation: Conversation data class
-# - ConversationManager: Conversation manager class
-#-----------------------------------------------------------------------------------------------------------------------------  
+"""
+TalkBridge Ollama - Conversation Manager
+========================================
+
+Gestor/Manager del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+======================================================================
+Functions:
+- __init__: Initialize conversation manager.
+- create_conversation: Create a new conversation.
+- get_conversation: Get a conversation by ID.
+- list_conversations: List all conversations.
+- add_message: Add a message to a conversation.
+- send_message: Send a message and get response from the model.
+- get_conversation_messages: Get all messages in a conversation.
+- get_conversation_context: Get conversation context as a formatted string.
+- delete_conversation: Delete a conversation.
+- clear_conversation: Clear all messages from a conversation.
+======================================================================
+"""
 
 import json
 import time

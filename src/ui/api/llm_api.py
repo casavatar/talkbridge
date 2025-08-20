@@ -1,34 +1,31 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: LLM API Module
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Llm Api
+=======================
 
-# requirements:
-# - streamlit Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - LLMAPI: LLM API class
-# - generate_response: Generate response using LLM
-# - chat_conversation: Generate response in a conversation context
-# - _format_conversation: Format conversation messages into a single prompt
-# - _add_to_history: Add message to conversation history
-# - get_available_models: Get list of available LLM models
-# - set_model: Set the current model
-# - get_conversation_history: Get conversation history
-# - clear_conversation_history: Clear conversation history
-# - get_model_info: Get information about the current model
-# - validate_prompt: Validate prompt for LLM generation
-# - get_response_quality_score: Get a quality score for the generated response
-# - get_current_status: Get current LLM API status
-#-------------------------------------------------------------------------------------------------
+Módulo llm_api para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the LLM API.
+- generate_response: Generate response using LLM.
+- chat_conversation: Generate response in a conversation context.
+- _format_conversation: Format conversation messages into a single prompt.
+- _add_to_history: Add message to conversation history.
+- get_available_models: Get list of available LLM models.
+- set_model: Set the current model.
+- get_conversation_history: Get conversation history.
+- clear_conversation_history: Clear conversation history.
+- get_model_info: Get information about the current model.
+======================================================================
+"""
 
 import streamlit as st
 from pathlib import Path

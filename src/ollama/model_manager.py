@@ -1,24 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Ollama Model Manager Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - ModelInfo: Model information data class
-# - OllamaModelManager: Ollama model manager class
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Ollama - Model Manager
+=================================
+
+Gestor/Manager del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+======================================================================
+Functions:
+- __init__: Initialize model manager.
+- list_models: List all available models.
+- get_model_info: Get detailed information about a specific model.
+- install_model: Install a model.
+- remove_model: Remove a model.
+- model_exists: Check if a model exists.
+- get_model_size: Get model size in bytes.
+- format_model_size: Format model size in human-readable format.
+- get_models_summary: Get summary of all models.
+- create_custom_model: Create a custom model with a specific system prompt.
+======================================================================
+"""
 
 import json
 import time

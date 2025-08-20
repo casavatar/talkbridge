@@ -1,0 +1,119 @@
+name: talkbridge-desktop
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # ==========================================
+  # PYTHON BASE
+  # ==========================================
+  - python=3.11
+  
+  # ==========================================
+  # CORE SCIENTIFIC COMPUTING
+  # ==========================================
+  - numpy
+  - scipy
+  - matplotlib
+  - pandas
+  
+  # ==========================================
+  # AUDIO PROCESSING
+  # ==========================================
+  - libsndfile
+  - librosa
+  
+  # ==========================================
+  # COMPUTER VISION
+  # ==========================================
+  - opencv
+  - pillow
+  
+  # ==========================================
+  # CONFIGURATION & DATA
+  # ==========================================
+  - pyyaml
+  - jsonschema
+  - python-dotenv
+  
+  # ==========================================
+  # SYSTEM UTILITIES
+  # ==========================================
+  - psutil
+  - requests
+  - click
+  
+  # ==========================================
+  # DEVELOPMENT TOOLS
+  # ==========================================
+  - pytest
+  - black
+  - mypy
+  - isort
+  
+  # ==========================================
+  # LOGGING & MONITORING
+  # ==========================================
+  - rich
+  - tqdm
+  
+  # ==========================================
+  # SECURITY
+  # ==========================================
+  - cryptography
+  
+  # ==========================================
+  # PIP-ONLY DEPENDENCIES
+  # ==========================================
+  - pip
+  - pip:
+    # PyQt6 - GUI framework
+    - PyQt6>=6.5.0
+    - PyQt6-Qt6>=6.5.0
+    - PyQt6-sip>=13.5.0
+    
+    # Audio processing
+    - sounddevice>=0.4.5
+    - soundfile>=0.12.0
+    - pydub>=0.25.1
+    - pygame>=2.5.0
+    
+    # ML/AI packages
+    - torch>=1.12.0
+    - torchaudio>=0.12.0
+    - transformers>=4.20.0
+    
+    # TTS engine
+    - TTS>=0.22.0
+    
+    # Whisper for STT
+    - openai-whisper>=20231117
+    
+    # Translation services
+    - googletrans>=4.0.0rc1
+    
+    # MediaPipe for face animation
+    - mediapipe>=0.10.0
+    
+    # Advanced logging
+    - loguru>=0.7.0
+    - structlog>=22.0.0
+    - colorlog>=6.7.0
+    
+    # Desktop-specific utilities
+    - typeguard>=3.0.0
+    - pydantic>=2.0.0
+    - sqlite-utils>=3.34.0
+    - websocket-client>=1.6.0
+    
+    # Development tools
+    - pytest-qt>=4.2.0
+    - pytest-mock>=3.11.0
+    - coverage>=7.2.0
+    
+    # Security
+    - bcrypt>=4.0.0
+    
+    # Compatibility
+    - typing-extensions>=4.7.0
+    - python-dateutil>=2.8.0

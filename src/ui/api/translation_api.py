@@ -1,31 +1,31 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Translation API Module
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Translation Api
+===============================
 
-# requirements:
-# - streamlit Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - TranslationAPI: Translation API class
-# - translate_text: Translate text from source language to target language
-# - get_supported_languages: Get dictionary of supported languages
-# - get_language_name: Get language name from language code
-# - validate_language_pair: Validate language pair for translation
-# - detect_language: Detect the language of the given text
-# - translate_batch: Translate multiple texts
-# - get_translation_quality_score: Get a quality score for the translation
-# - get_current_settings: Get current translation settings
-# - set_default_languages: Set default source and target languages
-#-------------------------------------------------------------------------------------------------
+Módulo translation_api para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the Translation API.
+- translate_text: Translate text from source language to target language.
+- get_supported_languages: Get dictionary of supported languages.
+- get_language_name: Get language name from language code.
+- validate_language_pair: Validate language pair for translation.
+- detect_language: Detect the language of the given text.
+- translate_batch: Translate multiple texts.
+- get_translation_quality_score: Get a quality score for the translation.
+- get_current_settings: Get current translation settings.
+- set_default_languages: Set default source and target languages.
+======================================================================
+"""
 
 import streamlit as st
 from pathlib import Path

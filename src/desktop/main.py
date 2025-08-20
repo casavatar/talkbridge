@@ -1,20 +1,25 @@
-#! /src/desktop/windows/dashboard.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Dashboard UI for TalkBridge Desktop application
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - setup_application_settings: Configure global Qt application settings
-# - setup_application_logging: Configure logging for the application
-# - check_dependencies: Check for critical dependencies
-# - show_error_dialog: Display an error dialog
-#----------------------------------------------------------------------------------------------------------------------------
+#!/usr/bin/env python3
+"""
+TalkBridge Desktop - Main Application Entry Point
+=================================================
+
+Punto de entrada principal de la aplicación
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- setup_application_settings: Configure global Qt application settings.
+- setup_application_logging: Configures the logging system for the desktop application.
+- check_dependencies: Checks that critical dependencies are available.
+- show_error_dialog: Shows a critical error dialog.
+- main: Main function of the application.
+======================================================================
+"""
 
 import sys
 import os

@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: TTS Module Example
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - example_basic_usage: Example of basic TTS usage without voice cloning
-# - example_voice_cloning: Example of voice cloning with reference samples
-# - example_multilingual: Example of multilingual synthesis
-# - example_system_info: Example of getting system information
-# - example_error_handling: Example of error handling
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Demo - Tts Example
+=============================
+
+Módulo tts_example para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- example_basic_usage: Example of basic TTS usage without voice cloning.
+- example_voice_cloning: Example of voice cloning with reference samples.
+- example_multilingual: Example of multilingual synthesis.
+- example_system_info: Example of getting system information.
+- example_error_handling: Example of error handling.
+- main: Run all examples.
+======================================================================
+"""
 
 import os
 import sys

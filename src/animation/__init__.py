@@ -1,29 +1,18 @@
 #!/usr/bin/env python3  
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Animation module for TalkBridge application.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - matplotlib Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-# - mediapipe Python package
-# - opencv-python Python package
-# - pygame Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - AudioVisualizer: Audio visualization animations
-# - LoadingAnimation: Loading animations
-# - InteractiveAnimations: Interactive visualizations
-# - FaceSync: Real-time facial animation and lip sync
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Animation -   Init   - Package Initialization
+========================================================
+
+Inicialización del paquete
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- mediapipe
+- opencv-python
+"""
 
 from .audio_visualizer import AudioVisualizer
 from .loading_animation import LoadingAnimation

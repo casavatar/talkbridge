@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Test TalkBridge Hardware Access
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - os Python package
-# - sys Python package
-# - time Python package
-# - webbrowser Python package
-# - threading Python package
-# - pathlib Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - test_hardware_access: Test the hardware access functionality
-# - test_browser_compatibility: Test browser compatibility for hardware access
-# - test_permission_handling: Test permission handling scenarios
-# - main: Main function to run the test suite
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Test Hardware Access
+====================================
+
+Módulo test_hardware_access para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- test_hardware_access: Test the hardware access functionality.
+- test_browser_compatibility: Test browser compatibility for hardware access.
+- test_permission_handling: Test permission handling scenarios.
+- main: Main test function.
+======================================================================
+"""
 
 import os
 import sys

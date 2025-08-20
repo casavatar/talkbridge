@@ -1,34 +1,31 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Avatar Display Component
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - streamlit Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - AvatarDisplay: Avatar display component class
-# - render_avatar_interface: Render the avatar display interface
-# - _render_avatar_settings: Render avatar settings
-# - _render_avatar_controls: Render avatar control settings
-# - _render_avatar_status: Render avatar status information
-# - _apply_avatar_settings: Apply avatar settings
-# - start_avatar: Start the avatar display  
-# - stop_avatar: Stop the avatar display
-# - get_avatar_status: Get the current avatar status
-# - update_avatar_settings: Update avatar settings
-# - validate_avatar_file: Validate avatar file
-# - get_avatar_types: Get list of available avatar types
-# - check_webcam_availability: Check if webcam is available
-# - get_avatar_quality_score: Get a quality score for the current avatar setup
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Avatar Display
+==============================
+
+Módulo avatar_display para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the avatar display.
+- render_avatar_interface: Render the avatar display interface.
+- _render_avatar_settings: Render avatar settings.
+- _render_avatar_controls: Render avatar control settings.
+- _render_avatar_status: Render avatar status information.
+- _apply_avatar_settings: Apply avatar settings.
+- start_avatar: Start the avatar display.
+- stop_avatar: Stop the avatar display.
+- get_avatar_status: Get current avatar status.
+- update_avatar_settings: Update avatar settings.
+======================================================================
+"""
 
 import streamlit as st
 from pathlib import Path

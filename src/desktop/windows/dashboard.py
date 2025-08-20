@@ -1,19 +1,30 @@
 #!/src/desktop/windows/dashboard.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Dashboard UI for TalkBridge Desktop application
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - setup_ui: Configure the user interface
-# - update_status: Update the service status
-# - show_error: Display an error message
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Desktop - Dashboard
+==============================
+
+Módulo dashboard para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- __init__: Función __init__
+- setup_ui: Configures the card interface.
+- apply_styles: Applies CSS styles to the card.
+- update_status: Updates the card status.
+- _update_status_indicator: Updates the color of the status indicator.
+- _get_status_text: Converts the status to readable text.
+- _update_action_button: Updates the text and state of the action button.
+- _update_details: Updates the details information.
+- __init__: Función __init__
+- __init__: Función __init__
+======================================================================
+"""
 
 import logging
 from typing import Dict, Optional, Any

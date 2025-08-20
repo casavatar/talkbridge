@@ -1,25 +1,30 @@
 #! /src/desktop/app/state_manager.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: State Manager for TalkBridge Desktop application
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - initialize: Initialize the state manager
-# - load_config: Load application configuration
-# - save_config: Save application configuration
-# - get_user_session: Get the current user session
-# - set_user_session: Set the current user session
-# - get_service_status: Get the status of a specific service
-# - set_service_status: Set the status of a specific service
-# - get_ui_preference: Get a UI preference value
-# - set_ui_preference: Set a UI preference value
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Desktop - State Manager
+==================================
+
+Gestor/Manager del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- __post_init__: Función __post_init__
+- __init__: Función __init__
+- initialize: Initializes the StateManager by loading configuration and state.
+- _load_main_config: Loads the main configuration from config.yaml.
+- _get_default_config: Returns default configuration.
+- _load_app_state: Loads the application state from file.
+- _initialize_default_services: Initializes default service states.
+- get_config: Gets a configuration value using dot notation.
+- set_config: Sets a configuration value using dot notation.
+- get_setting: Gets a user preference from QSettings.
+======================================================================
+"""
 
 import os
 import json

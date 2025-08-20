@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script connects to the Ollama service and uses the Deepseek Coder model to generate a Python function.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - Docker with Ollama service running
-# - ollama Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - audio_callback: Audio callback function
-# - create_notification_sound: Create a notification sound using audio generation
-# - main: Main application with integrated animations and audio generation
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge - Main Application
+=============================
+
+Aplicación principal de TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- None
+======================================================================
+Functions:
+- audio_callback: Función audio_callback
+- create_notification_sound: Create a notification sound using audio generation.
+- main: Main application with integrated animations and audio generation.
+======================================================================
+"""
 
 import numpy as np
 import time

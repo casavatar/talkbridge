@@ -1,50 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script implements the configuration for the STT module.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - whisper Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:    
-# - get_model_name(): Get the name of the model
-# - get_default_language(): Get the default language
-# - get_supported_languages(): Get the supported languages
-# - get_device(): Get the device
-# - get_auto_device(): Get the auto device setting
-# - get_sample_rate(): Get the sample rate
-# - get_channels(): Get the channels
-# - get_chunk_size(): Get the chunk size    
-# - get_temp_audio_path(): Get the temporary audio path 
-# - get_cache_dir(): Get the cache directory
-# - get_batch_size(): Get the batch size
-# - get_compute_type(): Get the compute type
-# - get_load_model_on_startup(): Get the load model on startup setting
-# - get_model_cache_enabled(): Get the model cache enabled setting
-# - get_supported_formats(): Get the supported formats
-# - get_max_audio_duration(): Get the maximum audio duration
-# - get_log_level(): Get the log level
-# - get_log_transcription(): Get the log transcription setting
-# - get_retry_attempts(): Get the retry attempts
-# - get_timeout_seconds(): Get the timeout seconds
-# - get_confidence_threshold(): Get the confidence threshold
-# - get_word_timestamps(): Get the word timestamps setting
-# - get_language_detection(): Get the language detection setting
-# - get_debug_mode(): Get the debug mode setting
-# - get_save_audio_samples(): Get the save audio samples setting
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge STT - Config
+=======================
+
+Configuración del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- openai-whisper
+======================================================================
+Functions:
+- get_model_name: Get the name of the model.
+- get_default_language: Get the default language.
+- get_supported_languages: Get the supported languages.
+- get_device: Get the device.
+- get_auto_device: Get the auto device setting.
+- get_sample_rate: Get the sample rate.
+- get_channels: Get the channels.
+- get_chunk_size: Get the chunk size.
+- get_temp_audio_path: Get the temporary audio path.
+- get_cache_dir: Get the cache directory.
+======================================================================
+"""
 
 import os
 from pathlib import Path

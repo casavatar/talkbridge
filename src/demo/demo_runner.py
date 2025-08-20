@@ -1,15 +1,29 @@
 #!/usr/bin/env python3
 """
-Demo Runner
+TalkBridge Demo - Demo Runner
+=============================
 
-Simulates the full TalkBridge AI voice assistant system without requiring
-real hardware (microphone, camera) or external services (Whisper, Ollama, TTS).
-
-Uses predefined static files to demonstrate the complete conversation flow.
+Módulo demo_runner para TalkBridge
 
 Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- get_demo_runner: Get the global demo runner instance.
+- run_demo_conversation: Run a demo conversation and return results.
+- __init__: Initialize the demo runner.
+- _load_conversation_log: Load existing conversation log from demo files.
+- register_callback: Register a callback function for a specific step.
+- simulate_audio_capture: Simulate audio capture by reading from demo file.
+- simulate_transcription: Simulate speech-to-text transcription.
+- simulate_translation: Simulate English to Spanish translation.
+- simulate_llm_response: Simulate LLM response generation.
+- simulate_voice_synthesis: Simulate text-to-speech synthesis.
+======================================================================
 """
 
 import time

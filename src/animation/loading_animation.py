@@ -1,28 +1,30 @@
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Loading Animation Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - time Python package 
-# - threading Python package
-# - sys Python package
-# - os Python package
-# - typing Python package
-# - math Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:    
-# - LoadingAnimation: Base class for loading animations
-# - SpinnerAnimation: Spinning loading animation
-# - ProgressBar: Progress bar animation
-# - PulseAnimation: Pulsing loading animation
-# - WaveAnimation: Wave-like loading animation
-# - LoadingManager: Manager for multiple loading animations
-# - LoadingDemo: Demo class to showcase different loading animations        
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Animation - Loading Animation
+========================================
+
+Módulo loading_animation para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- mediapipe
+- opencv-python
+======================================================================
+Functions:
+- __init__: Initialize loading animation.
+- start: Start the loading animation.
+- stop: Stop the loading animation.
+- _animate: Override this method in subclasses.
+- __init__: Función __init__
+- _animate: Animate the spinner.
+- __init__: Función __init__
+- update: Update progress value.
+- _animate: Animate the progress bar.
+- __init__: Función __init__
+======================================================================
+"""
 
 import time
 import threading

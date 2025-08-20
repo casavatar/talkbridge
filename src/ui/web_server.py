@@ -1,26 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: TalkBridge Web Server
-# Serves the web interface with hardware access capabilities
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - http.server Python package
-# - threading Python package
-# - webbrowser Python package
-# - logging Python package
-# - argparse Python package
-# - pathlib Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - TalkBridgeHTTPRequestHandler: Custom HTTP request handler for TalkBridge web interface
-# - TalkBridgeWebServer: Web server for TalkBridge application
-# - main: Main function to run the web server
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Web Server
+==========================
+
+Módulo web_server para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- main: Main function to run the web server.
+- __init__: Función __init__
+- end_headers: Add CORS headers for cross-origin requests.
+- do_OPTIONS: Handle preflight requests for CORS.
+- log_message: Custom logging for request handling.
+- __init__: Initialize the web server.
+- start: Start the web server.
+- _run_server: Run the HTTP server.
+- _open_browser: Open the default browser to the web interface.
+- stop: Stop the web server.
+======================================================================
+"""
 
 import os
 import sys

@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Run TalkBridge Web Interface
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - streamlit Python package
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - main: Main function to run the web interface
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Run Web Interface
+=================================
+
+Interfaz del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- main: Main function to run the web interface.
+======================================================================
+"""
 
 import os
 import sys

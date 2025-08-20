@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
 """
-Animation Module Example
+TalkBridge Demo - Animation Example
+===================================
 
-This script demonstrates how to use the animation module for
-real-time facial animation and lip sync with audio.
+Módulo animation_example para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- example_webcam_face_sync: Example of webcam-based face sync.
+- example_avatar_face_sync: Example of avatar-based face sync.
+- example_facial_landmark_detection: Example of facial landmark detection.
+- example_integration_with_tts: Example of integrating face sync with TTS output.
+- main: Run all animation examples.
+======================================================================
 """
 
 import os

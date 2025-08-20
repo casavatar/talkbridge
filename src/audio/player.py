@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Audio Player Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - AudioPlayer: Audio player class
-# - AudioPlayerDemo: Demo class for audio player
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Audio - Player
+=========================
+
+Módulo player para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- sounddevice
+- numpy
+======================================================================
+Functions:
+- __init__: Initialize audio player.
+- load_audio_file: Load audio from file.
+- _load_wav_file: Load WAV file.
+- save_audio_file: Save audio to file.
+- play_audio: Play audio data.
+- start_streaming: Start streaming audio from callback.
+- stop_streaming: Stop audio streaming.
+- set_volume: Set playback volume.
+- add_to_playlist: Add track to playlist.
+- load_playlist: Load playlist from file.
+======================================================================
+"""
 
 import numpy as np
 import sounddevice as sd

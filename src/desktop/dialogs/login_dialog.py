@@ -1,19 +1,30 @@
 #! /src/desktop/dialogs/login_dialog.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Login dialog for TalkBridge Desktop application
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - create_login_dialog: Create and display the login dialog
-# - handle_login: Process the login credentials
-# - show_login_error: Display an error message for failed login attempts
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Desktop - Login Dialog
+=================================
+
+Módulo login_dialog para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- __init__: Función __init__
+- authenticate: Runs the authentication process asynchronously.
+- __init__: Función __init__
+- setup_ui: Sets up the dialog's user interface.
+- _create_header: Creates the dialog header section.
+- _create_login_form: Creates the login form.
+- _create_buttons: Creates the action buttons.
+- _apply_styles: Applies CSS styles to the dialog.
+- setup_connections: Configures signal and slot connections.
+- load_saved_credentials: Loads saved credentials if available.
+======================================================================
+"""
 
 import logging
 from typing import Optional

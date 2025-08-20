@@ -1,28 +1,26 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Main TTS Synthesizer Module
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - os Python package
-# - logging Python package
-# - tempfile Python package
-# - pathlib Python package
-# - typing Python package
-# - soundfile Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - _get_voice_cloner: Get or create a global voice cloner instance
-# - synthesize_voice: Main function to synthesize speech from text using voice cloning
-# - _synthesize_default_voice: Synthesize speech using the default voice (no cloning)
-# - setup_voice_cloning: Set up voice cloning with reference samples
-# - get_synthesis_info: Get information about the current synthesis setup
-# - list_available_models: Get list of available TTS models
-#-------------------------------------------------------------------------------------------------      
+"""
+TalkBridge TTS - Synthesizer
+============================
+
+Módulo synthesizer para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- TTS
+======================================================================
+Functions:
+- _get_voice_cloner: Get or create a global voice cloner instance.
+- synthesize_voice: Main function to synthesize speech from text using voice cloning.
+- _synthesize_default_voice: Synthesize speech using the default voice (no cloning).
+- setup_voice_cloning: Set up voice cloning with reference samples.
+- get_synthesis_info: Get information about the current synthesis setup.
+- list_available_models: Get list of available TTS models.
+======================================================================
+"""
 
 import os
 import logging

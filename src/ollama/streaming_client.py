@@ -1,25 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Ollama Streaming Client Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - StreamingEvent: Streaming event data class
-# - StreamingCallback: Base class for streaming callbacks
-# - OllamaStreamingClient: Ollama streaming client class
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Ollama - Streaming Client
+====================================
+
+Cliente para conexiones externas
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+======================================================================
+Functions:
+- on_start: Called when streaming starts.
+- on_chunk: Called for each response chunk.
+- on_end: Called when streaming ends.
+- on_error: Called when an error occurs.
+- __init__: Initialize streaming client.
+- add_callback: Add a streaming callback.
+- remove_callback: Remove a streaming callback.
+- _notify_callbacks: Notify all callbacks of an event.
+- stream_generate: Stream generate text from Ollama.
+- stream_chat: Stream chat with Ollama model.
+======================================================================
+"""
 
 import json
 import time

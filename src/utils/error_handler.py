@@ -1,29 +1,27 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: TalkBridge Error Handler
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - os Python package
-# - logging Python package
-# - traceback Python package
-# - datetime Python package
-# - typing Python package
-#
-# functions:
-# - SystemErrorHandled: Custom exception for system-level handled errors
-# - ErrorHandler: Centralized error handler class
-# - log_error: Log an exception to the error log file
-# - format_error: Format an exception into a user-friendly message
-# - get_last_errors: Retrieve the last N error log entries
-# - suppress_non_critical: Optionally suppress non-critical errors
-# - raise_or_log: Raise critical errors, log and suppress non-critical ones
-# - wrap_function: Decorator to auto-log uncaught errors in a function
-#-------------------------------------------------------------------------------------------------  
+"""
+TalkBridge Utils - Error Handler
+================================
+
+Módulo error_handler para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- None
+======================================================================
+Functions:
+- log_error: Log an exception to the error log file with timestamp and context.
+- format_error: Format an exception into a user-friendly message.
+- get_last_errors: Retrieve the last N error log entries.
+- suppress_non_critical: Optionally suppress non-critical errors (extend as needed).
+- raise_or_log: Raise critical errors, log and suppress non-critical ones.
+- wrap_function: Decorator to auto-log uncaught errors in a function.
+- wrapper: Función wrapper
+======================================================================
+"""
 
 import os
 import logging

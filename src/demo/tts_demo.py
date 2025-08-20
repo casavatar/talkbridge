@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: TTS Demo Script
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - demo_basic_synthesis: Demonstrate basic text-to-speech synthesis
-# - demo_voice_cloning: Demonstrate voice cloning functionality
-# - demo_multilingual: Demonstrate multilingual synthesis
-# - demo_system_info: Display system information and available models
-# - create_demo_audio_samples: Create demo audio samples for testing voice cloning
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Demo - Tts Demo
+==========================
+
+Módulo tts_demo para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- demo_basic_synthesis: Demonstrate basic text-to-speech synthesis.
+- demo_voice_cloning: Demonstrate voice cloning functionality.
+- demo_multilingual: Demonstrate multilingual synthesis.
+- demo_system_info: Display system information and available models.
+- create_demo_audio_samples: Create demo audio samples for testing voice cloning.
+- main: Main demo function.
+======================================================================
+"""
 
 import os
 import sys

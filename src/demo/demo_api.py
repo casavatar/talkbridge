@@ -1,13 +1,29 @@
 #!/usr/bin/env python3
 """
-Demo API Wrapper
+TalkBridge Demo - Demo Api
+==========================
 
-Provides demo implementations of all API interfaces that match the real APIs
-but use the demo runner for simulation instead of actual services.
+Módulo demo_api para TalkBridge
 
 Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- get_api_instance: Get API instance based on demo mode.
+- get_tts_api: Get TTS API instance.
+- get_stt_api: Get STT API instance.
+- get_llm_api: Get LLM API instance.
+- get_translation_api: Get Translation API instance.
+- get_animation_api: Get Animation API instance.
+- get_audio_api: Get Audio API instance.
+- __init__: Función __init__
+- synthesize_voice: Simulate voice synthesis.
+- get_synthesis_info: Get demo synthesis information.
+======================================================================
 """
 
 import time

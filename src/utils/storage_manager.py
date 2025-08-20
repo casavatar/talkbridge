@@ -1,38 +1,30 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: TalkBridge Storage Manager
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - os Python package
-# - shutil Python package
-# - uuid Python package
-# - hashlib Python package
-# - datetime Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-# - json Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - StorageManager: Storage manager class
-# - _create_folders: Create necessary folders
-# - _generate_unique_filename: Generate a unique filename
-# - _get_file_hash: Generate SHA-256 hash of file content
-# - save_audio_sample: Save audio sample with unique filename
-# - save_log_file: Save log file with unique filename
-# - get_model_path: Get the path for a specific model
-# - save_avatar: Save avatar file with unique filename
-# - cleanup_old_files: Clean up old files from specified folder
-# - get_folder_info: Get information about a folder
-# - get_all_folders_info: Get information about all folders
-# - backup_folder: Create a backup of a folder
-# - validate_file_integrity: Validate file integrity by checking hash
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge Utils - Storage Manager
+==================================
+
+Gestor/Manager del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- None
+======================================================================
+Functions:
+- create_storage_manager: Create a new storage manager instance.
+- get_default_storage_manager: Get the default storage manager instance.
+- __init__: Initialize the storage manager.
+- _create_folders: Create all necessary folders if they don't exist.
+- _generate_unique_filename: Generate a unique filename with timestamp and optional user ID.
+- _get_file_hash: Generate SHA-256 hash of file content.
+- save_audio_sample: Save audio sample with unique filename.
+- save_log_file: Save log file with unique filename.
+- get_model_path: Get the path for a specific model.
+- save_avatar: Save avatar file with unique filename.
+======================================================================
+"""
 
 import os
 import shutil

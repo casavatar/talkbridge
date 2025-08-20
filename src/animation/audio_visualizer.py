@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Audio Visualizer Animation Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - matplotlib Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - AudioVisualizer: Audio visualization animations
-# - AudioVisualizerDemo: Demo class to showcase different audio visualization animations
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Animation - Audio Visualizer
+=======================================
+
+Módulo audio_visualizer para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- mediapipe
+- opencv-python
+======================================================================
+Functions:
+- __init__: Initialize the audio visualizer.
+- start_visualization: Start the audio visualization in a separate thread.
+- _audio_processing_thread: Process audio data in background thread.
+- _setup_animation: Setup the matplotlib animation.
+- _setup_bars_animation: Setup bar chart animation.
+- _setup_wave_animation: Setup wave animation.
+- _setup_circular_animation: Setup circular animation.
+- _setup_spectrum_animation: Setup spectrum analyzer animation.
+- _update_animation: Update animation frame.
+- _update_bars: Update bar chart animation.
+======================================================================
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt

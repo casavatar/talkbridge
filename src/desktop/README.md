@@ -1,61 +1,47 @@
-TalkBridge Desktop Application
-🚀 Modern desktop interface for TalkBridge - Real-time voice translation platform powered by artificial intelligence.
+# TalkBridge Desktop Application
 
-📋 Table of Contents
-Main Features
+> 🚀 **Modern desktop interface for TalkBridge** - Real-time voice translation platform powered by artificial intelligence.
 
-Architecture
+![TalkBridge Desktop](https://img.shields.io/badge/PyQt6-Desktop%20App-blue?style=flat-square) ![Python](https://img.shields.io/badge/Python-3.8%2B-green?style=flat-square) ![Status](https://img.shields.io/badge/Status-In%20Development-orange?style=flat-square)
 
-Installation
+## 📋 Table of Contents
 
-Usage
+- [Main Features](#main-features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Development](#development)
+- [Configuration](#configuration)
+- [File Structure](#file-structure)
+- [API and Services](#api-and-services)
+- [Contributing](#contributing)
 
-Development
+## 🎯 Main Features
 
-Configuration
+### ✨ Modern Interface
+- **Dark Theme design** with customizable colors
+- **Interactive cards** for service status
+- **Centralized dashboard** with real-time information
+- **Responsive design** adaptable to different resolutions
 
-File Structure
+### 🔧 Integrated Services
+- 🎤 **Text-to-Speech (TTS)** with Coqui TTS
+- 🎵 **Real-time Audio Capture**
+- 🌐 **Multi-language Translation**
+- 📹 **Facial Detection** and synchronized animation
+- 🤖 **LLM Processing** with Ollama
+- 👤 **Animated Avatar** with MediaPipe
 
-API and Services
+### 🛡️ Advanced Features
+- **Secure authentication** with session management
+- **Persistent state** with auto-save
+- **Asynchronous threading** for heavy operations
+- **Robust error handling** with detailed logging
+- **Centralized configuration** via YAML
 
-Contributing
+## 🏗️ Architecture
 
-🎯 Main Features
-✨ Modern Interface
-Dark Theme design with customizable colors
-
-Interactive cards for service status
-
-Centralized dashboard with real-time information
-
-Responsive design adaptable to different resolutions
-
-🔧 Integrated Services
-🎤 Text-to-Speech (TTS) with Coqui TTS
-
-🎵 Real-time Audio Capture
-
-🌐 Multi-language Translation
-
-📹 Facial Detection and synchronized animation
-
-🤖 LLM Processing with Ollama
-
-👤 Animated Avatar with MediaPipe
-
-🛡️ Advanced Features
-Secure authentication with session management
-
-Persistent state with auto-save
-
-Asynchronous threading for heavy operations
-
-Robust error handling with detailed logging
-
-Centralized configuration via YAML
-...existing code...
-
-🏗️ Architecture
+```
 src/desktop/
 ├── main.py                 # 🚪 Entry point
 ├── app/
@@ -78,43 +64,45 @@ src/desktop/
 │   ├── login_dialog.py     # 🔑 Authentication dialog
 │   └── error_dialog.py     # ⚠️ Error handling
 └── resources/
-    └── styles.qss          # 🎨 Qt stylesheets
-🧬 Architectural Pattern
-MVVM + Service Layer Pattern
+    └── styles.qss          # 🎨 Qt style sheets
+```
 
-Model: StateManager + Core modules
+### 🧬 Architecture Pattern
 
-View: Dashboard, Windows, Dialogs
+**MVVM + Service Layer Pattern**
+- **Model**: StateManager + Core modules
+- **View**: Dashboard, Windows, Dialogs  
+- **ViewModel**: CoreBridge services
+- **Service Layer**: TTSService, AudioService, etc.
 
-ViewModel: CoreBridge services
+## 📦 Installation
 
-Service Layer: TTSService, AudioService, etc.
+### 📋 System Requirements
 
-📦 Installation
-📋 System Requirements
-Python: 3.8 or higher
+- **Python**: 3.8 or higher
+- **Operating System**: Windows 10+, Linux, macOS 10.14+
+- **RAM**: Minimum 4GB (Recommended 8GB)
+- **Space**: ~500MB for dependencies (pip) / ~1.5GB for dependencies (conda)
 
-Operating System: Windows 10+, Linux, macOS 10.14+
+### 🚀 Recommended: Conda Installation
 
-RAM: Minimum 4GB (8GB Recommended)
+**Why Conda?** Better dependency management, optimized PyQt6, pre-compiled packages, and GPU support.
 
-Disk Space: ~500MB for dependencies
+```bash
+# Quick start
+python config/setup_conda_desktop.py
 
-🚀 Automatic Installation
-Bash
+# Or use convenience scripts
+# Windows:
+start_desktop.bat
 
-# 1. Clone the repository (if you haven't already)
-git clone https://github.com/youruser/talkbridge.git
-cd talkbridge
+# Linux/macOS:
+./start_desktop.sh
+```
 
-# 2. Run automatic setup
-python setup_desktop.py --install
+### 🔧 Alternative: pip Installation
 
-# 3. Verify installation
-python setup_desktop.py --verify
-🔧 Manual Installation
-Bash
-
+```bash
 # 1. Install base dependencies
 pip install -r requirements.txt
 
@@ -126,40 +114,54 @@ python -c "from PyQt6.QtWidgets import QApplication; print('✓ PyQt6 OK')"
 
 # 4. Create necessary directories
 mkdir -p data/logs config/desktop src/desktop/resources/{icons,images}
-🐛 Common Troubleshooting
+```
+
+### 📊 Installation Comparison
+
+| Feature | pip | Conda | Winner |
+|---------|-----|-------|--------|
+| **PyQt6 Stability** | ⚠️ May have issues | ✅ Rock solid | Conda |
+| **Installation Speed** | 15-30 min | 5-10 min | Conda |
+| **GPU Support** | Manual setup | Auto-configured | Conda |
+| **Disk Space** | ~500MB | ~1.5GB | pip |
+| **Scientific Libraries** | Slower | Pre-compiled | Conda |
+
+### 🐛 Common Troubleshooting
+
 <details>
 <summary><b>Error: "PyQt6 could not be resolved"</b></summary>
 
-Bash
-
-# On Windows
+```bash
+# En Windows
 pip uninstall PyQt6
 pip install PyQt6==6.5.0
 
-# On Linux (Ubuntu/Debian)
+# En Linux (Ubuntu/Debian)
 sudo apt-get install python3-pyqt6
 pip install PyQt6
 
-# On macOS
+# En macOS
 brew install pyqt@6
 pip install PyQt6
+```
 </details>
 
 <details>
 <summary><b>Error: "Module 'src.tts.synthesizer' not found"</b></summary>
 
-This is normal - the core modules are optional. The application will run in demo mode.
+This is normal - core modules are optional. The application will run in demo mode.
 
-Bash
-
-# To install the full core modules
+```bash
+# To install full core modules
 pip install -r requirements.txt
+```
 </details>
 
-🎮 Usage
-🚀 Launching the Application
-Bash
+## 🎮 Usage
 
+### 🚀 Start the Application
+
+```bash
 # Option 1: Launch script (Windows)
 run_desktop.bat
 
@@ -168,44 +170,44 @@ run_desktop.bat
 
 # Option 3: Direct execution
 python src/desktop/main.py
-🔑 First-Time Setup
-Login: User: admin, Password: admin (demo mode)
+```
 
-Dashboard: Check the status of the services
+### 🔑 First Setup
 
-Settings: Adjust preferences in the Tools menu
+1. **Login**: User: `admin`, Password: `admin` (demo mode)
+2. **Dashboard**: Check service status
+3. **Settings**: Adjust preferences in the Tools menu
 
-📈 Main Dashboard
-The dashboard displays 6 service cards:
+### 📈 Main Dashboard
 
-Service	Status	Description
-🎤 TTS	🟢/🔴/🟡	AI-powered voice synthesis
-🎵 Audio	🟢/🔴/🟡	Capture and processing
-🌐 Translation	🟢/🔴/🟡	Multi-language engine
-📹 Camera	🟢/🔴/🟡	Video capture
-👤 Avatar	🟢/🔴/🟡	Facial animation
-🤖 Ollama	🟢/🔴/🟡	LLM Processing
-Color Codes:
+The dashboard shows **6 service cards**:
 
-🟢 Green: Connected and working
+| Service | Status | Description |
+|---------|--------|-------------|
+| 🎤 **TTS** | 🟢/🔴/🟡 | AI voice synthesis |
+| 🎵 **Audio** | 🟢/🔴/🟡 | Capture and processing |
+| 🌐 **Translation** | 🟢/🔴/🟡 | Multi-language engine |
+| 📹 **Camera** | 🟢/🔴/🟡 | Video capture |
+| 👤 **Avatar** | 🟢/🔴/🟡 | Facial animation |
+| 🤖 **Ollama** | 🟢/🔴/🟡 | LLM processing |
 
-🟡 Yellow: Initializing or processing
+**Color Codes:**
+- 🟢 **Green**: Connected and working
+- 🟡 **Yellow**: Initializing or processing  
+- 🔴 **Red**: Error or disconnected
 
-🔴 Red: Error or disconnected
+### ⚡ Quick Actions
 
-⚡ Quick Actions
-New Chat: Start conversation (coming soon)
+- **New Chat**: Start conversation (coming soon)
+- **Settings**: Adjust system preferences
+- **Avatar**: Configure facial animation (coming soon)
+- **Statistics**: View usage metrics (coming soon)
 
-Settings: Adjust system preferences
+## 🛠️ Development
 
-Avatar: Configure facial animation (coming soon)
+### 🏃‍♂️ Development Mode
 
-Statistics: View usage metrics (coming soon)
-
-🛠️ Development
-🏃‍♂️ Development Mode
-Bash
-
+```bash
 # Install development dependencies
 python setup_desktop.py --install --dev
 
@@ -220,9 +222,11 @@ mypy src/desktop/
 
 # Format code
 black src/desktop/
-🧪 Testing
-Bash
+```
 
+### 🧪 Testing
+
+```bash
 # Unit tests
 pytest src/desktop/tests/ -v
 
@@ -232,37 +236,36 @@ pytest src/desktop/tests/test_ui.py --qt-api=pyqt6
 # Coverage
 coverage run -m pytest
 coverage report --include="src/desktop/*"
-📝 Logging and Debugging
-Log Files:
+```
 
-data/logs/desktop.log - Main log
+### 📝 Logging and Debugging
 
-data/logs/errors.log - Errors only
+**Log Files:**
+- `data/logs/desktop.log` - Main log
+- `data/logs/errors.log` - Errors only
+- `data/logs/app.log` - General application log
 
-data/logs/app.log - General application log
-
-Log Levels:
-
-Python
-
+**Log Levels:**
+```python
 # In config/config.yaml
 logging:
   level: DEBUG  # DEBUG, INFO, WARNING, ERROR
   console: true
   file_rotation: daily
-⚙️ Configuration
-📄 Configuration Files
-config/config.yaml - Main configuration
+```
 
-config/desktop/desktop.yaml - Desktop-specific
+## ⚙️ Configuration
 
-data/app_state.json - Persistent state
+### 📄 Configuration Files
 
-QSettings - User preferences
+1. **`config/config.yaml`** - Main configuration
+2. **`config/desktop/desktop.yaml`** - Desktop-specific
+3. **`data/app_state.json`** - Persistent state
+4. **QSettings** - User preferences
 
-🎨 Theme Customization
-YAML
+### 🎨 Theme Customization
 
+```yaml
 # In config/desktop/desktop.yaml
 desktop:
   theme:
@@ -270,10 +273,10 @@ desktop:
     accent_color: "#0078d4"  # Default blue
     font_family: "Segoe UI"
     font_size: 10
-Custom Colors:
+```
 
-CSS
-
+**Custom Colors:**
+```css
 /* In src/desktop/resources/styles.qss */
 :root {
   --primary-bg: #2b2b2b;    /* Main background */
@@ -282,9 +285,11 @@ CSS
   --error: #d13438;         /* Error red */
   --warning: #ff8c00;       /* Warning orange */
 }
-🔧 Service Configuration
-YAML
+```
 
+### 🔧 Service Configuration
+
+```yaml
 # Enable/disable services
 services:
   tts: true
@@ -304,8 +309,13 @@ audio:
   sample_rate: 44100
   channels: 1
   chunk_size: 1024
-📁 File Structure
-📂 Main Directories
+```
+
+## 📁 File Structure
+
+### 📂 Main Directories
+
+```
 talkbridge/
 ├── src/desktop/           # 🖥️ Desktop application
 ├── data/                  # 💾 Persistent data
@@ -317,19 +327,25 @@ talkbridge/
 │   ├── config.yaml       # 📄 Main config
 │   └── desktop/          # 🖥️ Desktop config
 └── requirements-desktop.txt # 📦 Dependencies
-🗂️ Modules by Functionality
-Module	Purpose	Key Files
-app/	Application Core	application.py, main_window.py, state_manager.py
-services/	Backend services	core_bridge.py, tts_service.py, audio_service.py
-windows/	Main windows	dashboard.py, chat_window.py, settings_window.py
-components/	Reusable components	audio_controls.py, video_widget.py
-dialogs/	Modal dialogs	login_dialog.py, error_dialog.py
-resources/	Static resources	styles.qss, icons/, images/
-🔌 API and Services
-🌉 CoreBridge API
-Python
+```
 
-# Use services from the UI
+### 🗂️ Modules by Functionality
+
+| Module | Purpose | Key Files |
+|--------|---------|-----------|
+| **app/** | Application core | `application.py`, `main_window.py`, `state_manager.py` |
+| **services/** | Backend services | `core_bridge.py`, `tts_service.py`, `audio_service.py` |
+| **windows/** | Main windows | `dashboard.py`, `chat_window.py`, `settings_window.py` |
+| **components/** | Reusable components | `audio_controls.py`, `video_widget.py` |
+| **dialogs/** | Modal dialogs | `login_dialog.py`, `error_dialog.py` |
+| **resources/** | Static resources | `styles.qss`, `icons/`, `images/` |
+
+## 🔌 API and Services
+
+### 🌉 CoreBridge API
+
+```python
+# Use services from UI
 from src.desktop.services.core_bridge import CoreBridge
 
 bridge = CoreBridge(state_manager)
@@ -344,9 +360,11 @@ audio_data = bridge.stop_audio_recording()
 
 # Check status
 status = bridge.get_service_status("tts")  # "connected", "error", etc.
-📊 StateManager API
-Python
+```
 
+### 📊 StateManager API
+
+```python
 # Configuration management
 from src.desktop.app.state_manager import StateManager
 
@@ -364,10 +382,12 @@ service_status = state.get_service_status("tts")
 # User session
 state.set_user_session("admin", is_authenticated=True)
 session = state.get_user_session()
-🎤 TTSService API
-Python
+```
 
-# Asynchronous TTS Service
+### 🎤 TTSService API
+
+```python
+# Asynchronous TTS service
 from src.desktop.services.core_bridge import TTSService
 
 tts = TTSService(state_manager)
@@ -378,52 +398,45 @@ tts.synthesis_failed.connect(on_synthesis_error)
 
 # Synthesize
 success = tts.synthesize_async(
-    "Text to be synthesized",
+    "Text to synthesize",
     output_path="output.wav",
     voice_settings={"voice": "en-US", "speed": 1.0}
 )
-🤝 Contributing
-🐛 Reporting Issues
-Check that the issue does not already exist
+```
 
-Include system information:
+## 🤝 Contributing
 
-OS and version
+### 🐛 Report Issues
 
-Python and PyQt6 version
+1. **Check** that the issue does not already exist
+2. **Include** system information:
+   - OS and version
+   - Python and PyQt6 version
+   - Relevant logs
+3. **Describe** steps to reproduce
 
-Relevant logs
+### 🔧 Pull Requests
 
-Describe the steps to reproduce
+1. **Fork** the repository
+2. **Create** a branch for your feature: `git checkout -b feature/new-feature`
+3. **Commit** changes: `git commit -m 'Add new feature'`
+4. **Push** to your branch: `git push origin feature/new-feature`
+5. **Open** a Pull Request
 
-🔧 Pull Requests
-Fork the repository
+### 📝 Code Conventions
 
-Create a branch for your feature: git checkout -b feature/new-feature
+- **PEP 8** for Python style
+- **Type hints** in all functions
+- **Google-style docstrings**
+- **Commits** in English with format: `type: description`
 
-Commit your changes: git commit -m 'Add new feature'
-
-Push to your branch: git push origin feature/new-feature
-
-Open a Pull Request
-
-📝 Code Conventions
-PEP 8 for Python style
-
-Type hints in all functions
-
-Google-style docstrings
-
-Commit messages in Spanish with the format: type: description
-
-Python
-
+```python
 def synthesize_voice(text: str, output_path: Optional[str] = None) -> bytes:
-    '''
-    Synthesizes text to speech using the TTS engine.
+    """
+    Synthesizes text to voice using the TTS engine.
     
     Args:
-        text: Text to be synthesized
+        text: Text to synthesize
         output_path: Optional output path
         
     Returns:
@@ -431,22 +444,30 @@ def synthesize_voice(text: str, output_path: Optional[str] = None) -> bytes:
         
     Raises:
         TTSError: If synthesis fails
-    '''
+    """
     pass
-📄 License
-This project is licensed under the MIT License. See LICENSE for more details.
+```
 
-🆘 Support
-Documentation: docs/
+## 📄 License
 
-Issues: GitHub Issues
+This project is under the MIT license. See `LICENSE` for details.
 
-Discussions: GitHub Discussions
+---
 
-Email: support@talkbridge.com
+## 🆘 Support
+
+- **Documentation**: [docs/](docs/)
+- **Issues**: [GitHub Issues](https://github.com/casavatar/talkbridge/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/casavatar/talkbridge/discussions)
+- **Email**: support@talkbridge.com
+
+---
 
 <div align="center">
 
-🚀 TalkBridge Desktop - AI-Powered Voice Translation 🤖
+**🚀 TalkBridge Desktop - Voice Translation Powered by AI 🤖**
+
+[![GitHub stars](https://img.shields.io/github/stars/casavatar/talkbridge?style=social)](https://github.com/casavatar/talkbridge)
+[![Follow](https://img.shields.io/github/followers/casavatar?style=social)](https://github.com/casavatar)
 
 </div>

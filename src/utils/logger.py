@@ -1,29 +1,30 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Conversation Logger
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - json Python package
-# - csv Python package
-# - threading Python package
-# - time Python package
-# - datetime Python package
-# - pathlib Python package
-# - typing Python package
-# - dataclasses Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - ConversationEntry: Conversation entry class
-# - ConversationLogger: Conversation logger class
-# - create_logger: Create a new conversation logger instance
-# - log_conversation_entry: Convenience function to log a conversation entry
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge Utils - Logger
+=========================
+
+Módulo logger para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- None
+======================================================================
+Functions:
+- create_logger: Create a new conversation logger instance.
+- log_conversation_entry: Convenience function to log a conversation entry.
+- to_dict: Convert entry to dictionary format.
+- from_dict: Create entry from dictionary format.
+- __init__: Initialize the conversation logger.
+- _start_auto_save_thread: Start the auto-save thread.
+- log_message: Log a conversation message with all relevant information.
+- get_conversation_log: Retrieve conversation log entries with optional filtering.
+- save_log_to_file: Save conversation log to file.
+- load_log_from_file: Load conversation log from file.
+======================================================================
+"""
 
 import json
 import csv

@@ -1,16 +1,30 @@
-#---------------------------------------------------------------------------------
-# description: This module provides functionality to capture audio from the microphone
-# and system output using the sounddevice library.
-#-----------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.1 (FIXED VERSION)
-#
-# requirements:
-# - sounddevice library
-# - numpy library
-#-----------------------------------------------------------------------------------
+"""
+TalkBridge Audio - Capture
+==========================
+
+Módulo capture para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- sounddevice
+- numpy
+======================================================================
+Functions:
+- get_default_device_info: Get information about default audio devices.
+- test_audio_system: Test the complete audio system.
+- __init__: Función __init__
+- list_devices: List available audio devices.
+- test_microphone_access: Test if microphone access is available.
+- start_input_stream: Start capturing microphone audio continuously.
+- start_output_stream: Start capturing system output audio (if supported by the system).
+- record_fixed_duration: Record audio for a fixed duration.
+- get_audio_buffer: Get the current audio buffer and clear it.
+- stop: Stop audio capture.
+======================================================================
+"""
 
 import sounddevice as sd
 import numpy as np

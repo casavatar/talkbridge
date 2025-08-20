@@ -1,34 +1,31 @@
 #! /usr/bin/env python3 
-#-------------------------------------------------------------------------------------------------
-# description: Animation API Module
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Animation Api
+=============================
 
-# requirements:
-# - streamlit Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - AnimationAPI: Animation API class
-# - initialize_face_sync: Initialize face sync
-# - start_animation: Start animation
-# - stop_animation: Stop animation
-# - get_animation_status: Get animation status
-# - update_animation_settings: Update animation settings
-# - detect_facial_landmarks: Detect facial landmarks
-# - get_avatar_types: Get list of available avatar types
-# - set_avatar_type: Set avatar type and path
-# - check_webcam_availability: Check if webcam is available
-# - get_animation_quality_score: Get animation quality score
-# - get_current_settings: Get current animation settings
-# - validate_audio_file: Validate audio file
-#-------------------------------------------------------------------------------------------------
+Módulo animation_api para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the Animation API.
+- initialize_face_sync: Initialize the face sync system.
+- start_animation: Start facial animation with audio.
+- stop_animation: Stop the current animation.
+- get_animation_status: Get current animation status.
+- update_animation_settings: Update animation settings.
+- detect_facial_landmarks: Detect facial landmarks from frame data.
+- get_avatar_types: Get list of available avatar types.
+- set_avatar_type: Set the avatar type and path.
+- _check_webcam_availability: Check if webcam is available.
+======================================================================
+"""
 
 import streamlit as st
 from pathlib import Path

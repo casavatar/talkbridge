@@ -1,25 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Prompt Engineer Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - PromptTemplate: Prompt template data class
-# - PromptResult: Prompt result data class
-# - PromptEngineer: Prompt engineer class
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Ollama - Prompt Engineer
+===================================
+
+Motor/Engine del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+======================================================================
+Functions:
+- __init__: Initialize prompt engineer.
+- _load_default_templates: Load default prompt templates.
+- add_template: Add a prompt template.
+- get_template: Get a prompt template by name.
+- list_templates: List prompt templates.
+- render_template: Render a prompt template with variables.
+- test_prompt: Test a prompt with a model.
+- _calculate_similarity: Calculate similarity between response and expected response.
+- optimize_prompt: Optimize a prompt to get closer to target response.
+- batch_test_templates: Test multiple templates with test cases.
+======================================================================
+"""
 
 import json
 import time

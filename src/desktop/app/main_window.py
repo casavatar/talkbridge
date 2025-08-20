@@ -1,21 +1,29 @@
+"""
+TalkBridge Desktop - Main Window
+================================
 
-#! /src/desktop/app/main_window.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Main application window for TalkBridge Desktop
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - setup_ui: Set up the user interface for the main window
-# - load_user_data: Load user-specific data for the main window
-# - refresh_data: Refresh the displayed data
-# - show_error: Display an error message
-#----------------------------------------------------------------------------------------------------------------------------
+Módulo main_window para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- __init__: Función __init__
+- setup_ui: Sets up the main interface.
+- create_menu_bar: Creates the menu bar.
+- create_status_bar: Creates the status bar.
+- configure_window: Configures window properties.
+- center_window: Centers the window on the screen.
+- connect_signals: Connects component signals.
+- show_view: Shows a specific view.
+- handle_service_action: Handles service actions from the dashboard.
+- handle_quick_action: Handles quick actions from the dashboard.
+======================================================================
+"""
 
 import logging
 from typing import Optional

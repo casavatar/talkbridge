@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
 """
-Demo Runner Script
+TalkBridge Demo - Run Demo
+==========================
 
-Standalone script to run the TalkBridge demo system.
-Can be used to test the demo functionality independently.
-
-Usage:
-    python run_demo.py [--web] [--test] [--config]
+Módulo run_demo para TalkBridge
 
 Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- test_demo_system: Test the demo system functionality.
+- run_web_demo: Run the web-based demo interface.
+- show_config: Show demo configuration.
+- main: Main demo runner function.
+======================================================================
 """
 
 import sys

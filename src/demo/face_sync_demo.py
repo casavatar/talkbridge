@@ -1,32 +1,25 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Face Sync Demo Script
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# requirements:
-# - numpy Python package
-# - mediapipe Python package
-# - pygame Python package
-# - librosa Python package
-# - opencv-python Python package
-# - soundfile Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------       
-# functions:
-# - demo_webcam_face_sync: Demo the webcam face sync capabilities
-# - demo_avatar_face_sync: Demo the avatar face sync capabilities
-# - demo_facial_landmarks: Demo the facial landmark detection capabilities
-# - create_test_audio: Create a test audio file for demo
-# - main: Main function to run all demos
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge Demo - Face Sync Demo
+================================
+
+Módulo face_sync_demo para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- demo_webcam_face_sync: Demonstrate face sync with webcam input.
+- demo_avatar_face_sync: Demonstrate face sync with static avatar.
+- demo_facial_landmarks: Demonstrate facial landmark detection without audio.
+- create_test_audio: Create a simple test audio file for demo.
+- main: Run all face sync demos.
+======================================================================
+"""
 
 import os
 import sys

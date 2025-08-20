@@ -1,37 +1,18 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script implements the main module for the STT module.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - whisper Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#----------------------------------------------------------------------------------------------------------------------------   
-# functions:
-# - transcribe_audio(): Transcribe audio bytes to text
-# - transcribe_file(): Transcribe audio file to text
-# - transcribe_with_metadata(): Transcribe audio with metadata
-# - load_model(): Load Whisper model explicitly
-# - unload_model(): Unload Whisper model
-# - get_model_info(): Get model information
-# - get_supported_languages(): Get list of supported languages
-# - is_language_supported(): Check if a language is supported
-# - is_model_ready(): Check if the model is ready
-# - get_engine_status(): Get engine status
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge STT -   Init   - Package Initialization
+==================================================
 
-# Import main public interface
+Inicialización del paquete
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- openai-whisper
+"""
+
 from .interface import (
     transcribe_audio,
     transcribe_file,

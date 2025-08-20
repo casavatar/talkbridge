@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Audio Generator Module
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - AudioGenerator: Audio generator class
-# - AudioGeneratorDemo: Demo class for audio generator
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Audio - Generator
+============================
+
+Módulo generator para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- sounddevice
+- numpy
+======================================================================
+Functions:
+- __init__: Initialize audio generator.
+- generate_sine_wave: Generate a sine wave.
+- generate_square_wave: Generate a square wave.
+- generate_sawtooth_wave: Generate a sawtooth wave.
+- generate_triangle_wave: Generate a triangle wave.
+- generate_white_noise: Generate white noise.
+- generate_pink_noise: Generate pink noise (1/f noise).
+- generate_frequency_sweep: Generate a frequency sweep.
+- generate_chord: Generate a chord from multiple frequencies.
+- generate_melody: Generate a melody from note names and durations.
+======================================================================
+"""
 
 import numpy as np
 import sounddevice as sd

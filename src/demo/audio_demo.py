@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Audio Generation Demo Script for TalkBridge
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - seaborn Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - demo_audio_generator: Demo the audio generator capabilities
-# - demo_audio_synthesizer: Demo the audio synthesizer capabilities
-# - demo_audio_effects: Demo the audio effects capabilities
-# - demo_audio_player: Demo the audio player capabilities
-# - demo_audio_integration: Demo the audio integration capabilities
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Demo - Audio Demo
+============================
+
+Módulo audio_demo para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- demo_audio_generator: Demo the audio generator capabilities.
+- demo_audio_synthesizer: Demo the advanced audio synthesizer.
+- demo_audio_effects: Demo the audio effects processor.
+- demo_audio_player: Demo the audio player capabilities.
+- demo_audio_integration: Demo integration with existing audio capture.
+- main: Main demo function.
+- on_track_change: Función on_track_change
+- on_playback_end: Función on_playback_end
+======================================================================
+"""
 
 import time
 import sys

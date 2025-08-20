@@ -1,31 +1,30 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Audio Recorder Component
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - streamlit Python package
-# - tempfile Python package
-# - os Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------  
-# functions:
-# - AudioRecorder: Audio recorder component class
-# - render_recording_interface: Render the audio recording interface
-# - _start_recording: Start audio recording
-# - _stop_recording: Stop audio recording
-# - _render_recording_settings: Render recording settings
-# - create_audio_file: Create an audio file from audio data
-# - get_recording_status: Get current recording status
-# - clear_audio: Clear the current audio data
-# - get_audio_duration: Get audio duration in seconds
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Audio Recorder
+==============================
+
+Módulo audio_recorder para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the audio recorder.
+- render_recording_interface: Render the audio recording interface.
+- _start_recording: Start audio recording.
+- _stop_recording: Stop audio recording and return audio data.
+- _render_recording_settings: Render recording settings controls.
+- create_audio_file: Create an audio file from audio data.
+- get_recording_status: Get current recording status.
+- clear_audio: Clear the current audio data.
+- get_audio_duration: Get audio duration in seconds.
+======================================================================
+"""
 
 import streamlit as st
 import tempfile

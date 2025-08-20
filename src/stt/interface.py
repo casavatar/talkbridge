@@ -1,35 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script implements the public interface for the STT module.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - whisper Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - transcribe_audio(): Transcribe audio bytes to text
-# - transcribe_file(): Transcribe audio file to text
-# - transcribe_with_metadata(): Transcribe audio with metadata
-# - load_model(): Load Whisper model explicitly
-# - unload_model(): Unload Whisper model
-# - get_model_info(): Get model information
-# - get_supported_languages(): Get list of supported languages
-# - is_language_supported(): Check if a language is supported
-# - is_model_ready(): Check if the model is ready
-# - get_engine_status(): Get engine status
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge STT - Interface
+==========================
+
+Interfaz del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- openai-whisper
+======================================================================
+Functions:
+- _get_engine: Get or create the global Whisper engine instance.
+- transcribe_audio: Transcribe audio bytes to text using offline Whisper model.
+- transcribe_file: Transcribe audio file to text.
+- transcribe_with_metadata: Transcribe audio file with detailed metadata.
+- load_model: Load Whisper model explicitly.
+- unload_model: Unload the Whisper model to free memory.
+- get_model_info: Get information about the current model.
+- get_supported_languages: Get list of supported languages.
+- is_language_supported: Check if language is supported.
+- is_model_ready: Check if the model is loaded and ready for transcription.
+======================================================================
+"""
 
 import logging
 from typing import Optional, Dict, Any

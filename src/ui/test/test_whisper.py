@@ -1,6 +1,23 @@
 #!/usr/bin/env python3
 """
-Test script to verify Whisper functionality with conda environment
+TalkBridge UI - Test Whisper
+============================
+
+Módulo test_whisper para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- test_whisper_installation: Test if Whisper is properly installed and working.
+- test_talkbridge_whisper: Test TalkBridge's Whisper engine.
+- main: Run all tests.
+======================================================================
 """
 
 import sys

@@ -1,15 +1,30 @@
 #!/usr/bin/env python3
 """
-STT (Speech-to-Text) API Module
+TalkBridge UI - Stt Api
+=======================
 
-Provides REST API endpoints for speech-to-text functionality:
-- Audio recording and transcription
-- File-based transcription
-- Language support and configuration
-- Real-time transcription capabilities
+Módulo stt_api para TalkBridge
 
-Author: TalkBridge Development Team
-Date: 2024-01-01
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize STT API.
+- start_recording: Start audio recording.
+- stop_recording: Stop audio recording and return captured audio.
+- transcribe_audio: Transcribe audio data to text using the new STT module.
+- transcribe_file: Transcribe audio file to text using the new STT module.
+- get_supported_languages: Get list of supported languages for transcription.
+- is_language_supported: Check if a language is supported.
+- get_engine_status: Get comprehensive status of the STT engine.
+- update_recording_settings: Update recording settings.
+- get_recording_status: Get current recording status.
+======================================================================
 """
 
 import os

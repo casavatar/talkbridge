@@ -1,34 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script implements the audio utilities for the STT module.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - validate_audio_bytes(): Validate audio bytes for transcription
-# - save_audio_bytes_to_temp(): Save audio bytes to a temporary WAV file
-# - validate_audio_file(): Validate audio file for transcription
-# - get_audio_duration(): Get audio duration in seconds
-# - check_audio_duration(): Check if audio duration is within acceptable limits
-# - convert_audio_format(): Convert audio file to target format using ffmpeg
-# - preprocess_audio(): Preprocess audio file for optimal transcription
-# - cleanup_temp_file(): Clean up temporary audio file
-# - create_test_audio(): Create test audio data for testing purposes
-# - get_audio_info(): Get detailed information about audio file
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge STT - Audio Utils
+============================
+
+Módulo audio_utils para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- openai-whisper
+======================================================================
+Functions:
+- validate_audio_bytes: Validate audio bytes for transcription.
+- save_audio_bytes_to_temp: Save audio bytes to a temporary WAV file.
+- validate_audio_file: Validate audio file for transcription.
+- get_audio_duration: Get audio duration in seconds.
+- check_audio_duration: Check if audio duration is within acceptable limits.
+- convert_audio_format: Convert audio file to target format using ffmpeg.
+- preprocess_audio: Preprocess audio file for optimal transcription.
+- cleanup_temp_file: Clean up temporary audio file.
+- create_test_audio: Create test audio data for testing purposes.
+- get_audio_info: Get detailed information about audio file.
+======================================================================
+"""
 
 import os
 import tempfile

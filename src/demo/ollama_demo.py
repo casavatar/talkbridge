@@ -1,29 +1,28 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Ollama Integration Demo Script for TalkBridge
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - demo_basic_client: Demo the basic Ollama client capabilities
-# - demo_model_manager: Demo the model manager capabilities
-# - demo_conversation_manager: Demo the conversation manager capabilities
-# - demo_prompt_engineer: Demo the prompt engineer capabilities
-# - demo_streaming_client: Demo the streaming client capabilities
-# - demo_integration: Demo the integration between different Ollama components
-# - demo_advanced_features: Demo advanced Ollama features
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Demo - Ollama Demo
+=============================
+
+Módulo ollama_demo para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- demo_basic_client: Demo the basic Ollama client capabilities.
+- demo_model_manager: Demo the model manager capabilities.
+- demo_conversation_manager: Demo the conversation manager capabilities.
+- demo_prompt_engineer: Demo the prompt engineer capabilities.
+- demo_streaming_client: Demo the streaming client capabilities.
+- demo_integration: Demo integration between different Ollama components.
+- demo_advanced_features: Demo advanced Ollama features.
+- main: Main demo function.
+======================================================================
+"""
 
 import time
 import sys

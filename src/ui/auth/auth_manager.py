@@ -1,42 +1,31 @@
 #! /usr/bin/env python3 
-#-------------------------------------------------------------------------------------------------
-# description: Authentication Manager
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Auth Manager
+============================
 
-# requirements:
-# - json Python package
-# - hashlib Python package
-# - os Python package
-# - pathlib Python package
-# - typing Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - AuthManager: Authentication manager class
-# - _load_users: Load users from JSON file
-# - _create_default_users: Create secure default users with salted passwords
-# - _save_users: Save users to JSON file
-# - _hash_password: Hash password using SHA-256 (legacy)
-# - _hash_password_with_salt: Hash password with salt for enhanced security
-# - _verify_password_with_salt: Verify password against salted hash
-# - _update_login_success: Update user data after successful login
-# - _update_login_failure: Update user data after failed login attempt
-# - authenticate: Authenticate user with username and password
-# - add_user: Add a new user to the system with enhanced security
-# - remove_user: Remove a user from the system
-# - change_password: Change user password with enhanced security
-# - get_user_info: Get user information (without password)
-# - list_users: Get list of all usernames
-# - get_user_role: Get user role
-# - is_admin: Check if user is admin
-# - is_account_locked: Check if user account is locked
-# - unlock_account: Unlock a user account
-# - requires_password_change: Check if user requires password change
-#-------------------------------------------------------------------------------------------------  
+Gestor/Manager del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the authentication manager.
+- _load_users: Load users from JSON file or create default if not exists.
+- _create_default_users: Create default users with enhanced security.
+- _save_users: Save users to JSON file.
+- _hash_password: Hash password using SHA-256 (legacy method for backward compatibility).
+- _hash_password_with_salt: Hash password using SHA-256 with salt for enhanced security.
+- _verify_password_with_salt: Verify password against salted hash.
+- _update_login_success: Update user data after successful login.
+- _update_login_failure: Update user data after failed login attempt.
+- is_account_locked: Check if user account is locked.
+======================================================================
+"""
 
 import json
 import hashlib

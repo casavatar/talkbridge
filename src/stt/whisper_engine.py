@@ -1,29 +1,30 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script implements the WhisperEngine class for offline speech-to-text transcription.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - whisper Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - WhisperEngine: Whisper engine class
-# - get_whisper_engine(): Get or create a Whisper engine instance
-# - is_model_loaded(): Check if Whisper model is currently loaded
-# - get_loaded_model(): Get the currently loaded Whisper model
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge STT - Whisper Engine
+===============================
+
+Motor/Engine del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- openai-whisper
+======================================================================
+Functions:
+- get_whisper_engine: Get or create a Whisper engine instance.
+- is_model_loaded: Check if Whisper model is currently loaded.
+- get_loaded_model: Get the currently loaded Whisper model.
+- __init__: Función __init__
+- transcribe: Mock transcription that returns a placeholder message.
+- __init__: Initialize Whisper engine.
+- _detect_device: Detect and validate the best available device.
+- load_model: Load Whisper model.
+- transcribe_audio_bytes: Transcribe audio bytes to text.
+- transcribe_file: Transcribe audio file to text.
+======================================================================
+"""
 
 import os
 import logging

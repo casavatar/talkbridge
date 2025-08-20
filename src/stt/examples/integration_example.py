@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: This script demonstrates the integration of the STT module with the TalkBridge system.
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - whisper Python package
-# - numpy Python package
-# - sounddevice Python package
-# - soundfile Python package
-# - scipy Python package
-# - matplotlib Python package
-# - pandas Python package
-# - seaborn Python package
-# - dataclasses Python package
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - example_basic_transcription(): Example of basic audio transcription
-# - example_file_transcription(): Example of file-based transcription
-# - example_model_management(): Example of model management
-# - example_error_handling(): Example of error handling
-# - example_language_support(): Example of language support
-# - example_integration_with_talkbridge(): Example of integration with TalkBridge components
-#---------------------------------------------------------------------------------------------------------------------------- 
+"""
+TalkBridge STT - Integration Example
+====================================
+
+Módulo integration_example para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- openai-whisper
+======================================================================
+Functions:
+- example_basic_transcription: Example of basic audio transcription.
+- example_file_transcription: Example of file-based transcription.
+- example_model_management: Example of model management.
+- example_error_handling: Example of error handling.
+- example_language_support: Example of language support.
+- example_integration_with_talkbridge: Example of integration with TalkBridge components.
+- main: Run all examples.
+======================================================================
+"""
 
 import sys
 import os

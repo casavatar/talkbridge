@@ -1,13 +1,29 @@
 #!/usr/bin/env python3
 """
-Demo UI Components
+TalkBridge Demo - Demo Ui
+=========================
 
-Streamlit UI components for demo mode that integrate with the web interface.
-Provides demo-specific widgets and displays for the TalkBridge system.
+Módulo demo_ui para TalkBridge
 
 Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- render_demo_header: Render demo mode header with status information.
+- render_demo_status: Render demo system status.
+- render_demo_audio_recorder: Render demo audio recorder component.
+- render_demo_transcription: Render demo transcription display.
+- render_demo_translation: Render demo translation display.
+- render_demo_llm_response: Render demo LLM response display.
+- render_demo_voice_synthesis: Render demo voice synthesis display.
+- render_demo_avatar: Render demo avatar display.
+- render_demo_conversation_log: Render demo conversation history.
+- render_demo_full_conversation: Render full demo conversation flow.
+======================================================================
 """
 
 import streamlit as st
@@ -17,9 +33,9 @@ from datetime import datetime
 from typing import Dict, List, Optional
 import base64
 
-from .demo_runner import get_demo_runner, run_demo_conversation
-from .demo_config import is_demo_mode, get_demo_setting, get_demo_file_path
-from .demo_api import (
+from demo.demo_runner import get_demo_runner, run_demo_conversation
+from demo.demo_config import is_demo_mode, get_demo_setting, get_demo_file_path
+from demo.demo_api import (
     get_tts_api, get_stt_api, get_llm_api, 
     get_translation_api, get_animation_api, get_audio_api
 )

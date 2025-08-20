@@ -5,7 +5,7 @@
     "role": "admin",
     "email": "admin@talkbridge.local",
     "created_at": "2024-01-01 00:00:00",
-    "last_login": "2025-08-13 14:24:22",
+    "last_login": "2025-08-19 18:49:56",
     "password_changed_at": "2024-01-01 00:00:00",
     "account_locked": false,
     "failed_login_attempts": 0,

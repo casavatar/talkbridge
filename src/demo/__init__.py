@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 """
-TalkBridge Demo Module
+TalkBridge Demo -   Init   - Package Initialization
+===================================================
 
-Demo mode implementation for the TalkBridge AI voice assistant system.
-Provides simulation of all major components without requiring real hardware
-or external services.
+Inicialización del paquete
 
 Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
+Date: 2025-08-19
+Version: 1.0
 
-Components:
-- demo_config: Demo configuration and settings
-- demo_runner: Main demo runner for simulating conversations
-- demo_api: API wrappers for demo mode
-- demo_ui: Streamlit UI components for demo mode
+Requirements:
+- PyQt6
 """
 
 from .demo_config import (

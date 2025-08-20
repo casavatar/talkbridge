@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-#-----------------------------------------------------------------------------
-# description: This module provides a Translator class that interfaces with the Ollama API
-# for text translation. It reads configuration from a YAML file and sends translation requests.
-#-----------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - requests
-# - pyyaml
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - Translator: Translator class
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Translation - Translator
+===================================
+
+Módulo translator para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- googletrans
+======================================================================
+Functions:
+- __init__: Función __init__
+- translate: Función translate
+======================================================================
+"""
 
 import requests
 import time

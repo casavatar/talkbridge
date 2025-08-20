@@ -1,33 +1,31 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: TTS API Module
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#-------------------------------------------------------------------------------------------------
-# requirements:
-# - streamlit Python package
-# - tempfile Python package
-# - os Python package
-# - pathlib Python package
-# - typing Python package
-# - logging Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - TTSAPI: TTS API class
-# - synthesize_text: Synthesize text to speech
-# - setup_voice_cloning: Set up voice cloning
-# - get_synthesis_info: Get synthesis info
-# - list_available_models: List available models
-# - update_voice_settings: Update voice settings
-# - create_audio_file: Create audio file
-# - get_audio_bytes: Get audio bytes
-# - validate_text: Validate text
-# - get_supported_languages: Get supported languages
-# - get_current_settings: Get current settings
-#-------------------------------------------------------------------------------------------------  
+"""
+TalkBridge UI - Tts Api
+=======================
+
+Módulo tts_api para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the TTS API.
+- synthesize_text: Synthesize text to speech.
+- setup_voice_cloning: Set up voice cloning with reference samples.
+- get_synthesis_info: Get information about the TTS system.
+- list_available_models: Get list of available TTS models.
+- update_voice_settings: Update voice synthesis settings.
+- create_audio_file: Create an audio file from text.
+- get_audio_bytes: Get audio data as bytes.
+- validate_text: Validate text for synthesis.
+- get_supported_languages: Get list of supported languages.
+======================================================================
+"""
 
 import streamlit as st
 import tempfile

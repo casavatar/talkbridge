@@ -1,30 +1,26 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Voice Cloning Module using Coqui TTS
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - os Python package
-# - logging Python package
-# - tempfile Python package
-# - numpy Python package
-# - soundfile Python package
-# - pathlib Python package 
-# - typing Python package
-# - torch Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - VoiceCloner: Voice cloning class
-# - _load_model: Load the TTS model
-# - clone_voice_from_samples: Clone a voice from reference audio samples
-# - synthesize_with_cloned_voice: Synthesize speech using the cloned voice
-# - get_available_models: Get list of available TTS models
-# - get_model_info: Get information about the loaded model
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge TTS - Voice Cloner
+=============================
+
+Módulo voice_cloner para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- TTS
+======================================================================
+Functions:
+- __init__: Initialize the voice cloner with a pre-trained model.
+- _load_model: Load the TTS model and move it to the appropriate device.
+- clone_voice_from_samples: Clone a voice from reference audio samples.
+- synthesize_with_cloned_voice: Synthesize speech using the cloned voice.
+- get_available_models: Get list of available TTS models.
+- get_model_info: Get information about the loaded model.
+======================================================================
+"""
 
 import os
 import logging

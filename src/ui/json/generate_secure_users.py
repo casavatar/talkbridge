@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Generate Secure Users JSON
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - json Python package
-# - hashlib Python package
-# - secrets Python package
-# - string Python package
-# - datetime Python package
-#-------------------------------------------------------------------------------------------------
-# functions:
-# - generate_secure_password: Generate a cryptographically secure password
-# - generate_salt: Generate a cryptographically secure salt
-# - hash_password_with_salt: Hash password using SHA-256 with salt
-# - create_user_data: Create user data with secure password and salt
-# - generate_users_json: Generate the complete users.json file with secure passwords
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Generate Secure Users
+=====================================
+
+Módulo generate_secure_users para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- generate_secure_password: Generate a cryptographically secure password.
+- generate_salt: Generate a cryptographically secure salt.
+- hash_password_with_salt: Hash password using SHA-256 with salt.
+- create_user_data: Create user data with secure password and salt.
+- generate_users_json: Generate the complete users.json file with secure passwords.
+======================================================================
+"""
 
 import json
 import hashlib

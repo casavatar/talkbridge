@@ -1,28 +1,27 @@
 #!/usr/bin/env python3
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Dashboard Component
-#----------------------------------------------------------------------------------------------------------------------------
-# 
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-# 
-# requirements:
-# - streamlit Python package
-# - ollama Python package
-# - json Python package
-# - time Python package
-# - threading Python package
-# - typing Python package
-# - dataclasses Python package  
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - Dashboard: Dashboard component class
-# - _render_voice_chat_tab: Render the voice chat tab
-# - _render_chat_history_tab: Render the chat history tab
-# - _render_avatar_tab: Render the avatar tab
-# - _render_settings_tab: Render the settings tab
-#----------------------------------------------------------------------------------------------------------------------------   
+"""
+TalkBridge UI - Dashboard
+=========================
+
+Módulo dashboard para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the dashboard.
+- render: Render the main dashboard.
+- _render_voice_chat_tab: Render the voice chat tab.
+- _render_chat_history_tab: Render the chat history tab.
+- _render_avatar_tab: Render the avatar tab.
+- _render_settings_tab: Render the settings tab.
+======================================================================
+"""
 
 import streamlit as st
 from typing import Optional

@@ -1,20 +1,30 @@
 #! /src/desktop/windows/dashboard.py
-#----------------------------------------------------------------------------------------------------------------------------
-# description: Dashboard UI for TalkBridge Desktop application
-#----------------------------------------------------------------------------------------------------------------------------
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#----------------------------------------------------------------------------------------------------------------------------
-# requirements:
-# - PyQt6
-#----------------------------------------------------------------------------------------------------------------------------
-# functions:
-# - setup_ui: Set up the user interface for the dashboard
-# - load_user_data: Load user-specific data for the dashboard
-# - refresh_data: Refresh the displayed data
-# - show_error: Display an error message
-#----------------------------------------------------------------------------------------------------------------------------
+"""
+TalkBridge Desktop - Application
+================================
+
+Módulo application para TalkBridge
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- __init__: Initializes the application.
+- run: Runs the full application.
+- _show_splash_screen: Shows the splash screen during loading.
+- _initialize_core_components: Initializes the application's core components.
+- _show_login_dialog: Shows the login dialog and handles authentication.
+- _initialize_services_async: Initializes services asynchronously.
+- _do_initialize_services: Performs actual service initialization.
+- _on_authentication_completed: Handles authentication result.
+- _on_services_initialized: Handles service initialization result.
+- _show_main_window: Shows the application's main window.
+======================================================================
+"""
 
 import sys
 import logging

@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 """
-Demo Configuration
+TalkBridge Demo - Demo Config
+=============================
 
-Controls whether the TalkBridge system runs in demo mode or live mode.
-Demo mode uses predefined static files to simulate the full system.
+Configuración del módulo
 
 Author: TalkBridge Team
-Date: 2024-01-01
-Version: 1.0.0
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+======================================================================
+Functions:
+- is_demo_mode: Check if demo mode is enabled.
+- get_demo_setting: Get a demo setting value.
+- get_demo_file_path: Get the full path to a demo file.
+- ensure_demo_files_exist: Ensure all demo files exist, create placeholder files if missing.
+======================================================================
 """
 
 import os

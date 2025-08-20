@@ -1,32 +1,31 @@
 #! /usr/bin/env python3
-#-------------------------------------------------------------------------------------------------
-# description: Chat Interface Component
-#-------------------------------------------------------------------------------------------------
-#
-# author: ingekastel
-# date: 2025-06-02
-# version: 1.0
-#
-# requirements:
-# - streamlit Python package
-# - typing Python package
-# - logging Python package
-# - datetime Python package
-#-------------------------------------------------------------------------------------------------  
-# functions:
-# - ChatInterface: Chat interface component class
-# - render_chat_interface: Render the main chat interface
-# - _display_chat_messages: Display chat messages
-# - _display_message: Display a single chat message
-# - _render_text_input: Render text input for manual messages
-# - _add_user_message: Add a user message to chat history
-# - add_assistant_message: Add an assistant message to chat history
-# - render_chat_history_tab: Render the chat history tab
-# - _display_filtered_history: Display filtered chat history
-# - get_chat_statistics: Get chat statistics
-# - export_chat_history: Export chat history
-#-------------------------------------------------------------------------------------------------
+"""
+TalkBridge UI - Chat Interface
+==============================
 
+Interfaz del módulo
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- PyQt6
+- Flask
+======================================================================
+Functions:
+- __init__: Initialize the chat interface.
+- render_chat_interface: Render the main chat interface.
+- _display_chat_messages: Display chat messages.
+- _display_message: Display a single chat message.
+- _render_text_input: Render text input for manual messages.
+- _add_user_message: Add a user message to chat history.
+- add_assistant_message: Add an assistant message to chat history.
+- render_chat_history_tab: Render the chat history tab.
+- _display_filtered_history: Display filtered chat history.
+- get_chat_statistics: Get chat statistics.
+======================================================================
+"""
 
 import streamlit as st
 from typing import List, Dict, Any, Optional
