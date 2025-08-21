@@ -1,22 +1,241 @@
-# TalkBridge Desktop Application
+# TalkBridge Desktop GUI
 
-> 🚀 **Modern desktop interface for TalkBridge** - Real-time voice translation platform powered by artificial intelligence.
+## 🎯 Descripción
 
-![TalkBridge Desktop](https://img.shields.io/badge/PyQt6-Desktop%20App-blue?style=flat-square) ![Python](https://img.shields.io/badge/Python-3.8%2B-green?style=flat-square) ![Status](https://img.shields.io/badge/Status-In%20Development-orange?style=flat-square)
+Esta es la nueva implementación de la GUI de TalkBridge Desktop usando PyQt6 con una arquitectura de pestañas integradas que permite:
 
-## 📋 Table of Contents
+- **� Chat Traducido**: Grabación de voz, transcripción, traducción y respuestas de IA
+- **👤 Avatar Animado**: Webcam en tiempo real con sincronización facial y labial  
+- **⚙️ Configuración**: Ajustes completos de TTS, traducción, animación y audio
 
-- [Main Features](#main-features)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Development](#development)
-- [Configuration](#configuration)
-- [File Structure](#file-structure)
-- [API and Services](#api-and-services)
-- [Contributing](#contributing)
+## 🏗️ Arquitectura
 
-## 🎯 Main Features
+### Estructura de Componentes
+
+```
+src/desktop/
+├── components/           # Pestañas modulares
+│   ├── chat_tab.py      # Chat traducido con IA
+│   ├── avatar_tab.py    # Avatar animado y webcam
+│   └── settings_tab.py  # Configuración del sistema
+├── app/
+│   ├── main_window.py   # Ventana principal con pestañas
+│   └── application.py   # Aplicación base
+└── main.py              # Punto de entrada
+```
+
+### Características de cada Pestaña
+
+#### 💬 Chat Tab
+- **Grabación de voz** con botón de inicio/detener
+- **Transcripción automática** usando Whisper
+- **Traducción en tiempo real** entre idiomas
+- **Respuestas de IA** usando Ollama/GPT
+- **Síntesis de voz** para las respuestas
+- **Historial de conversación** con mensajes del usuario y asistente
+
+#### 👤 Avatar Tab  
+- **Vista de webcam en tiempo real**
+- **Detección de puntos faciales** usando MediaPipe
+- **Sincronización labial** con audio
+- **Controles de animación** (sensibilidad, intensidad, suavizado)
+- **Efectos visuales** (landmarks, malla facial)
+- **Configuración en tiempo real**
+
+#### ⚙️ Settings Tab
+- **Configuración de TTS**: Motor, velocidad, tono, volumen, clonación de voz
+- **Configuración de Traducción**: Servicios, idiomas, API keys
+- **Configuración de Animación**: Modelos, sensibilidad, efectos
+- **Configuración de Audio**: Dispositivos, calidad, pruebas
+- **Configuración General**: Idioma UI, tema, logs, sistema
+
+## 🚀 Cómo Ejecutar
+
+### Método 1: Script de Prueba (Recomendado)
+```bash
+# Desde el directorio raíz del proyecto
+python test_gui.py
+```
+
+### Método 2: Aplicación Completa
+```bash
+# Desde el directorio raíz del proyecto
+python src/desktop/main.py
+```
+
+## 📋 Dependencias
+
+### Principales
+- **PyQt6**: Framework de GUI
+- **opencv-python**: Procesamiento de video
+- **numpy**: Operaciones numéricas
+
+### Backend (Opcionales)
+- **mediapipe**: Detección facial
+- **librosa**: Procesamiento de audio
+- **transformers**: Modelos de IA
+- **openai-whisper**: Transcripción de voz
+
+## 🛠️ Instalación
+
+### Usando Conda (Recomendado)
+```bash
+conda install -c conda-forge pyqt=6 opencv numpy
+```
+
+### Usando Pip
+```bash
+pip install PyQt6 opencv-python numpy
+```
+
+## 🎮 Controles y Atajos
+
+### Atajos de Teclado
+- **Ctrl+1**: Cambiar a pestaña de Chat
+- **Ctrl+2**: Cambiar a pestaña de Avatar  
+- **Ctrl+,**: Abrir Configuración
+- **Ctrl+L**: Cerrar Sesión
+- **Ctrl+Q**: Salir de la aplicación
+
+### Controles de Chat
+- **🎤 Botón de Grabación**: Inicia/detiene grabación de voz
+- **🗑️ Limpiar Chat**: Borra el historial de conversación
+- **Selección de Idioma**: Configura idioma de entrada
+
+### Controles de Avatar
+- **📹 Iniciar/Detener Cámara**: Control de webcam
+- **🎭 Activar Animación**: Habilita/deshabilita efectos faciales
+- **Sliders de Configuración**: Ajusta sensibilidad, intensidad, suavizado
+- **Checkboxes de Efectos**: Muestra landmarks, malla facial, etc.
+
+## 🔧 Configuración
+
+### Archivos de Configuración
+- **QSettings**: Configuración persistente de Qt
+- **config.yaml**: Configuración de backend (si está disponible)
+- **Logs**: `data/logs/desktop.log`
+
+### Modos de Funcionamiento
+
+#### Modo Completo
+- Todos los módulos backend disponibles
+- Funcionalidad completa de TTS, STT, traducción
+- Avatar animado con MediaPipe
+
+#### Modo Demo/Fallback
+- Funciona sin dependencias complejas
+- Simula respuestas y efectos
+- Interfaz completamente funcional
+
+## 📊 Estados y Indicadores
+
+### Barra de Estado
+- **✅ Listo**: Sistema preparado
+- **🎤 Grabando**: Capturando audio
+- **⚙️ Procesando**: Analizando entrada
+- **📹 Cámara activa**: Webcam funcionando
+- **❌ Error**: Problema detectado
+
+### Indicadores Visuales
+- **Botones con colores**: Verde (listo), Rojo (grabando/detener), Azul (procesando)
+- **Barras de progreso**: Durante grabación y procesamiento
+- **Mensajes de chat**: Diferenciados por usuario/asistente
+- **Frames de video**: Tiempo real con efectos opcionales
+
+## � Flujo de Trabajo
+
+### Chat Traducido
+1. Usuario presiona botón de grabación
+2. Sistema captura audio por 5 segundos (configurable)
+3. Audio se transcribe usando Whisper
+4. Texto se traduce al idioma objetivo
+5. IA genera respuesta contextual
+6. Respuesta se sintetiza a voz
+7. Mensaje se agrega al historial
+
+### Avatar Animado
+1. Usuario inicia webcam
+2. Sistema detecta rostro en tiempo real
+3. Puntos faciales se rastrean continuamente
+4. Audio sincroniza movimiento labial
+5. Efectos visuales se aplican en tiempo real
+
+## 🧪 Testing y Debug
+
+### Logs
+- Archivo: `data/logs/desktop.log`
+- Nivel: INFO por defecto (configurable)
+- Categorías: Chat, Avatar, Settings, MainWindow
+
+### Modo Debug
+- Activar con variable de entorno: `TALKBRIDGE_DEBUG=1`
+- Logs más detallados
+- Información de rendimiento
+
+## 🎨 Personalización
+
+### Temas y Estilos
+- CSS personalizable en código
+- Soporte para modo claro/oscuro
+- Iconos y emojis integrados
+
+### Idiomas Soportados
+- **Interfaz**: Español (por defecto), English, Français, Deutsch
+- **Voz/Traducción**: Todos los idiomas soportados por los servicios backend
+
+## 🤝 Contribuir
+
+### Agregar Nueva Funcionalidad
+1. Crear nuevo archivo en `components/` para pestañas
+2. Heredar de `QWidget` e implementar señales estándar
+3. Agregar a `MainWindow` en `setup_ui()`
+4. Conectar señales en `connect_signals()`
+
+### Estructura de Señales
+```python
+# Señales estándar para todas las pestañas
+status_changed = pyqtSignal(str)      # Cambio de estado
+error_occurred = pyqtSignal(str)      # Error detectado
+# + señales específicas de cada componente
+```
+
+## 📈 Roadmap
+
+### Próximas Funcionalidades
+- [ ] Soporte para múltiples idiomas de UI
+- [ ] Temas personalizables
+- [ ] Grabación de sesiones
+- [ ] Exportar conversaciones
+- [ ] Configuración de hotkeys
+- [ ] Modo pantalla completa
+- [ ] Soporte para múltiples cámaras
+- [ ] Efectos de avatar avanzados
+
+## 🐛 Problemas Conocidos
+
+### Limitaciones Actuales
+- TTS requiere Python < 3.12 (incompatibilidad con Python 3.13)
+- Algunos módulos de animación pueden no estar disponibles
+- MediaPipe puede requerir dependencias del sistema adicionales
+
+### Soluciones
+- Modo fallback automático para funcionalidad reducida
+- Detección inteligente de dependencias
+- Mensajes informativos sobre limitaciones
+
+## 📝 Notas de Desarrollo
+
+### Principios de Diseño
+- **Modularidad**: Cada pestaña es independiente
+- **Robustez**: Funciona incluso con dependencias faltantes  
+- **Usabilidad**: Interfaz intuitiva con indicadores claros
+- **Escalabilidad**: Fácil agregar nuevas características
+
+### Patrones Utilizados
+- **MVC**: Separación de lógica y UI
+- **Signals/Slots**: Comunicación entre componentes
+- **Worker Threads**: Operaciones no bloqueantes
+- **Fallback**: Degradación elegante de funcionalidad
 
 ### ✨ Modern Interface
 - **Dark Theme design** with customizable colors

@@ -1,4 +1,4 @@
-#! /src/desktop/windows/dashboard.py
+#! /usr/bin/env python3
 """
 TalkBridge Desktop - Application
 ================================
@@ -10,7 +10,7 @@ Date: 2025-08-19
 Version: 1.0
 
 Requirements:
-- PyQt6
+- PySide6
 ======================================================================
 Functions:
 - __init__: Initializes the application.
@@ -31,9 +31,9 @@ import logging
 from typing import Optional
 from pathlib import Path
 
-from PyQt6.QtWidgets import QApplication, QMessageBox, QSplashScreen
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer, QThread
-from PyQt6.QtGui import QPixmap, QPainter, QFont
+from PySide6.QtWidgets import QApplication, QMessageBox, QSplashScreen
+from PySide6.QtCore import QObject, Signal, QTimer, QThread
+from PySide6.QtGui import QPixmap, QPainter, QFont
 
 from src.desktop.app.state_manager import StateManager
 from src.desktop.dialogs.login_dialog import LoginDialog
@@ -53,9 +53,9 @@ class TalkBridgeApplication(QApplication):
     """
 
     # Signals for communication between components
-    authentication_completed = pyqtSignal(bool, str)  # success, message
-    services_initialized = pyqtSignal(bool)  # success
-    application_ready = pyqtSignal()
+    authentication_completed = Signal(bool, str)  # success, message
+    services_initialized = Signal(bool)  # success
+    application_ready = Signal()
 
     def __init__(self, argv: list) -> None:
         """

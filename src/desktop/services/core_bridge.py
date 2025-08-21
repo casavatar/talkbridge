@@ -31,8 +31,8 @@ from typing import Dict, Any, Optional, Callable, List
 from pathlib import Path
 from threading import Lock
 
-from PyQt6.QtCore import (
-    QObject, pyqtSignal, QThread, QThreadPool, 
+from PySide6.QtCore import (
+    QObject, Signal, QThread, QThreadPool, 
     QRunnable, QTimer, QMutex
 )
 
@@ -75,10 +75,10 @@ except ImportError:
 
 class WorkerSignals(QObject):
     """Signals for asynchronous workers."""
-    finished = pyqtSignal()
-    error = pyqtSignal(str)
-    result = pyqtSignal(object)
-    progress = pyqtSignal(int)
+    finished = Signal()
+    error = Signal(str)
+    result = Signal(object)
+    progress = Signal(int)
 
 
 class BaseWorker(QRunnable):
@@ -112,9 +112,9 @@ class BaseWorker(QRunnable):
 class TTSService(QObject):
     """Text-to-Speech service with asynchronous operations."""
     
-    synthesis_completed = pyqtSignal(str, bytes)  # text, audio_data
-    synthesis_failed = pyqtSignal(str, str)  # text, error_message
-    status_changed = pyqtSignal(str)  # status
+    synthesis_completed = Signal(str, bytes)  # text, audio_data
+    synthesis_failed = Signal(str, str)  # text, error_message
+    status_changed = Signal(str)  # status
     
     def __init__(self, state_manager=None, parent=None):
         super().__init__(parent)
@@ -239,11 +239,11 @@ class TTSService(QObject):
 class AudioService(QObject):
     """Audio service with capture and processing."""
     
-    audio_captured = pyqtSignal(bytes)  # audio_data
-    recording_started = pyqtSignal()
-    recording_stopped = pyqtSignal()
-    status_changed = pyqtSignal(str)  # status
-    error_occurred = pyqtSignal(str)  # error_message
+    audio_captured = Signal(bytes)  # audio_data
+    recording_started = Signal()
+    recording_stopped = Signal()
+    status_changed = Signal(str)  # status
+    error_occurred = Signal(str)  # error_message
     
     def __init__(self, state_manager=None, parent=None):
         super().__init__(parent)
@@ -388,9 +388,9 @@ class CoreBridge(QObject):
     """
     
     # General signals
-    service_initialized = pyqtSignal(str, bool)  # service_name, success
-    all_services_ready = pyqtSignal(bool)  # success
-    service_error = pyqtSignal(str, str)  # service_name, error_message
+    service_initialized = Signal(str, bool)  # service_name, success
+    all_services_ready = Signal(bool)  # success
+    service_error = Signal(str, str)  # service_name, error_message
     
     def __init__(self, state_manager=None, parent=None):
         super().__init__(parent)

@@ -30,15 +30,15 @@ import logging
 from typing import Optional
 from pathlib import Path
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QFormLayout,
     QLineEdit, QPushButton, QLabel, QCheckBox,
     QFrame, QMessageBox, QProgressBar, QWidget
 )
-from PyQt6.QtCore import (
-    pyqtSignal, QThread, QObject, QTimer, Qt
+from PySide6.QtCore import (
+    Signal, QThread, QObject, QTimer, Qt
 )
-from PyQt6.QtGui import QFont, QPixmap, QPainter, QPalette
+from PySide6.QtGui import QFont, QPixmap, QPainter, QPalette
 
 # Import existing authentication module
 try:
@@ -51,7 +51,7 @@ except ImportError:
 class AuthWorker(QObject):
     """Worker thread for asynchronous authentication operations."""
 
-    authentication_completed = pyqtSignal(bool, str)  # success, message
+    authentication_completed = Signal(bool, str)  # success, message
 
     def __init__(self, username: str, password: str, parent=None):
         super().__init__(parent)
@@ -100,7 +100,7 @@ class LoginDialog(QDialog):
     - Modern and responsive design
     """
 
-    authentication_result = pyqtSignal(bool, str)  # success, message
+    authentication_result = Signal(bool, str)  # success, message
 
     def __init__(self, state_manager=None, parent=None):
         super().__init__(parent)

@@ -35,7 +35,7 @@ from typing import Any, Dict, Optional, List
 from dataclasses import dataclass, asdict
 from datetime import datetime
 
-from PyQt6.QtCore import QObject, pyqtSignal, QSettings
+from PySide6.QtCore import QObject, Signal, QSettings
 
 
 @dataclass
@@ -86,11 +86,11 @@ class StateManager(QObject):
     """
 
     # Signals to notify state changes
-    state_changed = pyqtSignal(str, object)  # key, value
-    service_status_changed = pyqtSignal(str, str)  # service_name, status
-    user_session_changed = pyqtSignal(object)  # UserSession
-    configuration_loaded = pyqtSignal()
-    error_occurred = pyqtSignal(str, str)  # error_type, message
+    state_changed = Signal(str, object)  # key, value
+    service_status_changed = Signal(str, str)  # service_name, status
+    user_session_changed = Signal(object)  # UserSession
+    configuration_loaded = Signal()
+    error_occurred = Signal(str, str)  # error_type, message
 
     def __init__(self, parent=None):
         super().__init__(parent)

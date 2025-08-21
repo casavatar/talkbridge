@@ -1,0 +1,49 @@
+{
+  "user_session": null,
+  "services": {
+    "tts": {
+      "name": "tts",
+      "status": "cancelled",
+      "last_update": "2025-08-20T19:37:17.057404",
+      "error_message": null,
+      "metadata": {}
+    },
+    "audio": {
+      "name": "audio",
+      "status": "connected",
+      "last_update": "2025-08-20T19:34:11.771680",
+      "error_message": null,
+      "metadata": {}
+    },
+    "translation": {
+      "name": "translation",
+      "status": "disconnected",
+      "last_update": "2025-08-20T15:00:40.354927",
+      "error_message": null,
+      "metadata": {}
+    },
+    "ollama": {
+      "name": "ollama",
+      "status": "disconnected",
+      "last_update": "2025-08-20T15:00:40.354931",
+      "error_message": null,
+      "metadata": {}
+    },
+    "animation": {
+      "name": "animation",
+      "status": "disconnected",
+      "last_update": "2025-08-20T15:00:40.354935",
+      "error_message": null,
+      "metadata": {}
+    },
+    "camera": {
+      "name": "camera",
+      "status": "disconnected",
+      "last_update": "2025-08-20T15:00:40.354939",
+      "error_message": null,
+      "metadata": {}
+    }
+  },
+  "ui_preferences": {},
+  "last_save_time": "2025-08-20T19:37:17.314923"
+}

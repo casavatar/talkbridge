@@ -3,7 +3,7 @@
 Config
 ======
 
-Configuración del módulo
+Module configuration
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -84,6 +84,7 @@ PATH_CONFIG = {
     "animation_module": SRC_DIR / "animation",
     "ui_module": SRC_DIR / "ui",
     "demo_module": SRC_DIR / "demo",
+    "demo_files_dir": SRC_DIR / "demo" / "samples",
     "utils_module": SRC_DIR / "utils",
     
     # Configuration files

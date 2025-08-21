@@ -30,15 +30,15 @@ import logging
 from typing import Dict, Optional, Any
 from datetime import datetime
 
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout,
     QLabel, QPushButton, QFrame, QScrollArea,
     QProgressBar, QGroupBox, QSizePolicy
 )
-from PyQt6.QtCore import (
-    pyqtSignal, QTimer, Qt, QSize
+from PySide6.QtCore import (
+    Signal, QTimer, Qt, QSize
 )
-from PyQt6.QtGui import QFont, QIcon, QPalette
+from PySide6.QtGui import QFont, QIcon, QPalette
 
 
 class ServiceCard(QWidget):
@@ -52,7 +52,7 @@ class ServiceCard(QWidget):
     - Detailed status information
     """
 
-    action_triggered = pyqtSignal(str)  # service_name
+    action_triggered = Signal(str)  # service_name
 
     def __init__(self, service_name: str, title: str, description: str,
                  icon_name: str = None, parent=None):
@@ -328,8 +328,8 @@ class Dashboard(QWidget):
     """
 
     # Signals
-    service_action_requested = pyqtSignal(str)  # service_name
-    quick_action_requested = pyqtSignal(str)  # action_name
+    service_action_requested = Signal(str)  # service_name
+    quick_action_requested = Signal(str)  # action_name
 
     def __init__(self, state_manager=None, core_bridge=None, parent=None):
         super().__init__(parent)

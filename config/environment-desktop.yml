@@ -1,118 +1,123 @@
+# TalkBridge Desktop Conda Environment - FULL COMPATIBILITY
+# ==========================================================
+# 
+# UPDATED for complete dependency compatibility with ALL features
+# Python 3.11 for maximum compatibility with TTS, argos-translate, mediapipe
+#
+# Environment creation:
+# conda env create -f environment-desktop.yml
+#
+# Activation:
+# conda activate talkbridge-desktop
+#
+# Post-installation verification:
+# python -c "import sys; print(f'Python {sys.version}')"
+# python -c "import TTS, argostranslate, mediapipe, PySide6; print('All dependencies OK!')"
+
 name: talkbridge-desktop
 channels:
+  - pytorch
   - conda-forge
   - defaults
 
 dependencies:
-  # ==========================================
-  # PYTHON BASE
-  # ==========================================
-  - python=3.11
+  # Python base (3.11 for compatibility with TTS, argos-translate, mediapipe)
+  - python=3.11.9
   
-  # ==========================================
-  # CORE SCIENTIFIC COMPUTING - STABLE VERSIONS
-  # ==========================================
-  - numpy>=1.21.0,<1.26.0  # Compatible with OpenCV and PyTorch
-  - scipy>=1.7.0,<1.12.0
-  - matplotlib>=3.5.0,<3.9.0
-  - pandas>=1.3.0,<2.1.0
+  # ===== CORE DEPENDENCIES =====
+  - numpy>=1.21.0,<2.0.0
+  - matplotlib>=3.5.0,<4.0.0
+  - scipy>=1.7.0,<2.0.0
+  - requests>=2.25.0,<3.0.0
   
-  # ==========================================
-  # AUDIO PROCESSING - CONDA VERSIONS
-  # ==========================================
-  - libsndfile>=1.0.31
-  - librosa>=0.9.0,<0.11.0
+  # ===== AUDIO PROCESSING =====
+  - sounddevice>=0.4.5,<1.0.0
+  - librosa>=0.10.0,<1.0.0
+  - soundfile>=0.12.0,<1.0.0
+  - pygame>=2.5.0,<3.0.0
   
-  # ==========================================
-  # COMPUTER VISION - STABLE VERSION
-  # ==========================================
-  - opencv>=4.5.0,<4.9.0  # Stable version compatible with most systems
-  - pillow>=9.0.0,<10.1.0
+  # ===== MACHINE LEARNING & AI =====
+  - pytorch>=1.12.0,<2.0.0
+  - torchaudio>=0.12.0,<1.0.0
+  - transformers>=4.20.0,<5.0.0
+  - sentencepiece>=0.1.96,<1.0.0
   
-  # ==========================================
-  # CONFIGURATION & DATA
-  # ==========================================
+  # ===== COMPUTER VISION =====
+  - opencv>=4.8.0,<5.0.0
+  - pillow>=9.0.0,<11.0.0
+  
+  # ===== WEB INTERFACE =====
+  - streamlit>=1.28.0,<2.0.0
+  - plotly>=5.0.0,<6.0.0
+  
+  # ===== SECURITY =====
+  - cryptography>=3.4.0,<4.0.0
+  - bcrypt>=4.0.0,<5.0.0
+  
+  # ===== DATA HANDLING =====
+  - pandas>=1.3.0,<2.0.0
   - pyyaml>=6.0,<7.0
   - jsonschema>=4.0.0,<5.0.0
-  - python-dotenv>=0.19.0,<1.1.0
   
-  # ==========================================
-  # SYSTEM UTILITIES
-  # ==========================================
-  - psutil>=5.9.0,<6.0.0
-  - requests>=2.25.0,<3.0.0
+  # ===== LOGGING =====
+  - colorlog>=6.7.0,<7.0.0
+  
+  # ===== UTILITIES =====
+  - python-dotenv>=0.19.0,<1.0.0
   - click>=8.0.0,<9.0.0
-  
-  # ==========================================
-  # DEVELOPMENT TOOLS
-  # ==========================================
-  - pytest>=7.0.0,<8.0.0
-  - black>=22.0.0,<24.0.0
-  - mypy>=1.0.0,<1.8.0
-  
-  # ==========================================
-  # LOGGING & MONITORING
-  # ==========================================
   - rich>=12.0.0,<14.0.0
   - tqdm>=4.64.0,<5.0.0
   
-  # ==========================================
-  # SECURITY
-  # ==========================================
-  - cryptography>=3.4.0,<42.0.0
+  # ===== DEVELOPMENT TOOLS =====
+  - pytest>=7.0.0,<8.0.0
+  - black>=22.0.0,<24.0.0
+  - isort>=5.10.0,<6.0.0
+  - flake8>=5.0.0,<7.0.0
+  - mypy>=1.0.0,<2.0.0
   
-  # ==========================================
-  # PIP-ONLY DEPENDENCIES
-  # ==========================================
-  - pip>=23.0,<24.0
+  # ===== PIP DEPENDENCIES (not available in conda) =====
+  - pip
+  
   - pip:
-    # PyQt6 - GUI framework (latest stable)
-    - PyQt6>=6.5.0,<6.7.0
-    - PyQt6-Qt6>=6.5.0,<6.7.0
-    - PyQt6-sip>=13.5.0,<14.0.0
+    # ===== GUI FRAMEWORK =====
+    # PySide6 - Better compatibility than PyQt6 in Python 3.11+
+    - PySide6>=6.5.0
+    - pyside6-tools>=6.5.0
     
-    # Audio processing not available via conda
-    - sounddevice>=0.4.5,<0.5.0
-    - soundfile>=0.12.0,<0.13.0
-    - pydub>=0.25.1,<0.26.0
-    - pygame>=2.5.0,<2.6.0
-    
-    # ML/AI packages - compatible versions
-    - torch>=1.12.0,<2.2.0
-    - torchaudio>=0.12.0,<2.2.0
-    - transformers>=4.20.0,<4.37.0
-    
-    # TTS engine
-    - TTS>=0.22.0,<0.23.0
-    
-    # Whisper for STT
+    # ===== STT (Speech-to-Text) =====
     - openai-whisper>=20231117
     
-    # Translation services
-    - googletrans>=4.0.0rc1,<5.0.0
+    # ===== TTS (Text-to-Speech) - REQUIRES Python <= 3.11 =====
+    - TTS>=0.22.0
     
-    # MediaPipe for face animation
-    - mediapipe>=0.10.0,<0.11.0
+    # ===== TRANSLATION - REQUIRES Python <= 3.11 =====
+    - argos-translate>=1.9.0
+    - googletrans>=4.0.0rc1
+    - translate>=3.6.0
     
-    # Advanced logging
-    - loguru>=0.7.0,<0.8.0
-    - structlog>=22.0.0,<24.0.0
-    - colorlog>=6.7.0,<7.0.0
+    # ===== COMPUTER VISION & ANIMATION - REQUIRES Python <= 3.11 =====
+    - mediapipe>=0.10.0,<1.0.0
     
-    # Desktop-specific utilities
-    - typeguard>=3.0.0,<5.0.0
-    - pydantic>=2.0.0,<3.0.0
-    - sqlite-utils>=3.34.0,<4.0.0
-    - websocket-client>=1.6.0,<2.0.0
+    # ===== WEB INTERFACE SPECIFIC =====
+    - streamlit-webrtc>=0.47.0,<1.0.0
     
-    # Development tools
-    - pytest-qt>=4.2.0,<5.0.0
-    - pytest-mock>=3.11.0,<4.0.0
-    - coverage>=7.2.0,<8.0.0
+    # ===== ADDITIONAL SECURITY =====
+    - passlib>=1.7.0,<2.0.0
     
-    # Compatibility
-    - typing-extensions>=4.7.0
-    - python-dateutil>=2.8.0,<3.0.0
+    # ===== ADDITIONAL LOGGING =====
+    - structlog>=22.0.0,<23.0.0
     
-    # Optional: BCrypt for security
-    - bcrypt>=4.0.0,<5.0.0
+    # ===== ADDITIONAL AUDIO PROCESSING =====
+    - pydub>=0.25.0,<1.0.0
+    - webrtcvad>=2.0.0,<3.0.0
+    
+    # ===== OPTIONAL INTEGRATIONS =====
+    # Ollama integration (uncomment if needed)
+    # - ollama>=0.1.0
+    
+    # Additional ML libraries (uncomment if needed)
+    # - scikit-learn>=1.0.0,<2.0.0
+    # - tensorflow>=2.8.0,<3.0.0
+    
+    # ===== DEVELOPMENT DEPENDENCIES =====
+    - pytest-cov>=4.0.0,<5.0.0

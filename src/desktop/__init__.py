@@ -19,7 +19,7 @@ __email__ = "support@talkbridge.com"
 
 # Verify critical units
 try:
-    from PyQt6.QtWidgets import QApplication
+    from PySide6.QtWidgets import QApplication
     PYQT6_AVAILABLE = True
 except ImportError:
     PYQT6_AVAILABLE = False
