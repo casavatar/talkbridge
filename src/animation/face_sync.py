@@ -69,14 +69,34 @@ class FaceSync:
         
         # Initialize video capture
         if use_webcam:
-            self.cap = cv2.VideoCapture(0)
-            if not self.cap.isOpened():
-                raise RuntimeError("Could not open webcam")
+            try:
+                self.cap = cv2.VideoCapture(0)
+                if not self.cap.isOpened():
+                    self.logger.warning("Webcam not available, falling back to avatar mode")
+                    self.use_webcam = False
+                    self.cap = None
+                    # Use default avatar if no avatar_path specified
+                    if not avatar_path:
+                        avatar_path = Path(__file__).parent / "resources" / "default_avatar.png"
+                    if not Path(avatar_path).exists():
+                        self.logger.error(f"Avatar image not found: {avatar_path}")
+                        self.avatar_image = None
+                    else:
+                        self.avatar_image = cv2.imread(str(avatar_path))
+                else:
+                    self.logger.info("Webcam initialized successfully")
+            except Exception as e:
+                self.logger.error(f"Error initializing webcam: {e}")
+                self.use_webcam = False
+                self.cap = None
+                self.avatar_image = None
         else:
             if not avatar_path or not Path(avatar_path).exists():
-                raise ValueError(f"Avatar image not found: {avatar_path}")
+                self.logger.error(f"Avatar image not found: {avatar_path}")
+                self.avatar_image = None
+            else:
+                self.avatar_image = cv2.imread(str(avatar_path))
             self.cap = None
-            self.avatar_image = cv2.imread(avatar_path)
         
         # Initialize pygame for audio
         pygame.mixer.init()

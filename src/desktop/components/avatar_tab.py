@@ -17,6 +17,7 @@ Requirements:
 """
 
 import logging
+import os
 import cv2
 import numpy as np
 from typing import Optional
@@ -56,15 +57,40 @@ class WebcamWorker(QObject):
         self.face_sync = None
         
     def start_capture(self):
-        """Start the webcam capture."""
+        """Start the webcam capture with improved error handling."""
         try:
-            self.cap = cv2.VideoCapture(0)
-            if not self.cap.isOpened():
-                self.error_occurred.emit("No se pudo acceder a la webcam")
-                return
+            # Use robust camera creation
+            import logging
+            logger = logging.getLogger("talkbridge.avatar")
+            
+            # Import robust camera functions
+            try:
+                from src.utils.error_suppression import create_robust_camera_capture
+                self.cap, camera_index = create_robust_camera_capture(0)
                 
-            self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+                if self.cap is None:
+                    self.error_occurred.emit("🔹 Cámara no disponible - Funcionalidad de avatar limitada")
+                    return
+                
+                logger.info(f"Cámara inicializada en índice {camera_index}")
+                
+            except ImportError:
+                # Fallback to original method if utils not available
+                logger.warning("Utils no disponible, usando método básico de cámara")
+                
+                old_level = os.environ.get('OPENCV_LOG_LEVEL', 'INFO')
+                os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'
+                
+                self.cap = cv2.VideoCapture(0)
+                
+                os.environ['OPENCV_LOG_LEVEL'] = old_level
+                
+                if not self.cap.isOpened():
+                    self.error_occurred.emit("🔹 Cámara no disponible - Funcionalidad de avatar limitada")
+                    return
+                    
+                self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+                self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
             
             if ANIMATION_AVAILABLE:
                 self.face_sync = FaceSync(use_webcam=True)

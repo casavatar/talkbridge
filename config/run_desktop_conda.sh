@@ -22,7 +22,7 @@ fi
 eval "$(conda shell.bash hook)"
 
 # Check if environment exists
-if ! conda env list | grep -q "talkbridge-desktop"; then
+if ! conda env list | grep -q "talkbridge-desktop-env"; then
     echo "🔧 Environment not found. Creating TalkBridge Desktop environment..."
     echo "This may take several minutes..."
     echo ""
@@ -36,7 +36,7 @@ if ! conda env list | grep -q "talkbridge-desktop"; then
 fi
 
 echo "✅ Activating TalkBridge Desktop environment..."
-conda activate talkbridge-desktop
+conda activate talkbridge-desktop-env
 
 if [ $? -eq 0 ]; then
     echo ""

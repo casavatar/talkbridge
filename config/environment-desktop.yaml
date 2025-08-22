@@ -8,13 +8,13 @@
 # conda env create -f environment-desktop.yml
 #
 # Activation:
-# conda activate talkbridge-desktop
+# conda activate talkbridge-desktop-env
 #
 # Post-installation verification:
 # python -c "import sys; print(f'Python {sys.version}')"
-# python -c "import TTS, argostranslate, mediapipe, PySide6; print('All dependencies OK!')"
+# python -c "import PySide6, TTS, transformers, mediapipe; print('All dependencies OK!')"
 
-name: talkbridge-desktop
+name: talkbridge-desktop-env
 channels:
   - pytorch
   - conda-forge
@@ -22,7 +22,7 @@ channels:
 
 dependencies:
   # Python base (3.11 for compatibility with TTS, argos-translate, mediapipe)
-  - python=3.11.9
+  - python=3.11
   
   # ===== CORE DEPENDENCIES =====
   - numpy>=1.21.0,<2.0.0
@@ -34,7 +34,7 @@ dependencies:
   - sounddevice>=0.4.5,<1.0.0
   - librosa>=0.10.0,<1.0.0
   - soundfile>=0.12.0,<1.0.0
-  - pygame>=2.5.0,<3.0.0
+  - ffmpeg
   
   # ===== MACHINE LEARNING & AI =====
   - pytorch>=1.12.0,<2.0.0
@@ -67,6 +67,7 @@ dependencies:
   - click>=8.0.0,<9.0.0
   - rich>=12.0.0,<14.0.0
   - tqdm>=4.64.0,<5.0.0
+  - psutil
   
   # ===== DEVELOPMENT TOOLS =====
   - pytest>=7.0.0,<8.0.0
@@ -80,7 +81,7 @@ dependencies:
   
   - pip:
     # ===== GUI FRAMEWORK =====
-    # PySide6 - Better compatibility than PyQt6 in Python 3.11+
+    # PySide6 - Consistent with project codebase
     - PySide6>=6.5.0
     - pyside6-tools>=6.5.0
     
@@ -106,18 +107,21 @@ dependencies:
     
     # ===== ADDITIONAL LOGGING =====
     - structlog>=22.0.0,<23.0.0
+    - loguru>=0.7.0
     
     # ===== ADDITIONAL AUDIO PROCESSING =====
+    - pygame>=2.5.0,<3.0.0
     - pydub>=0.25.0,<1.0.0
     - webrtcvad>=2.0.0,<3.0.0
     
-    # ===== OPTIONAL INTEGRATIONS =====
-    # Ollama integration (uncomment if needed)
-    # - ollama>=0.1.0
-    
-    # Additional ML libraries (uncomment if needed)
-    # - scikit-learn>=1.0.0,<2.0.0
-    # - tensorflow>=2.8.0,<3.0.0
-    
     # ===== DEVELOPMENT DEPENDENCIES =====
     - pytest-cov>=4.0.0,<5.0.0
+    - pytest-qt>=4.2.0
+    - pytest-mock>=3.11.0
+    - coverage>=7.2.0
+    
+    # ===== COMPATIBILITY =====
+    - typing-extensions>=4.7.0
+    - python-dateutil>=2.8.0
+    - typeguard>=3.0.0
+    - pydantic>=2.0.0

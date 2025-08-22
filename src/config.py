@@ -227,7 +227,7 @@ UI_CONFIG = {
     
     # File paths
     "css_file": SRC_DIR / "ui" / "assets" / "style.css",
-    "users_file": SRC_DIR / "ui" / "json" / "users.json",
+    "users_file": SRC_DIR / "json" / "users.json",
 }
 
 # Demo Configuration

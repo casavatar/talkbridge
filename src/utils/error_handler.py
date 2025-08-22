@@ -3,7 +3,7 @@
 TalkBridge Utils - Error Handler
 ================================
 
-Módulo error_handler para TalkBridge
+Error_handler Module for Talkbridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

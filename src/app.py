@@ -3,7 +3,7 @@
 TalkBridge - Main Application
 =============================
 
-Aplicación principal de TalkBridge
+Talkbridge main application
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -13,7 +13,7 @@ Requirements:
 - None
 ======================================================================
 Functions:
-- audio_callback: Función audio_callback
+- audio_callback: Audio_callback function
 - create_notification_sound: Create a notification sound using audio generation.
 - main: Main application with integrated animations and audio generation.
 ======================================================================

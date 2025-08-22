@@ -264,7 +264,7 @@ render_dashboard() -> None
 authenticate_user(username: str, password: str) -> bool
 ```
 
-### Authentication Module (`src/ui/auth/`)
+### Authentication Module (`src/auth/`)
 
 **Purpose**: Handles user authentication and session management.
 

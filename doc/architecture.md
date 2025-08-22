@@ -351,7 +351,7 @@ Continue or Retry
 ```
 User Login
     ↓
-Auth Manager (ui/auth/auth_manager.py)
+Auth Manager (auth/auth_manager.py)
     ↓
 Password Verification (Salted Hash)
     ↓

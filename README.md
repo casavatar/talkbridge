@@ -57,8 +57,6 @@ talkbridge/
 │   ├── ui/                      # Web interface
 │   │   ├── web_interface.py     # Main Streamlit app
 │   │   ├── run_web_interface.py # App runner
-│   │   ├── auth/                # Authentication system
-│   │   │   └── auth_manager.py  # User management
 │   │   ├── components/          # UI components
 │   │   │   ├── login.py         # Login interface
 │   │   │   ├── dashboard.py     # Main dashboard
@@ -71,12 +69,14 @@ talkbridge/
 │   │   │   ├── llm_api.py       # Language model API
 │   │   │   ├── translation_api.py # Translation API
 │   │   │   └── animation_api.py # Animation API
-│   │   ├── json/                # User data
-│   │   │   ├── users.json       # User database
-│   │   │   ├── generate_secure_users.py # Password generator
-│   │   │   └── README.md        # User system docs
 │   │   └── assets/              # Static assets
 │   │       └── style.css        # Custom styling
+│   ├── json/                    # User data
+│   │   ├── users.json           # User database
+│   │   ├── generate_secure_users.py # Password generator
+│   │   └── README.md            # User system docs
+│   ├── auth/                    # Authentication system
+│   │   └── auth_manager.py      # User management
 │   ├── audio/                   # Audio processing
 │   │   ├── capture.py           # Audio capture
 │   │   ├── effects.py           # Audio effects
@@ -387,7 +387,7 @@ class Dashboard:
 
 **Web Interface Issues**
 - **Problem**: Authentication fails
-- **Solution**: Regenerate users with `python generate_secure_users.py`
+- **Solution**: Regenerate users with `python src/json/generate_secure_users.py`
 
 **Performance Issues**
 - **Problem**: Slow synthesis

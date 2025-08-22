@@ -684,11 +684,23 @@ class SettingsTab(QWidget):
     def get_system_info(self):
         """Obtiene información del sistema."""
         import platform
-        import PyQt6.QtCore
+        try:
+            import PySide6.QtCore
+            qt_version = PySide6.QtCore.__version__
+            qt_name = "PySide6"
+        except ImportError:
+            try:
+                # Fallback to PyQt6 (though we prefer PySide6)
+                import PyQt6.QtCore
+                qt_version = PyQt6.QtCore.PYQT_VERSION_STR
+                qt_name = "PyQt6"
+            except ImportError:
+                qt_version = "No disponible"
+                qt_name = "Qt"
         
         info = f"Sistema: {platform.system()} {platform.release()}\n"
         info += f"Python: {platform.python_version()}\n"
-        info += f"PyQt6: {PyQt6.QtCore.PYQT_VERSION_STR}\n"
+        info += f"{qt_name}: {qt_version}\n"
         info += f"TalkBridge: 1.0.0"
         
         return info

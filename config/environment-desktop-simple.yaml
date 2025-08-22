@@ -1,4 +1,4 @@
-name: talkbridge-desktop
+name: talkbridge-desktop-env
 channels:
   - conda-forge
   - defaults
@@ -22,6 +22,7 @@ dependencies:
   # ==========================================
   - libsndfile
   - librosa
+  - ffmpeg
   
   # ==========================================
   # COMPUTER VISION
@@ -67,10 +68,9 @@ dependencies:
   # ==========================================
   - pip
   - pip:
-    # PyQt6 - GUI framework
-    - PyQt6>=6.5.0
-    - PyQt6-Qt6>=6.5.0
-    - PyQt6-sip>=13.5.0
+    # PySide6 - Consistent with main project
+    - PySide6>=6.5.0
+    - pyside6-tools>=6.5.0
     
     # Audio processing
     - sounddevice>=0.4.5
@@ -90,6 +90,7 @@ dependencies:
     - openai-whisper>=20231117
     
     # Translation services
+    - argos-translate>=1.9.0
     - googletrans>=4.0.0rc1
     
     # MediaPipe for face animation
@@ -103,7 +104,6 @@ dependencies:
     # Desktop-specific utilities
     - typeguard>=3.0.0
     - pydantic>=2.0.0
-    - sqlite-utils>=3.34.0
     - websocket-client>=1.6.0
     
     # Development tools
@@ -113,6 +113,7 @@ dependencies:
     
     # Security
     - bcrypt>=4.0.0
+    - passlib>=1.7.0
     
     # Compatibility
     - typing-extensions>=4.7.0

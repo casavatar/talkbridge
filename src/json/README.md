@@ -114,7 +114,7 @@ Development-only file containing generated passwords (DELETE IN PRODUCTION).
 
 ### Generate New Users
 ```bash
-cd src/ui/json
+cd src/json
 python generate_secure_users.py
 ```
 

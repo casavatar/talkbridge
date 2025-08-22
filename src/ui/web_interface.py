@@ -39,7 +39,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Import local modules
-from ui.auth.auth_manager import AuthManager
+from auth.auth_manager import AuthManager
 from ui.components.dashboard import Dashboard
 from ui.components.login import LoginComponent
 from ui.components.audio_recorder import AudioRecorder

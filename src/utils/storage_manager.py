@@ -3,7 +3,7 @@
 TalkBridge Utils - Storage Manager
 ==================================
 
-Gestor/Manager del módulo
+Module manager/manager
 
 Author: TalkBridge Team
 Date: 2025-08-19

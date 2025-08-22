@@ -13,6 +13,7 @@ ollama:
   model: "deepseek-r1:latest"
   timeout: 30
   max_retries: 3
+  stream: true
 
 # ==========================================
 # WHISPER STT CONFIGURATION
@@ -20,7 +21,29 @@ ollama:
 whisper:
   model_name: "base"  # Options: tiny, base, small, medium, large
   language: "auto"    # Auto-detect or specify language code
-  device: "auto"      # auto, cpu, cuda
+  device: "auto"      # auto, cpu, cuda, mps
+  temperature: 0.0    # Controls randomness (0.0 = deterministic)
+  beam_size: 5        # Beam search size for better accuracy
+
+# ==========================================
+# TTS CONFIGURATION
+# ==========================================
+tts:
+  model: "tts_models/multilingual/multi-dataset/your_tts"
+  language: "en"
+  speaker: "default"
+  use_gpu: true
+  speed: 1.0
+  volume: 1.0
+
+# ==========================================
+# TRANSLATION CONFIGURATION
+# ==========================================
+translation:
+  default_source: "auto"
+  default_target: "en"
+  engine: "googletrans"  # Options: googletrans, argos
+  cache_translations: true
 
 # ==========================================
 # AUDIO CONFIGURATION
@@ -30,6 +53,24 @@ audio:
   channels: 1
   chunk_size: 1024
   format: "int16"
+  input_device: "default"
+  output_device: "default"
+  noise_reduction: true
+
+# ==========================================
+# ANIMATION CONFIGURATION
+# ==========================================
+animation:
+  webcam:
+    device_id: 0
+    resolution: [640, 480]
+    fps: 30
+  facial_tracking:
+    confidence_threshold: 0.5
+    landmark_count: 468
+  audio_sync:
+    energy_threshold: 0.01
+    blink_threshold: 0.2
 
 # ==========================================
 # DESKTOP UI CONFIGURATION
@@ -38,6 +79,27 @@ ui:
   theme: "dark"
   window_size: [1200, 800]
   language: "en"
+  font_size: 12
+  auto_save: true
+  show_tooltips: true
+  minimize_to_tray: true
+  
+# ==========================================
+# PERFORMANCE CONFIGURATION
+# ==========================================
+performance:
+  max_conversation_history: 1000
+  auto_cleanup_temp_files: true
+  cache_size_mb: 500
+  max_concurrent_requests: 3
+
+# ==========================================
+# SECURITY CONFIGURATION
+# ==========================================
+security:
+  session_timeout: 1800
+  max_failed_attempts: 5
+  require_confirmation: true
   
 # ==========================================
 # LOGGING CONFIGURATION
@@ -47,3 +109,5 @@ logging:
   file: "logs/app.log"
   max_size: "10MB"
   backup_count: 5
+  console_output: true
+  detailed_errors: false

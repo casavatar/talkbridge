@@ -3,7 +3,7 @@
 Setup Conda Desktop
 ===================
 
-Módulo setup_conda_desktop para TalkBridge
+setup_conda_desktop module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -130,7 +130,7 @@ def check_environment_file() -> bool:
         print_error("Environment file not found: environment-desktop-simple.yml or environment-desktop.yml")
         return False
 
-def create_conda_environment(env_name: str = "talkbridge-desktop") -> bool:
+def create_conda_environment(env_name: str = "talkbridge-desktop-env") -> bool:
     """Create the conda environment from the YAML file."""
     print_header("CREATING CONDA ENVIRONMENT")
     
@@ -146,12 +146,33 @@ def create_conda_environment(env_name: str = "talkbridge-desktop") -> bool:
         response = input(f"Do you want to remove and recreate it? (y/N): ").strip().lower()
         if response in ('y', 'yes'):
             print_info(f"Removing existing environment: {env_name}")
+            
+            # First try to deactivate if it's currently active
+            try:
+                run_command(
+                    ["conda", "deactivate"],
+                    "Deactivating current environment",
+                    capture_output=True
+                )
+            except:
+                pass  # Ignore if deactivate fails
+            
+            # Force remove with --all flag
             success, _ = run_command(
-                ["conda", "env", "remove", "-n", env_name, "-y"],
-                f"Removing environment {env_name}"
+                ["conda", "env", "remove", "-n", env_name, "--all", "-y"],
+                f"Force removing environment {env_name}"
             )
             if not success:
-                return False
+                print_error("Failed to remove existing environment. Trying alternative method...")
+                # Try conda remove with force
+                success, _ = run_command(
+                    ["conda", "remove", "-n", env_name, "--all", "-y"],
+                    f"Alternative removal of environment {env_name}"
+                )
+                if not success:
+                    print_error("Could not remove existing environment. Please remove manually:")
+                    print_error(f"  conda env remove -n {env_name} --all")
+                    return False
         else:
             print_info("Skipping environment creation")
             return True
@@ -162,6 +183,7 @@ def create_conda_environment(env_name: str = "talkbridge-desktop") -> bool:
     
     env_file_to_use = "environment-desktop-simple.yml" if simple_env_file.exists() else "environment-desktop.yml"
     
+    print_info(f"Creating environment from: {env_file_to_use}")
     success, _ = run_command(
         ["conda", "env", "create", "-f", env_file_to_use],
         f"Creating conda environment from {env_file_to_use}"
@@ -172,15 +194,17 @@ def create_conda_environment(env_name: str = "talkbridge-desktop") -> bool:
         return True
     else:
         print_error("Failed to create conda environment")
+        print_info("You can try manually with:")
+        print_info(f"  conda env create -f {env_file_to_use}")
         return False
 
-def verify_installation(env_name: str = "talkbridge-desktop") -> bool:
+def verify_installation(env_name: str = "talkbridge-desktop-env") -> bool:
     """Verify that the installation was successful."""
     print_header("VERIFYING INSTALLATION")
     
-    # Test PyQt6 import
+    # Test PySide6 import
     test_commands = [
-        ("python", "-c", "from PyQt6.QtWidgets import QApplication; print('PyQt6: OK')"),
+        ("python", "-c", "from PySide6.QtWidgets import QApplication; print('PySide6: OK')"),
         ("python", "-c", "import torch; print(f'PyTorch: {torch.__version__}')"),
         ("python", "-c", "import numpy; print(f'NumPy: {numpy.__version__}')"),
         ("python", "-c", "import yaml; print('PyYAML: OK')"),
@@ -199,7 +223,7 @@ def verify_installation(env_name: str = "talkbridge-desktop") -> bool:
     
     return all_success
 
-def create_activation_scripts(env_name: str = "talkbridge-desktop") -> bool:
+def create_activation_scripts(env_name: str = "talkbridge-desktop-env") -> bool:
     """Create convenient activation scripts for different platforms."""
     print_header("CREATING ACTIVATION SCRIPTS")
     
@@ -275,7 +299,7 @@ fi
     
     return True
 
-def print_installation_summary(env_name: str = "talkbridge-desktop") -> None:
+def print_installation_summary(env_name: str = "talkbridge-desktop-env") -> None:
     """Print installation summary and next steps."""
     print_header("INSTALLATION COMPLETE")
     
@@ -283,7 +307,7 @@ def print_installation_summary(env_name: str = "talkbridge-desktop") -> None:
     
     print(f"{Colors.BOLD}Environment Name:{Colors.ENDC} {env_name}")
     print(f"{Colors.BOLD}Python Version:{Colors.ENDC} 3.11")
-    print(f"{Colors.BOLD}GUI Framework:{Colors.ENDC} PyQt6")
+    print(f"{Colors.BOLD}GUI Framework:{Colors.ENDC} PySide6")
     print(f"{Colors.BOLD}AI Framework:{Colors.ENDC} PyTorch\n")
     
     print(f"{Colors.BOLD}Next Steps:{Colors.ENDC}")
@@ -311,8 +335,8 @@ def print_installation_summary(env_name: str = "talkbridge-desktop") -> None:
 def main():
     """Main setup function."""
     parser = argparse.ArgumentParser(description="TalkBridge Desktop Conda Setup")
-    parser.add_argument("--env-name", default="talkbridge-desktop", 
-                       help="Conda environment name (default: talkbridge-desktop)")
+    parser.add_argument("--env-name", default="talkbridge-desktop-env", 
+                       help="Conda environment name (default: talkbridge-desktop-env)")
     parser.add_argument("--verify-only", action="store_true",
                        help="Only verify existing installation")
     parser.add_argument("--create-scripts-only", action="store_true",
@@ -325,8 +349,8 @@ def main():
     print_info(f"Python: {sys.version}")
     print_info(f"Target Environment: {args.env_name}")
     
-    # Change to script directory
-    script_dir = Path(__file__).parent.parent  # Go up one level from config to project root
+    # Change to config directory to find environment files
+    script_dir = Path(__file__).parent  # Stay in config directory
     os.chdir(script_dir)
     
     if args.verify_only:

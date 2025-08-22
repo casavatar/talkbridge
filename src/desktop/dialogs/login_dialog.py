@@ -42,7 +42,7 @@ from PySide6.QtGui import QFont, QPixmap, QPainter, QPalette
 
 # Import existing authentication module
 try:
-    from src.ui.auth.auth_manager import AuthManager
+    from src.auth.auth_manager import AuthManager
 except ImportError:
     # Fallback if not available
     AuthManager = None
@@ -70,15 +70,15 @@ class AuthWorker(QObject):
                 success = auth_manager.authenticate(self.username, self.password)
 
                 if success:
-                    message = "Authentication successful"
+                    message = "¡Bienvenido! Autenticación exitosa"
                     self.logger.info(f"User {self.username} authenticated successfully")
                 else:
-                    message = "Invalid credentials"
+                    message = "❌ Credenciales incorrectas. Verifique su usuario y contraseña"
                     self.logger.warning(f"Authentication failed for user: {self.username}")
             else:
                 # Demo/development mode - always accepts admin/admin
                 success = (self.username == "admin" and self.password == "admin")
-                message = "Authentication successful (demo mode)" if success else "Invalid credentials"
+                message = "¡Bienvenido! Autenticación exitosa (modo demo)" if success else "❌ Credenciales incorrectas. En modo demo use: admin/admin"
                 self.logger.warning("AuthManager not available, using demo mode")
 
             self.authentication_completed.emit(success, message)
@@ -385,22 +385,35 @@ class LoginDialog(QDialog):
         password = self.password_edit.text()
 
         if not username or not password:
-            self.show_error_message("Please enter username and password")
+            self.show_error_message("⚠️ Por favor complete todos los campos requeridos")
             return
 
         # Set UI to loading state
         self.set_ui_loading_state(True)
 
-        # Create worker thread
-        self.auth_thread = QThread()
-        self.auth_worker = AuthWorker(username, password)
-        self.auth_worker.moveToThread(self.auth_thread)
-
-        # Connect signals
-        self.auth_thread.started.connect(self.auth_worker.authenticate)
-        self.auth_worker.authentication_completed.connect(self.on_authentication_completed)
-        self.auth_worker.authentication_completed.connect(self.auth_thread.quit)
-        self.auth_thread.finished.connect(self.auth_thread.deleteLater)
+        # Create worker thread using safe method
+        try:
+            from src.utils.error_suppression import create_safe_qthread
+            self.auth_thread, self.auth_worker, self.thread_cleanup = create_safe_qthread(
+                AuthWorker, username, password
+            )
+            
+            # Connect signals for safe thread
+            self.auth_worker.authentication_completed.connect(self.on_authentication_completed)
+            self.auth_worker.authentication_completed.connect(self.auth_thread.quit)
+            
+        except ImportError:
+            # Fallback to standard method
+            self.auth_thread = QThread()
+            self.auth_worker = AuthWorker(username, password)
+            self.auth_worker.moveToThread(self.auth_thread)
+            self.thread_cleanup = None
+            
+            # Connect signals for standard thread
+            self.auth_thread.started.connect(self.auth_worker.authenticate)
+            self.auth_worker.authentication_completed.connect(self.on_authentication_completed)
+            self.auth_worker.authentication_completed.connect(self.auth_thread.quit)
+            self.auth_thread.finished.connect(self.auth_thread.deleteLater)
 
         # Start thread
         self.auth_thread.start()
@@ -424,11 +437,19 @@ class LoginDialog(QDialog):
         self.progress_bar.setVisible(loading)
         if loading:
             self.progress_bar.setRange(0, 0)  # Indeterminate progress
-            self.status_label.setText("Authenticating...")
+            self.status_label.setText("🔐 Verificando credenciales...")
+            self.status_label.setStyleSheet("""
+                color: #3498db;
+                background-color: #1b2435;
+                border: 1px solid #3498db;
+                border-radius: 5px;
+                padding: 8px;
+                font-weight: bold;
+            """)
             self.status_label.setVisible(True)
         else:
             self.progress_bar.setVisible(False)
-            self.status_label.setVisible(False)
+            # Don't hide status label here, let success/error messages handle it
 
     def on_authentication_completed(self, success: bool, message: str) -> None:
         """
@@ -442,13 +463,40 @@ class LoginDialog(QDialog):
 
         if success:
             self.logger.info("Authentication successful")
-            self.save_credentials()
-            self.authentication_result.emit(True, message)
-            self.accept()
+            self.show_success_message(message)
+            # Wait a moment to show success message before closing
+            QTimer.singleShot(1500, self._complete_successful_auth)
         else:
             self.logger.warning(f"Authentication failed: {message}")
             self.show_error_message(message)
             self.authentication_result.emit(False, message)
+            # Clear password field on failed attempt
+            self.password_edit.clear()
+            self.password_edit.setFocus()
+
+    def _complete_successful_auth(self) -> None:
+        """Completes successful authentication after showing success message."""
+        self.save_credentials()
+        self.authentication_result.emit(True, "Authentication successful")
+        self.accept()
+
+    def show_success_message(self, message: str) -> None:
+        """
+        Shows a success message to the user.
+
+        Args:
+            message: Success message
+        """
+        self.status_label.setText(message)
+        self.status_label.setStyleSheet("""
+            color: #2ed573;
+            background-color: #1b2f1b;
+            border: 1px solid #2ed573;
+            border-radius: 5px;
+            padding: 8px;
+            font-weight: bold;
+        """)
+        self.status_label.setVisible(True)
 
     def show_error_message(self, message: str) -> None:
         """
@@ -457,18 +505,47 @@ class LoginDialog(QDialog):
         Args:
             message: Error message
         """
-        self.status_label.setText(f"Error: {message}")
-        self.status_label.setStyleSheet("color: #d13438;")
+        self.status_label.setText(message)
+        self.status_label.setStyleSheet("""
+            color: #ff4757;
+            background-color: #2f1b1b;
+            border: 1px solid #ff4757;
+            border-radius: 5px;
+            padding: 8px;
+            font-weight: bold;
+        """)
         self.status_label.setVisible(True)
 
-        # Hide message after 5 seconds
-        QTimer.singleShot(5000, lambda: self.status_label.setVisible(False))
+        # Hide message after 8 seconds (increased time for better UX)
+        QTimer.singleShot(8000, lambda: self.status_label.setVisible(False))
 
     def closeEvent(self, event) -> None:
         """Handles the dialog close event."""
-        if self.is_authenticating and self.auth_thread:
-            # Cancel authentication in progress
-            self.auth_thread.terminate()
-            self.auth_thread.wait()
-
+        self._cleanup_auth_thread()
         super().closeEvent(event)
+
+    def reject(self) -> None:
+        """Handle dialog rejection (ESC, X button)."""
+        self._cleanup_auth_thread()
+        super().reject()
+    
+    def _cleanup_auth_thread(self) -> None:
+        """Limpia el thread de autenticación de forma segura."""
+        if self.is_authenticating and self.auth_thread:
+            self.logger.info("Limpiando thread de autenticación...")
+            
+            # Usar función de limpieza específica si está disponible
+            if hasattr(self, 'thread_cleanup') and self.thread_cleanup:
+                self.thread_cleanup()
+            else:
+                # Método de limpieza estándar mejorado
+                self.auth_thread.quit()
+                if not self.auth_thread.wait(3000):  # Wait up to 3 seconds
+                    self.logger.warning("Auth thread did not stop gracefully, terminating")
+                    self.auth_thread.terminate()
+                    if not self.auth_thread.wait(1000):  # Give it one more second
+                        self.logger.error("Auth thread termination failed")
+            
+            self.auth_thread = None
+            self.auth_worker = None
+            self.is_authenticating = False

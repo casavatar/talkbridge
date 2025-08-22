@@ -40,14 +40,16 @@ logger = logging.getLogger(__name__)
 class AuthManager:
     """Manages user authentication using local JSON file."""
     
-    def __init__(self, users_file: str = "../ui/json/users.json"):
+    def __init__(self, users_file: str = "json/users.json"):
         """
         Initialize the authentication manager.
         
         Args:
             users_file: Path to the JSON file containing user data
         """
-        self.users_file = Path(__file__).parent.parent / users_file
+        # Get the src directory (going up from src/auth to src)
+        src_dir = Path(__file__).parent.parent
+        self.users_file = src_dir / users_file
         self.users = self._load_users()
     
     def _load_users(self) -> Dict[str, Dict]:

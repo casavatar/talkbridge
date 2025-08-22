@@ -27,9 +27,23 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-# Add the project root directory to the path
+# Early configuration of error suppression
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
+
+# Basic suppression setup (before heavy imports)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TF warnings
+os.environ['GLOG_minloglevel'] = '2'      # Suppress MediaPipe warnings
+os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'  # Suppress OpenCV warnings
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'  # Suppress pygame prompt
+
+# Advanced suppression if available
+try:
+    from src.utils.error_suppression import suppress_ml_warnings, configure_camera_fallback
+    suppress_ml_warnings()
+    configure_camera_fallback()
+except ImportError:
+    pass  # Fallback already configured above
 
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QSettings, Qt
@@ -95,7 +109,7 @@ def check_dependencies() -> tuple[bool, bool]:
                 'description': 'Audio recording and processing',
                 'optional': False
             },
-            'src.ui.auth.auth_manager': {
+            'src.auth.auth_manager': {
                 'name': 'Authentication Manager',
                 'install': 'included in project',
                 'description': 'User authentication system',
@@ -111,7 +125,7 @@ def check_dependencies() -> tuple[bool, bool]:
         
         # Additional optional dependencies
         optional_deps = {
-            'argos-translate': {
+            'argostranslate': {
                 'name': 'Argos Translate',
                 'install': 'pip install argos-translate>=1.9.0',
                 'description': 'Offline translation support'
@@ -270,6 +284,15 @@ def main() -> int:
             return 1
         
         logger.info("Dependencies check completed")
+        
+        # Configure thread cleanup for robust shutdown
+        try:
+            from src.utils.error_suppression import setup_qt_thread_cleanup
+            active_threads = setup_qt_thread_cleanup()
+            logger.info("Qt thread cleanup configured")
+        except ImportError:
+            logger.warning("Thread cleanup utilities not available")
+            active_threads = []
         
         # Configure application settings
         settings = setup_application_settings()
