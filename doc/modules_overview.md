@@ -1,103 +1,143 @@
 # TalkBridge Modules Overview
 
-Comprehensive overview of all modules in the TalkBridge system, their purposes, dependencies, and interactions.
+Comprehensive overview of all modules in the TalkBridge real-time voice translation and communication platform, their purposes, dependencies, and interactions.
 
 ## Table of Contents
 
 1. [Core Modules](#core-modules)
 2. [Audio Processing Modules](#audio-processing-modules)
 3. [AI/ML Modules](#aiml-modules)
-4. [Web Interface Modules](#web-interface-modules)
-5. [Utility Modules](#utility-modules)
-6. [Demo Modules](#demo-modules)
-7. [Module Dependencies](#module-dependencies)
-8. [Module Interactions](#module-interactions)
+4. [Interface Modules](#interface-modules)
+5. [Desktop Application Modules](#desktop-application-modules)
+6. [Web Interface Modules](#web-interface-modules)
+7. [Utility Modules](#utility-modules)
+8. [Demo Modules](#demo-modules)
+9. [Module Dependencies](#module-dependencies)
+10. [Module Interactions](#module-interactions)
 
 ## Core Modules
 
 ### Audio Module (`src/audio/`)
 
-**Purpose**: Handles all audio-related functionality including capture, playback, processing, and synthesis.
+**Purpose**: Comprehensive audio processing system handling capture, playback, effects, and generation.
 
 **Components**:
-- `capture.py`: Real-time audio capture from microphone using PyAudio
-- `player.py`: Audio playback functionality with volume control
-- `effects.py`: Audio processing effects (noise reduction, echo cancellation)
-- `generator.py`: Audio generation utilities for testing and demos
-- `synthesizer.py`: Audio synthesis helpers for TTS integration
+- `capture.py`: Real-time audio capture from microphone using PyAudio with configurable parameters
+- `player.py`: Advanced audio playback with volume control, effects, and multi-device support
+- `effects.py`: Audio processing effects including noise reduction, echo cancellation, and filters
+- `generator.py`: Audio generation utilities for notifications, testing, and procedural audio
+- `synthesizer.py`: Audio synthesis helpers for TTS integration and audio post-processing
 
 **Dependencies**:
-- `pyaudio`: Audio capture and playback
-- `numpy`: Audio data processing
-- `scipy`: Audio signal processing
-- `librosa`: Audio analysis and features
-- `soundfile`: Audio file I/O
+- `pyaudio`: Audio capture and playback interface
+- `numpy`: Audio data processing and mathematical operations
+- `scipy`: Advanced audio signal processing and filtering
+- `librosa`: Audio analysis, feature extraction, and manipulation
+- `soundfile`: High-quality audio file I/O operations
+- `sounddevice`: Alternative audio interface with advanced features
 
 **Interactions**:
-- Receives audio input from microphone
-- Provides audio data to STT module
-- Receives synthesized audio from TTS module
-- Outputs audio to speakers/headphones
-- Integrates with animation module for lip sync
+- Receives audio input from microphone hardware
+- Provides processed audio data to STT module
+- Receives synthesized audio from TTS module with voice cloning
+- Outputs audio to speakers/headphones with effects
+- Integrates with animation module for real-time lip sync
+- Connects to demo system for audio simulation
 
 **Key Functions**:
 ```python
-# Audio capture
-capture_audio(duration=5.0) -> bytes
+# Real-time audio capture with effects
+capture_audio_stream(duration=5.0, apply_effects=True) -> bytes
 
-# Audio playback
-play_audio(audio_data: bytes) -> bool
+# Advanced audio playback with device selection
+play_audio_enhanced(audio_data: bytes, device_id: int = None) -> bool
 
-# Audio processing
-process_audio(audio_data: bytes) -> bytes
+# Audio effects processing pipeline
+apply_audio_effects(audio_data: bytes, effects_config: dict) -> bytes
+
+# Audio generation for notifications
+generate_notification_sound(frequency: float, duration: float) -> bytes
 ```
 
 ### Speech-to-Text Module (`src/stt/`)
 
-**Purpose**: Converts speech audio to text using offline Whisper models.
+**Purpose**: Advanced speech recognition system converting audio to text using offline Whisper models.
 
 **Components**:
-- `whisper_client.py`: Whisper model integration and inference
-- `transcriber.py`: Main transcription interface and API
-- `audio_processor.py`: Audio preprocessing for optimal STT performance
+- `whisper_engine.py`: Whisper model integration with GPU acceleration and model management
+- `interface.py`: Main transcription API with streaming support and language detection
+- `audio_utils.py`: Audio preprocessing, optimization, and format conversion for STT
+- `config.py`: STT configuration management, model selection, and performance tuning
 
 **Dependencies**:
-- `whisper`: OpenAI Whisper for speech recognition
-- `torch`: PyTorch for model inference
-- `numpy`: Audio data processing
-- `librosa`: Audio feature extraction
+- `whisper`: OpenAI Whisper for high-quality speech recognition
+- `torch`: PyTorch for model inference and GPU acceleration
+- `numpy`: Audio data processing and tensor operations
+- `librosa`: Audio feature extraction and preprocessing
+- `transformers`: Additional model support and optimization
 
 **Interactions**:
-- Receives audio data from audio module
+- Receives preprocessed audio data from audio module
 - Sends transcribed text to translation module
-- Provides transcription status to UI
-- Logs transcription results
+- Provides real-time transcription status to UI components
+- Logs transcription results and performance metrics
+- Integrates with demo system for simulated transcription
 
 **Key Functions**:
 ```python
-# Transcribe audio
-transcribe_audio(audio_data: bytes) -> str
+# Advanced transcription with language detection
+transcribe_audio_advanced(audio_data: bytes, detect_language: bool = True) -> dict
 
-# Get transcription info
+# Streaming transcription for real-time use
+transcribe_streaming(audio_stream: Iterator[bytes]) -> Iterator[str]
+
+# Batch transcription for multiple files
+transcribe_batch(audio_files: List[str]) -> List[dict]
+
+# Get model information and performance stats
 get_transcription_info() -> dict
-
-# Process audio chunk
-process_chunk(audio_chunk: bytes) -> str
 ```
 
 ### Language Model Module (`src/ollama/`)
 
-**Purpose**: Generates AI responses using local Ollama models.
+**Purpose**: Advanced AI conversation system using local Ollama models with streaming and conversation management.
 
 **Components**:
-- `ollama_client.py`: Ollama API client for model communication
-- `conversation_manager.py`: Manages conversation state and history
-- `model_manager.py`: Handles model loading, switching, and management
-- `prompt_engineer.py`: Constructs and optimizes prompts for better responses
-- `streaming_client.py`: Handles streaming responses for real-time interaction
+- `ollama_client.py`: Enhanced Ollama API client with health monitoring and error handling
+- `conversation_manager.py`: Advanced conversation state management with persistence and search
+- `model_manager.py`: Comprehensive model management including installation and testing
+- `prompt_engineer.py`: Intelligent prompt construction, optimization, and template management
+- `streaming_client.py`: Real-time streaming responses with callbacks and event handling
 
 **Dependencies**:
-- `requests`: HTTP client for Ollama API
+- `requests`: HTTP client for Ollama API communication
+- `json`: Data serialization for conversation storage
+- `threading`: Concurrent processing for streaming responses
+- `queue`: Event handling for real-time streaming
+- `pathlib`: File system operations for model management
+
+**Interactions**:
+- Receives translated text from translation module
+- Sends generated responses to TTS module
+- Manages conversation state and history
+- Provides streaming responses to UI components
+- Integrates with demo system for simulated AI responses
+- Logs conversation data and model performance
+
+**Key Functions**:
+```python
+# Enhanced text generation with streaming
+generate_response_streaming(prompt: str, model: str) -> Iterator[str]
+
+# Conversation management with context
+manage_conversation(conv_id: str, message: str) -> str
+
+# Model health monitoring and testing
+test_model_performance(model_name: str) -> dict
+
+# Advanced conversation search and export
+search_conversations(query: str) -> List[dict]
+```
 - `json`: JSON data handling
 - `asyncio`: Asynchronous operations
 - `threading`: Background processing
@@ -123,145 +163,433 @@ get_model_info() -> dict
 
 ### Translation Module (`src/translation/`)
 
-**Purpose**: Translates text between languages (primarily English to Spanish).
+**Purpose**: Multi-language translation system with automatic language detection and optimization.
 
 **Components**:
-- `translator.py`: Main translation interface and API
+- `translator.py`: Main translation interface with caching and optimization
 - `offline_translator.py`: Offline translation engine using local models
-- `language_detector.py`: Detects input language automatically
+- `language_detector.py`: Automatic language detection and confidence scoring
 
 **Dependencies**:
 - `transformers`: Hugging Face transformers for translation models
-- `torch`: PyTorch for model inference
-- `sentencepiece`: Tokenization for translation models
-- `sacremoses`: Moses tokenization
+- `torch`: PyTorch for model inference and optimization
+- `langdetect`: Language detection library
+- `numpy`: Numerical operations for model processing
 
 **Interactions**:
 - Receives transcribed text from STT module
-- Translates text to target language
 - Sends translated text to LLM module
-- Provides translation status to UI
-- Logs translation results
+- Provides translation confidence scores to UI
+- Caches frequently used translations
+- Integrates with demo system for simulated translations
 
 **Key Functions**:
 ```python
-# Translate text
-translate_text(text: str, source_lang: str = "en", target_lang: str = "es") -> str
+# Advanced translation with language detection
+translate_text_advanced(text: str, target_lang: str = "auto") -> dict
 
-# Get supported languages
-get_supported_languages() -> List[str]
+# Batch translation for multiple texts
+translate_batch(texts: List[str], target_lang: str) -> List[dict]
 
-# Detect language
-detect_language(text: str) -> str
+# Language detection with confidence
+detect_language(text: str) -> dict
+
+# Translation caching and optimization
+get_translation_cache_stats() -> dict
 ```
 
 ### Text-to-Speech Module (`src/tts/`)
 
-**Purpose**: Converts text to speech using voice cloning and synthesis.
+**Purpose**: Advanced speech synthesis with voice cloning capabilities using Coqui TTS.
 
 **Components**:
-- `voice_cloner.py`: Voice cloning functionality using Coqui TTS
-- `synthesizer.py`: Main TTS interface and API
-- `config.py`: TTS configuration and settings
+- `voice_cloner.py`: Voice cloning functionality using Coqui TTS YourTTS model with GPU optimization
+- `synthesizer.py`: Main TTS interface with voice cloning integration and streaming support
+- `config.py`: TTS configuration management, model selection, and voice profile management
 
 **Dependencies**:
-- `TTS`: Coqui TTS for speech synthesis
-- `torch`: PyTorch for model inference
-- `numpy`: Audio data processing
-- `librosa`: Audio analysis
-- `soundfile`: Audio file I/O
+- `TTS`: Coqui TTS library for advanced voice synthesis and cloning
+- `torch`: PyTorch for model inference and GPU acceleration
+- `numpy`: Audio data processing and manipulation
+- `soundfile`: High-quality audio file operations
+- `librosa`: Audio analysis and feature extraction
 
 **Interactions**:
-- Receives AI responses from LLM module
-- Synthesizes speech from text
-- Sends audio data to animation module
-- Provides audio to audio playback module
-- Logs synthesis results
+- Receives text responses from LLM module
+- Provides synthesized audio to audio module
+- Integrates with animation module for lip-sync timing
+- Manages voice cloning profiles and samples
+- Provides synthesis status to UI components
+- Integrates with demo system for voice simulation
 
 **Key Functions**:
 ```python
-# Synthesize voice
-synthesize_voice(text: str, output_path: str = None) -> bytes
+# Voice cloning from reference samples
+clone_voice_from_samples(samples: List[str]) -> bool
 
-# Clone voice
-clone_voice_from_samples(audio_samples: List[str]) -> str
+# Advanced text synthesis with cloned voice
+synthesize_with_cloned_voice(text: str, voice_profile: str) -> bytes
 
-# Get synthesis info
+# Real-time streaming synthesis
+synthesize_streaming(text_stream: Iterator[str]) -> Iterator[bytes]
+
+# Voice profile management
+manage_voice_profiles() -> dict
+
+# Model information and performance metrics
 get_synthesis_info() -> dict
 ```
 
 ### Animation Module (`src/animation/`)
 
-**Purpose**: Handles avatar animation and facial synchronization with speech.
+**Purpose**: Advanced avatar animation and facial synchronization with enhanced MediaPipe integration.
 
 **Components**:
-- `face_sync.py`: Facial animation and lip synchronization using MediaPipe
-- `audio_visualizer.py`: Audio visualization for real-time feedback
-- `interactive_animations.py`: Interactive animation controls
-- `loading_animation.py`: Loading and transition animations
+- `face_sync.py`: Facial animation and lip synchronization using MediaPipe with emotion detection
+- `audio_visualizer.py`: Real-time audio visualization with multiple display modes
+- `interactive_animations.py`: Interactive animation controls with particle systems
+- `loading_animation.py`: Loading and transition animations with progress tracking
+- `camera_manager.py`: Webcam integration and video processing with device management
 
 **Dependencies**:
-- `mediapipe`: Google MediaPipe for facial landmark detection
-- `opencv-python`: Computer vision for video processing
-- `pygame`: Audio playback and timing
-- `numpy`: Numerical computations
-- `librosa`: Audio analysis for lip sync
+- `mediapipe`: Google MediaPipe for facial landmark detection and analysis
+- `opencv-python`: Computer vision for video processing and camera interface
+- `pygame`: Audio playback timing and interactive graphics
+- `numpy`: Numerical computations for animation calculations
+- `librosa`: Audio analysis for lip sync timing and frequency analysis
 
 **Interactions**:
-- Receives audio data from TTS module
-- Synchronizes facial movements with speech
-- Provides animation frames to UI
-- Integrates with webcam for real-time avatar
-- Logs animation performance
+- Receives audio data from TTS module for lip synchronization
+- Synchronizes facial movements with speech timing
+- Provides animation frames to UI components
+- Integrates with webcam for real-time avatar overlay
+- Manages camera devices and video processing
+- Logs animation performance and timing metrics
 
 **Key Functions**:
 ```python
-# Run face sync
-run_face_sync(audio_path: str) -> dict
+# Advanced face sync with emotion detection
+run_face_sync_enhanced(audio_path: str, emotion: str = "neutral") -> dict
 
-# Detect landmarks
-detect_facial_landmarks(frame) -> List[tuple]
+# Real-time facial landmark detection
+detect_facial_landmarks_realtime(frame, model_complexity: int = 1) -> dict
 
-# Update animation
-update_animation_state(audio_features: dict) -> dict
+# Interactive animation management
+manage_interactive_animations(animation_type: str, parameters: dict) -> bool
+
+# Camera device management
+manage_camera_devices() -> List[dict]
 ```
 
-## Web Interface Modules
+## Interface Modules
 
-### UI Module (`src/ui/`)
+### Desktop Application Module (`src/desktop/`)
 
-**Purpose**: Provides the web-based user interface using Streamlit.
+**Purpose**: Comprehensive PySide6-based desktop application with tabbed interface and advanced state management.
 
-**Components**:
-- `web_interface.py`: Main Streamlit application entry point
-- `auth/`: Authentication system and user management
-- `components/`: Reusable UI components
-- `api/`: API wrappers for backend modules
-- `assets/`: Static files (CSS, images, etc.)
+**Key Components**:
+
+#### Application Core (`src/desktop/app/`)
+- `main.py`: Desktop application entry point with dependency checking
+- `application.py`: Main application class (TalkBridgeApplication) with service coordination
+- `main_window.py`: Main window with integrated tabs and menu system
+- `state_manager.py`: Advanced application state management with persistence
+
+#### UI Components (`src/desktop/components/`)
+- `chat_tab.py`: Real-time conversation interface with voice recording
+- `avatar_tab.py`: Avatar display and webcam integration with animation controls
+- `settings_tab.py`: Comprehensive system configuration interface
+
+#### Dialogs (`src/desktop/dialogs/`)
+- `login_dialog.py`: Enhanced authentication dialog with security features
+
+#### Services (`src/desktop/services/`)
+- `core_bridge.py`: Service integration bridge coordinating all backend modules
+
+#### Windows (`src/desktop/windows/`)
+- `dashboard.py`: Service status dashboard with real-time monitoring
 
 **Dependencies**:
-- `streamlit`: Web application framework
-- `pandas`: Data handling for UI
-- `plotly`: Interactive charts and visualizations
-- `pillow`: Image processing for UI
+- `PySide6`: Modern Qt6 bindings for Python with advanced widgets
+- `logging`: Comprehensive logging system
+- `json`: Configuration and state serialization
+- `pathlib`: Modern file system operations
+- `threading`: Background service management
 
-**Interactions**:
-- Provides user interface for all system functions
-- Manages user authentication and sessions
-- Coordinates between all backend modules
-- Displays real-time status and results
-- Handles user input and configuration
+**Key Features**:
+- **Tabbed Interface**: Integrated chat, avatar, and settings in single window
+- **Real-time Processing**: Live audio processing and avatar animation
+- **State Persistence**: Automatic saving and restoration of application state
+- **Service Monitoring**: Real-time status of all backend services
+- **Authentication**: Secure login with session management
+- **Configuration**: Comprehensive settings management
 
-**Key Functions**:
-```python
-# Main application
-main() -> None
+### Web Interface Module (`src/ui/`)
 
-# Render dashboard
-render_dashboard() -> None
+**Purpose**: Advanced Streamlit-based web application with device management and real-time communication.
 
-# Handle authentication
-authenticate_user(username: str, password: str) -> bool
+**Key Components**:
+
+#### Core Web Application (`src/ui/`)
+- `web_interface.py`: Main Streamlit application with dashboard interface
+- `web_server.py`: Enhanced web server with device permissions and security
+
+#### Authentication (`src/ui/auth/`)
+- Enhanced authentication system with role-based access control
+
+#### Components (`src/ui/components/`)
+- `dashboard.py`: Main dashboard with real-time chat and controls
+- `login.py`: Web-based authentication interface
+- Reusable UI components for consistent interface
+
+#### API Wrappers (`src/ui/api/`)
+- `llm_api.py`: Ollama LLM integration for web interface
+- `tts_api.py`: TTS and voice cloning API wrapper
+- `stt_api.py`: Speech recognition API integration
+- `translation_api.py`: Translation service wrapper
+- `animation_api.py`: Avatar animation API interface
+
+**Dependencies**:
+- `streamlit`: Modern web application framework
+- `asyncio`: Asynchronous web operations
+- `websockets`: Real-time communication
+- `ssl`: Secure HTTPS/WSS connections
+- `threading`: Background processing
+
+**Key Features**:
+- **Device Permissions**: Advanced camera/microphone permission management
+- **Real-time Communication**: WebSocket-based real-time updates
+- **Responsive Design**: Mobile-friendly interface
+- **Security**: HTTPS/SSL encryption and secure authentication
+- **API Integration**: Seamless integration with all backend services
+
+## Utility Modules
+
+### Enhanced Utilities Module (`src/utils/`)
+
+**Purpose**: Comprehensive utility system providing shared functionality across all modules.
+
+**Components**:
+- `logger.py`: Advanced logging system with rotation, filtering, and performance monitoring
+- `error_handler.py`: Centralized error handling with user-friendly messages and recovery
+- `storage_manager.py`: Advanced file storage and data management with backup/restore
+- `config.py`: Global configuration management with validation and hot-reloading
+- `error_suppression.py`: System for suppressing ML/AI library warnings and optimization
+
+**Dependencies**:
+- `logging`: Python logging with advanced handlers
+- `pathlib`: Modern file system operations
+- `json`: Configuration serialization
+- `yaml`: Configuration file support
+- `threading`: Thread-safe operations
+
+**Key Features**:
+- **Advanced Logging**: Structured logging with multiple outputs and log rotation
+- **Error Recovery**: Intelligent error recovery and fallback mechanisms
+- **Configuration Management**: Hot-reloadable configuration with validation
+- **Performance Monitoring**: System performance tracking and optimization
+- **Data Persistence**: Reliable data storage with backup and recovery
+
+### Authentication Module (`src/auth/`)
+
+**Purpose**: Enhanced security system with role-based access control.
+
+**Components**:
+- `auth_manager.py`: Advanced authentication with brute force protection and audit logging
+
+**Key Features**:
+- **Enhanced Security**: SHA-256 salted password hashing
+- **Role-based Access**: Multiple user roles with granular permissions
+- **Session Management**: Secure session handling with configurable timeouts
+- **Audit Trail**: Comprehensive login tracking and security monitoring
+- **Brute Force Protection**: Account locking and rate limiting
+
+## Demo Modules
+
+### Comprehensive Demo System (`src/demo/`)
+
+**Purpose**: Advanced demo and testing system with realistic simulations.
+
+**Components**:
+
+#### Core Demo System
+- `demo_runner.py`: Advanced demo conversation simulation engine
+- `demo_api.py`: Demo API wrappers for all backend modules
+- `demo_ui.py`: Demo UI components and simulation controls
+- `demo_config.py`: Demo configuration and scenario management
+
+#### Individual Module Demos
+- `tts_demo.py`: TTS and voice cloning demonstration
+- `ollama_demo.py`: LLM integration and streaming demos
+- `animation_demo.py`: Avatar animation and face sync demos
+- `audio_demo.py`: Audio processing and effects demonstrations
+- `translation_demo.py`: Translation system demonstrations
+- `face_sync_demo.py`: Facial animation synchronization demos
+
+**Dependencies**:
+- All backend modules (with mocking capabilities)
+- `unittest.mock`: Sophisticated mocking system
+- `random`: Realistic data generation
+- `time`: Timing simulation
+
+**Key Features**:
+- **Realistic Simulation**: Authentic behavior simulation without hardware
+- **Performance Testing**: Load testing and performance benchmarking
+- **Integration Testing**: End-to-end system testing
+- **Educational Examples**: Comprehensive examples for each module
+- **Development Support**: Tools for development and debugging
+
+**Demo Scenarios**:
+- **Voice Cloning Demo**: Complete voice cloning workflow
+- **Real-time Conversation**: Simulated real-time chat with all features
+- **Animation Showcase**: Avatar animation capabilities demonstration
+- **Performance Benchmarks**: System performance and optimization testing
+## Module Dependencies
+
+### Application-Level Dependencies
+
+```
+TalkBridge System Dependencies:
+
+Desktop Application:
+main.py
+├── TalkBridgeApplication (PySide6)
+├── StateManager (Configuration & Persistence)
+├── CoreBridge (Service Coordination)
+├── MainWindow (UI Container)
+│   ├── ChatTab → stt/, translation/, ollama/, tts/
+│   ├── AvatarTab → animation/, audio/, camera/
+│   └── SettingsTab → config/, auth/
+└── LoginDialog → auth/
+
+Web Application:
+web_server.py
+├── WebServerManager (Device Management)
+├── TalkBridgeWebInterface (Streamlit)
+├── Dashboard → API Wrappers → Backend Modules
+├── Authentication → auth/
+└── Components → Specialized UI Elements
+
+Backend Processing Chain:
+audio/capture → stt/whisper_engine → translation/translator
+→ ollama/conversation_manager → tts/voice_cloner → animation/face_sync
+→ audio/player
+```
+
+### Inter-Module Communication Patterns
+
+```
+Service Communication Patterns:
+
+1. Desktop Application Communication:
+   MainWindow ↔ CoreBridge ↔ Backend Services
+   Components → StateManager → Persistence
+   Services → Utils/Logger → Logging System
+
+2. Web Application Communication:
+   Streamlit UI → API Wrappers → Backend Services
+   WebSocket → Real-time Updates → Client Browser
+   Session Manager → Authentication → User Management
+
+3. Backend Module Chain:
+   Audio Input → STT → Translation → LLM → TTS → Animation → Audio Output
+   
+4. Demo System Integration:
+   Demo APIs → Mocked Backend Services → Simulated Responses
+   Performance Testing → Real Backend Services → Benchmarking
+
+5. Configuration Flow:
+   YAML Config → utils/config → Module Configuration
+   State Manager → Application State → Component State
+```
+
+## Module Interactions
+
+### Real-time Processing Flow
+
+```
+Desktop Application Real-time Flow:
+
+User Interaction (ChatTab)
+    ↓
+Audio Capture (audio/capture)
+    ↓
+Speech Recognition (stt/whisper_engine)
+    ↓
+Language Translation (translation/translator)
+    ↓
+AI Response Generation (ollama/streaming_client)
+    ↓
+Voice Synthesis + Cloning (tts/voice_cloner)
+    ↓
+Avatar Animation Sync (animation/face_sync)
+    ↓
+Audio Output (audio/player)
+    ↓
+State Persistence (StateManager)
+
+Web Application Processing Flow:
+
+Browser Input (Dashboard)
+    ↓
+API Wrapper (ui/api/*)
+    ↓
+Backend Service Processing
+    ↓
+Real-time Response Streaming
+    ↓
+WebSocket Updates (web_server)
+    ↓
+Client Display Update
+```
+
+### Error Handling and Recovery
+
+```
+Error Handling Chain:
+
+Module Error → utils/error_handler → User-friendly Message
+    ↓
+Logging (utils/logger) → File System (utils/storage_manager)
+    ↓
+Recovery Mechanism → Fallback Operation
+    ↓
+State Restoration → Continue Operation
+
+Demo Mode Fallback:
+
+Service Unavailable → Demo Mode Detection → Simulated Response
+    ↓
+demo/demo_api → Realistic Simulation → User Experience Maintained
+```
+
+### Performance Optimization Integration
+
+```
+Performance Management:
+
+Memory Management:
+- StateManager: Application state caching
+- Model Loading: Lazy loading and caching
+- Audio Processing: Buffer management
+- Animation: Frame rate optimization
+
+Threading Coordination:
+- Main UI Thread: User interface responsiveness
+- Audio Thread: Real-time audio processing
+- Service Threads: Backend processing
+- Animation Thread: Smooth avatar rendering
+
+Caching Strategy:
+- Configuration: Hot-reloadable settings
+- Models: Intelligent model caching
+- Voice Profiles: Voice cloning cache
+- Conversations: Chat history caching
+```
+
+---
+
+**Note**: This modular architecture supports both desktop and web deployment scenarios while maintaining consistent functionality across all interfaces. The comprehensive demo system ensures reliable testing and development workflows, while the enhanced utility modules provide robust error handling and performance optimization.
 ```
 
 ### Authentication Module (`src/auth/`)

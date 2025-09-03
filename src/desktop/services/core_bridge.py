@@ -3,7 +3,7 @@
 TalkBridge Desktop - Core Bridge
 ================================
 
-Módulo core_bridge para TalkBridge
+Core bridge module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -13,16 +13,16 @@ Requirements:
 - PyQt6
 ======================================================================
 Functions:
-- __init__: Función __init__
+- __init__: Initialization function
 - run: Executes the operation in the thread pool.
 - cancel: Cancels the operation.
-- __init__: Función __init__
+- __init__: Initialization function
 - synthesize_async: Asynchronously synthesizes text to speech.
 - _do_synthesis: Performs the actual voice synthesis.
 - _get_default_voice_settings: Returns default voice configuration.
 - _cleanup_worker: Cleans up a completed worker.
 - cancel_all_synthesis: Cancels all ongoing synthesis operations.
-- __init__: Función __init__
+- __init__: Initialization function
 ======================================================================
 """
 

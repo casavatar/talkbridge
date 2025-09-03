@@ -3,7 +3,7 @@
 TalkBridge Desktop - Application
 ================================
 
-Módulo application para TalkBridge
+Application module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -101,9 +101,30 @@ class TalkBridgeApplication(QApplication):
                 self.logger.error("Core components initialization failed")
                 return 1
 
-            # Show login dialog
-            if not self._show_login_dialog():
-                self.logger.info("User cancelled login")
+            # Show login dialog with retry loop
+            login_successful = False
+            max_attempts = 3
+            attempts = 0
+            
+            while not login_successful and attempts < max_attempts:
+                attempts += 1
+                self.logger.info(f"Login attempt {attempts}/{max_attempts}")
+                
+                login_successful = self._show_login_dialog()
+                
+                if not login_successful:
+                    if attempts < max_attempts:
+                        # Show option to retry or exit
+                        retry = self._show_login_retry_dialog()
+                        if not retry:
+                            self.logger.info("User chose to exit")
+                            return 0
+                    else:
+                        self.logger.warning("Maximum login attempts reached")
+                        return 0
+
+            if not login_successful:
+                self.logger.info("Login failed after maximum attempts")
                 return 0
 
             # Initialize services
@@ -178,24 +199,58 @@ class TalkBridgeApplication(QApplication):
             if self.splash_screen:
                 self.splash_screen.showMessage("Signing in...", 0x82)  # Qt.AlignBottom
 
+            # Reset authentication state
+            self.is_authenticated = False
+            
             login_dialog = LoginDialog(self.state_manager)
             login_dialog.authentication_result.connect(self.authentication_completed)
 
             # Show modal dialog
             result = login_dialog.exec()
 
-            # Process result
-            if result == login_dialog.DialogCode.Accepted and self.is_authenticated:
-                self.logger.info("Authentication successful")
-                return True
+            # Process result based on dialog code
+            if result == login_dialog.DialogCode.Accepted:
+                # Dialog was accepted, check authentication status
+                if self.is_authenticated:
+                    self.logger.info("Authentication successful")
+                    return True
+                else:
+                    self.logger.warning("Dialog accepted but authentication failed")
+                    return False
+            elif result == login_dialog.DialogCode.Rejected:
+                # User cancelled or closed dialog
+                self.logger.info("Login dialog was cancelled by user")
+                return False
             else:
-                self.logger.info("Authentication failed or cancelled")
+                # Unexpected result
+                self.logger.warning(f"Unexpected dialog result: {result}")
                 return False
 
         except Exception as e:
             self.logger.error(f"Login process error: {e}")
             self._show_critical_error("Login Error", str(e))
             return False
+
+    def _show_login_retry_dialog(self) -> bool:
+        """
+        Shows a dialog asking the user if they want to retry login or exit.
+
+        Returns:
+            bool: True if user wants to retry, False if they want to exit
+        """
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Icon.Question)
+        msg_box.setWindowTitle("Login Failed")
+        msg_box.setText("Authentication failed. Would you like to try again?")
+        msg_box.setInformativeText("You can retry with different credentials or exit the application.")
+        
+        retry_button = msg_box.addButton("Try Again", QMessageBox.ButtonRole.AcceptRole)
+        exit_button = msg_box.addButton("Exit", QMessageBox.ButtonRole.RejectRole)
+        
+        msg_box.setDefaultButton(retry_button)
+        msg_box.exec()
+        
+        return msg_box.clickedButton() == retry_button
 
     def _initialize_services_async(self) -> None:
         """Initializes services asynchronously."""

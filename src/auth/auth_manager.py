@@ -30,15 +30,27 @@ Functions:
 import json
 import hashlib
 import os
+import secrets
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
 
 
+def generate_salt() -> str:
+    """Generate a cryptographically secure random salt."""
+    return secrets.token_hex(32)
+
+
 class AuthManager:
     """Manages user authentication using local JSON file."""
+    
+    # Class-level cache to avoid reloading users file multiple times
+    _users_cache = None
+    _cache_file = None
+    _cache_mtime = None
     
     def __init__(self, users_file: str = "json/users.json"):
         """
@@ -50,7 +62,40 @@ class AuthManager:
         # Get the src directory (going up from src/auth to src)
         src_dir = Path(__file__).parent.parent
         self.users_file = src_dir / users_file
-        self.users = self._load_users()
+        self.users = self._load_users_cached()
+    
+    def _load_users_cached(self) -> Dict[str, Dict]:
+        """
+        Load users from JSON file with caching for better performance.
+        
+        Returns:
+            Dict containing user data
+        """
+        # Check if we can use cached data
+        if (AuthManager._users_cache is not None and 
+            AuthManager._cache_file == str(self.users_file)):
+            
+            # Check if file has been modified since last cache
+            try:
+                current_mtime = self.users_file.stat().st_mtime if self.users_file.exists() else 0
+                if current_mtime == AuthManager._cache_mtime:
+                    logger.debug("Using cached user data")
+                    return AuthManager._users_cache.copy()
+            except (OSError, AttributeError):
+                pass  # File doesn't exist or stat failed, proceed to load
+        
+        # Load users from file
+        users = self._load_users()
+        
+        # Update cache
+        AuthManager._users_cache = users.copy()
+        AuthManager._cache_file = str(self.users_file)
+        try:
+            AuthManager._cache_mtime = self.users_file.stat().st_mtime if self.users_file.exists() else 0
+        except OSError:
+            AuthManager._cache_mtime = 0
+            
+        return users
     
     def _load_users(self) -> Dict[str, Dict]:
         """
@@ -69,6 +114,7 @@ class AuthManager:
                 logger.error(f"Failed to load users file: {e}")
                 return self._create_default_users()
         else:
+            logger.info("Users file doesn't exist, creating default users")
             return self._create_default_users()
     
     def _create_default_users(self) -> Dict[str, Dict]:
@@ -78,7 +124,6 @@ class AuthManager:
         Returns:
             Dict containing default user data
         """
-        from datetime import datetime
         import secrets
         import string
         
@@ -86,10 +131,6 @@ class AuthManager:
             """Generate a cryptographically secure password."""
             alphabet = string.ascii_letters + string.digits + "!@#$%^&*"
             return ''.join(secrets.choice(alphabet) for _ in range(length))
-        
-        def generate_salt() -> str:
-            """Generate a cryptographically secure salt."""
-            return secrets.token_hex(16)
         
         # Generate secure default passwords
         admin_password = generate_secure_password(20)  # Longer password for admin
@@ -148,17 +189,27 @@ class AuthManager:
     
     def _save_users(self, users: Dict[str, Dict]) -> None:
         """
-        Save users to JSON file.
+        Save users to JSON file and invalidate cache.
         
         Args:
             users: User data to save
         """
         try:
+            # Ensure directory exists
+            self.users_file.parent.mkdir(parents=True, exist_ok=True)
+            
             with open(self.users_file, 'w') as f:
                 json.dump(users, f, indent=2)
+            
+            # Invalidate cache after successful save
+            AuthManager._users_cache = None
+            AuthManager._cache_file = None
+            AuthManager._cache_mtime = None
+            
             logger.info(f"Saved users to {self.users_file}")
         except Exception as e:
             logger.error(f"Failed to save users: {e}")
+            raise  # Re-raise to handle errors properly
     
     def _hash_password(self, password: str) -> str:
         """
@@ -208,8 +259,6 @@ class AuthManager:
         Args:
             username: Username of the user who logged in
         """
-        from datetime import datetime
-        
         if username in self.users:
             self.users[username]['last_login'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             self.users[username]['failed_login_attempts'] = 0
@@ -327,7 +376,6 @@ class AuthManager:
             logger.warning(f"User '{username}' already exists")
             return False
         
-        from datetime import datetime
         import secrets
         
         # Generate salt for new user
@@ -393,7 +441,6 @@ class AuthManager:
             logger.warning(f"Password change failed: invalid credentials for user '{username}'")
             return False
         
-        from datetime import datetime
         import secrets
         
         # Generate new salt for password change

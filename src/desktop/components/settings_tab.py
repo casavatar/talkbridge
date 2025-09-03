@@ -76,6 +76,80 @@ class SettingsTab(QWidget):
         layout.setSpacing(10)
         layout.setContentsMargins(15, 15, 15, 15)
         
+        # Apply dark theme to SettingsTab
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #1e1e1e;
+                color: #ffffff;
+                font-family: 'Segoe UI', Arial, sans-serif;
+            }
+            QLabel {
+                color: #ffffff;
+                background: transparent;
+            }
+            QGroupBox {
+                font-weight: bold;
+                border: 2px solid #555555;
+                border-radius: 8px;
+                margin-top: 1ex;
+                color: #ffffff;
+                background-color: #2d2d2d;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 8px 0 8px;
+                color: #0078d4;
+            }
+            QComboBox {
+                background-color: #3c3c3c;
+                border: 2px solid #555555;
+                border-radius: 6px;
+                padding: 8px;
+                color: #ffffff;
+                min-width: 150px;
+            }
+            QComboBox:focus {
+                border-color: #0078d4;
+            }
+            QLineEdit {
+                background-color: #3c3c3c;
+                border: 2px solid #555555;
+                border-radius: 6px;
+                padding: 8px;
+                color: #ffffff;
+            }
+            QLineEdit:focus {
+                border-color: #0078d4;
+            }
+            QTextEdit {
+                background-color: #3c3c3c;
+                border: 2px solid #555555;
+                border-radius: 6px;
+                color: #ffffff;
+            }
+            QCheckBox {
+                color: #ffffff;
+            }
+            QSlider::groove:horizontal {
+                background-color: #555555;
+                height: 6px;
+                border-radius: 3px;
+            }
+            QSlider::handle:horizontal {
+                background-color: #0078d4;
+                width: 16px;
+                border-radius: 8px;
+            }
+            QSpinBox {
+                background-color: #3c3c3c;
+                border: 2px solid #555555;
+                border-radius: 6px;
+                padding: 4px;
+                color: #ffffff;
+            }
+        """)
+        
         # Título
         title_label = QLabel("⚙️ Configuración del Sistema")
         title_font = QFont()
@@ -83,10 +157,48 @@ class SettingsTab(QWidget):
         title_font.setBold(True)
         title_label.setFont(title_font)
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_label.setStyleSheet("color: #ffffff; background: transparent; margin-bottom: 10px;")
         layout.addWidget(title_label)
         
         # Pestañas de configuración
         self.tabs = QTabWidget()
+        
+        # Apply dark theme to internal tabs
+        self.tabs.setStyleSheet("""
+            QTabWidget::pane {
+                border: 2px solid #555555;
+                border-radius: 8px;
+                background-color: #2d2d2d;
+                color: #ffffff;
+            }
+            QTabBar::tab {
+                background-color: #3c3c3c;
+                border: 2px solid #555555;
+                border-bottom: none;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                padding: 8px 16px;
+                margin-right: 2px;
+                font-weight: bold;
+                color: #cccccc;
+                min-width: 80px;
+            }
+            QTabBar::tab:selected {
+                background-color: #2d2d2d;
+                color: #ffffff;
+                border-color: #0078d4;
+                border-bottom: 2px solid #0078d4;
+            }
+            QTabBar::tab:hover {
+                background-color: #4a4a4a;
+                color: #ffffff;
+                border-color: #106ebe;
+            }
+            QTabBar::tab:!selected {
+                margin-top: 2px;
+            }
+        """)
+        
         self.tabs.addTab(self.create_tts_tab(), "🔊 TTS")
         self.tabs.addTab(self.create_translation_tab(), "🌐 Traducción")
         self.tabs.addTab(self.create_animation_tab(), "🎭 Animación")
@@ -112,6 +224,9 @@ class SettingsTab(QWidget):
             QPushButton:hover {
                 background-color: #45a049;
             }
+            QPushButton:pressed {
+                background-color: #3d8b40;
+            }
         """)
         self.save_button.clicked.connect(self.save_settings)
         buttons_layout.addWidget(self.save_button)
@@ -129,6 +244,9 @@ class SettingsTab(QWidget):
             QPushButton:hover {
                 background-color: #F57C00;
             }
+            QPushButton:pressed {
+                background-color: #E65100;
+            }
         """)
         self.reset_button.clicked.connect(self.reset_settings)
         buttons_layout.addWidget(self.reset_button)
@@ -136,7 +254,7 @@ class SettingsTab(QWidget):
         self.export_button = QPushButton("📤 Exportar Config")
         self.export_button.setStyleSheet("""
             QPushButton {
-                background-color: #2196F3;
+                background-color: #0078d4;
                 color: white;
                 border: none;
                 border-radius: 20px;
@@ -144,7 +262,10 @@ class SettingsTab(QWidget):
                 font-weight: bold;
             }
             QPushButton:hover {
-                background-color: #1976D2;
+                background-color: #106ebe;
+            }
+            QPushButton:pressed {
+                background-color: #005a9e;
             }
         """)
         self.export_button.clicked.connect(self.export_settings)

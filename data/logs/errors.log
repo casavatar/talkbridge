@@ -1,0 +1,6 @@
+2025-08-28 15:03:01,873 [ERROR] Error in chat: 404 Client Error: Not Found for url: http://localhost:11434/api/chat
+2025-08-28 15:03:11,651 [ERROR] Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
+2025-08-28 15:03:11,651 [ERROR] Speech synthesis failed: Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
+2025-08-28 15:10:13,003 [ERROR] Error in chat: 404 Client Error: Not Found for url: http://localhost:11434/api/chat
+2025-08-28 15:10:13,877 [ERROR] Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
+2025-08-28 15:10:13,877 [ERROR] Speech synthesis failed: Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.

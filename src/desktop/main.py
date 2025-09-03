@@ -3,7 +3,7 @@
 TalkBridge Desktop - Main Application Entry Point
 =================================================
 
-Punto de entrada principal de la aplicación
+Main entry point for the application
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -25,7 +25,7 @@ import sys
 import os
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 # Early configuration of error suppression
 project_root = Path(__file__).parent.parent.parent
@@ -72,23 +72,36 @@ def setup_application_logging() -> None:
     log_dir = project_root / "data" / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     
-    # Basic logging configuration
+    # Clear any existing handlers to avoid conflicts
+    root_logger = logging.getLogger()
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+    
+    # Configure logging with force=True to override previous configurations
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
             logging.FileHandler(log_dir / "desktop.log"),
+            logging.FileHandler(log_dir / "app.log"),  # General application log
             logging.StreamHandler()
-        ]
+        ],
+        force=True  # Force reconfiguration
     )
+    
+    # Also configure error logging to write to errors.log
+    error_handler = logging.FileHandler(log_dir / "errors.log")
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s] %(message)s'))
+    logging.getLogger().addHandler(error_handler)
 
 
-def check_dependencies() -> tuple[bool, bool]:
+def check_dependencies() -> Tuple[bool, bool]:
     """
     Checks that critical dependencies are available and provides detailed feedback.
     
     Returns:
-        tuple[bool, bool]: (core_deps_available, has_missing_optional)
+        Tuple[bool, bool]: (core_deps_available, has_missing_optional)
     """
     try:
         # Check PySide6 (critical dependency)

@@ -11,6 +11,7 @@ Version: 1.0
 Requirements:
 - sounddevice
 - numpy
+- soundfile
 ======================================================================
 Functions:
 - get_default_device_info: Get information about default audio devices.
@@ -21,6 +22,7 @@ Functions:
 - start_input_stream: Start capturing microphone audio continuously.
 - start_output_stream: Start capturing system output audio (if supported by the system).
 - record_fixed_duration: Record audio for a fixed duration.
+- record_audio: Record audio for a fixed duration and save to file.
 - get_audio_buffer: Get the current audio buffer and clear it.
 - stop: Stop audio capture.
 ======================================================================
@@ -34,12 +36,63 @@ from typing import Optional, Callable, Dict, Any
 logger = logging.getLogger(__name__)
 
 class AudioCapture:
-    def __init__(self, sample_rate=44100, channels=1):
+    def __init__(self, sample_rate=None, channels=1, device=None):
+        # Validate and set device
+        self.device = device
+        
+        # Auto-detect optimal sample rate if not provided
+        if sample_rate is None:
+            sample_rate = self._get_optimal_sample_rate(device)
+        elif not isinstance(sample_rate, int) or sample_rate <= 0:
+            logger.warning(f"Invalid sample_rate {sample_rate}, auto-detecting optimal rate")
+            sample_rate = self._get_optimal_sample_rate(device)
+        
+        # Validate channels
+        if not isinstance(channels, int) or channels <= 0:
+            logger.warning(f"Invalid channels {channels}, using default 1")
+            channels = 1
+            
         self.sample_rate = sample_rate
         self.channels = channels
         self.stream = None
         self.is_recording = False
         self.audio_buffer = []
+        
+        logger.info(f"AudioCapture initialized with sample_rate={self.sample_rate}, channels={self.channels}, device={self.device}")
+
+    def _get_optimal_sample_rate(self, device=None):
+        """Get the optimal sample rate for the specified device."""
+        try:
+            if device is None:
+                device = sd.default.device[0]  # Default input device
+            
+            device_info = sd.query_devices(device)
+            default_rate = int(device_info['default_samplerate'])
+            
+            # Common sample rates to test in order of preference
+            preferred_rates = [44100, 48000, 22050, 16000, 8000]
+            
+            # If default rate is in our preferred list, use it
+            if default_rate in preferred_rates:
+                logger.info(f"Using device default sample rate: {default_rate}")
+                return default_rate
+            
+            # Test preferred rates
+            for rate in preferred_rates:
+                try:
+                    sd.check_input_settings(device=device, samplerate=rate)
+                    logger.info(f"Selected optimal sample rate: {rate} for device {device}")
+                    return rate
+                except:
+                    continue
+            
+            # Fallback to device default
+            logger.warning(f"Using device default sample rate as fallback: {default_rate}")
+            return default_rate
+            
+        except Exception as e:
+            logger.error(f"Error detecting optimal sample rate: {e}, using 44100 as fallback")
+            return 44100
 
     def list_devices(self) -> Dict[str, Any]:
         """List available audio devices."""
@@ -156,7 +209,24 @@ class AudioCapture:
     def record_fixed_duration(self, duration: float, device: Optional[int] = None) -> np.ndarray:
         """Record audio for a fixed duration."""
         try:
+            # Use instance device if no device specified
+            if device is None:
+                device = self.device
+                
             logger.info(f"Recording {duration} seconds of audio...")
+            
+            # Validate device compatibility first
+            if device is not None:
+                try:
+                    sd.check_input_settings(device=device, samplerate=self.sample_rate, channels=self.channels)
+                except Exception as e:
+                    logger.warning(f"Device {device} not compatible with current settings: {e}")
+                    # Try to get optimal settings for this device
+                    optimal_rate = self._get_optimal_sample_rate(device)
+                    if optimal_rate != self.sample_rate:
+                        logger.info(f"Adjusting sample rate from {self.sample_rate} to {optimal_rate} for device {device}")
+                        self.sample_rate = optimal_rate
+            
             recording = sd.rec(
                 int(duration * self.sample_rate),
                 samplerate=self.sample_rate,
@@ -169,6 +239,48 @@ class AudioCapture:
             return recording
         except Exception as e:
             logger.error(f"Failed to record audio: {e}")
+            raise
+
+    def record_audio(self, duration: float, device: Optional[int] = None, output_path: Optional[str] = None) -> str:
+        """
+        Record audio for a fixed duration and save to file.
+        
+        Args:
+            duration: Duration in seconds to record
+            device: Audio device to use (None for default)
+            output_path: Path to save the audio file (None for auto-generated temp file)
+            
+        Returns:
+            str: Path to the saved audio file
+        """
+        try:
+            import tempfile
+            import soundfile as sf
+            from pathlib import Path
+            
+            # Record the audio data
+            audio_data = self.record_fixed_duration(duration, device)
+            
+            # Generate output path if not provided
+            if output_path is None:
+                temp_file = tempfile.NamedTemporaryFile(suffix='.wav', delete=False)
+                output_path = temp_file.name
+                temp_file.close()
+            
+            # Ensure the directory exists
+            Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+            
+            # Save audio data to file
+            sf.write(output_path, audio_data, self.sample_rate)
+            logger.info(f"Audio saved to: {output_path}")
+            
+            return output_path
+            
+        except ImportError as e:
+            logger.error("soundfile library not available. Install with: pip install soundfile")
+            raise ImportError("soundfile library required for saving audio files") from e
+        except Exception as e:
+            logger.error(f"Failed to record and save audio: {e}")
             raise
 
     def get_audio_buffer(self) -> np.ndarray:

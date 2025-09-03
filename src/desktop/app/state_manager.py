@@ -265,9 +265,19 @@ class StateManager(QObject):
             keys = key.split('.')
             config = self.config
 
+            # Ensure config is a dictionary
+            if not isinstance(config, dict):
+                self.logger.warning(f"Config root is not a dict, resetting to default")
+                self.config = self._get_default_config()
+                config = self.config
+
             # Navigate to the second-to-last level
-            for k in keys[:-1]:
+            for i, k in enumerate(keys[:-1]):
                 if k not in config:
+                    config[k] = {}
+                elif not isinstance(config[k], dict):
+                    # Handle case where intermediate value is not a dict
+                    self.logger.warning(f"Config path '{'.'.join(keys[:i+1])}' is not a dict, overwriting")
                     config[k] = {}
                 config = config[k]
 
@@ -281,6 +291,25 @@ class StateManager(QObject):
 
         except Exception as e:
             self.logger.error(f"Error setting config '{key}': {e}")
+            # Try to recover by ensuring the path exists
+            try:
+                self._ensure_config_path(key)
+            except Exception as recovery_error:
+                self.logger.error(f"Recovery failed for config '{key}': {recovery_error}")
+
+    def _ensure_config_path(self, key: str) -> None:
+        """Ensures a config path exists with proper structure."""
+        keys = key.split('.')
+        config = self.config
+        
+        if not isinstance(config, dict):
+            self.config = self._get_default_config()
+            config = self.config
+        
+        for k in keys[:-1]:
+            if k not in config or not isinstance(config[k], dict):
+                config[k] = {}
+            config = config[k]
 
     def get_setting(self, key: str, default: Any = None) -> Any:
         """
@@ -291,9 +320,29 @@ class StateManager(QObject):
             default: Default value
 
         Returns:
-            Any: Preference value
+            Any: Preference value with proper type conversion
         """
-        return self.qt_settings.value(key, default)
+        value = self.qt_settings.value(key, default)
+        
+        # Handle type conversion based on default value type
+        if default is not None and not isinstance(value, type(default)):
+            try:
+                if isinstance(default, bool):
+                    # Convert string to boolean
+                    if isinstance(value, str):
+                        value = value.lower() in ('true', '1', 'yes', 'on')
+                    else:
+                        value = bool(value)
+                elif isinstance(default, int):
+                    value = int(value)
+                elif isinstance(default, float):
+                    value = float(value)
+                # String values don't need conversion
+            except (ValueError, TypeError):
+                # If conversion fails, return the default
+                value = default
+                
+        return value
 
     def set_setting(self, key: str, value: Any) -> None:
         """
@@ -492,11 +541,22 @@ class StateManager(QObject):
             if self.auto_save_enabled and self.is_initialized:
                 self.save_state()
 
-            self.qt_settings.sync()
+            # Check if qt_settings still exists before accessing it
+            if hasattr(self, 'qt_settings') and self.qt_settings is not None:
+                try:
+                    self.qt_settings.sync()
+                except RuntimeError as e:
+                    # QSettings object was already deleted
+                    self.logger.debug(f"QSettings already deleted during cleanup: {e}")
 
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
 
     def __del__(self):
         """StateManager destructor."""
-        self.cleanup()
+        try:
+            if hasattr(self, 'logger') and hasattr(self, 'is_initialized'):
+                self.cleanup()
+        except Exception:
+            # Silently handle cleanup errors during destruction
+            pass

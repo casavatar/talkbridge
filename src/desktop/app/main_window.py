@@ -111,6 +111,19 @@ class MainWindow(QMainWindow):
         # Central widget
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
+        
+        # Apply dark theme to main window
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #1e1e1e;
+                color: #ffffff;
+            }
+            QWidget {
+                background-color: #1e1e1e;
+                color: #ffffff;
+                font-family: 'Segoe UI', Arial, sans-serif;
+            }
+        """)
 
         layout = QVBoxLayout(self.central_widget)
         layout.setContentsMargins(5, 5, 5, 5)
@@ -125,7 +138,7 @@ class MainWindow(QMainWindow):
         title_font.setPointSize(18)
         title_font.setBold(True)
         title_label.setFont(title_font)
-        title_label.setStyleSheet("color: #2196F3; padding: 10px;")
+        title_label.setStyleSheet("color: #0078d4; padding: 10px; background: transparent;")
         header_layout.addWidget(title_label)
         
         header_layout.addStretch()
@@ -156,29 +169,39 @@ class MainWindow(QMainWindow):
         self.tab_widget.setMovable(False)
         self.tab_widget.setDocumentMode(True)
         
-        # Style the tab widget
+        # Style the tab widget with dark theme
         self.tab_widget.setStyleSheet("""
             QTabWidget::pane {
-                border: 1px solid #cccccc;
-                border-radius: 5px;
-                background-color: white;
+                border: 2px solid #555555;
+                border-radius: 8px;
+                background-color: #1e1e1e;
+                color: #ffffff;
             }
             QTabBar::tab {
-                background-color: #f0f0f0;
-                border: 1px solid #cccccc;
+                background-color: #2d2d2d;
+                border: 2px solid #555555;
                 border-bottom: none;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
-                padding: 8px 16px;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                padding: 12px 20px;
                 margin-right: 2px;
                 font-weight: bold;
+                color: #cccccc;
+                min-width: 120px;
             }
             QTabBar::tab:selected {
-                background-color: white;
-                color: #2196F3;
+                background-color: #3c3c3c;
+                color: #ffffff;
+                border-color: #0078d4;
+                border-bottom: 2px solid #0078d4;
             }
             QTabBar::tab:hover {
-                background-color: #e3f2fd;
+                background-color: #4a4a4a;
+                color: #ffffff;
+                border-color: #106ebe;
+            }
+            QTabBar::tab:!selected {
+                margin-top: 3px;
             }
         """)
 
@@ -262,13 +285,28 @@ class MainWindow(QMainWindow):
         """Creates the status bar."""
         statusbar = self.statusBar()
         
+        # Apply dark theme to status bar
+        statusbar.setStyleSheet("""
+            QStatusBar {
+                background-color: #2d2d2d;
+                color: #ffffff;
+                border-top: 1px solid #555555;
+            }
+            QLabel {
+                color: #ffffff;
+                background: transparent;
+            }
+        """)
+        
         # Status label
         self.status_label = QLabel("✅ Listo")
-        self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold; padding: 5px;")
+        self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold; padding: 5px; background: transparent;")
         statusbar.addWidget(self.status_label)
         
         # Add permanent widgets
-        statusbar.addPermanentWidget(QLabel("TalkBridge v1.0"))
+        version_label = QLabel("TalkBridge v1.0")
+        version_label.setStyleSheet("color: #cccccc; padding: 5px; background: transparent;")
+        statusbar.addPermanentWidget(version_label)
 
     def configure_window(self) -> None:
         """Configures window properties."""
@@ -342,19 +380,19 @@ class MainWindow(QMainWindow):
         """Updates the status bar message."""
         if self.status_label:
             self.status_label.setText(message)
-            self.status_label.setStyleSheet("color: #2196F3; font-weight: bold; padding: 5px;")
+            self.status_label.setStyleSheet("color: #0078d4; font-weight: bold; padding: 5px; background: transparent;")
             
             # Reset to default after 5 seconds
             QTimer.singleShot(5000, lambda: (
                 self.status_label.setText("✅ Listo"),
-                self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold; padding: 5px;")
+                self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold; padding: 5px; background: transparent;")
             ))
 
     def show_error_message(self, message: str) -> None:
         """Shows an error message in status bar and as popup."""
         if self.status_label:
             self.status_label.setText(f"❌ Error: {message}")
-            self.status_label.setStyleSheet("color: #f44336; font-weight: bold; padding: 5px;")
+            self.status_label.setStyleSheet("color: #f44336; font-weight: bold; padding: 5px; background: transparent;")
         
         # Also show as popup for important errors
         QMessageBox.warning(self, "Error", message)

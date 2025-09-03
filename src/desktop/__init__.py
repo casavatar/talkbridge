@@ -20,9 +20,9 @@ __email__ = "support@talkbridge.com"
 # Verify critical units
 try:
     from PySide6.QtWidgets import QApplication
-    PYQT6_AVAILABLE = True
+    PYSIDE6_AVAILABLE = True
 except ImportError:
-    PYQT6_AVAILABLE = False
+    PYSIDE6_AVAILABLE = False
 
 try:
     import yaml
@@ -31,13 +31,13 @@ except ImportError:
     YAML_AVAILABLE = False
 
 # Dependency status
-DEPENDENCIES_OK = PYQT6_AVAILABLE and YAML_AVAILABLE
+DEPENDENCIES_OK = PYSIDE6_AVAILABLE and YAML_AVAILABLE
 
 if not DEPENDENCIES_OK:
     import warnings
     missing = []
-    if not PYQT6_AVAILABLE:
-        missing.append("PyQt6")
+    if not PYSIDE6_AVAILABLE:
+        missing.append("PySide6")
     if not YAML_AVAILABLE:
         missing.append("PyYAML")
 
@@ -52,6 +52,6 @@ __all__ = [
     "__author__", 
     "__email__",
     "DEPENDENCIES_OK",
-    "PYQT6_AVAILABLE",
+    "PYSIDE6_AVAILABLE",
     "YAML_AVAILABLE"
 ]

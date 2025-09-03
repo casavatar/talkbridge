@@ -1,53 +1,356 @@
 # 🎤 TalkBridge
 
-**Real-time voice translation and communication platform with AI-powered speech synthesis, facial animation, and secure web interface.**
+**Advanced real-time voice translation and communication platform with AI-powered speech synthesis, facial animation, and multi-interface support.**
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS-lightgrey.svg)](https://github.com/your-repo/talkbridge)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/casavatar/talkbridge)
+[![GUI](https://img.shields.io/badge/GUI-PySide6%20%### 🐛 Debugging
+
+Enable debug mode for development:
+
+```bash
+# Enable debug logging
+export TALKBRIDGE_DEBUG=1
+python src/desktop/main.py
+
+# Check logs
+tail -f data/logs/app.log
+tail -f data/logs/desktop.log
+tail -f data/logs/errors.log
+```
+
+## 🔍 Troubleshooting
+
+### Common Issues and Solutions
+
+#### 🎤 Audio Issues
+
+**Problem**: No audio input/output detected
+```bash
+# Check audio devices
+python -c "import pyaudio; pa = pyaudio.PyAudio(); [print(f'{i}: {pa.get_device_info_by_index(i)[\"name\"]}') for i in range(pa.get_device_count())]"
+
+# Solution: Update device ID in config.yaml
+audio:
+  input_device: 1  # Replace with correct device ID
+  output_device: 2
+```
+
+**Problem**: Poor audio quality
+```yaml
+# Increase audio quality in config.yaml
+audio:
+  sample_rate: 44100  # Higher sample rate
+  chunk_size: 512     # Smaller chunks for lower latency
+  channels: 2         # Stereo for better quality
+```
+
+#### 🖥️ Desktop Application Issues
+
+**Problem**: PyQt6/PySide6 import errors
+```bash
+# Reinstall with conda (recommended)
+conda install pyside6 pyqt6
+
+# Or with pip
+pip install PySide6 PyQt6
+```
+
+**Problem**: Application crashes on startup
+```bash
+# Check for missing dependencies
+python config/error_diagnostic.py
+
+# Run post-install fixes
+python config/post_install_fix.py
+```
+
+#### 🌐 Web Interface Issues
+
+**Problem**: Streamlit won't start
+```bash
+# Check port availability
+netstat -an | grep 8501
+
+# Use different port
+streamlit run src/ui/main_app.py --server.port 8502
+```
+
+**Problem**: File upload issues
+```yaml
+# Increase upload limits in config.yaml
+web:
+  max_upload_size: 500  # MB
+  max_file_size: 100    # MB per file
+```
+
+#### 🤖 AI Model Issues
+
+**Problem**: Ollama connection failed
+```bash
+# Check Ollama status
+curl http://localhost:11434/api/tags
+
+# Start Ollama service
+ollama serve
+
+# Pull required model
+ollama pull llama2
+```
+
+**Problem**: Whisper model loading issues
+```bash
+# Download Whisper models manually
+python -c "import whisper; whisper.load_model('base')"
+
+# Use smaller model for testing
+python -c "import whisper; whisper.load_model('tiny')"
+```
+
+#### 🎭 Animation Issues
+
+**Problem**: Camera not detected
+```python
+# Test camera access
+import cv2
+cap = cv2.VideoCapture(0)
+print(f"Camera available: {cap.isOpened()}")
+cap.release()
+```
+
+**Problem**: Poor facial tracking
+```yaml
+# Adjust tracking settings in config.yaml
+animation:
+  facial_tracking:
+    confidence_threshold: 0.3  # Lower for better detection
+    smoothing_factor: 0.8      # Higher for smoother animation
+```
+
+### Performance Optimization
+
+#### 🚀 Desktop Performance
+```yaml
+# Optimize desktop settings
+desktop:
+  update_interval: 50     # Faster UI updates
+  auto_save_interval: 30  # Less frequent saves
+  max_history: 100        # Limit conversation history
+```
+
+#### 🌐 Web Performance
+```yaml
+# Optimize web settings
+web:
+  cache_size: 100         # MB
+  session_cleanup: 300    # seconds
+  max_concurrent: 10      # users
+```
+
+### Log Analysis
+
+**Check specific logs for issues:**
+
+```bash
+# Application errors
+grep "ERROR" data/logs/app.log
+
+# Desktop-specific issues
+grep "CRITICAL" data/logs/desktop.log
+
+# Translation problems
+grep "translation" data/logs/errors.log
+
+# Audio processing issues
+grep "audio" data/logs/app.log
+```
+
+### Getting Help
+
+1. **Check Documentation**: Review `/doc/` folder for detailed guides
+2. **Run Diagnostics**: Use `python config/error_diagnostic.py`
+3. **Enable Debug Mode**: Set `TALKBRIDGE_DEBUG=1`
+4. **Check Dependencies**: Run `pip check` or `conda list`
+5. **Update Components**: Ensure all dependencies are current
+
+## 🤝 Contributingrange.svg)](https://github.com/casavatar/talkbridge)
 
 ## 🌟 Features
 
-### 🗣️ **Speech Synthesis (TTS)**
-- **Voice Cloning**: Clone user's voice from audio samples
-- **Offline Processing**: Complete offline functionality on Windows and macOS
-- **Coqui TTS Integration**: Uses YourTTS model for multilingual voice cloning
-- **Real-time Synthesis**: Low latency for live communication
-- **Multiple Languages**: Support for multiple languages and accents
+### 🗣️ **Advanced Speech Synthesis (TTS)**
+- **Voice Cloning**: Clone user's voice from minimal audio samples (3-10 seconds)
+- **Multi-speaker Support**: Support for multiple voice profiles and switching
+- **Offline Processing**: Complete offline functionality on Windows, macOS, and Linux
+- **Coqui TTS Integration**: Uses YourTTS model for high-quality multilingual voice cloning
+- **Real-time Synthesis**: Low latency for live communication with streaming support
+- **Multiple Languages**: Support for 50+ languages and accents
+- **SSML Support**: Advanced speech control with Speech Synthesis Markup Language
 
-### 🎭 **Facial Animation**
-- **Lip Sync**: Synchronize mouth movements with speech audio
-- **Real-time Tracking**: MediaPipe facial landmark detection
-- **Eye Blinking**: Natural eye movement animations
-- **Webcam Integration**: Live webcam feed processing
-- **Avatar Support**: Static and animated avatar options
+### 🎭 **Enhanced Facial Animation**
+- **Advanced Lip Sync**: Synchronize mouth movements with speech audio using MediaPipe
+- **Real-time Tracking**: Facial landmark detection with emotion recognition
+- **Eye Blinking**: Natural eye movement animations with timing control
+- **Webcam Integration**: Live webcam feed processing with device management
+- **Avatar Support**: Static and animated avatar options with customization
+- **Interactive Controls**: Real-time animation parameter adjustment
+- **Emotion Detection**: Facial expression analysis and animation
 
-### 🌐 **Web Interface**
-- **Streamlit Dashboard**: Modern, responsive web interface
-- **Secure Authentication**: Role-based user management
-- **Real-time Chat**: Live chat with translation
-- **Audio Recording**: Built-in audio capture and playback
-- **Avatar Display**: Animated avatar with facial expressions
+### 🖥️ **Multi-Interface Support**
+- **Desktop Application**: Modern PySide6-based GUI with tabbed interface
+- **Web Interface**: Responsive Streamlit dashboard with real-time updates
+- **CLI Access**: Command-line interface for automation and scripting
+- **API Integration**: RESTful API for third-party integration
+- **Cross-platform**: Windows, macOS, and Linux support
 
-### 🔐 **Security & Authentication**
-- **Enhanced Security**: Salted password hashing with SHA-256
-- **Role-based Access**: Multiple user roles with specific permissions
-- **Account Protection**: Brute force protection and account locking
-- **Session Management**: Configurable session timeouts
-- **Audit Trail**: Comprehensive login tracking and monitoring
+### 🤖 **AI Integration**
+- **Local LLM Support**: Ollama integration with streaming responses
+- **Conversation Management**: Persistent chat history with search and export
+- **Model Management**: Dynamic model loading and performance monitoring
+- **Streaming Responses**: Real-time AI response generation
+- **Context Awareness**: Intelligent conversation context management
+
+### 🔐 **Enhanced Security & Authentication**
+- **Multi-layer Security**: Enhanced SHA-256 salted password hashing
+- **Role-based Access**: Multiple user roles (admin, user, guest) with granular permissions
+- **Account Protection**: Brute force protection and account locking mechanisms
+- **Session Management**: Configurable session timeouts and security monitoring
+- **Audit Trail**: Comprehensive login tracking and security logging
+- **Privacy-first**: Local processing ensures data privacy
+
+### 🎵 **Advanced Audio Processing**
+- **Real-time Processing**: Low-latency audio capture and playback
+- **Audio Effects**: Noise reduction, echo cancellation, and enhancement
+- **Multi-device Support**: Automatic device detection and selection
+- **Format Support**: Multiple audio formats with automatic conversion
+- **Streaming Audio**: Real-time audio streaming and processing
 
 ## 📁 Project Structure
 
 ```
 talkbridge/
-├── config/
-│   └── config.yaml              # Centralized configuration
-├── src/
-│   ├── tts/                     # Text-to-Speech module
-│   │   ├── voice_cloner.py      # Voice cloning functionality
-│   │   ├── synthesizer.py       # Speech synthesis API
-│   │   ├── config.py            # TTS configuration
-│   │   └── README.md            # TTS documentation
+├── 🔧 config/
+│   ├── config.yaml              # Main configuration file
+│   ├── environment-*.yaml       # Environment-specific configurations
+│   └── setup_conda_desktop.py   # Conda environment setup
+├── 📊 data/
+│   ├── app_state.json          # Application state persistence
+│   └── logs/                   # Comprehensive logging system
+├── 💻 src/
+│   ├── 🎯 Entry Points
+│   │   ├── app.py              # CLI application entry point
+│   │   ├── desktop/main.py     # Desktop application entry point
+│   │   └── ui/web_interface.py # Web application entry point
+│   │
+│   ├── 🎵 Audio Processing
+│   │   ├── audio/              # Audio capture, playback, and effects
+│   │   │   ├── capture.py      # Real-time audio capture
+│   │   │   ├── player.py       # Advanced audio playback
+│   │   │   ├── effects.py      # Audio processing effects
+│   │   │   ├── generator.py    # Audio generation utilities
+│   │   │   └── synthesizer.py  # Audio synthesis helpers
+│   │   │
+│   │   └── stt/                # Speech-to-text processing
+│   │       ├── whisper_engine.py # Whisper model integration
+│   │       ├── interface.py    # Main transcription API
+│   │       ├── audio_utils.py  # Audio preprocessing
+│   │       └── config.py       # STT configuration
+│   │
+│   ├── 🤖 AI Integration
+│   │   ├── ollama/             # LLM integration and conversation
+│   │   │   ├── ollama_client.py      # Enhanced Ollama API client
+│   │   │   ├── conversation_manager.py # Conversation management
+│   │   │   ├── model_manager.py      # Model management system
+│   │   │   ├── prompt_engineer.py    # Prompt optimization
+│   │   │   └── streaming_client.py   # Real-time streaming
+│   │   │
+│   │   ├── translation/        # Multi-language translation
+│   │   │   ├── translator.py   # Main translation interface
+│   │   │   ├── offline_translator.py # Offline translation
+│   │   │   └── language_detector.py  # Language detection
+│   │   │
+│   │   └── tts/                # Text-to-speech and voice cloning
+│   │       ├── voice_cloner.py # Advanced voice cloning (Coqui TTS)
+│   │       ├── synthesizer.py  # Main TTS interface
+│   │       └── config.py       # TTS configuration management
+│   │
+│   ├── 🎭 Animation & Video
+│   │   └── animation/          # Avatar animation and facial sync
+│   │       ├── face_sync.py    # Facial animation with MediaPipe
+│   │       ├── audio_visualizer.py # Real-time audio visualization
+│   │       ├── interactive_animations.py # Interactive controls
+│   │       ├── camera_manager.py # Webcam integration
+│   │       └── loading_animation.py # UI animations
+│   │
+│   ├── 🖥️ Desktop Application
+│   │   └── desktop/            # PySide6-based desktop GUI
+│   │       ├── main.py         # Desktop app entry point
+│   │       ├── app/            # Application core
+│   │       │   ├── application.py    # Main application class
+│   │       │   ├── main_window.py    # Main window with tabs
+│   │       │   └── state_manager.py  # Application state
+│   │       ├── components/     # UI components
+│   │       │   ├── chat_tab.py       # Conversation interface
+│   │       │   ├── avatar_tab.py     # Avatar display and controls
+│   │       │   └── settings_tab.py   # Configuration interface
+│   │       ├── dialogs/        # Modal dialogs
+│   │       │   └── login_dialog.py   # Authentication dialog
+│   │       ├── services/       # Backend integration
+│   │       │   └── core_bridge.py    # Service coordinator
+│   │       └── windows/        # Additional windows
+│   │           └── dashboard.py      # Service status dashboard
+│   │
+│   ├── 🌐 Web Application
+│   │   └── ui/                 # Streamlit-based web interface
+│   │       ├── web_interface.py # Main web application
+│   │       ├── web_server.py   # Enhanced web server
+│   │       ├── components/     # Web UI components
+│   │       │   ├── dashboard.py      # Main dashboard
+│   │       │   └── login.py          # Web authentication
+│   │       └── api/            # API wrappers
+│   │           ├── llm_api.py        # LLM integration
+│   │           ├── tts_api.py        # TTS integration
+│   │           ├── stt_api.py        # STT integration
+│   │           ├── translation_api.py # Translation integration
+│   │           └── animation_api.py  # Animation integration
+│   │
+│   ├── 🔐 Authentication & Security
+│   │   ├── auth/               # Authentication system
+│   │   │   └── auth_manager.py # Enhanced security management
+│   │   └── json/               # User management
+│   │       ├── generate_secure_users.py # User generation
+│   │       └── users.json      # User database
+│   │
+│   ├── 🛠️ Utilities
+│   │   └── utils/              # Shared utilities and helpers
+│   │       ├── logger.py       # Advanced logging system
+│   │       ├── error_handler.py # Centralized error handling
+│   │       ├── storage_manager.py # File storage management
+│   │       ├── config.py       # Global configuration
+│   │       └── error_suppression.py # System optimization
+│   │
+│   └── 🎪 Demo System
+│       └── demo/               # Comprehensive demo and testing
+│           ├── demo_runner.py  # Demo simulation engine
+│           ├── demo_api.py     # Demo API wrappers
+│           ├── demo_config.py  # Demo configuration
+│           ├── *_demo.py       # Individual module demos
+│           └── run_demo.py     # Demo launcher
+│
+├── 🧪 test/                    # Comprehensive test suite
+│   ├── test_*.py              # Module-specific tests
+│   └── integration/           # Integration tests
+│
+├── 📚 doc/                     # Documentation
+│   ├── architecture.md        # System architecture
+│   ├── modules_overview.md    # Module documentation
+│   └── project_overview.md    # Project overview
+│
+├── 📋 requirements*.txt        # Dependencies
+├── 🚀 launch_desktop.sh       # Desktop app launcher
+├── 🐳 Dockerfile             # Container deployment
+└── 📄 README.md               # This file
+```
 │   ├── animation/               # Facial animation module
 │   │   ├── face_sync.py         # Real-time facial animation
 │   │   ├── audio_visualizer.py  # Audio visualization
@@ -165,6 +468,91 @@ Best for desktop GUI application with optimized dependencies:
    python src/desktop/main.py
    ```
 
+## 📚 Usage Examples
+
+### 🖥️ Desktop Application
+
+The desktop interface provides a complete GUI experience:
+
+```python
+# Start the desktop application
+python src/desktop/main.py
+
+# Features available in desktop mode:
+# - Real-time voice translation
+# - Facial animation sync
+# - Voice cloning
+# - Conversation history
+# - Multiple language pairs
+# - Advanced audio controls
+```
+
+**Key Features:**
+- **Live Translation**: Speak in one language, hear it in another
+- **Voice Cloning**: Train custom voices for more natural output
+- **Facial Animation**: Real-time lip-sync for avatars
+- **Chat Integration**: LLM-powered conversations with translation
+
+### 🌐 Web Interface
+
+The Streamlit web interface offers browser-based access:
+
+```python
+# Start the web interface
+cd src/ui
+python run_web_interface.py
+
+# Or using streamlit directly:
+streamlit run main_app.py --server.port 8501
+```
+
+**Features:**
+- **Multi-tab Interface**: Organized workflow
+- **Device Management**: Audio device selection
+- **Real-time Processing**: Live audio translation
+- **Export Options**: Save conversations and audio
+
+### 🎯 API Usage
+
+Integrate TalkBridge components into your applications:
+
+```python
+# Translation API
+from src.translation.translator import Translator
+translator = Translator()
+result = translator.translate("Hello world", "en", "es")
+
+# Text-to-Speech API
+from src.tts.coqui_tts import CoquiTTS
+tts = CoquiTTS()
+audio = tts.synthesize("Hello world", voice_id="speaker_01")
+
+# Speech-to-Text API
+from src.stt.whisper_engine import WhisperEngine
+stt = WhisperEngine()
+text = stt.transcribe("audio_file.wav")
+
+# LLM Integration
+from src.ollama.ollama_client import OllamaClient
+llm = OllamaClient()
+response = llm.chat("Translate this to Spanish: Hello world")
+```
+
+### 🎮 Demo System
+
+Explore features with the built-in demo system:
+
+```bash
+# Run interactive demos
+python src/demo/run_demo.py
+
+# Specific demo examples:
+python src/demo/translation_demo.py    # Translation demo
+python src/demo/tts_demo.py           # Text-to-speech demo
+python src/demo/face_sync_demo.py     # Facial animation demo
+python src/demo/ollama_demo.py        # LLM integration demo
+```
+
 #### 🎯 **Which option should you choose?**
 
 | Feature | pip Installation | Conda Installation |
@@ -178,6 +566,141 @@ Best for desktop GUI application with optimized dependencies:
 | **Installation Speed** | ⚠️ Can be slow | ✅ **Faster** |
 
 **Recommendation**: Use **conda** for desktop application development and production use.
+
+## ⚙️ Configuration
+
+### 📝 Basic Configuration
+
+TalkBridge uses a YAML configuration file located at `config/config.yaml`:
+
+```yaml
+# Audio Settings
+audio:
+  input_device: "default"
+  output_device: "default"
+  sample_rate: 16000
+  channels: 1
+  chunk_size: 1024
+
+# Translation Settings
+translation:
+  default_source: "auto"
+  default_target: "en"
+  cache_enabled: true
+  
+# TTS Settings
+tts:
+  default_voice: "speaker_01"
+  speed: 1.0
+  quality: "high"
+  
+# Animation Settings
+animation:
+  face_detection: true
+  smoothing_factor: 0.7
+  fps: 30
+
+# LLM Settings
+ollama:
+  base_url: "http://localhost:11434"
+  default_model: "llama2"
+  temperature: 0.7
+```
+
+### 🔧 Advanced Configuration
+
+**Desktop Application Settings:**
+```yaml
+desktop:
+  theme: "dark"
+  window_size: [1200, 800]
+  auto_save: true
+  update_interval: 100
+```
+
+**Web Interface Settings:**
+```yaml
+web:
+  port: 8501
+  host: "localhost"
+  max_upload_size: 200
+  session_timeout: 3600
+```
+
+### 🔒 Security Configuration
+
+Configure user authentication and access control:
+
+```python
+# Generate secure user credentials
+python src/json/generate_secure_users.py
+
+# Configure authentication in config.yaml
+auth:
+  enabled: true
+  password_policy:
+    min_length: 8
+    require_special: true
+  session_duration: 3600
+```
+
+## 🛠️ Development
+
+### 📁 Project Structure for Developers
+
+```
+talkbridge/
+├── src/
+│   ├── desktop/           # PySide6 desktop application
+│   │   ├── main.py        # Desktop entry point
+│   │   ├── app/           # Core application logic
+│   │   ├── components/    # Reusable UI components
+│   │   ├── dialogs/       # Dialog windows
+│   │   └── windows/       # Main application windows
+│   ├── ui/                # Streamlit web interface
+│   │   ├── main_app.py    # Web entry point
+│   │   ├── pages/         # Multi-page interface
+│   │   └── components/    # Streamlit components
+│   ├── animation/         # Facial animation system
+│   ├── audio/             # Audio processing
+│   ├── ollama/            # LLM integration
+│   ├── tts/               # Text-to-speech
+│   ├── stt/               # Speech-to-text
+│   └── translation/       # Translation engine
+├── config/                # Configuration files
+├── test/                  # Unit tests
+└── doc/                   # Documentation
+```
+
+### 🧪 Running Tests
+
+```bash
+# Run all tests
+python -m pytest test/
+
+# Run specific test modules
+python -m pytest test/test_tts.py
+python -m pytest test/test_stt_module.py
+python -m pytest test/test_translate.py
+
+# Run with coverage
+python -m pytest --cov=src test/
+```
+
+### 🐛 Debugging
+
+Enable debug mode for development:
+
+```bash
+# Enable debug logging
+export TALKBRIDGE_DEBUG=1
+python src/desktop/main.py
+
+# Check logs
+tail -f data/logs/app.log
+tail -f data/logs/desktop.log
+tail -f data/logs/errors.log
+```
 
 ## 🔧 Configuration
 

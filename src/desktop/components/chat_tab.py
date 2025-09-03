@@ -3,7 +3,7 @@
 TalkBridge Desktop - Chat Tab
 =============================
 
-Pestaña de chat traducido con entrada por voz y respuesta hablada.
+Translated chat tab with voice input and spoken response.
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -33,14 +33,240 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
     from src.audio.capture import AudioCapture
-    from src.stt.whisper_engine import WhisperEngine
-    from src.translation.translator import Translator
-    from src.ollama.conversation_manager import ConversationManager
-    from src.tts.synthesizer import synthesize_voice
-    MODULES_AVAILABLE = True
+    AUDIO_AVAILABLE = True
 except ImportError as e:
-    print(f"Warning: Some modules not available: {e}")
-    MODULES_AVAILABLE = False
+    print(f"Warning: Audio module not available: {e}")
+    AUDIO_AVAILABLE = False
+
+try:
+    from src.stt.whisper_engine import WhisperEngine
+    WHISPER_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Whisper engine not available: {e}")
+    WHISPER_AVAILABLE = False
+
+try:
+    from src.translation.translator import Translator
+    TRANSLATOR_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Translator not available: {e}")
+    TRANSLATOR_AVAILABLE = False
+
+try:
+    from src.ollama.conversation_manager import ConversationManager
+    OLLAMA_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Ollama module not available: {e}")
+    OLLAMA_AVAILABLE = False
+
+try:
+    from src.tts.synthesizer import synthesize_voice
+    TTS_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: TTS synthesizer not available: {e}")
+    TTS_AVAILABLE = False
+
+MODULES_AVAILABLE = AUDIO_AVAILABLE and WHISPER_AVAILABLE and TRANSLATOR_AVAILABLE
+
+
+class ChatTheme:
+    """Tema oscuro mejorado para la interfaz de chat."""
+    
+    # Colores base del tema oscuro
+    BACKGROUND_MAIN = "#1e1e1e"
+    BACKGROUND_SECONDARY = "#2d2d2d"
+    BACKGROUND_ELEVATED = "#3c3c3c"
+    
+    # Colores de texto
+    TEXT_PRIMARY = "#ffffff"
+    TEXT_SECONDARY = "#cccccc"
+    TEXT_MUTED = "#999999"
+    
+    # Colores de acento
+    ACCENT_BLUE = "#0078d4"
+    ACCENT_BLUE_HOVER = "#106ebe"
+    ACCENT_GREEN = "#4CAF50"
+    ACCENT_ORANGE = "#FF9800"
+    ACCENT_RED = "#f44336"
+    
+    # Colores para mensajes
+    USER_MESSAGE_BG = "#0e3a5f"
+    USER_MESSAGE_BORDER = "#1e5a8a"
+    ASSISTANT_MESSAGE_BG = "#2d1b3d"
+    ASSISTANT_MESSAGE_BORDER = "#4a2c5a"
+    
+    # Colores para elementos de UI
+    INPUT_BACKGROUND = "#3c3c3c"
+    INPUT_BORDER = "#555555"
+    INPUT_BORDER_FOCUS = "#0078d4"
+    
+    @staticmethod
+    def get_main_style() -> str:
+        """Estilo principal para el ChatTab."""
+        return f"""
+        QWidget {{
+            background-color: {ChatTheme.BACKGROUND_MAIN};
+            color: {ChatTheme.TEXT_PRIMARY};
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }}
+        
+        QLabel {{
+            color: {ChatTheme.TEXT_PRIMARY};
+            background: transparent;
+        }}
+        
+        QComboBox {{
+            background-color: {ChatTheme.INPUT_BACKGROUND};
+            border: 2px solid {ChatTheme.INPUT_BORDER};
+            border-radius: 6px;
+            padding: 8px;
+            color: {ChatTheme.TEXT_PRIMARY};
+            min-width: 150px;
+        }}
+        
+        QComboBox:focus {{
+            border-color: {ChatTheme.INPUT_BORDER_FOCUS};
+        }}
+        
+        QComboBox::drop-down {{
+            border: none;
+            width: 20px;
+        }}
+        
+        QComboBox::down-arrow {{
+            image: none;
+            border: 2px solid {ChatTheme.TEXT_SECONDARY};
+            width: 6px;
+            height: 6px;
+            border-top: none;
+            border-right: none;
+            transform: rotate(-45deg);
+        }}
+        
+        QScrollArea {{
+            background-color: {ChatTheme.BACKGROUND_SECONDARY};
+            border: 1px solid {ChatTheme.INPUT_BORDER};
+            border-radius: 8px;
+        }}
+        
+        QScrollBar:vertical {{
+            background-color: {ChatTheme.BACKGROUND_SECONDARY};
+            width: 12px;
+            border-radius: 6px;
+        }}
+        
+        QScrollBar::handle:vertical {{
+            background-color: {ChatTheme.INPUT_BORDER};
+            border-radius: 6px;
+            min-height: 20px;
+        }}
+        
+        QScrollBar::handle:vertical:hover {{
+            background-color: {ChatTheme.TEXT_MUTED};
+        }}
+        
+        QGroupBox {{
+            font-weight: bold;
+            border: 2px solid {ChatTheme.INPUT_BORDER};
+            border-radius: 8px;
+            margin-top: 1ex;
+            color: {ChatTheme.TEXT_PRIMARY};
+        }}
+        
+        QGroupBox::title {{
+            subcontrol-origin: margin;
+            left: 10px;
+            padding: 0 8px 0 8px;
+            color: {ChatTheme.ACCENT_BLUE};
+        }}
+        """
+    
+    @staticmethod
+    def get_button_style(button_type: str = "primary") -> str:
+        """Estilos para botones según el tipo."""
+        if button_type == "primary":
+            return f"""
+            QPushButton {{
+                background-color: {ChatTheme.ACCENT_BLUE};
+                color: {ChatTheme.TEXT_PRIMARY};
+                border: none;
+                border-radius: 8px;
+                padding: 12px 24px;
+                font-weight: bold;
+                font-size: 14px;
+            }}
+            
+            QPushButton:hover {{
+                background-color: {ChatTheme.ACCENT_BLUE_HOVER};
+            }}
+            
+            QPushButton:pressed {{
+                background-color: #005a9e;
+            }}
+            
+            QPushButton:disabled {{
+                background-color: {ChatTheme.INPUT_BORDER};
+                color: {ChatTheme.TEXT_MUTED};
+            }}
+            """
+        elif button_type == "danger":
+            return f"""
+            QPushButton {{
+                background-color: {ChatTheme.ACCENT_RED};
+                color: {ChatTheme.TEXT_PRIMARY};
+                border: none;
+                border-radius: 8px;
+                padding: 12px 24px;
+                font-weight: bold;
+                font-size: 14px;
+            }}
+            
+            QPushButton:hover {{
+                background-color: #d32f2f;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: #b71c1c;
+            }}
+            """
+        elif button_type == "recording":
+            return f"""
+            QPushButton {{
+                background-color: {ChatTheme.ACCENT_GREEN};
+                color: {ChatTheme.TEXT_PRIMARY};
+                border: none;
+                border-radius: 8px;
+                padding: 12px 24px;
+                font-weight: bold;
+                font-size: 14px;
+            }}
+            
+            QPushButton:hover {{
+                background-color: #45a049;
+            }}
+            """
+        elif button_type == "stop":
+            return f"""
+            QPushButton {{
+                background-color: {ChatTheme.ACCENT_RED};
+                color: {ChatTheme.TEXT_PRIMARY};
+                border: none;
+                border-radius: 8px;
+                padding: 12px 24px;
+                font-weight: bold;
+                font-size: 14px;
+            }}
+            
+            QPushButton:hover {{
+                background-color: #d32f2f;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: #b71c1c;
+            }}
+            """
+        
+        return ChatTheme.get_button_style("primary")
 
 
 class AudioRecordingWorker(QObject):
@@ -88,36 +314,68 @@ class ChatMessage(QFrame):
         role_label = QLabel("🗣️ Tú" if is_user else "🤖 Asistente")
         role_font = QFont()
         role_font.setBold(True)
+        role_font.setPointSize(10)
         role_label.setFont(role_font)
+        role_label.setStyleSheet(f"color: {ChatTheme.TEXT_SECONDARY}; margin-bottom: 4px;")
         layout.addWidget(role_label)
         
         # Texto del mensaje
         message_label = QLabel(text)
         message_label.setWordWrap(True)
-        message_label.setStyleSheet("padding: 5px; background-color: #f0f0f0; border-radius: 5px;")
+        message_label.setStyleSheet(f"""
+            padding: 10px;
+            background-color: {ChatTheme.BACKGROUND_ELEVATED};
+            border-radius: 8px;
+            color: {ChatTheme.TEXT_PRIMARY};
+            font-size: 14px;
+            line-height: 1.4;
+        """)
         layout.addWidget(message_label)
         
         # Traducción si está disponible
         if translation and translation != text:
             translation_label = QLabel(f"📝 Traducción: {translation}")
             translation_label.setWordWrap(True)
-            translation_label.setStyleSheet("padding: 5px; background-color: #e8f4f8; border-radius: 5px; font-style: italic;")
+            translation_label.setStyleSheet(f"""
+                padding: 8px;
+                background-color: {ChatTheme.BACKGROUND_SECONDARY};
+                border-radius: 6px;
+                border-left: 3px solid {ChatTheme.ACCENT_BLUE};
+                color: {ChatTheme.TEXT_SECONDARY};
+                font-style: italic;
+                font-size: 13px;
+                margin-top: 6px;
+            """)
             layout.addWidget(translation_label)
         
         # Estilo según el tipo de mensaje
         if is_user:
-            self.setStyleSheet("QFrame { background-color: #e3f2fd; border-radius: 10px; }")
+            self.setStyleSheet(f"""
+                QFrame {{
+                    background-color: {ChatTheme.USER_MESSAGE_BG};
+                    border: 1px solid {ChatTheme.USER_MESSAGE_BORDER};
+                    border-radius: 12px;
+                    margin: 4px 20px 4px 4px;
+                }}
+            """)
         else:
-            self.setStyleSheet("QFrame { background-color: #f3e5f5; border-radius: 10px; }")
+            self.setStyleSheet(f"""
+                QFrame {{
+                    background-color: {ChatTheme.ASSISTANT_MESSAGE_BG};
+                    border: 1px solid {ChatTheme.ASSISTANT_MESSAGE_BORDER};
+                    border-radius: 12px;
+                    margin: 4px 4px 4px 20px;
+                }}
+            """)
 
 
 class ChatTab(QWidget):
     """
-    Pestaña de chat traducido con entrada por voz.
+    Translated chat tab with voice input.
     
-    Características:
-    - Grabación de voz
-    - Transcripción automática
+    Features:
+    - Voice recording
+    - Automatic transcription
     - Traducción en tiempo real
     - Respuesta de IA
     - Síntesis de voz para respuestas
@@ -139,6 +397,7 @@ class ChatTab(QWidget):
         self.whisper_engine = None
         self.translator = None
         self.conversation_manager = None
+        self.conversation_id = None  # Para mantener la conversación activa
         
         # UI Components
         self.chat_area = None
@@ -157,6 +416,9 @@ class ChatTab(QWidget):
         
     def setup_ui(self):
         """Configura la interfaz de usuario."""
+        # Aplicar tema oscuro
+        self.setStyleSheet(ChatTheme.get_main_style())
+        
         layout = QVBoxLayout(self)
         layout.setSpacing(10)
         layout.setContentsMargins(15, 15, 15, 15)
@@ -168,13 +430,14 @@ class ChatTab(QWidget):
         title_font.setBold(True)
         title_label.setFont(title_font)
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_label.setStyleSheet(f"color: {ChatTheme.TEXT_PRIMARY}; margin-bottom: 10px;")
         layout.addWidget(title_label)
         
-        # Configuración de idioma
-        config_group = QGroupBox("⚙️ Configuración")
+        # Language configuration
+        config_group = QGroupBox("⚙️ Configuration")
         config_layout = QHBoxLayout(config_group)
         
-        config_layout.addWidget(QLabel("Idioma de entrada:"))
+        config_layout.addWidget(QLabel("Input language:"))
         self.language_combo = QComboBox()
         self.language_combo.addItems([
             "Español (es)", "English (en)", "Français (fr)", 
@@ -209,22 +472,7 @@ class ChatTab(QWidget):
         button_layout = QHBoxLayout()
         self.record_button = QPushButton("🎤 Iniciar Grabación")
         self.record_button.setMinimumHeight(50)
-        self.record_button.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-            QPushButton:pressed {
-                background-color: #3d8b40;
-            }
-        """)
+        self.record_button.setStyleSheet(ChatTheme.get_button_style("recording"))
         self.record_button.clicked.connect(self.toggle_recording)
         button_layout.addWidget(self.record_button)
         
@@ -233,12 +481,27 @@ class ChatTab(QWidget):
         # Barra de progreso
         self.progress_bar = QProgressBar()
         self.progress_bar.setVisible(False)
+        self.progress_bar.setStyleSheet(f"""
+            QProgressBar {{
+                border: 2px solid {ChatTheme.INPUT_BORDER};
+                border-radius: 8px;
+                background-color: {ChatTheme.BACKGROUND_SECONDARY};
+                text-align: center;
+                font-weight: bold;
+                color: {ChatTheme.TEXT_PRIMARY};
+            }}
+            
+            QProgressBar::chunk {{
+                background-color: {ChatTheme.ACCENT_BLUE};
+                border-radius: 6px;
+            }}
+        """)
         controls_layout.addWidget(self.progress_bar)
         
         # Estado
         self.status_label = QLabel("✅ Listo para grabar")
         self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
+        self.status_label.setStyleSheet(f"color: {ChatTheme.ACCENT_GREEN}; font-weight: bold; font-size: 14px;")
         controls_layout.addWidget(self.status_label)
         
         layout.addWidget(controls_group)
@@ -246,19 +509,61 @@ class ChatTab(QWidget):
         # Botón de limpiar chat
         clear_button = QPushButton("🗑️ Limpiar Chat")
         clear_button.clicked.connect(self.clear_chat)
-        clear_button.setStyleSheet("QPushButton { background-color: #f44336; color: white; padding: 8px; border-radius: 5px; }")
+        clear_button.setStyleSheet(ChatTheme.get_button_style("danger"))
         layout.addWidget(clear_button)
         
     def initialize_services(self):
         """Inicializa los servicios backend."""
         try:
-            if MODULES_AVAILABLE:
-                self.whisper_engine = WhisperEngine()
-                self.translator = Translator()
-                self.conversation_manager = ConversationManager()
-                self.logger.info("Backend services initialized successfully")
+            services_initialized = []
+            services_failed = []
+            
+            # Initialize Whisper Engine
+            if WHISPER_AVAILABLE:
+                try:
+                    self.whisper_engine = WhisperEngine()
+                    services_initialized.append("WhisperEngine")
+                except Exception as e:
+                    services_failed.append(f"WhisperEngine: {e}")
+                    self.whisper_engine = None
             else:
-                self.logger.warning("Running in demo mode - backend services not available")
+                self.whisper_engine = None
+                services_failed.append("WhisperEngine: Module not available")
+                
+            # Initialize Translator
+            if TRANSLATOR_AVAILABLE:
+                try:
+                    self.translator = Translator()
+                    services_initialized.append("Translator")
+                except Exception as e:
+                    services_failed.append(f"Translator: {e}")
+                    self.translator = None
+            else:
+                self.translator = None
+                services_failed.append("Translator: Module not available")
+                
+            # Initialize Conversation Manager (Ollama)
+            if OLLAMA_AVAILABLE:
+                try:
+                    self.conversation_manager = ConversationManager()
+                    services_initialized.append("ConversationManager")
+                except Exception as e:
+                    services_failed.append(f"ConversationManager: {e}")
+                    self.conversation_manager = None
+            else:
+                self.conversation_manager = None
+                services_failed.append("ConversationManager: Module not available")
+            
+            # Log results
+            if services_initialized:
+                self.logger.info(f"Services initialized successfully: {', '.join(services_initialized)}")
+            
+            if services_failed:
+                self.logger.warning(f"Services not available: {', '.join(services_failed)}")
+                
+            if not services_initialized:
+                self.logger.warning("Running in demo mode - no backend services available")
+                
         except Exception as e:
             self.logger.error(f"Failed to initialize services: {e}")
             self.show_error(f"Error al inicializar servicios: {e}")
@@ -277,22 +582,10 @@ class ChatTab(QWidget):
             
         self.is_recording = True
         self.record_button.setText("⏹️ Detener Grabación")
-        self.record_button.setStyleSheet("""
-            QPushButton {
-                background-color: #f44336;
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #da190b;
-            }
-        """)
+        self.record_button.setStyleSheet(ChatTheme.get_button_style("stop"))
         
         self.status_label.setText("🎤 Grabando...")
-        self.status_label.setStyleSheet("color: #f44336; font-weight: bold;")
+        self.status_label.setStyleSheet(f"color: {ChatTheme.ACCENT_RED}; font-weight: bold; font-size: 14px;")
         
         # Crear worker para grabación
         self.recording_worker = AudioRecordingWorker(duration=5)
@@ -335,7 +628,7 @@ class ChatTab(QWidget):
         self.stop_recording()
         self.progress_bar.setVisible(False)
         self.status_label.setText("⚙️ Procesando audio...")
-        self.status_label.setStyleSheet("color: #FF9800; font-weight: bold;")
+        self.status_label.setStyleSheet(f"color: {ChatTheme.ACCENT_ORANGE}; font-weight: bold; font-size: 14px;")
         
         # Procesar el audio grabado
         self.process_audio(audio_path)
@@ -386,7 +679,31 @@ class ChatTab(QWidget):
             # 3. Generar respuesta con IA
             self.status_label.setText("🤖 Generando respuesta...")
             if MODULES_AVAILABLE and self.conversation_manager:
-                response = self.conversation_manager.get_response(translation)
+                try:
+                    # Create conversation only if it doesn't exist
+                    if not self.conversation_id:
+                        self.conversation_id = self.conversation_manager.create_conversation(
+                            "Chat Session", 
+                            "llama3.2:latest"  # Default model
+                        )
+                    
+                    message_id = self.conversation_manager.send_message(self.conversation_id, translation)
+                    
+                    if message_id:
+                        # Get the actual message content
+                        messages = self.conversation_manager.get_conversation_messages(self.conversation_id)
+                        # Find the assistant message by ID
+                        response = "Respuesta generada correctamente"
+                        for msg in reversed(messages):
+                            if msg.role == 'assistant' and msg.id == message_id:
+                                response = msg.content
+                                break
+                    else:
+                        response = f"Respuesta demo para: '{translation}'"
+                except Exception as e:
+                    # Fallback for demo
+                    self.logger.error(f"Error generating AI response: {e}")
+                    response = f"Respuesta demo para: '{translation}'"
             else:
                 # Demo mode
                 response = f"Esta es una respuesta de ejemplo a: '{translation}'"
@@ -405,7 +722,7 @@ class ChatTab(QWidget):
                     self.logger.warning(f"TTS failed: {e}")
             
             self.status_label.setText("✅ Completado")
-            self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
+            self.status_label.setStyleSheet(f"color: {ChatTheme.ACCENT_GREEN}; font-weight: bold; font-size: 14px;")
             
         except Exception as e:
             self.show_error(f"Error procesando audio: {e}")
@@ -438,35 +755,23 @@ class ChatTab(QWidget):
             child = self.chat_layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
+        
+        # Reset conversation
+        self.conversation_id = None
     
     def reset_record_button(self):
         """Resetea el botón de grabación al estado inicial."""
         self.record_button.setText("🎤 Iniciar Grabación")
-        self.record_button.setStyleSheet("""
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-size: 14px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-            QPushButton:pressed {
-                background-color: #3d8b40;
-            }
-        """)
+        self.record_button.setStyleSheet(ChatTheme.get_button_style("recording"))
     
     def show_error(self, message: str):
         """Muestra un mensaje de error."""
         self.status_label.setText(f"❌ Error: {message}")
-        self.status_label.setStyleSheet("color: #f44336; font-weight: bold;")
+        self.status_label.setStyleSheet(f"color: {ChatTheme.ACCENT_RED}; font-weight: bold; font-size: 14px;")
         self.error_occurred.emit(message)
         
         # Resetear estado después de unos segundos
         QTimer.singleShot(5000, lambda: (
             self.status_label.setText("✅ Listo para grabar"),
-            self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
+            self.status_label.setStyleSheet(f"color: {ChatTheme.ACCENT_GREEN}; font-weight: bold; font-size: 14px;")
         ))

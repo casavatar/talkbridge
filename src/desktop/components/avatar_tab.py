@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
 TalkBridge Desktop - Avatar Tab
-===============================
+============================================
 
 Animated Avatar tab synchronized with audio.
+This refactored version improves code organization, error handling,
+and maintainability.
 
 Author: TalkBridge Team
-Date: 2025-08-19
-Version: 1.0
+Date: 2025-08-28
+Version: 2.0
 
 Requirements:
 - PyQt6
@@ -20,15 +22,17 @@ import logging
 import os
 import cv2
 import numpy as np
-from typing import Optional
+from typing import Optional, Dict, Any
 from pathlib import Path
+from enum import Enum
+from dataclasses import dataclass
 
 from PySide6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
     QComboBox, QSlider, QGroupBox, QCheckBox, QSpinBox,
-    QFrame, QSizePolicy
+    QFrame, QSizePolicy, QMessageBox
 )
-from PySide6.QtCore import Signal, QTimer, QThread, QObject, Qt
+from PySide6.QtCore import Signal, QTimer, QThread, QObject, Qt, QMutex
 from PySide6.QtGui import QFont, QImage, QPixmap
 
 # Import backend modules
@@ -44,464 +48,596 @@ except ImportError as e:
     ANIMATION_AVAILABLE = False
 
 
+class CameraState(Enum):
+    """Camera state enumeration."""
+    STOPPED = "stopped"
+    STARTING = "starting"
+    RUNNING = "running"
+    ERROR = "error"
+
+
+@dataclass
+class AnimationConfig:
+    """Configuration for animation parameters."""
+    sensitivity: int = 50
+    intensity: int = 75
+    smoothing: int = 30
+    enabled: bool = True
+
+
 class WebcamWorker(QObject):
-    """Worker thread para capturar frames de la webcam."""
+    """
+    Worker thread to capture frames from the webcam.
     
-    frame_ready = Signal(np.ndarray)  # frame
-    error_occurred = Signal(str)  # error_message
+    This class handles camera operations in a separate thread to prevent
+    UI blocking and provides thread-safe communication with the main UI.
+    """
     
-    def __init__(self):
+    # Signals
+    frame_ready = Signal(np.ndarray)
+    error_occurred = Signal(str)
+    state_changed = Signal(str)
+    
+    def __init__(self, camera_index: int = 0):
         super().__init__()
-        self.cap = None
-        self.running = False
-        self.face_sync = None
+        self.camera_index = camera_index
+        self.camera: Optional[cv2.VideoCapture] = None
+        self.is_running = False
+        self.face_sync: Optional[FaceSync] = None
+        self.mutex = QMutex()
+        self._init_logging()
+    
+    def _init_logging(self):
+        """Initialize logging for the worker."""
+        self.logger = logging.getLogger(f"{__name__}.WebcamWorker")
+    
+    def initialize_camera(self) -> bool:
+        """
+        Initialize the camera with error handling.
         
-    def start_capture(self):
-        """Start the webcam capture with improved error handling."""
+        Returns:
+            bool: True if camera initialized successfully, False otherwise.
+        """
         try:
-            # Use robust camera creation
-            import logging
-            logger = logging.getLogger("talkbridge.avatar")
+            self.state_changed.emit(CameraState.STARTING.value)
+            self.camera = cv2.VideoCapture(self.camera_index)
             
-            # Import robust camera functions
-            try:
-                from src.utils.error_suppression import create_robust_camera_capture
-                self.cap, camera_index = create_robust_camera_capture(0)
-                
-                if self.cap is None:
-                    self.error_occurred.emit("🔹 Cámara no disponible - Funcionalidad de avatar limitada")
-                    return
-                
-                logger.info(f"Cámara inicializada en índice {camera_index}")
-                
-            except ImportError:
-                # Fallback to original method if utils not available
-                logger.warning("Utils no disponible, usando método básico de cámara")
-                
-                old_level = os.environ.get('OPENCV_LOG_LEVEL', 'INFO')
-                os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'
-                
-                self.cap = cv2.VideoCapture(0)
-                
-                os.environ['OPENCV_LOG_LEVEL'] = old_level
-                
-                if not self.cap.isOpened():
-                    self.error_occurred.emit("🔹 Cámara no disponible - Funcionalidad de avatar limitada")
-                    return
-                    
-                self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-                self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            if not self.camera.isOpened():
+                self.error_occurred.emit("Camera not available")
+                return False
             
+            # Set camera properties for better performance
+            self._configure_camera()
+            
+            # Initialize face sync if available
             if ANIMATION_AVAILABLE:
-                self.face_sync = FaceSync(use_webcam=True)
+                self._initialize_face_sync()
             
-            self.running = True
-            while self.running:
-                ret, frame = self.cap.read()
-                if ret:
-                    # Procesar frame con FaceSync si está disponible
-                    if self.face_sync:
-                        processed_frame = self.face_sync.process_frame(frame)
-                        self.frame_ready.emit(processed_frame)
-                    else:
-                        # Modo demo: solo voltear horizontalmente
-                        flipped_frame = cv2.flip(frame, 1)
-                        self.frame_ready.emit(flipped_frame)
-                else:
-                    break
-                    
+            self.logger.info(f"Camera {self.camera_index} initialized successfully")
+            return True
+            
         except Exception as e:
-            self.error_occurred.emit(str(e))
-        finally:
-            if self.cap:
-                self.cap.release()
+            self.logger.error(f"Error initializing camera: {e}")
+            self.error_occurred.emit(f"Camera initialization failed: {str(e)}")
+            return False
+    
+    def _configure_camera(self):
+        """Configure camera properties for optimal performance."""
+        if self.camera:
+            self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+            self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            self.camera.set(cv2.CAP_PROP_FPS, 30)
+            self.camera.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+    
+    def _initialize_face_sync(self):
+        """Initialize face synchronization module."""
+        try:
+            self.face_sync = FaceSync()
+            self.logger.info("Face sync initialized")
+        except Exception as e:
+            self.logger.warning(f"Face sync initialization failed: {e}")
+            self.face_sync = None
+    
+    def start_capture(self):
+        """Start camera capture loop."""
+        if not self.initialize_camera():
+            return
+        
+        self.is_running = True
+        self.state_changed.emit(CameraState.RUNNING.value)
+        self._capture_loop()
+    
+    def _capture_loop(self):
+        """Main capture loop running in separate thread."""
+        timer = QTimer()
+        timer.timeout.connect(self._capture_frame)
+        timer.start(33)  # ~30 FPS
+        
+        while self.is_running and self.camera and self.camera.isOpened():
+            pass
+    
+    def _capture_frame(self):
+        """Capture and process a single frame."""
+        if not self.is_running or not self.camera:
+            return
+        
+        with QMutex():
+            try:
+                ret, frame = self.camera.read()
+                if ret:
+                    processed_frame = self._process_frame(frame)
+                    self.frame_ready.emit(processed_frame)
+                else:
+                    self.error_occurred.emit("Failed to capture frame")
+                    
+            except Exception as e:
+                self.logger.error(f"Frame capture error: {e}")
+                self.error_occurred.emit(f"Frame processing error: {str(e)}")
+    
+    def _process_frame(self, frame: np.ndarray) -> np.ndarray:
+        """
+        Process frame with face sync if available.
+        
+        Args:
+            frame: Raw frame from camera
+            
+        Returns:
+            Processed frame
+        """
+        if self.face_sync and ANIMATION_AVAILABLE:
+            try:
+                return self.face_sync.process_frame(frame)
+            except Exception as e:
+                self.logger.warning(f"Face sync processing error: {e}")
+        
+        return frame
     
     def stop_capture(self):
-        """Stop the webcam capture."""
-        self.running = False
+        """Stop camera capture and cleanup resources."""
+        self.is_running = False
+        self.state_changed.emit(CameraState.STOPPED.value)
+        
+        if self.camera:
+            self.camera.release()
+            self.camera = None
+        
         if self.face_sync:
-            self.face_sync.stop()
+            self.face_sync = None
+        
+        self.logger.info("Camera capture stopped")
+    
+    def update_animation_config(self, config: AnimationConfig):
+        """Update animation configuration."""
+        if self.face_sync and config.enabled:
+            try:
+                # Apply configuration to face sync
+                # This would depend on the FaceSync API
+                pass
+            except Exception as e:
+                self.logger.error(f"Failed to update animation config: {e}")
+
+
+class CameraController:
+    """Controller for camera operations."""
+    
+    def __init__(self):
+        self.worker: Optional[WebcamWorker] = None
+        self.thread: Optional[QThread] = None
+        self.state = CameraState.STOPPED
+        self.logger = logging.getLogger(f"{__name__}.CameraController")
+    
+    def start(self, camera_index: int = 0) -> bool:
+        """Start camera capture in separate thread."""
+        if self.state == CameraState.RUNNING:
+            self.logger.warning("Camera already running")
+            return True
+        
+        try:
+            self.worker = WebcamWorker(camera_index)
+            self.thread = QThread()
+            
+            # Move worker to thread
+            self.worker.moveToThread(self.thread)
+            
+            # Connect signals
+            self.thread.started.connect(self.worker.start_capture)
+            self.worker.state_changed.connect(self._on_state_changed)
+            
+            # Start thread
+            self.thread.start()
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to start camera: {e}")
+            return False
+    
+    def stop(self):
+        """Stop camera capture and cleanup."""
+        if self.worker:
+            self.worker.stop_capture()
+        
+        if self.thread and self.thread.isRunning():
+            self.thread.quit()
+            self.thread.wait(3000)  # Wait up to 3 seconds
+        
+        self.worker = None
+        self.thread = None
+        self.state = CameraState.STOPPED
+    
+    def _on_state_changed(self, state: str):
+        """Handle state changes from worker."""
+        self.state = CameraState(state)
+        self.logger.info(f"Camera state changed to: {state}")
+
+
+class UIComponents:
+    """Factory class for creating UI components with consistent styling."""
+    
+    @staticmethod
+    def create_styled_button(text: str, icon: str = "") -> QPushButton:
+        """Create a styled button."""
+        button = QPushButton(f"{icon} {text}" if icon else text)
+        button.setStyleSheet("""
+            QPushButton {
+                background-color: #2196F3;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                padding: 8px 16px;
+                min-width: 100px;
+            }
+            QPushButton:hover {
+                background-color: #1976D2;
+            }
+            QPushButton:pressed {
+                background-color: #1565C0;
+            }
+            QPushButton:disabled {
+                background-color: #BDBDBD;
+                color: #757575;
+            }
+        """)
+        return button
+    
+    @staticmethod
+    def create_status_label(text: str) -> QLabel:
+        """Create a styled status label."""
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label.setStyleSheet("color: #4CAF50; font-weight: bold; font-size: 14px;")
+        return label
+    
+    @staticmethod
+    def create_control_slider(min_val: int, max_val: int, default_val: int) -> QSlider:
+        """Create a styled control slider."""
+        slider = QSlider(Qt.Orientation.Horizontal)
+        slider.setMinimum(min_val)
+        slider.setMaximum(max_val)
+        slider.setValue(default_val)
+        slider.setStyleSheet("""
+            QSlider::groove:horizontal {
+                border: 1px solid #999999;
+                height: 8px;
+                background: #2d2d2d;
+                border-radius: 4px;
+            }
+            QSlider::handle:horizontal {
+                background: #2196F3;
+                border: 1px solid #1976D2;
+                width: 18px;
+                margin: -5px 0;
+                border-radius: 9px;
+            }
+            QSlider::handle:horizontal:hover {
+                background: #1976D2;
+            }
+        """)
+        return slider
 
 
 class AvatarTab(QWidget):
     """
-  Animated avatar tab.
+    Main Avatar Tab widget with improved architecture.
     
-    Characteristics:
-    -Webcam live view
-    -Detection of facial points
-    -Lip synchronization with audio
-    -Animation parameters configuration
+    This refactored version separates concerns and improves maintainability:
+    - Camera operations handled by CameraController
+    - UI components created by UIComponents factory
+    - Configuration managed by AnimationConfig dataclass
+    - Better error handling and logging
     """
     
-    # Señales
-    status_changed = Signal(str)  # message
-    error_occurred = Signal(str)  # error_message
+    # Signals
+    error_occurred = Signal(str)
+    audio_sync_requested = Signal(str)
     
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.logger = logging.getLogger("talkbridge.desktop.avatar")
+        self.camera_controller = CameraController()
+        self.animation_config = AnimationConfig()
+        self.audio_player: Optional[AudioPlayer] = None
         
-        # Estado
-        self.webcam_active = False
-        self.animation_enabled = True
-        
-        # Servicios backend
-        self.face_sync = None
-        self.audio_player = None
-        
-        # UI Components
-        self.video_label = None
-        self.start_button = None
-        self.status_label = None
-        self.animation_controls = {}
-        
-        # Workers
-        self.webcam_worker = None
-        self.webcam_thread = None
-        
-        self.setup_ui()
-        self.initialize_services()
-        
-    def setup_ui(self):
-        """Configure the user interface."""
+        self._init_logging()
+        self._init_ui()
+        self._connect_signals()
+        self._setup_timers()
+    
+    def _init_logging(self):
+        """Initialize logging for the tab."""
+        self.logger = logging.getLogger(f"{__name__}.AvatarTab")
+    
+    def _init_ui(self):
+        """Initialize the user interface."""
         layout = QVBoxLayout(self)
-        layout.setSpacing(10)
-        layout.setContentsMargins(15, 15, 15, 15)
+        layout.setSpacing(15)
         
-        # Título
-        title_label = QLabel("👤 Avatar Animado")
-        title_font = QFont()
-        title_font.setPointSize(16)
-        title_font.setBold(True)
-        title_label.setFont(title_font)
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(title_label)
+        # Create main components
+        self._create_video_section(layout)
+        self._create_controls_section(layout)
+        self._create_animation_controls(layout)
+        self._create_status_section(layout)
         
-        # Layout principal horizontal
-        main_layout = QHBoxLayout()
-        
-        # Panel izquierdo: Video
-        video_group = QGroupBox("📹 Camera view")
+        # Set initial state
+        self._update_ui_state(CameraState.STOPPED)
+    
+    def _create_video_section(self, parent_layout: QVBoxLayout):
+        """Create the video display section."""
+        video_group = QGroupBox("Camera Feed")
         video_layout = QVBoxLayout(video_group)
         
-        # Video display
         self.video_label = QLabel()
-        self.video_label.setMinimumSize(480, 360)
+        self.video_label.setMinimumSize(640, 480)
         self.video_label.setStyleSheet("""
             QLabel {
-                border: 2px solid #cccccc;
+                border: 2px solid #555;
                 border-radius: 10px;
-                background-color: #f5f5f5;
+                background-color: #1e1e1e;
+                color: #888;
+                font-size: 16px;
             }
         """)
         self.video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.video_label.setText("📷\nDisconnected camera\n\nClick on 'Start camera' to start")
+        self.video_label.setText("📷\nCamera disconnected\n\nClick 'Start Camera' to begin")
+        
         video_layout.addWidget(self.video_label)
+        parent_layout.addWidget(video_group)
+    
+    def _create_controls_section(self, parent_layout: QVBoxLayout):
+        """Create the camera controls section."""
+        controls_group = QGroupBox("Camera Controls")
+        controls_layout = QHBoxLayout(controls_group)
         
-        # Video controls
-        video_controls_layout = QHBoxLayout()
+        self.start_button = UIComponents.create_styled_button("Start Camera", "📹")
+        self.start_button.clicked.connect(self._toggle_camera)
         
-        self.start_button = QPushButton("📹 Iniciar Cámara")
-        self.start_button.setMinimumHeight(40)
-        self.start_button.setStyleSheet("""
-            QPushButton {
-                background-color: #2196F3;
+        self.camera_combo = QComboBox()
+        self.camera_combo.addItems(["Camera 0", "Camera 1", "Camera 2"])
+        self.camera_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #2d2d2d;
                 color: white;
-                border: none;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
+                border: 1px solid #555;
+                border-radius: 5px;
+                padding: 5px;
+                min-width: 100px;
             }
         """)
-        self.start_button.clicked.connect(self.toggle_webcam)
-        video_controls_layout.addWidget(self.start_button)
         
-        video_controls_layout.addStretch()
-        video_layout.addLayout(video_controls_layout)
-        
-        # Estado
-        self.status_label = QLabel("✅ Listo")
-        self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
-        video_layout.addWidget(self.status_label)
-        
-        main_layout.addWidget(video_group, 2)
-        
-        # Right Panel: Animation controls
-        controls_group = QGroupBox("⚙️ Controles de Animación")
-        controls_layout = QVBoxLayout(controls_group)
-        
-        # Activate/deactivate animation
-        self.animation_checkbox = QCheckBox("🎭 Activar Animación Facial")
-        self.animation_checkbox.setChecked(True)
-        self.animation_checkbox.toggled.connect(self.toggle_animation)
-        controls_layout.addWidget(self.animation_checkbox)
-        
-        controls_layout.addWidget(self.create_separator())
-        
-        # Facial detection configuration
-        face_group = QGroupBox("👤 Facial detection")
-        face_layout = QVBoxLayout(face_group)
-        
-        # Detection sensitivity
-        sensitivity_layout = QHBoxLayout()
-        sensitivity_layout.addWidget(QLabel("Sensitivity:"))
-        self.sensitivity_slider = QSlider(Qt.Orientation.Horizontal)
-        self.sensitivity_slider.setRange(1, 10)
-        self.sensitivity_slider.setValue(5)
-        self.sensitivity_slider.valueChanged.connect(self.on_sensitivity_changed)
-        sensitivity_layout.addWidget(self.sensitivity_slider)
-        self.sensitivity_label = QLabel("5")
-        sensitivity_layout.addWidget(self.sensitivity_label)
-        face_layout.addLayout(sensitivity_layout)
-
-        # Minimum face size
-        min_face_layout = QHBoxLayout()
-        min_face_layout.addWidget(QLabel("Minimum face size:"))
-        self.min_face_spin = QSpinBox()
-        self.min_face_spin.setRange(50, 200)
-        self.min_face_spin.setValue(100)
-        self.min_face_spin.setSuffix(" px")
-        min_face_layout.addWidget(self.min_face_spin)
-        min_face_layout.addStretch()
-        face_layout.addLayout(min_face_layout)
-        
-        controls_layout.addWidget(face_group)
-
-        # Lip sync configuration
-        lips_group = QGroupBox("👄 Lip Sync")
-        lips_layout = QVBoxLayout(lips_group)
-
-        # Movement intensity
-        intensity_layout = QHBoxLayout()
-        intensity_layout.addWidget(QLabel("Intensity:"))
-        self.intensity_slider = QSlider(Qt.Orientation.Horizontal)
-        self.intensity_slider.setRange(1, 10)
-        self.intensity_slider.setValue(7)
-        self.intensity_slider.valueChanged.connect(self.on_intensity_changed)
-        intensity_layout.addWidget(self.intensity_slider)
-        self.intensity_label = QLabel("7")
-        intensity_layout.addWidget(self.intensity_label)
-        lips_layout.addLayout(intensity_layout)
-
-        # Smoothing
-        smoothing_layout = QHBoxLayout()
-        smoothing_layout.addWidget(QLabel("Smoothing:"))
-        self.smoothing_slider = QSlider(Qt.Orientation.Horizontal)
-        self.smoothing_slider.setRange(1, 10)
-        self.smoothing_slider.setValue(3)
-        self.smoothing_slider.valueChanged.connect(self.on_smoothing_changed)
-        smoothing_layout.addWidget(self.smoothing_slider)
-        self.smoothing_label = QLabel("3")
-        smoothing_layout.addWidget(self.smoothing_label)
-        lips_layout.addLayout(smoothing_layout)
-        
-        controls_layout.addWidget(lips_group)
-
-        # Effects configuration
-        effects_group = QGroupBox("✨ Visual Effects")
-        effects_layout = QVBoxLayout(effects_group)
-
-        self.landmarks_checkbox = QCheckBox("🔍 Show Facial Landmarks")
-        self.landmarks_checkbox.setChecked(False)
-        effects_layout.addWidget(self.landmarks_checkbox)
-
-        self.mesh_checkbox = QCheckBox("🕸️ Show Facial Mesh")
-        self.mesh_checkbox.setChecked(False)
-        effects_layout.addWidget(self.mesh_checkbox)
-        
-        controls_layout.addWidget(effects_group)
-        
+        controls_layout.addWidget(self.start_button)
+        controls_layout.addWidget(QLabel("Camera:"))
+        controls_layout.addWidget(self.camera_combo)
         controls_layout.addStretch()
-
-        # Reset button
-        reset_button = QPushButton("🔄 Reset Values")
-        reset_button.clicked.connect(self.reset_settings)
-        reset_button.setStyleSheet("QPushButton { background-color: #FF9800; color: white; padding: 8px; border-radius: 5px; }")
-        controls_layout.addWidget(reset_button)
         
-        main_layout.addWidget(controls_group, 1)
-        
-        layout.addLayout(main_layout)
-        
-    def create_separator(self):
-        """Creates a separator line."""
-        line = QFrame()
-        line.setFrameShape(QFrame.Shape.HLine)
-        line.setFrameShadow(QFrame.Shadow.Sunken)
-        return line
-        
-    def initialize_services(self):
-        """Initialize backend services."""
-        try:
-            if ANIMATION_AVAILABLE:
-                self.audio_player = AudioPlayer()
-                self.logger.info("Animation services initialized successfully")
-            else:
-                self.logger.warning("Running in demo mode - animation services not available")
-        except Exception as e:
-            self.logger.error(f"Failed to initialize animation services: {e}")
-            self.show_error(f"Error al inicializar servicios de animación: {e}")
+        parent_layout.addWidget(controls_group)
     
-    def toggle_webcam(self):
-        """Start or stop the webcam."""
-        if not self.webcam_active:
-            self.start_webcam()
+    def _create_animation_controls(self, parent_layout: QVBoxLayout):
+        """Create animation control section."""
+        anim_group = QGroupBox("Animation Settings")
+        anim_layout = QVBoxLayout(anim_group)
+        
+        # Enable/Disable animation
+        self.animation_checkbox = QCheckBox("Enable Animation")
+        self.animation_checkbox.setChecked(self.animation_config.enabled)
+        self.animation_checkbox.toggled.connect(self._on_animation_toggled)
+        anim_layout.addWidget(self.animation_checkbox)
+        
+        # Create parameter controls
+        self._create_parameter_controls(anim_layout)
+        
+        parent_layout.addWidget(anim_group)
+    
+    def _create_parameter_controls(self, parent_layout: QVBoxLayout):
+        """Create animation parameter controls."""
+        params = [
+            ("Sensitivity", "sensitivity", 0, 100, self.animation_config.sensitivity),
+            ("Intensity", "intensity", 0, 100, self.animation_config.intensity),
+            ("Smoothing", "smoothing", 0, 100, self.animation_config.smoothing)
+        ]
+        
+        for label_text, attr_name, min_val, max_val, default_val in params:
+            param_layout = QHBoxLayout()
+            
+            label = QLabel(f"{label_text}:")
+            label.setMinimumWidth(80)
+            
+            slider = UIComponents.create_control_slider(min_val, max_val, default_val)
+            value_label = QLabel(str(default_val))
+            value_label.setMinimumWidth(30)
+            
+            # Store references
+            setattr(self, f"{attr_name}_slider", slider)
+            setattr(self, f"{attr_name}_label", value_label)
+            
+            # Connect signals
+            slider.valueChanged.connect(
+                lambda val, attr=attr_name: self._on_parameter_changed(attr, val)
+            )
+            
+            param_layout.addWidget(label)
+            param_layout.addWidget(slider)
+            param_layout.addWidget(value_label)
+            
+            parent_layout.addLayout(param_layout)
+    
+    def _create_status_section(self, parent_layout: QVBoxLayout):
+        """Create status display section."""
+        self.status_label = UIComponents.create_status_label("✅ Ready")
+        parent_layout.addWidget(self.status_label)
+    
+    def _connect_signals(self):
+        """Connect internal signals."""
+        if self.camera_controller.worker:
+            self.camera_controller.worker.frame_ready.connect(self._update_frame)
+            self.camera_controller.worker.error_occurred.connect(self._handle_camera_error)
+    
+    def _setup_timers(self):
+        """Setup internal timers."""
+        self.status_timer = QTimer()
+        self.status_timer.setSingleShot(True)
+        self.status_timer.timeout.connect(self._reset_status)
+    
+    def _toggle_camera(self):
+        """Toggle camera on/off."""
+        if self.camera_controller.state == CameraState.RUNNING:
+            self._stop_camera()
         else:
-            self.stop_webcam()
+            self._start_camera()
     
-    def start_webcam(self):
-        """Start the webcam capture."""
-        try:
-            self.webcam_worker = WebcamWorker()
-            self.webcam_thread = QThread()
-            self.webcam_worker.moveToThread(self.webcam_thread)
-            
-            # Conectar señales
-            self.webcam_worker.frame_ready.connect(self.update_frame)
-            self.webcam_worker.error_occurred.connect(self.on_webcam_error)
-            self.webcam_thread.started.connect(self.webcam_worker.start_capture)
-            
-            self.webcam_thread.start()
-            
-            self.webcam_active = True
-            self.start_button.setText("⏹️ Stop camera")
-            self.start_button.setStyleSheet("""
-                QPushButton {
-                    background-color: #f44336;
-                    color: white;
-                    border: none;
-                    border-radius: 20px;
-                    font-size: 12px;
-                    font-weight: bold;
-                }
-                QPushButton:hover {
-                    background-color: #d32f2f;
-                }
-            """)
-            
-            self.status_label.setText("📹 Active Chamber")
-            self.status_label.setStyleSheet("color: #2196F3; font-weight: bold;")
-            
-        except Exception as e:
-            self.show_error(f"Error at the start camera: {e}")
-    
-    def stop_webcam(self):
-        """Stop the webcam capture."""
-        if self.webcam_worker:
-            self.webcam_worker.stop_capture()
-        if self.webcam_thread:
-            self.webcam_thread.quit()
-            self.webcam_thread.wait()
+    def _start_camera(self):
+        """Start camera capture."""
+        camera_index = self.camera_combo.currentIndex()
         
-        self.webcam_active = False
-        self.start_button.setText("📹 Start camera")
-        self.start_button.setStyleSheet("""
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                border: none;
-                border-radius: 20px;
-                font-size: 12px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        """)
-        
-        self.video_label.setText("📷\nDisconnected camera\n\nClick on 'Start camera' to start")
-        self.status_label.setText("✅ Ready")
-        self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
+        if self.camera_controller.start(camera_index):
+            self._update_ui_state(CameraState.STARTING)
+            self._show_status("📹 Starting camera...", "info")
+        else:
+            self._show_status("❌ Failed to start camera", "error")
     
-    def update_frame(self, frame):
-        """Update the frame shown in the UI."""
+    def _stop_camera(self):
+        """Stop camera capture."""
+        self.camera_controller.stop()
+        self._update_ui_state(CameraState.STOPPED)
+        self._show_status("⏹️ Camera stopped", "info")
+    
+    def _update_ui_state(self, state: CameraState):
+        """Update UI based on camera state."""
+        if state == CameraState.STOPPED:
+            self.start_button.setText("📹 Start Camera")
+            self.start_button.setEnabled(True)
+            self.camera_combo.setEnabled(True)
+            self.video_label.setText("📷\nCamera disconnected\n\nClick 'Start Camera' to begin")
+            self.video_label.setPixmap(QPixmap())
+            
+        elif state == CameraState.STARTING:
+            self.start_button.setText("⏳ Starting...")
+            self.start_button.setEnabled(False)
+            self.camera_combo.setEnabled(False)
+            
+        elif state == CameraState.RUNNING:
+            self.start_button.setText("⏹️ Stop Camera")
+            self.start_button.setEnabled(True)
+            self.camera_combo.setEnabled(False)
+            
+        elif state == CameraState.ERROR:
+            self.start_button.setText("📹 Start Camera")
+            self.start_button.setEnabled(True)
+            self.camera_combo.setEnabled(True)
+    
+    def _update_frame(self, frame: np.ndarray):
+        """Update the displayed frame."""
         try:
-            # Convertir frame de OpenCV a QImage
+            # Convert OpenCV frame to Qt format
             rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h, w, ch = rgb_image.shape
             bytes_per_line = ch * w
             qt_image = QImage(rgb_image.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
             
-            # Scalar image to adjust to the label
+            # Scale image to fit label
             label_size = self.video_label.size()
             scaled_pixmap = QPixmap.fromImage(qt_image).scaled(
-                label_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
+                label_size, 
+                Qt.AspectRatioMode.KeepAspectRatio, 
+                Qt.TransformationMode.SmoothTransformation
             )
             
             self.video_label.setPixmap(scaled_pixmap)
             
         except Exception as e:
             self.logger.error(f"Error updating frame: {e}")
+            self._show_status(f"❌ Frame update error: {str(e)}", "error")
     
-    def on_webcam_error(self, error_message: str):
-        """Maneja errores de la webcam."""
-        self.show_error(f"Error de cámara: {error_message}")
-        self.stop_webcam()
+    def _handle_camera_error(self, error_message: str):
+        """Handle camera errors."""
+        self.logger.error(f"Camera error: {error_message}")
+        self._update_ui_state(CameraState.ERROR)
+        self._show_status(f"❌ Camera error: {error_message}", "error")
+        self.error_occurred.emit(error_message)
     
-    def toggle_animation(self, enabled: bool):
-        """Activa o desactiva la animación."""
-        self.animation_enabled = enabled
-        if self.webcam_worker and hasattr(self.webcam_worker, 'face_sync'):
-            if self.webcam_worker.face_sync:
-                if enabled:
-                    self.webcam_worker.face_sync.start()
-                else:
-                    self.webcam_worker.face_sync.stop()
-    
-    def on_sensitivity_changed(self, value: int):
-        """Maneja cambios en la sensibilidad."""
-        self.sensitivity_label.setText(str(value))
-        # Here you would apply the configuration to the animation module
+    def _on_animation_toggled(self, enabled: bool):
+        """Handle animation enable/disable."""
+        self.animation_config.enabled = enabled
+        self._update_animation_config()
         
-    def on_intensity_changed(self, value: int):
-        """Maneja cambios en la intensidad."""
-        self.intensity_label.setText(str(value))
-        # Here you would apply the configuration to the animation module
-        
-    def on_smoothing_changed(self, value: int):
-        """Maneja cambios en el suavizado."""
-        self.smoothing_label.setText(str(value))
-        # Here you would apply the configuration to the animation module
+        status = "enabled" if enabled else "disabled"
+        self._show_status(f"🎭 Animation {status}", "info")
     
-    def reset_settings(self):
-        """Restore default values."""
-        self.sensitivity_slider.setValue(5)
-        self.intensity_slider.setValue(7)
-        self.smoothing_slider.setValue(3)
-        self.min_face_spin.setValue(100)
-        self.animation_checkbox.setChecked(True)
-        self.landmarks_checkbox.setChecked(False)
-        self.mesh_checkbox.setChecked(False)
+    def _on_parameter_changed(self, parameter: str, value: int):
+        """Handle animation parameter changes."""
+        setattr(self.animation_config, parameter, value)
+        label = getattr(self, f"{parameter}_label")
+        label.setText(str(value))
+        
+        self._update_animation_config()
+    
+    def _update_animation_config(self):
+        """Update animation configuration."""
+        if self.camera_controller.worker:
+            self.camera_controller.worker.update_animation_config(self.animation_config)
+    
+    def _show_status(self, message: str, status_type: str = "info"):
+        """Show status message with appropriate styling."""
+        colors = {
+            "info": "#2196F3",
+            "success": "#4CAF50", 
+            "warning": "#FF9800",
+            "error": "#f44336"
+        }
+        
+        color = colors.get(status_type, colors["info"])
+        self.status_label.setText(message)
+        self.status_label.setStyleSheet(f"color: {color}; font-weight: bold; font-size: 14px;")
+        
+        # Auto-reset status after 5 seconds for non-persistent messages
+        if status_type in ["info", "warning"]:
+            self.status_timer.start(5000)
+    
+    def _reset_status(self):
+        """Reset status to ready state."""
+        self.status_label.setText("✅ Ready")
+        self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold; font-size: 14px;")
     
     def load_audio_for_sync(self, audio_path: str):
-        """Load an audio file for lip synchronization."""
+        """Load audio file for lip synchronization."""
         try:
-            if ANIMATION_AVAILABLE and self.face_sync:
-                self.face_sync.load_audio(audio_path)
-                self.status_label.setText("🎵 Audio cargado para sincronización")
-                self.status_label.setStyleSheet("color: #9C27B0; font-weight: bold;")
+            if ANIMATION_AVAILABLE and self.camera_controller.worker and self.camera_controller.worker.face_sync:
+                self.camera_controller.worker.face_sync.load_audio(audio_path)
+                self._show_status("🎵 Audio loaded for synchronization", "success")
+                self.audio_sync_requested.emit(audio_path)
+            else:
+                self._show_status("❌ Animation not available", "error")
+                
         except Exception as e:
-            self.show_error(f"Error cargando audio: {e}")
-    
-    def show_error(self, message: str):
-        """Show an error message."""
-        self.status_label.setText(f"❌ Error: {message}")
-        self.status_label.setStyleSheet("color: #f44336; font-weight: bold;")
-        self.error_occurred.emit(message)
-        
-        # Reset the state after a few seconds
-        QTimer.singleShot(5000, lambda: (
-            self.status_label.setText("✅ Listo"),
-            self.status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
-        ))
+            self.logger.error(f"Error loading audio: {e}")
+            self._show_status(f"❌ Error loading audio: {str(e)}", "error")
     
     def closeEvent(self, event):
-        """Manage the closure of the tab."""
-        if self.webcam_active:
-            self.stop_webcam()
+        """Handle tab closure."""
+        self.logger.info("Closing avatar tab")
+        self._stop_camera()
         super().closeEvent(event)
+    
+    def __del__(self):
+        """Cleanup resources on destruction."""
+        if hasattr(self, 'camera_controller'):
+            self.camera_controller.stop()

@@ -3,15 +3,15 @@
   "services": {
     "tts": {
       "name": "tts",
-      "status": "connected",
-      "last_update": "2025-08-21T19:06:13.800693",
+      "status": "cancelled",
+      "last_update": "2025-08-28T15:48:07.614176",
       "error_message": null,
       "metadata": {}
     },
     "audio": {
       "name": "audio",
       "status": "connected",
-      "last_update": "2025-08-21T19:06:13.801088",
+      "last_update": "2025-08-28T15:46:34.384840",
       "error_message": null,
       "metadata": {}
     },
@@ -45,5 +45,5 @@
     }
   },
   "ui_preferences": {},
-  "last_save_time": "2025-08-21T19:51:43.368548"
+  "last_save_time": "2025-08-28T15:48:07.630186"
 }

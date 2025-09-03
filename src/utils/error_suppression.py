@@ -39,19 +39,34 @@ def suppress_ml_warnings():
     os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Disable oneNN optimizations that cause warnings
     os.environ['MEDIAPIPE_DISABLE_GPU'] = '1'  # Disable GPU if it causes problems
     
-    # Specific configuration for absl logging (Google)
-    os.environ['GLOG_minloglevel'] = '2'  # Only errors and fatal
-    os.environ['GLOG_stderrthreshold'] = '2'  # Redirect only errors to stderr
+    # Specific configuration for absl logging (Google) - EARLY INIT
+    os.environ['GLOG_minloglevel'] = '3'  # Only fatal messages
+    os.environ['GLOG_stderrthreshold'] = '3'  # Redirect only fatal to stderr
     os.environ['GLOG_v'] = '0'  # Verbose level 0
+    os.environ['GLOG_logtostderr'] = '0'  # Don't log to stderr by default
+    
+    # Suppress the "Logging before flag parsing" warning
+    os.environ['GLOG_alsologtostderr'] = '0'
+    
+    # Configuration for spaCy to suppress model loading messages
+    os.environ['SPACY_WARNING_IGNORE'] = 'W008,W033,W036'  # Ignore common spaCy warnings
+    os.environ['PYTHONWARNINGS'] = 'ignore::UserWarning:spacy'
     
     # Configuration for TensorFlow Lite
     os.environ['TFLITE_LOG_LEVEL'] = 'ERROR'
     
-    # Initialize absl logging early if available
+    # Initialize absl logging early if available - VERY EARLY
     try:
         import absl.logging
+        import absl.flags
+        # Parse flags if not already parsed to avoid the warning
+        try:
+            absl.flags.FLAGS(['program_name'])
+        except absl.flags.Error:
+            pass  # Flags already parsed
+        
         absl.logging.set_verbosity(absl.logging.ERROR)
-        absl.logging.set_stderrthreshold(absl.logging.ERROR)
+        absl.logging.set_stderrthreshold(absl.logging.FATAL)
         absl.logging.use_absl_handler()  # Use absl handler
         print("🔧 absl logging initialized")
     except ImportError:
@@ -75,7 +90,7 @@ def suppress_ml_warnings():
         try:
             import absl.logging
             absl.logging.set_verbosity(absl.logging.ERROR)
-            absl.logging.set_stderrthreshold(absl.logging.ERROR)
+            absl.logging.set_stderrthreshold(absl.logging.FATAL)
         except ImportError:
             pass
             
@@ -87,6 +102,16 @@ def suppress_ml_warnings():
     warnings.filterwarnings('ignore', category=UserWarning, module='.*tensorflow.*')
     warnings.filterwarnings('ignore', category=DeprecationWarning, module='.*tflite.*')
     warnings.filterwarnings('ignore', category=FutureWarning, module='.*tensorflow.*')
+    
+    # Suppress spaCy-related warnings and model loading messages
+    warnings.filterwarnings('ignore', category=UserWarning, module='.*spacy.*')
+    warnings.filterwarnings('ignore', message='.*Looking for cached.*')
+    warnings.filterwarnings('ignore', message='.*spacy.*model.*')
+    warnings.filterwarnings('ignore', message='.*xx_sent_ud_sm.*')
+    
+    # Suppress translation library warnings
+    warnings.filterwarnings('ignore', category=UserWarning, module='.*argostranslate.*')
+    warnings.filterwarnings('ignore', category=UserWarning, module='.*transformers.*')
     
     # Suppress specific warnings from inference feedback manager
     warnings.filterwarnings('ignore', message='.*feedback.*tensors.*')

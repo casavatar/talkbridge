@@ -13,7 +13,7 @@ Requirements:
 - PyQt6
 ======================================================================
 Functions:
-- __init__: Función __init__
+- __init__: Initialization function
 - setup_ui: Configures the card interface.
 - apply_styles: Applies CSS styles to the card.
 - update_status: Updates the card status.
@@ -21,8 +21,8 @@ Functions:
 - _get_status_text: Converts the status to readable text.
 - _update_action_button: Updates the text and state of the action button.
 - _update_details: Updates the details information.
-- __init__: Función __init__
-- __init__: Función __init__
+- __init__: Initialization function
+- __init__: Initialization function
 ======================================================================
 """
 

@@ -180,6 +180,21 @@ class WhisperEngine:
             logger.error(f"Failed to load Whisper model: {e}")
             return False
     
+    def transcribe(self, audio_path: str, language: Optional[str] = None) -> str:
+        """
+        Transcribe audio file to text.
+        
+        This is a convenience method that delegates to transcribe_file.
+        
+        Args:
+            audio_path: Path to audio file
+            language: Language code (optional, auto-detected if None)
+            
+        Returns:
+            Transcribed text as string
+        """
+        return self.transcribe_file(audio_path, language)
+    
     def transcribe_audio_bytes(self, audio_bytes: bytes, 
                               language: Optional[str] = None) -> str:
         """

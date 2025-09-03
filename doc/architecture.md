@@ -1,77 +1,118 @@
 # TalkBridge System Architecture
 
-Comprehensive overview of the TalkBridge offline AI voice assistant system architecture.
+Comprehensive overview of the TalkBridge real-time voice translation and communication platform with AI-powered speech synthesis, facial animation, and multi-interface support.
 
 ## Table of Contents
 
 1. [System Overview](#system-overview)
 2. [High-Level Architecture](#high-level-architecture)
-3. [Data Flow](#data-flow)
-4. [Module Architecture](#module-architecture)
-5. [Component Interactions](#component-interactions)
-6. [Data Pipeline](#data-pipeline)
-7. [Security Architecture](#security-architecture)
-8. [Performance Considerations](#performance-considerations)
+3. [Application Architectures](#application-architectures)
+4. [Data Flow](#data-flow)
+5. [Module Architecture](#module-architecture)
+6. [Component Interactions](#component-interactions)
+7. [Data Pipeline](#data-pipeline)
+8. [Security Architecture](#security-architecture)
+9. [Performance Considerations](#performance-considerations)
+10. [Deployment Architecture](#deployment-architecture)
 
 ## System Overview
 
-TalkBridge is a fully offline AI voice assistant system that processes audio input, converts it to text, translates between languages, generates AI responses, synthesizes speech, and animates an avatar. The system operates completely locally without requiring internet connectivity.
+TalkBridge is a comprehensive real-time voice translation and communication platform that processes audio input, converts it to text, translates between languages, generates AI responses, synthesizes speech with voice cloning, and animates avatars. The system operates with both offline and online capabilities, supporting multiple user interfaces and deployment scenarios.
 
 ### Key Features
-- **Offline Operation**: All processing happens locally
-- **Multi-language Support**: English to Spanish translation
-- **Real-time Processing**: Low-latency audio processing
-- **Avatar Animation**: Facial animation synchronized with speech
-- **Web Interface**: Streamlit-based user interface
-- **Demo Mode**: Simulation mode for testing without hardware
+- **Multi-Interface Support**: Desktop GUI (PySide6), Web Interface (Streamlit), and CLI
+- **Advanced Voice Cloning**: Coqui TTS with YourTTS model for personalized speech synthesis
+- **Real-time Processing**: Low-latency audio processing with streaming capabilities
+- **Avatar Animation**: Facial animation with lip-sync and MediaPipe integration
+- **Offline Operation**: Complete offline functionality with local models
+- **Demo Mode**: Simulation mode for testing without hardware dependencies
+- **Authentication & Security**: Role-based access control and secure session management
+- **Conversation Management**: Persistent chat history with Ollama LLM integration
 
 ## High-Level Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Web Interface                           │
-│                    (Streamlit UI)                             │
+│                     User Interfaces                            │
+│   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐           │
+│   │ Desktop GUI │  │ Web Server  │  │   CLI/API   │           │
+│   │  (PySide6)  │  │ (Streamlit) │  │  (Direct)   │           │
+│   └─────────────┘  └─────────────┘  └─────────────┘           │
 └─────────────────────┬─────────────────────────────────────────┘
                       │
 ┌─────────────────────▼─────────────────────────────────────────┐
-│                    Authentication                             │
-│                    (Auth Manager)                            │
+│                  Authentication Layer                         │
+│     (Enhanced Security, Role-based Access, Session Mgmt)     │
 └─────────────────────┬─────────────────────────────────────────┘
                       │
 ┌─────────────────────▼─────────────────────────────────────────┐
-│                    Audio Capture                              │
-│                    (Microphone)                              │
+│                  Core Service Layer                           │
+│   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐           │
+│   │ Audio Core  │  │  AI Core    │  │Animation    │           │
+│   │ (Capture/   │  │ (LLM/STT/   │  │ Core        │           │
+│   │  Playback)  │  │  TTS/Trans) │  │ (Avatar)    │           │
+│   └─────────────┘  └─────────────┘  └─────────────┘           │
 └─────────────────────┬─────────────────────────────────────────┘
                       │
 ┌─────────────────────▼─────────────────────────────────────────┐
-│                Speech-to-Text (STT)                          │
-│                (Whisper/Offline)                             │
+│                  Processing Pipeline                          │
+│  Audio → STT → Translation → LLM → TTS → Animation → Output   │
 └─────────────────────┬─────────────────────────────────────────┘
                       │
 ┌─────────────────────▼─────────────────────────────────────────┐
-│                Translation Engine                             │
-│                (English → Spanish)                           │
-└─────────────────────┬─────────────────────────────────────────┘
-                      │
-┌─────────────────────▼─────────────────────────────────────────┐
-│                Language Model (LLM)                          │
-│                (Ollama/Local)                                │
-└─────────────────────┬─────────────────────────────────────────┘
-                      │
-┌─────────────────────▼─────────────────────────────────────────┐
-│                Text-to-Speech (TTS)                          │
-│                (Coqui TTS/Voice Cloning)                     │
-└─────────────────────┬─────────────────────────────────────────┘
-                      │
-┌─────────────────────▼─────────────────────────────────────────┐
-│                Avatar Animation                               │
-│                (Face Sync/Lip Sync)                          │
-└─────────────────────┬─────────────────────────────────────────┘
-                      │
-┌─────────────────────▼─────────────────────────────────────────┐
-│                    Audio Output                               │
-│                    (Speakers)                                │
+│                   Hardware Layer                              │
+│   Microphone → Audio Processing → Speakers/Headphones        │
+│   Webcam → Video Processing → Display/Avatar                 │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+## Application Architectures
+
+### Desktop Application Architecture (PySide6)
+
+```
+Desktop Application (main.py)
+├── TalkBridgeApplication (QApplication)
+│   ├── Authentication (LoginDialog)
+│   ├── StateManager (Global State)
+│   ├── CoreBridge (Service Integration)
+│   └── MainWindow (QMainWindow)
+│       ├── ChatTab (Conversation Interface)
+│       ├── AvatarTab (Animation & Webcam)
+│       └── SettingsTab (Configuration)
+├── Services Layer
+│   ├── CoreBridge (Service Coordinator)
+│   ├── TTSService (Voice Synthesis)
+│   ├── AudioService (Capture/Playback)
+│   └── CameraService (Video Processing)
+└── Backend Modules
+    ├── Audio Processing
+    ├── TTS & Voice Cloning
+    ├── Animation & Face Sync
+    └── Ollama LLM Integration
+```
+
+### Web Application Architecture (Streamlit)
+
+```
+Web Server (web_server.py)
+├── WebServerManager
+│   ├── Permission Handler (Camera/Mic)
+│   ├── Device Manager (Enumeration)
+│   └── Security Layer (HTTPS/WSS)
+├── TalkBridgeWebInterface (Streamlit App)
+│   ├── Authentication (LoginComponent)
+│   ├── Dashboard (Main Interface)
+│   │   ├── Chat Interface
+│   │   ├── Voice Recording
+│   │   ├── Avatar Display
+│   │   └── Settings Panel
+│   └── API Wrappers
+│       ├── LLMAPI (Ollama Integration)
+│       ├── TTSAPI (Voice Synthesis)
+│       ├── STTAPI (Speech Recognition)
+│       └── TranslationAPI (Language)
+└── Backend Services (Shared)
 ```
 
 ## Data Flow
@@ -101,187 +142,214 @@ All Steps → Conversation Logger → Storage Manager → Log Files
 ### Core Modules
 
 #### 1. Audio Module (`src/audio/`)
-- **Purpose**: Audio capture, processing, and playback
+- **Purpose**: Audio capture, processing, and playback with advanced effects
 - **Components**:
-  - `capture.py`: Real-time audio capture from microphone
-  - `player.py`: Audio playback functionality
-  - `effects.py`: Audio processing and effects
-  - `generator.py`: Audio generation utilities
-  - `synthesizer.py`: Audio synthesis helpers
+  - `capture.py`: Real-time audio capture from microphone using PyAudio
+  - `player.py`: Audio playback functionality with volume control and effects
+  - `effects.py`: Audio processing effects (noise reduction, echo cancellation)
+  - `generator.py`: Audio generation utilities for notifications and testing
+  - `synthesizer.py`: Audio synthesis helpers for TTS integration
 
 #### 2. Speech-to-Text Module (`src/stt/`)
-- **Purpose**: Convert speech to text
+- **Purpose**: Convert speech to text using offline Whisper models
 - **Components**:
-  - `whisper_client.py`: Whisper model integration
-  - `transcriber.py`: Main transcription interface
-  - `audio_processor.py`: Audio preprocessing for STT
+  - `whisper_engine.py`: Whisper model integration and inference
+  - `interface.py`: Main transcription API interface
+  - `audio_utils.py`: Audio preprocessing for optimal STT performance
+  - `config.py`: STT configuration and model settings
 
 #### 3. Language Model Module (`src/ollama/`)
-- **Purpose**: Generate AI responses
+- **Purpose**: Generate AI responses using local Ollama models with streaming support
 - **Components**:
-  - `ollama_client.py`: Ollama API client
-  - `conversation_manager.py`: Conversation state management
-  - `model_manager.py`: Model loading and management
+  - `ollama_client.py`: Enhanced Ollama API client with health monitoring
+  - `conversation_manager.py`: Conversation state management and persistence
+  - `model_manager.py`: Model loading, management, and testing
   - `prompt_engineer.py`: Prompt construction and optimization
+  - `streaming_client.py`: Real-time streaming responses with callbacks
 
 #### 4. Translation Module (`src/translation/`)
-- **Purpose**: Translate between languages
+- **Purpose**: Translate between multiple languages
 - **Components**:
   - `translator.py`: Main translation interface
   - `offline_translator.py`: Offline translation engine
-  - `language_detector.py`: Language detection
+  - `language_detector.py`: Automatic language detection
 
 #### 5. Text-to-Speech Module (`src/tts/`)
-- **Purpose**: Convert text to speech
+- **Purpose**: Convert text to speech with advanced voice cloning
 - **Components**:
-  - `voice_cloner.py`: Voice cloning functionality
-  - `synthesizer.py`: Main TTS interface
-  - `config.py`: TTS configuration
+  - `voice_cloner.py`: Voice cloning functionality using Coqui TTS YourTTS
+  - `synthesizer.py`: Main TTS interface with voice cloning integration
+  - `config.py`: TTS configuration and model management
 
 #### 6. Animation Module (`src/animation/`)
 - **Purpose**: Avatar animation and facial synchronization
 - **Components**:
-  - `face_sync.py`: Facial animation and lip sync
-  - `audio_visualizer.py`: Audio visualization
+  - `face_sync.py`: Facial animation and lip sync with MediaPipe
+  - `audio_visualizer.py`: Real-time audio visualization
   - `interactive_animations.py`: Interactive animation controls
+  - `camera_manager.py`: Webcam integration and video processing
+  - `loading_animation.py`: Loading and progress animations
 
-#### 7. Web Interface Module (`src/ui/`)
-- **Purpose**: User interface and web application
+#### 7. Desktop Interface Module (`src/desktop/`)
+- **Purpose**: PySide6-based desktop application with tabbed interface
+- **Components**:
+  - `main.py`: Desktop application entry point
+  - `app/application.py`: Main application class with service coordination
+  - `app/main_window.py`: Main window with integrated tabs
+  - `app/state_manager.py`: Application state management
+  - `components/chat_tab.py`: Conversation interface with real-time chat
+  - `components/avatar_tab.py`: Avatar display and webcam integration
+  - `components/settings_tab.py`: System configuration interface
+  - `dialogs/login_dialog.py`: Authentication dialog
+  - `services/core_bridge.py`: Service integration bridge
+  - `windows/dashboard.py`: Service status dashboard
+
+#### 8. Web Interface Module (`src/ui/`)
+- **Purpose**: Streamlit-based web application and server management
 - **Components**:
   - `web_interface.py`: Main Streamlit application
-  - `auth/`: Authentication system
-  - `components/`: UI components
-  - `api/`: API wrappers for modules
+  - `web_server.py`: Enhanced web server with device permissions
+  - `auth/`: Authentication system with role-based access
+  - `components/`: Reusable UI components
+  - `api/`: API wrappers for backend modules
 
-#### 8. Demo Module (`src/demo/`)
-- **Purpose**: Demo mode simulation
+#### 9. Demo Module (`src/demo/`)
+- **Purpose**: Demo mode simulation and examples
 - **Components**:
-  - `demo_runner.py`: Demo conversation runner
-  - `demo_api.py`: Demo API wrappers
+  - `demo_runner.py`: Demo conversation simulation engine
+  - `demo_api.py`: Demo API wrappers for testing
   - `demo_ui.py`: Demo UI components
-  - `demo_config.py`: Demo configuration
+  - `demo_config.py`: Demo configuration and scenarios
+  - `*_demo.py`: Individual module demos (TTS, Ollama, Animation, etc.)
 
-#### 9. Utilities Module (`src/utils/`)
+#### 10. Utilities Module (`src/utils/`)
 - **Purpose**: Shared utilities and helpers
 - **Components**:
   - `error_handler.py`: Centralized error handling
-  - `logger.py`: Logging utilities
-  - `storage_manager.py`: File storage management
-  - `config.py`: Global configuration
+  - `logger.py`: Advanced logging utilities
+  - `storage_manager.py`: File storage and data management
+  - `config.py`: Global configuration management
 
 ## Component Interactions
 
 ### Module Dependencies
 
 ```
-ui/ (Web Interface)
-├── auth/ (Authentication)
-├── components/ (UI Components)
-├── api/ (API Wrappers)
-│   ├── tts_api.py → tts/
-│   ├── stt_api.py → stt/
-│   ├── llm_api.py → ollama/
-│   ├── translation_api.py → translation/
-│   └── animation_api.py → animation/
-└── assets/ (Static Files)
+Desktop Application (src/desktop/)
+├── main.py (Entry Point)
+├── app/
+│   ├── application.py → StateManager, CoreBridge, MainWindow
+│   ├── main_window.py → Components (ChatTab, AvatarTab, SettingsTab)
+│   └── state_manager.py → Configuration Management
+├── components/
+│   ├── chat_tab.py → stt/, ollama/, translation/
+│   ├── avatar_tab.py → animation/, audio/
+│   └── settings_tab.py → config/
+├── dialogs/
+│   └── login_dialog.py → auth/
+└── services/
+    └── core_bridge.py → All Backend Modules
 
-audio/ (Audio Processing)
-├── capture.py (Microphone Input)
-├── player.py (Audio Output)
-└── effects.py (Audio Processing)
+Web Application (src/ui/)
+├── web_server.py → Device Management, Security
+├── web_interface.py → Components, API Wrappers
+├── components/
+│   ├── dashboard.py → All API Wrappers
+│   ├── login.py → auth/
+│   └── chat.py → api/
+└── api/
+    ├── llm_api.py → ollama/
+    ├── tts_api.py → tts/
+    ├── stt_api.py → stt/
+    ├── translation_api.py → translation/
+    └── animation_api.py → animation/
 
-stt/ (Speech Recognition)
-├── whisper_client.py (Whisper Integration)
-└── transcriber.py (Main Interface)
-
-ollama/ (Language Model)
-├── ollama_client.py (Ollama API)
-├── conversation_manager.py (State Management)
-└── model_manager.py (Model Management)
-
-translation/ (Translation)
-├── translator.py (Main Interface)
-└── offline_translator.py (Offline Engine)
-
-tts/ (Speech Synthesis)
-├── voice_cloner.py (Voice Cloning)
-└── synthesizer.py (Main Interface)
-
-animation/ (Avatar Animation)
-├── face_sync.py (Facial Animation)
-└── audio_visualizer.py (Audio Visualization)
-
-demo/ (Demo Mode)
-├── demo_runner.py (Simulation Engine)
-├── demo_api.py (Demo APIs)
-└── demo_ui.py (Demo UI)
-
-utils/ (Utilities)
-├── error_handler.py (Error Management)
-├── logger.py (Logging)
-└── storage_manager.py (File Management)
+Backend Modules
+├── audio/ (Audio Processing)
+│   ├── capture.py → pyaudio, numpy
+│   ├── player.py → sounddevice, effects
+│   ├── effects.py → scipy, librosa
+│   └── generator.py → numpy, synthesis
+├── stt/ (Speech Recognition)
+│   ├── whisper_engine.py → whisper, torch
+│   ├── interface.py → whisper_engine, audio_utils
+│   └── audio_utils.py → librosa, numpy
+├── ollama/ (Language Model)
+│   ├── ollama_client.py → requests, json
+│   ├── conversation_manager.py → ollama_client
+│   ├── model_manager.py → ollama_client
+│   ├── prompt_engineer.py → ollama_client
+│   └── streaming_client.py → ollama_client, threading
+├── translation/ (Translation)
+│   ├── translator.py → offline_translator
+│   └── offline_translator.py → transformers, torch
+├── tts/ (Speech Synthesis)
+│   ├── voice_cloner.py → TTS (Coqui), torch
+│   ├── synthesizer.py → voice_cloner
+│   └── config.py → configuration management
+├── animation/ (Avatar Animation)
+│   ├── face_sync.py → mediapipe, cv2
+│   ├── audio_visualizer.py → numpy, matplotlib
+│   ├── camera_manager.py → cv2, threading
+│   └── interactive_animations.py → pygame, numpy
+├── demo/ (Demo System)
+│   ├── demo_runner.py → All modules (mocked)
+│   ├── demo_api.py → demo_runner
+│   └── *_demo.py → Individual module tests
+└── utils/ (Utilities)
+    ├── logger.py → logging, pathlib
+    ├── storage_manager.py → json, pathlib
+    └── error_handler.py → logging, traceback
 ```
 
 ### Data Flow Between Modules
 
 ```
-1. User Input
-   ui/web_interface.py
-   ↓
-   ui/components/audio_recorder.py
-   ↓
-   audio/capture.py
+Desktop Application Flow:
+1. User Authentication
+   main.py → TalkBridgeApplication → LoginDialog → StateManager
+   
+2. Interface Initialization
+   TalkBridgeApplication → CoreBridge → MainWindow → Components
+   
+3. Chat Conversation
+   ChatTab → stt/whisper_engine → translation/translator 
+   → ollama/conversation_manager → tts/voice_cloner → audio/player
+   
+4. Avatar Animation
+   AvatarTab → animation/camera_manager → animation/face_sync
+   → audio/capture → audio/player
 
-2. Speech Recognition
-   audio/capture.py
-   ↓
-   stt/transcriber.py
-   ↓
-   stt/whisper_client.py
+Web Application Flow:
+1. Server Initialization
+   web_server.py → WebServerManager → Device Permissions
+   
+2. User Interface
+   web_interface.py → TalkBridgeWebInterface → Dashboard → Components
+   
+3. API Processing
+   Components → api/*_api.py → Backend Modules → Response
 
-3. Translation
-   stt/transcriber.py
-   ↓
-   translation/translator.py
-   ↓
-   translation/offline_translator.py
-
-4. AI Response
-   translation/translator.py
-   ↓
-   ollama/conversation_manager.py
-   ↓
-   ollama/ollama_client.py
-
-5. Speech Synthesis
-   ollama/conversation_manager.py
-   ↓
-   tts/synthesizer.py
-   ↓
-   tts/voice_cloner.py
-
-6. Avatar Animation
-   tts/synthesizer.py
-   ↓
-   animation/face_sync.py
-   ↓
-   ui/components/avatar_display.py
-
-7. Audio Output
-   animation/face_sync.py
-   ↓
-   audio/player.py
-   ↓
-   Speakers/Headphones
-
-8. Logging
-   All Modules
-   ↓
-   utils/logger.py
-   ↓
-   utils/storage_manager.py
-   ↓
-   Log Files
+Core Processing Pipeline:
+1. Audio Input
+   Hardware → audio/capture → audio/effects → stt/whisper_engine
+   
+2. Language Processing
+   stt/interface → translation/translator → ollama/ollama_client
+   
+3. Response Generation
+   ollama/conversation_manager → tts/voice_cloner → audio/synthesizer
+   
+4. Avatar Synchronization
+   tts/synthesizer → animation/face_sync → animation/camera_manager
+   
+5. Output
+   audio/player → Hardware (Speakers)
+   animation/face_sync → Hardware (Display/Webcam)
+   
+6. Logging & State
+   All Modules → utils/logger → utils/storage_manager → Files
+   All Components → desktop/app/state_manager → Persistence
 ```
 
 ## Data Pipeline
@@ -289,43 +357,95 @@ utils/ (Utilities)
 ### Real-time Processing Pipeline
 
 ```
+Multi-Interface Processing:
+
+Desktop Application Pipeline:
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│ Audio Input │───▶│ STT Process │───▶│ Translation │
+│ User Input  │───▶│ Chat Tab    │───▶│ Audio       │
+│ (GUI)       │    │ Processing  │    │ Capture     │
 └─────────────┘    └─────────────┘    └─────────────┘
                                                    │
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│ Audio Output│◀───│ TTS Process │◀───│ LLM Response│
+│ Avatar      │◀───│ TTS + Voice │◀───│ LLM Response│
+│ Animation   │    │ Cloning     │    │ Generation  │
+└─────────────┘    └─────────────┘    └─────────────┘
+
+Web Application Pipeline:
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│ Browser     │───▶│ Streamlit   │───▶│ API Layer   │
+│ Interface   │    │ Dashboard   │    │ Processing  │
 └─────────────┘    └─────────────┘    └─────────────┘
                                                    │
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│ Avatar Anim │◀───│ Face Sync   │◀───│ Audio Sync  │
+│ Response    │◀───│ Backend     │◀───│ Service     │
+│ Display     │    │ Processing  │    │ Calls       │
+└─────────────┘    └─────────────┘    └─────────────┘
+
+Streaming & Real-time Features:
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│ Audio Stream│───▶│ STT Stream  │───▶│ Translation │
+│ (Real-time) │    │ Processing  │    │ Stream      │
+└─────────────┘    └─────────────┘    └─────────────┘
+                                                   │
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│ Avatar Sync │◀───│ TTS Stream  │◀───│ LLM Stream  │
+│ (Live)      │    │ Generation  │    │ Response    │
 └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
 ### Conversation Flow
 
 ```
-1. User speaks into microphone
+Desktop Application Conversation Flow:
+1. User interaction in ChatTab
    ↓
-2. Audio captured in real-time chunks
+2. Audio captured via microphone
    ↓
-3. Audio processed and sent to STT
+3. Real-time audio processing and STT
    ↓
-4. Text transcribed from speech
+4. Text translated to target language
    ↓
-5. Text translated to Spanish
+5. Translated text sent to Ollama LLM
    ↓
-6. Translated text sent to LLM
+6. AI generates streaming response
    ↓
-7. AI generates response
+7. Response synthesized with cloned voice
    ↓
-8. Response synthesized to speech
+8. Avatar synchronized with generated audio
    ↓
-9. Audio synchronized with avatar
+9. Audio played through speakers
    ↓
-10. Audio played through speakers
-    ↓
-11. Conversation logged to file
+10. Conversation logged and state saved
+
+Web Application Conversation Flow:
+1. User records audio in web interface
+   ↓
+2. Audio uploaded and processed server-side
+   ↓
+3. STT processing via API wrapper
+   ↓
+4. Translation and LLM processing
+   ↓
+5. TTS synthesis with voice cloning
+   ↓
+6. Response displayed in web dashboard
+   ↓
+7. Audio streamed to browser
+   ↓
+8. Conversation state updated
+
+Voice Cloning Integration Flow:
+1. Reference samples uploaded/selected
+   ↓
+2. VoiceCloner processes samples
+   ↓
+3. Voice profile created and cached
+   ↓
+4. TTS synthesis uses cloned voice
+   ↓
+5. Personalized audio output generated
+   ↓
+6. Avatar lip-sync matches voice characteristics
 ```
 
 ### Error Handling Pipeline
@@ -349,85 +469,149 @@ Continue or Retry
 ### Authentication System
 
 ```
-User Login
+Multi-Layer Authentication:
+
+Desktop Application:
+User Login → LoginDialog → StateManager → User Session
     ↓
-Auth Manager (auth/auth_manager.py)
+Password Verification (Salted SHA-256) → Role Assignment
     ↓
-Password Verification (Salted Hash)
+Session Creation → Application Access → State Persistence
+
+Web Application:
+Browser → LoginComponent → AuthManager → Session Management
     ↓
-Session Creation
+Role-based Access Control → Dashboard Access → Session Monitoring
     ↓
-Role-Based Access Control
-    ↓
-Permission Validation
+Automatic Session Expiration → Security Audit Trail
+
+Enhanced Security Features:
+- Brute force protection with account locking
+- Configurable session timeouts
+- Comprehensive login tracking and monitoring
+- Multi-role support (admin, user, guest)
+- Secure password policies
 ```
 
 ### Data Security
 
-- **Local Storage**: All data stored locally
-- **Encrypted Passwords**: SHA-256 with salt
-- **Session Management**: Automatic expiration
-- **File Permissions**: Restricted access
-- **No External APIs**: Complete offline operation
+```
+Security Layers:
+1. Authentication Layer
+   - Enhanced password hashing (SHA-256 + salt)
+   - Role-based access control
+   - Session management with timeouts
+   - Brute force protection
+
+2. Application Layer
+   - Input validation and sanitization
+   - Secure configuration management
+   - Error handling without information leakage
+   - Audit logging
+
+3. Data Layer
+   - Local storage with appropriate permissions
+   - Encrypted sensitive data storage
+   - Secure file handling
+   - Backup and recovery procedures
+
+4. Network Layer (Web Interface)
+   - HTTPS/SSL encryption
+   - Secure WebSocket connections
+   - Device permission management
+   - CORS protection
+```
 
 ### Privacy Protection
 
-- **No Internet Access**: System operates offline
-- **Local Processing**: All AI processing local
-- **No Data Collection**: No telemetry or tracking
-- **User Control**: Full control over data
+- **Offline-First Architecture**: Core processing happens locally
+- **No Data Collection**: No telemetry or external tracking
+- **User Control**: Complete control over personal data and voice samples
+- **Local Model Storage**: AI models stored and run locally
+- **Secure Voice Cloning**: Voice samples processed locally only
+- **Privacy-First Design**: No external API dependencies for core functionality
 
 ## Performance Considerations
 
 ### Memory Management
 
 ```
-Audio Buffer Management
-├── Chunk-based processing
-├── Memory pooling
-└── Garbage collection
+Application Memory Management:
 
-Model Loading
-├── Lazy loading
-├── Model caching
-└── Memory optimization
+Desktop Application:
+├── StateManager: Application state and configuration caching
+├── CoreBridge: Service lifecycle management and resource pooling
+├── Component Management: Tab-based memory isolation
+├── Model Caching: TTS and STT model memory optimization
+└── Garbage Collection: Automatic cleanup of unused resources
 
-Session Management
-├── State cleanup
-├── Resource release
-└── Memory monitoring
+Web Application:
+├── Session Management: Per-user memory isolation
+├── Streamlit Caching: Component and data caching
+├── API Wrapper Caching: Request/response caching
+├── Streaming Buffers: Efficient audio/video streaming
+└── Resource Cleanup: Automatic session cleanup
+
+Model Management:
+├── Voice Cloner: TTS model lazy loading and GPU memory management
+├── Whisper Engine: STT model caching and device optimization
+├── Ollama Client: LLM model management and streaming buffers
+├── Animation Engine: MediaPipe model caching
+└── Translation Models: Efficient model switching
 ```
 
 ### CPU Optimization
 
 ```
-Parallel Processing
-├── Audio capture (separate thread)
-├── STT processing (async)
-├── LLM inference (background)
-└── UI updates (non-blocking)
+Multi-Threading Architecture:
 
-Caching Strategy
-├── Model caching
-├── Response caching
-├── Audio caching
-└── Configuration caching
+Desktop Application:
+├── Main UI Thread: User interface responsiveness
+├── Audio Processing Thread: Real-time audio capture/playback
+├── Background Service Threads: STT, TTS, LLM processing
+├── Animation Thread: Face sync and avatar rendering
+└── State Management Thread: Configuration and logging
+
+Web Application:
+├── Streamlit Main Thread: Web interface management
+├── WebServer Thread: HTTP/WebSocket handling
+├── Processing Worker Threads: Backend service calls
+├── Device Permission Thread: Camera/microphone access
+└── Streaming Thread: Real-time audio/video streaming
+
+Async Processing:
+├── Ollama Streaming: Real-time LLM response streaming
+├── TTS Synthesis: Non-blocking voice generation
+├── Audio Capture: Continuous background recording
+├── Animation Updates: Smooth avatar animation
+└── File I/O: Asynchronous logging and state saving
 ```
 
 ### Latency Optimization
 
 ```
-Real-time Pipeline
-├── Audio streaming
-├── Incremental STT
-├── Streaming TTS
-└── Frame-based animation
+Real-time Processing Optimizations:
 
-Buffer Management
-├── Audio buffers
-├── Text buffers
-├── Response buffers
-└── Animation buffers
+Audio Pipeline:
+├── Low-latency audio capture (chunk-based processing)
+├── Streaming STT processing (incremental transcription)
+├── Real-time TTS synthesis with voice cloning
+├── Frame-based avatar animation synchronization
+└── Buffered audio playback with minimal delay
+
+Network Optimization (Web Interface):
+├── WebSocket connections for real-time communication
+├── Efficient audio/video streaming protocols
+├── Progressive loading of resources
+├── Client-side caching strategies
+└── Optimized API response formats
+
+Buffer Management:
+├── Circular audio buffers for continuous processing
+├── Streaming text buffers for real-time display
+├── Response buffers for smooth LLM interaction
+├── Animation frame buffers for smooth rendering
+└── Memory-mapped file buffers for large data
 ```
 
 ## Scalability Considerations
@@ -462,33 +646,93 @@ Application Metrics
 
 ## Deployment Architecture
 
+## Deployment Architecture
+
 ### Development Environment
 ```
-Local Development
-├── Python virtual environment
-├── Local model storage
-├── Development configuration
-└── Debug logging
+Local Development Setup:
+├── Python Virtual Environment (conda/venv)
+├── Local Model Storage (models/, cache/)
+├── Development Configuration (config/config.yaml)
+├── Debug Logging (data/logs/)
+├── Hot Reload Support (desktop and web)
+└── Demo Mode Integration
+
+IDE Integration:
+├── VS Code workspace configuration
+├── Debugging configurations for multiple entry points
+├── Integrated terminal support
+├── Extension recommendations
+└── Testing framework integration
 ```
 
 ### Production Environment
 ```
-Docker Deployment
-├── Containerized application
-├── Volume mounts for data
-├── Environment variables
-└── Health monitoring
+Desktop Application Deployment:
+├── Standalone executable (PyInstaller/cx_Freeze)
+├── Model bundling and optimization
+├── Configuration management
+├── Automatic updates support
+├── Error reporting and analytics
+└── Performance monitoring
+
+Web Application Deployment:
+├── Containerized deployment (Docker)
+├── Reverse proxy configuration (nginx)
+├── SSL certificate management
+├── Load balancing support
+├── Health monitoring
+└── Automatic scaling
+
+Cloud Deployment Options:
+├── Docker containers with GPU support
+├── Kubernetes orchestration
+├── Model serving optimization
+├── Auto-scaling based on usage
+└── Multi-region deployment
 ```
 
 ### Offline Deployment
 ```
-Air-gapped Environment
-├── Pre-downloaded dependencies
-├── Local model repository
-├── Offline documentation
-└── Self-contained system
+Air-gapped Environment:
+├── Pre-downloaded model dependencies
+├── Offline model repository management
+├── Local documentation and help
+├── Self-contained installation packages
+├── Offline configuration validation
+└── Local troubleshooting tools
+
+Enterprise Deployment:
+├── Corporate security compliance
+├── LDAP/Active Directory integration
+├── Centralized configuration management
+├── Audit logging and compliance
+├── Performance monitoring
+└── Support for corporate proxies
+```
+
+### Container Architecture
+```
+Docker Composition:
+├── Base Application Container
+│   ├── TalkBridge application code
+│   ├── Python runtime and dependencies
+│   ├── Model cache volume
+│   └── Configuration mount
+├── Model Serving Container (Optional)
+│   ├── Ollama server
+│   ├── Model storage
+│   └── API endpoint
+├── Web Proxy Container
+│   ├── Nginx reverse proxy
+│   ├── SSL termination
+│   └── Static file serving
+└── Monitoring Container (Optional)
+    ├── Application metrics
+    ├── Performance monitoring
+    └── Health checks
 ```
 
 ---
 
-**Note**: This architecture is designed for complete offline operation while maintaining high performance and user experience. All components are modular and can be easily extended or modified. 
+**Note**: This architecture supports multiple deployment scenarios from single-user desktop applications to enterprise-scale web deployments. The modular design ensures that components can be deployed independently based on specific requirements, whether for offline use, cloud deployment, or hybrid configurations. 
