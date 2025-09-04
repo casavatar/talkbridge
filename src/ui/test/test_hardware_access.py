@@ -3,7 +3,7 @@
 TalkBridge UI - Test Hardware Access
 ====================================
 
-Módulo test_hardware_access para TalkBridge
+Test hardware access module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

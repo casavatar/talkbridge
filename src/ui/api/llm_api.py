@@ -3,7 +3,7 @@
 TalkBridge UI - Llm Api
 =======================
 
-Módulo llm_api para TalkBridge
+LLM API module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

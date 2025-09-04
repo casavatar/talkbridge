@@ -3,7 +3,7 @@
 TalkBridge TTS - Config
 =======================
 
-Configuración del módulo
+Module configuration
 
 Author: TalkBridge Team
 Date: 2025-08-19

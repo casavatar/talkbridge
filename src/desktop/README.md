@@ -1,8 +1,17 @@
-# TalkBridge Desktop GUI
+# TalkBridge Desktop - CustomTkinter Edition
 
-## 🎯 Descripción
+## 🎯 Overview
 
-Esta es la nueva implementación de la GUI de TalkBridge Desktop usando PyQt6 con una arquitectura de pestañas integradas que permite:
+TalkBridge Desktop is a modern AI-powered conversation and avatar system with real-time translation and voice synthesis capabilities. Now built with **CustomTkinter** for a contemporary, lightweight, and user-friendly interface.
+
+**Key Advantages of CustomTkinter:**
+- **Lightweight**: ~50MB vs ~200MB (PyQt6)
+- **Fast startup**: 1-2s vs 3-5s
+- **Modern UI**: Dark/Light themes, rounded corners, smooth animations
+- **Cross-platform**: Windows, Linux, macOS
+- **Python-native**: No C++ dependencies
+
+This implementation provides:
 
 - **� Chat Traducido**: Grabación de voz, transcripción, traducción y respuestas de IA
 - **👤 Avatar Animado**: Webcam en tiempo real con sincronización facial y labial  

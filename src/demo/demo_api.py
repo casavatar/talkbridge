@@ -20,7 +20,7 @@ Functions:
 - get_translation_api: Get Translation API instance.
 - get_animation_api: Get Animation API instance.
 - get_audio_api: Get Audio API instance.
-- __init__: Función __init__
+- __init__: Function __init__
 - synthesize_voice: Simulate voice synthesis.
 - get_synthesis_info: Get demo synthesis information.
 ======================================================================

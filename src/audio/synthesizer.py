@@ -3,7 +3,7 @@
 TalkBridge Audio - Synthesizer
 ==============================
 
-Módulo synthesizer para TalkBridge
+Synthesizer module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

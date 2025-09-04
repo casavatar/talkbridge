@@ -3,7 +3,7 @@
 TalkBridge Demo - Tts Example
 =============================
 
-Módulo tts_example para TalkBridge
+TTS example module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

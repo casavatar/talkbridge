@@ -3,7 +3,7 @@
 TalkBridge UI - Web Server
 ==========================
 
-Módulo web_server para TalkBridge
+Web server module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -15,7 +15,7 @@ Requirements:
 ======================================================================
 Functions:
 - main: Main function to run the web server.
-- __init__: Función __init__
+- __init__: Function __init__
 - end_headers: Add CORS headers for cross-origin requests.
 - do_OPTIONS: Handle preflight requests for CORS.
 - log_message: Custom logging for request handling.

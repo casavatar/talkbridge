@@ -3,18 +3,18 @@
 TalkBridge Translation - Translator
 ===================================
 
-Módulo translator para TalkBridge
+Translator module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
 Version: 1.0
 
 Requirements:
-- googletrans
+- None
 ======================================================================
 Functions:
-- __init__: Función __init__
-- translate: Función translate
+- __init__: Function __init__
+- translate: Function translate
 ======================================================================
 """
 

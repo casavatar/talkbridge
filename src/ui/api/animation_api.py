@@ -3,7 +3,7 @@
 TalkBridge UI - Animation Api
 =============================
 
-Módulo animation_api para TalkBridge
+Animation API module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

@@ -19,8 +19,8 @@ Functions:
 - demo_audio_player: Demo the audio player capabilities.
 - demo_audio_integration: Demo integration with existing audio capture.
 - main: Main demo function.
-- on_track_change: Función on_track_change
-- on_playback_end: Función on_playback_end
+- on_track_change: Function on_track_change
+- on_playback_end: Function on_playback_end
 ======================================================================
 """
 

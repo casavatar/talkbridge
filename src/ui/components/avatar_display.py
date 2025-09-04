@@ -3,7 +3,7 @@
 TalkBridge UI - Avatar Display
 ==============================
 
-Módulo avatar_display para TalkBridge
+Avatar display module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

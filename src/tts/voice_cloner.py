@@ -3,7 +3,7 @@
 TalkBridge TTS - Voice Cloner
 =============================
 
-Módulo voice_cloner para TalkBridge
+Voice cloner module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

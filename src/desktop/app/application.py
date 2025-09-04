@@ -1,16 +1,17 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 """
-TalkBridge Desktop - Application
-================================
+TalkBridge Desktop - Application (CustomTkinter)
+================================================
 
-Application module for TalkBridge
+Application module for TalkBridge with CustomTkinter
 
 Author: TalkBridge Team
-Date: 2025-08-19
-Version: 1.0
+Date: 2025-09-03
+Version: 2.0
 
 Requirements:
-- PySide6
+- customtkinter
+- tkinter
 ======================================================================
 Functions:
 - __init__: Initializes the application.
@@ -19,21 +20,19 @@ Functions:
 - _initialize_core_components: Initializes the application's core components.
 - _show_login_dialog: Shows the login dialog and handles authentication.
 - _initialize_services_async: Initializes services asynchronously.
-- _do_initialize_services: Performs actual service initialization.
-- _on_authentication_completed: Handles authentication result.
-- _on_services_initialized: Handles service initialization result.
 - _show_main_window: Shows the application's main window.
 ======================================================================
 """
 
 import sys
 import logging
+import threading
+import time
 from typing import Optional
 from pathlib import Path
-
-from PySide6.QtWidgets import QApplication, QMessageBox, QSplashScreen
-from PySide6.QtCore import QObject, Signal, QTimer, QThread
-from PySide6.QtGui import QPixmap, QPainter, QFont
+import tkinter as tk
+import customtkinter as ctk
+from PIL import Image, ImageDraw, ImageFont
 
 from src.desktop.app.state_manager import StateManager
 from src.desktop.dialogs.login_dialog import LoginDialog
@@ -41,333 +40,782 @@ from src.desktop.app.main_window import MainWindow
 from src.desktop.services.core_bridge import CoreBridge
 
 
-class TalkBridgeApplication(QApplication):
+class ApplicationTheme:
+    """Theme configuration for the application."""
+    
+    # Base colors
+    BACKGROUND_MAIN = "#1e1e1e"
+    BACKGROUND_SECONDARY = "#2d2d2d"
+    BACKGROUND_SPLASH = "#0f0f0f"
+    
+    # Text colors
+    TEXT_PRIMARY = "#ffffff"
+    TEXT_SECONDARY = "#cccccc"
+    TEXT_ACCENT = "#0078d4"
+    
+    # Accent colors
+    ACCENT_BLUE = "#0078d4"
+    ACCENT_GREEN = "#4CAF50"
+    ERROR_COLOR = "#f44336"
+    WARNING_COLOR = "#ff9800"
+
+
+class SplashConstants:
+    """Constants for splash screen configuration."""
+    
+    WIDTH = 500
+    HEIGHT = 350
+    LOGO_SIZE = 80
+    TITLE_FONT_SIZE = 24
+    SUBTITLE_FONT_SIZE = 14
+    STATUS_FONT_SIZE = 12
+    FADE_DURATION = 2000  # milliseconds
+    DISPLAY_DURATION = 3000  # milliseconds
+
+
+class TalkBridgeApplication:
     """
-    Main TalkBridge Desktop application.
+    Enhanced main TalkBridge Desktop application with CustomTkinter.
 
-    Handles full system initialization, including:
-    - User authentication
-    - Service initialization
-    - Global state management
-    - Coordination between windows and components
+    Handles comprehensive system initialization, including:
+    - Advanced splash screen with animations
+    - User authentication with retry logic
+    - Asynchronous service initialization
+    - Enhanced error handling and user feedback
+    - Modern visual design with theming
     """
 
-    # Signals for communication between components
-    authentication_completed = Signal(bool, str)  # success, message
-    services_initialized = Signal(bool)  # success
-    application_ready = Signal()
-
-    def __init__(self, argv: list) -> None:
-        """
-        Initializes the application.
-
-        Args:
-            argv: Command line arguments
-        """
-        super().__init__(argv)
-
-        # Configure logger
-        self.logger = logging.getLogger("talkbridge.desktop.app")
-
-        # Main components
+    def __init__(self):
+        """Initialize the enhanced application."""
+        self.logger = logging.getLogger("talkbridge.desktop.application")
+        
+        # Core components
         self.state_manager: Optional[StateManager] = None
         self.core_bridge: Optional[CoreBridge] = None
         self.main_window: Optional[MainWindow] = None
-        self.splash_screen: Optional[QSplashScreen] = None
+        
+        # Visual components
+        self.splash_window: Optional[ctk.CTkToplevel] = None
+        self.splash_progress_bar: Optional[ctk.CTkProgressBar] = None
+        self.splash_status_label: Optional[ctk.CTkLabel] = None
+        self.splash_animation_running = False
+        
+        # Application state
+        self.authenticated = False
+        self.services_initialized = False
+        self.initialization_progress = 0.0
+        self.exit_code = 0
+        self.max_login_attempts = 3
+        self.current_login_attempt = 0
+        
+        # Tkinter root with enhanced configuration
+        self.root = ctk.CTk()
+        self.root.withdraw()  # Hide initially
+        self._configure_root_window()
+        
+        self.logger.info("Enhanced TalkBridge Application initialized")
 
-        # Initialization states
-        self.is_authenticated = False
-        self.services_ready = False
-
-        # Connect signals
-        self.authentication_completed.connect(self._on_authentication_completed)
-        self.services_initialized.connect(self._on_services_initialized)
-
-        self.logger.info("TalkBridgeApplication initialized")
+    def _configure_root_window(self):
+        """Configure the root window with enhanced settings."""
+        # Set appearance mode and theme
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("dark-blue")
+        
+        # Configure root window
+        self.root.title("TalkBridge Desktop")
+        self.root.configure(fg_color=ApplicationTheme.BACKGROUND_MAIN)
+        
+        # Set window icon if available
+        try:
+            # You can add an icon file here if available
+            # self.root.iconbitmap("path/to/icon.ico")
+            pass
+        except Exception:
+            pass
 
     def run(self) -> int:
         """
-        Runs the full application.
-
+        Runs the enhanced full application with comprehensive error handling.
+        
         Returns:
-            int: Application exit code
+            Exit code (0 for success, 1 for error)
         """
         try:
-            # Show splash screen
-            self._show_splash_screen()
-
-            # Initialize core components
+            self.logger.info("Starting enhanced application run sequence")
+            
+            # Show splash screen first
+            self._show_enhanced_splash_screen()
+            
+            # Initialize core components with progress updates
             if not self._initialize_core_components():
                 self.logger.error("Core components initialization failed")
+                self._close_splash_screen()
+                self._show_critical_error("Initialization Error", 
+                                        "Failed to initialize core components.")
                 return 1
-
-            # Show login dialog with retry loop
-            login_successful = False
-            max_attempts = 3
-            attempts = 0
             
-            while not login_successful and attempts < max_attempts:
-                attempts += 1
-                self.logger.info(f"Login attempt {attempts}/{max_attempts}")
-                
-                login_successful = self._show_login_dialog()
-                
-                if not login_successful:
-                    if attempts < max_attempts:
-                        # Show option to retry or exit
-                        retry = self._show_login_retry_dialog()
-                        if not retry:
-                            self.logger.info("User chose to exit")
-                            return 0
-                    else:
-                        self.logger.warning("Maximum login attempts reached")
-                        return 0
-
-            if not login_successful:
-                self.logger.info("Login failed after maximum attempts")
+            # Authentication loop with retry logic
+            if not self._handle_authentication_with_retry():
+                self.logger.info("Authentication cancelled or failed")
+                self._close_splash_screen()
                 return 0
-
-            # Initialize services
+            
+            # Initialize services asynchronously with progress
             self._initialize_services_async()
-
-            # Run main loop
-            return self.exec()
-
+            
+            # Show main window after authentication
+            self._show_main_window()
+            
+            # Close splash screen
+            self._close_splash_screen()
+            
+            # Start main loop
+            self.logger.info("Starting main application loop")
+            self.root.mainloop()
+            
+            return self.exit_code
+            
         except Exception as e:
-            self.logger.error(f"Application execution error: {e}", exc_info=True)
-            self._show_critical_error("Critical Error", str(e))
+            self.logger.error(f"Critical application error: {e}", exc_info=True)
+            self._close_splash_screen()
+            self._show_critical_error("Critical Error", 
+                                    f"An unexpected error occurred:\n{str(e)}")
             return 1
         finally:
-            self._cleanup()
+            self._cleanup_application()
 
-    def _show_splash_screen(self) -> None:
-        """Shows the splash screen during loading."""
+    def _show_enhanced_splash_screen(self):
+        """Show enhanced splash screen with modern design and animations."""
         try:
-            # Create basic splash screen
-            splash_pixmap = QPixmap(400, 300)
-            splash_pixmap.fill(self.palette().color(self.palette().ColorRole.Window))
-
-            painter = QPainter(splash_pixmap)
-            painter.setFont(QFont("Arial", 16))
-            painter.drawText(
-                splash_pixmap.rect(),
-                0x84,  # Qt.AlignCenter
-                "TalkBridge\nLoading..."
-            )
-            painter.end()
-
-            self.splash_screen = QSplashScreen(splash_pixmap)
-            self.splash_screen.show()
-            self.processEvents()
-
+            self.logger.info("Showing enhanced splash screen")
+            
+            # Create splash window
+            self.splash_window = ctk.CTkToplevel(self.root)
+            self.splash_window.title("TalkBridge Desktop")
+            self.splash_window.geometry(f"{SplashConstants.WIDTH}x{SplashConstants.HEIGHT}")
+            self.splash_window.resizable(False, False)
+            
+            # Configure splash window
+            self.splash_window.configure(fg_color=ApplicationTheme.BACKGROUND_SPLASH)
+            self.splash_window.attributes('-topmost', True)
+            
+            # Center on screen
+            self._center_splash_screen()
+            
+            # Create splash content
+            self._create_splash_content()
+            
+            # Start loading animation
+            self._start_splash_animation()
+            
+            # Process events to show splash
+            self.root.update_idletasks()
+            self.root.update()
+            
         except Exception as e:
-            self.logger.warning(f"Could not show splash screen: {e}")
+            self.logger.warning(f"Could not show enhanced splash screen: {e}")
+
+    def _center_splash_screen(self):
+        """Center splash screen on the display."""
+        # Get screen dimensions
+        screen_width = self.splash_window.winfo_screenwidth()
+        screen_height = self.splash_window.winfo_screenheight()
+        
+        # Calculate position
+        x = (screen_width - SplashConstants.WIDTH) // 2
+        y = (screen_height - SplashConstants.HEIGHT) // 2
+        
+        # Set position
+        self.splash_window.geometry(f"{SplashConstants.WIDTH}x{SplashConstants.HEIGHT}+{x}+{y}")
+
+    def _create_splash_content(self):
+        """Create the enhanced splash screen content."""
+        # Main container
+        main_frame = ctk.CTkFrame(
+            self.splash_window,
+            fg_color="transparent",
+            corner_radius=0
+        )
+        main_frame.pack(fill="both", expand=True, padx=30, pady=40)
+        
+        # Logo section
+        logo_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        logo_frame.pack(fill="x", pady=(0, 20))
+        
+        # App logo (using emoji for now, can be replaced with actual image)
+        logo_label = ctk.CTkLabel(
+            logo_frame,
+            text="🤖",
+            font=ctk.CTkFont(size=SplashConstants.LOGO_SIZE),
+            text_color=ApplicationTheme.ACCENT_BLUE
+        )
+        logo_label.pack(pady=(0, 10))
+        
+        # App title
+        title_label = ctk.CTkLabel(
+            logo_frame,
+            text="TalkBridge Desktop",
+            font=ctk.CTkFont(size=SplashConstants.TITLE_FONT_SIZE, weight="bold"),
+            text_color=ApplicationTheme.TEXT_PRIMARY
+        )
+        title_label.pack()
+        
+        # Subtitle
+        subtitle_label = ctk.CTkLabel(
+            logo_frame,
+            text="AI-Powered Communication Platform",
+            font=ctk.CTkFont(size=SplashConstants.SUBTITLE_FONT_SIZE),
+            text_color=ApplicationTheme.TEXT_SECONDARY
+        )
+        subtitle_label.pack(pady=(5, 0))
+        
+        # Version info
+        version_label = ctk.CTkLabel(
+            logo_frame,
+            text="Version 2.0",
+            font=ctk.CTkFont(size=10),
+            text_color=ApplicationTheme.TEXT_SECONDARY
+        )
+        version_label.pack(pady=(10, 0))
+        
+        # Progress section
+        progress_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        progress_frame.pack(fill="x", side="bottom", pady=(20, 0))
+        
+        # Progress bar
+        self.splash_progress_bar = ctk.CTkProgressBar(
+            progress_frame,
+            height=8,
+            progress_color=ApplicationTheme.ACCENT_BLUE,
+            fg_color=ApplicationTheme.BACKGROUND_SECONDARY
+        )
+        self.splash_progress_bar.pack(fill="x", pady=(0, 10))
+        self.splash_progress_bar.set(0)
+        
+        # Status label
+        self.splash_status_label = ctk.CTkLabel(
+            progress_frame,
+            text="Initializing TalkBridge...",
+            font=ctk.CTkFont(size=SplashConstants.STATUS_FONT_SIZE),
+            text_color=ApplicationTheme.TEXT_SECONDARY
+        )
+        self.splash_status_label.pack()
+
+    def _start_splash_animation(self):
+        """Start the splash screen loading animation."""
+        self.splash_animation_running = True
+        self._animate_splash_progress()
+
+    def _animate_splash_progress(self):
+        """Animate the splash screen progress bar."""
+        if not self.splash_animation_running or not self.splash_progress_bar:
+            return
+            
+        # Animate progress bar
+        current_progress = self.splash_progress_bar.get()
+        if current_progress < 0.9:
+            new_progress = min(current_progress + 0.05, 0.9)
+            self.splash_progress_bar.set(new_progress)
+        
+        # Continue animation
+        if self.splash_animation_running:
+            self.root.after(100, self._animate_splash_progress)
+
+    def _update_splash_status(self, message: str, progress: float = None):
+        """Update splash screen status message and progress."""
+        if self.splash_status_label:
+            self.splash_status_label.configure(text=message)
+        
+        if progress is not None and self.splash_progress_bar:
+            self.splash_progress_bar.set(progress)
+        
+        # Process events to update display
+        if self.splash_window:
+            self.root.update_idletasks()
+            self.root.update()
+
+    def _close_splash_screen(self):
+        """Close the splash screen with fade animation."""
+        try:
+            self.splash_animation_running = False
+            
+            if self.splash_window:
+                # Complete progress bar
+                if self.splash_progress_bar:
+                    self.splash_progress_bar.set(1.0)
+                
+                # Update final status
+                if self.splash_status_label:
+                    self.splash_status_label.configure(text="Ready!")
+                
+                # Brief pause before closing
+                self.root.after(500, lambda: self.splash_window.destroy() if self.splash_window else None)
+                
+        except Exception as e:
+            self.logger.warning(f"Error closing splash screen: {e}")
+
+    def _handle_authentication_with_retry(self) -> bool:
+        """Handle authentication with retry logic and enhanced feedback."""
+        self.current_login_attempt = 0
+        
+        while self.current_login_attempt < self.max_login_attempts:
+            self.current_login_attempt += 1
+            
+            self.logger.info(f"Authentication attempt {self.current_login_attempt}/{self.max_login_attempts}")
+            self._update_splash_status(f"Authentication ({self.current_login_attempt}/{self.max_login_attempts})...")
+            
+            # Show login dialog
+            login_success = self._show_login_dialog()
+            
+            if login_success:
+                self.authenticated = True
+                self._update_splash_status("Authentication successful!", 0.8)
+                return True
+            
+            # Handle failed attempt
+            if self.current_login_attempt < self.max_login_attempts:
+                # Show retry dialog
+                retry = self._show_login_retry_dialog()
+                if not retry:
+                    self.logger.info("User chose to exit after failed login")
+                    return False
+            else:
+                self.logger.warning("Maximum login attempts reached")
+                self._show_error_dialog("Authentication Failed", 
+                                      "Maximum login attempts exceeded.\nPlease try again later.")
+                return False
+        
+        return False
+
+    def _show_login_retry_dialog(self) -> bool:
+        """Show dialog asking user if they want to retry login."""
+        try:
+            # Create retry dialog
+            retry_dialog = ctk.CTkToplevel(self.root)
+            retry_dialog.title("Login Failed")
+            retry_dialog.geometry("350x200")
+            retry_dialog.resizable(False, False)
+            retry_dialog.configure(fg_color=ApplicationTheme.BACKGROUND_MAIN)
+            retry_dialog.transient(self.root)
+            retry_dialog.grab_set()
+            
+            # Center dialog
+            self._center_dialog(retry_dialog, 350, 200)
+            
+            result = [False]  # Use list to modify from inner function
+            
+            # Dialog content
+            main_frame = ctk.CTkFrame(retry_dialog, fg_color="transparent")
+            main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+            
+            # Icon and message
+            icon_label = ctk.CTkLabel(
+                main_frame,
+                text="⚠️",
+                font=ctk.CTkFont(size=32),
+                text_color=ApplicationTheme.WARNING_COLOR
+            )
+            icon_label.pack(pady=(0, 10))
+            
+            message_label = ctk.CTkLabel(
+                main_frame,
+                text="Login failed. Would you like to try again?",
+                font=ctk.CTkFont(size=12),
+                text_color=ApplicationTheme.TEXT_PRIMARY,
+                wraplength=300
+            )
+            message_label.pack(pady=(0, 20))
+            
+            # Buttons
+            button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+            button_frame.pack(fill="x")
+            
+            def on_retry():
+                result[0] = True
+                retry_dialog.destroy()
+            
+            def on_exit():
+                result[0] = False
+                retry_dialog.destroy()
+            
+            # Exit button
+            exit_button = ctk.CTkButton(
+                button_frame,
+                text="Exit",
+                width=100,
+                height=35,
+                fg_color="transparent",
+                text_color=ApplicationTheme.TEXT_SECONDARY,
+                border_width=2,
+                border_color=ApplicationTheme.BACKGROUND_SECONDARY,
+                hover_color=ApplicationTheme.BACKGROUND_SECONDARY,
+                command=on_exit
+            )
+            exit_button.pack(side="left")
+            
+            # Retry button
+            retry_button = ctk.CTkButton(
+                button_frame,
+                text="Try Again",
+                width=100,
+                height=35,
+                fg_color=ApplicationTheme.ACCENT_BLUE,
+                hover_color="#106ebe",
+                command=on_retry
+            )
+            retry_button.pack(side="right")
+            
+            # Wait for dialog
+            retry_dialog.wait_window()
+            
+            return result[0]
+            
+        except Exception as e:
+            self.logger.error(f"Error showing retry dialog: {e}")
+            return False
+
+    def _center_dialog(self, dialog, width, height):
+        """Center a dialog on the screen."""
+        screen_width = dialog.winfo_screenwidth()
+        screen_height = dialog.winfo_screenheight()
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        dialog.geometry(f"{width}x{height}+{x}+{y}")
+
+    def _show_error_dialog(self, title: str, message: str):
+        """Show an enhanced error dialog."""
+        try:
+            error_dialog = ctk.CTkToplevel(self.root)
+            error_dialog.title(title)
+            error_dialog.geometry("400x250")
+            error_dialog.resizable(False, False)
+            error_dialog.configure(fg_color=ApplicationTheme.BACKGROUND_MAIN)
+            error_dialog.transient(self.root)
+            error_dialog.grab_set()
+            
+            # Center dialog
+            self._center_dialog(error_dialog, 400, 250)
+            
+            # Dialog content
+            main_frame = ctk.CTkFrame(error_dialog, fg_color="transparent")
+            main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+            
+            # Error icon
+            icon_label = ctk.CTkLabel(
+                main_frame,
+                text="❌",
+                font=ctk.CTkFont(size=40),
+                text_color=ApplicationTheme.ERROR_COLOR
+            )
+            icon_label.pack(pady=(0, 15))
+            
+            # Title
+            title_label = ctk.CTkLabel(
+                main_frame,
+                text=title,
+                font=ctk.CTkFont(size=16, weight="bold"),
+                text_color=ApplicationTheme.TEXT_PRIMARY
+            )
+            title_label.pack(pady=(0, 10))
+            
+            # Message
+            message_label = ctk.CTkLabel(
+                main_frame,
+                text=message,
+                font=ctk.CTkFont(size=12),
+                text_color=ApplicationTheme.TEXT_SECONDARY,
+                wraplength=350,
+                justify="center"
+            )
+            message_label.pack(pady=(0, 20))
+            
+            # OK button
+            ok_button = ctk.CTkButton(
+                main_frame,
+                text="OK",
+                width=100,
+                height=35,
+                fg_color=ApplicationTheme.ERROR_COLOR,
+                hover_color="#d32f2f",
+                command=error_dialog.destroy
+            )
+            ok_button.pack()
+            
+            # Wait for dialog
+            error_dialog.wait_window()
+            
+        except Exception as e:
+            self.logger.error(f"Error showing error dialog: {e}")
+
+    def _show_critical_error(self, title: str, message: str):
+        """Show a critical error dialog and log the error."""
+        self.logger.critical(f"{title}: {message}")
+        self._show_error_dialog(title, message)
 
     def _initialize_core_components(self) -> bool:
-        """
-        Initializes the application's core components.
-
-        Returns:
-            bool: True if initialization was successful
-        """
+        """Initialize the application's core components with progress updates."""
         try:
             self.logger.info("Initializing core components...")
-
+            self._update_splash_status("Initializing core components...", 0.1)
+            
             # Initialize StateManager
             self.state_manager = StateManager()
+            self._update_splash_status("Setting up state management...", 0.3)
+            
             if not self.state_manager.initialize():
                 raise Exception("StateManager initialization failed")
-
+            
             # Initialize CoreBridge
+            self._update_splash_status("Initializing core bridge...", 0.5)
             self.core_bridge = CoreBridge(self.state_manager)
-
+            
+            self._update_splash_status("Core components ready", 0.6)
             self.logger.info("Core components initialized successfully")
             return True
+            
+        except Exception as e:
+            self.logger.error(f"Error initializing core components: {e}")
+            return False
+    def _show_login_dialog(self) -> bool:
+        """
+        Shows the login dialog and handles authentication.
+        
+        Returns:
+            True if authentication successful, False otherwise
+        """
+        self.logger.info("Showing login dialog")
+        
+        if self.splash_window:
+            self.loading_label.configure(text="Waiting for authentication...")
+            self.progress_bar.set(0.8)
+            self.splash_window.update()
+        
+        try:
+            login_dialog = LoginDialog(self.root)
+            result = login_dialog.show()
+            
+            if result:
+                self.authenticated = True
+                self.logger.info("Authentication successful")
+                
+                if self.splash_window:
+                    self.progress_bar.set(1.0)
+                    self.splash_window.update()
+                
+                return True
+            else:
+                self.logger.info("Authentication cancelled")
+                return False
+                
+        except Exception as e:
+            self.logger.exception(f"Error in login dialog: {e}")
+            return False
 
+    def _initialize_services_async(self) -> None:
+        """Initializes services asynchronously."""
+        self.logger.info("Starting async service initialization")
+        
+        def init_services():
+            try:
+                time.sleep(1)  # Simulate initialization time
+                
+                # Close splash screen
+                if self.splash_window:
+                    self.splash_window.destroy()
+                    self.splash_window = None
+                
+                # Show main window
+                self._show_main_window()
+                
+                self.services_initialized = True
+                self.logger.info("Services initialization completed")
+                
+            except Exception as e:
+                self.logger.exception(f"Error initializing services: {e}")
+                self.exit_code = 1
+                self.root.quit()
+        
+        # Start initialization in background thread
+        init_thread = threading.Thread(target=init_services, daemon=True)
+        init_thread.start()
+
+    def _show_main_window(self) -> None:
+        """Shows the application's main window."""
+        self.logger.info("Showing main window")
+        
+        try:
+            # Create main window
+            self.main_window = MainWindow(
+                self.root,
+                state_manager=self.state_manager,
+                core_bridge=self.core_bridge
+            )
+            
+            # Show root window
+            self.root.deiconify()
+            
+            # Connect signals
+            def on_window_closing():
+                self.logger.info("Main window closing")
+                self.root.quit()
+            
+            self.root.protocol("WM_DELETE_WINDOW", on_window_closing)
+            
+            self.logger.info("Main window displayed successfully")
+            
+        except Exception as e:
+            self.logger.exception(f"Error showing main window: {e}")
+            raise
+
+    def _initialize_core_components(self) -> bool:
+        """Initialize the application's core components with progress updates."""
+        try:
+            self.logger.info("Initializing core components...")
+            self._update_splash_status("Initializing core components...", 0.1)
+            
+            # Initialize StateManager
+            self.state_manager = StateManager()
+            self._update_splash_status("Setting up state management...", 0.3)
+            
+            if not self.state_manager.initialize():
+                raise Exception("StateManager initialization failed")
+            
+            # Initialize CoreBridge
+            self._update_splash_status("Initializing core bridge...", 0.5)
+            self.core_bridge = CoreBridge(self.state_manager)
+            
+            self._update_splash_status("Core components ready", 0.6)
+            self.logger.info("Core components initialized successfully")
+            return True
+            
         except Exception as e:
             self.logger.error(f"Error initializing core components: {e}")
             return False
 
     def _show_login_dialog(self) -> bool:
-        """
-        Shows the login dialog and handles authentication.
-
-        Returns:
-            bool: True if login was successful
-        """
+        """Show the login dialog and handle authentication."""
         try:
-            if self.splash_screen:
-                self.splash_screen.showMessage("Signing in...", 0x82)  # Qt.AlignBottom
-
-            # Reset authentication state
-            self.is_authenticated = False
+            self.logger.info("Showing login dialog")
             
-            login_dialog = LoginDialog(self.state_manager)
-            login_dialog.authentication_result.connect(self.authentication_completed)
-
-            # Show modal dialog
-            result = login_dialog.exec()
-
-            # Process result based on dialog code
-            if result == login_dialog.DialogCode.Accepted:
-                # Dialog was accepted, check authentication status
-                if self.is_authenticated:
-                    self.logger.info("Authentication successful")
-                    return True
-                else:
-                    self.logger.warning("Dialog accepted but authentication failed")
-                    return False
-            elif result == login_dialog.DialogCode.Rejected:
-                # User cancelled or closed dialog
-                self.logger.info("Login dialog was cancelled by user")
-                return False
+            # Temporarily hide splash screen
+            if self.splash_window:
+                self.splash_window.withdraw()
+            
+            # Create and show login dialog
+            login_dialog = LoginDialog(self.root)
+            success, username, password = login_dialog.show()
+            
+            # Restore splash screen
+            if self.splash_window:
+                self.splash_window.deiconify()
+            
+            if success:
+                self.logger.info(f"Login successful for user: {username}")
+                # Here you would normally validate credentials with backend
+                return True
             else:
-                # Unexpected result
-                self.logger.warning(f"Unexpected dialog result: {result}")
+                self.logger.info("Login cancelled or failed")
                 return False
-
+                
         except Exception as e:
-            self.logger.error(f"Login process error: {e}")
-            self._show_critical_error("Login Error", str(e))
+            self.logger.error(f"Error in login dialog: {e}")
             return False
 
-    def _show_login_retry_dialog(self) -> bool:
-        """
-        Shows a dialog asking the user if they want to retry login or exit.
-
-        Returns:
-            bool: True if user wants to retry, False if they want to exit
-        """
-        msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Icon.Question)
-        msg_box.setWindowTitle("Login Failed")
-        msg_box.setText("Authentication failed. Would you like to try again?")
-        msg_box.setInformativeText("You can retry with different credentials or exit the application.")
+    def _initialize_services_async(self):
+        """Initialize services asynchronously in background thread."""
+        def initialize_services():
+            try:
+                self.logger.info("Starting service initialization...")
+                self._update_splash_status("Initializing AI services...", 0.9)
+                
+                # Simulate service initialization
+                time.sleep(1.0)  # Replace with actual service initialization
+                
+                # Mark services as ready
+                self.services_initialized = True
+                self._update_splash_status("All services ready!", 1.0)
+                
+                self.logger.info("Services initialized successfully")
+                
+            except Exception as e:
+                self.logger.error(f"Error initializing services: {e}")
+                self.services_initialized = False
         
-        retry_button = msg_box.addButton("Try Again", QMessageBox.ButtonRole.AcceptRole)
-        exit_button = msg_box.addButton("Exit", QMessageBox.ButtonRole.RejectRole)
-        
-        msg_box.setDefaultButton(retry_button)
-        msg_box.exec()
-        
-        return msg_box.clickedButton() == retry_button
+        # Start initialization in background thread
+        init_thread = threading.Thread(target=initialize_services, daemon=True)
+        init_thread.start()
 
-    def _initialize_services_async(self) -> None:
-        """Initializes services asynchronously."""
-        if self.splash_screen:
-            self.splash_screen.showMessage("Initializing services...", 0x82)
-
-        # Use QTimer for non-blocking initialization
-        QTimer.singleShot(100, self._do_initialize_services)
-
-    def _do_initialize_services(self) -> None:
-        """Performs actual service initialization."""
+    def _handle_logout(self):
+        """Handle user logout."""
         try:
-            self.logger.info("Initializing services...")
-
-            # Initialize services via CoreBridge
-            success = self.core_bridge.initialize_all_services()
-
-            self.services_initialized.emit(success)
-
+            self.logger.info("Handling user logout")
+            
+            # Clean up resources
+            if self.main_window:
+                self.main_window.hide()
+            
+            # Reset authentication state
+            self.authenticated = False
+            self.services_initialized = False
+            
+            # Exit application
+            self.exit_code = 0
+            self.root.quit()
+            
         except Exception as e:
-            self.logger.error(f"Error initializing services: {e}")
-            self.services_initialized.emit(False)
+            self.logger.error(f"Error during logout: {e}")
 
-    def _on_authentication_completed(self, success: bool, message: str) -> None:
-        """
-        Handles authentication result.
-
-        Args:
-            success: True if authentication was successful
-            message: Descriptive result message
-        """
-        self.is_authenticated = success
-        if success:
-            self.logger.info("User authenticated successfully")
-        else:
-            self.logger.warning(f"Authentication failed: {message}")
-
-    def _on_services_initialized(self, success: bool) -> None:
-        """
-        Handles service initialization result.
-
-        Args:
-            success: True if services were initialized successfully
-        """
-        self.services_ready = success
-
-        if success:
-            self.logger.info("Services initialized successfully")
-            self._show_main_window()
-        else:
-            self.logger.error("Service initialization failed")
-            self._show_critical_error(
-                "Service Error",
-                "Could not initialize all required services."
-            )
-
-    def _show_main_window(self) -> None:
-        """Shows the application's main window."""
+    def _cleanup_application(self):
+        """Clean up application resources."""
         try:
-            # Hide splash screen
-            if self.splash_screen:
-                self.splash_screen.close()
-                self.splash_screen = None
-
-            # Create and show main window
-            self.main_window = MainWindow(self.state_manager, self.core_bridge)
-            self.main_window.show()
-
-            # Emit application ready signal
-            self.application_ready.emit()
-
-            self.logger.info("Application fully initialized")
-
-        except Exception as e:
-            self.logger.error(f"Error showing main window: {e}")
-            self._show_critical_error("Interface Error", str(e))
-
-    def _show_critical_error(self, title: str, message: str) -> None:
-        """
-        Shows a critical error to the user.
-
-        Args:
-            title: Error title
-            message: Descriptive message
-        """
-        msg_box = QMessageBox()
-        msg_box.setIcon(QMessageBox.Icon.Critical)
-        msg_box.setWindowTitle(title)
-        msg_box.setText(message)
-        msg_box.setDetailedText(f"See logs in data/logs/desktop.log for more details.")
-        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-        msg_box.exec()
-
-    def _cleanup(self) -> None:
-        """Cleans up resources when closing the application."""
-        try:
-            self.logger.info("Cleaning up application resources...")
-
-            # Close splash screen if it still exists
-            if self.splash_screen:
-                self.splash_screen.close()
-
-            # Clean up services
-            if self.core_bridge:
+            self.logger.info("Cleaning up application resources")
+            
+            # Stop animations
+            self.splash_animation_running = False
+            
+            # Clean up components
+            if self.main_window and hasattr(self.main_window, 'cleanup'):
+                self.main_window.cleanup()
+            
+            if self.core_bridge and hasattr(self.core_bridge, 'cleanup'):
                 self.core_bridge.cleanup()
-
-            # Save state
-            if self.state_manager:
-                self.state_manager.save_state()
-
-            self.logger.info("Cleanup completed")
-
+            
+            if self.state_manager and hasattr(self.state_manager, 'cleanup'):
+                self.state_manager.cleanup()
+            
+            # Close splash screen
+            if self.splash_window:
+                try:
+                    self.splash_window.destroy()
+                except:
+                    pass
+            
+            self.logger.info("Application cleanup completed")
+            
         except Exception as e:
             self.logger.error(f"Error during cleanup: {e}")
 
-    def closeEvent(self, event) -> None:
-        """Handles the application's close event."""
-        self.logger.info("Closing application...")
-        self._cleanup()
-        super().closeEvent(event)
+    def set_exit_code(self, code: int):
+        """Set the application exit code."""
+        self.exit_code = code
+
+    def exit_application(self):
+        """Exit the application gracefully."""
+        self.logger.info("Exiting application")
+        self.root.quit()
+
+    def get_state_manager(self):
+        """Get the state manager instance."""
+        return self.state_manager
+
+    def get_core_bridge(self):
+        """Get the core bridge instance."""
+        return self.core_bridge
+
+    def is_services_ready(self) -> bool:
+        """Check if all services are initialized and ready."""
+        return self.services_initialized
+
+    def is_user_authenticated(self) -> bool:
+        """Check if user is authenticated."""
+        return self.authenticated

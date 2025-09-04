@@ -2,7 +2,7 @@
 TalkBridge Audio - Capture
 ==========================
 
-Módulo capture para TalkBridge
+Capture module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -16,7 +16,7 @@ Requirements:
 Functions:
 - get_default_device_info: Get information about default audio devices.
 - test_audio_system: Test the complete audio system.
-- __init__: Función __init__
+- __init__: Function __init__
 - list_devices: List available audio devices.
 - test_microphone_access: Test if microphone access is available.
 - start_input_stream: Start capturing microphone audio continuously.
@@ -111,18 +111,55 @@ class AudioCapture:
         """Test if microphone access is available."""
         try:
             # Try to create a short test recording
-            test_duration = 0.1  # 100ms
-            recording = sd.rec(
+            test_duration = 0.1  # 100ms test
+            test_data = sd.rec(
                 int(test_duration * self.sample_rate), 
-                samplerate=self.sample_rate,
+                samplerate=self.sample_rate, 
                 channels=self.channels,
-                dtype=np.float32
+                device=self.device
             )
-            sd.wait()
-            logger.info("Microphone access test successful")
-            return True
+            sd.wait()  # Wait for recording to complete
+            
+            # Check if we got valid data
+            if test_data is not None and len(test_data) > 0:
+                logger.info("Microphone access test successful")
+                return True
+            else:
+                logger.warning("Microphone test returned empty data")
+                return False
+                
         except Exception as e:
             logger.error(f"Microphone access test failed: {e}")
+            return False
+    
+    def is_output_capture_available(self) -> bool:
+        """Check if system output capture is available."""
+        try:
+            devices = sd.query_devices()
+            
+            # Look for loopback/monitor devices
+            for device_info in devices:
+                device_name = device_info['name'].lower()
+                if any(keyword in device_name for keyword in [
+                    'stereo mix', 'what u hear', 'monitor', 'loopback', 
+                    'blackhole', 'soundflower'
+                ]):
+                    return True
+            
+            # On Linux, also check PulseAudio sources
+            try:
+                import subprocess
+                result = subprocess.run(['pactl', 'list', 'sources'], 
+                                      capture_output=True, text=True, timeout=5)
+                if result.returncode == 0 and 'monitor' in result.stdout.lower():
+                    return True
+            except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+                pass
+            
+            return False
+            
+        except Exception as e:
+            logger.error(f"Error checking output capture availability: {e}")
             return False
 
     def start_input_stream(self, callback: Optional[Callable] = None, device: Optional[int] = None):
@@ -165,18 +202,54 @@ class AudioCapture:
             devices = sd.query_devices()
             loopback_device = None
             
-            # Look for Windows WASAPI loopback devices
+            # Look for different types of loopback/monitor devices across platforms
             for i, device_info in enumerate(devices):
                 device_name = device_info['name'].lower()
+                # Windows devices
                 if ('stereo mix' in device_name or 
                     'what u hear' in device_name or
-                    'loopback' in device_name or
-                    'monitor' in device_name):
+                    'speakers' in device_name and 'monitor' in device_name):
+                    loopback_device = i
+                    break
+                # Linux PulseAudio devices
+                elif ('monitor' in device_name or 
+                      'loopback' in device_name or
+                      '.monitor' in device_name):
+                    loopback_device = i
+                    break
+                # macOS devices 
+                elif ('blackhole' in device_name or
+                      'soundflower' in device_name):
                     loopback_device = i
                     break
             
+            # On Linux, try to use PulseAudio monitor devices if available
             if loopback_device is None:
-                raise Exception("No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.")
+                try:
+                    import subprocess
+                    result = subprocess.run(['pactl', 'list', 'sources', 'short'], 
+                                          capture_output=True, text=True, timeout=5)
+                    if result.returncode == 0:
+                        lines = result.stdout.strip().split('\n')
+                        for line in lines:
+                            if 'monitor' in line.lower():
+                                # Found a monitor source, try to use it
+                                parts = line.split('\t')
+                                if len(parts) > 1:
+                                    monitor_name = parts[1]
+                                    logger.info(f"Found PulseAudio monitor: {monitor_name}")
+                                    # Use PulseAudio device name directly
+                                    loopback_device = monitor_name
+                                    break
+                except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+                    pass
+            
+            if loopback_device is None:
+                # Fallback: try using default input device with warning
+                logger.warning("No dedicated loopback device found. Using default input device as fallback.")
+                loopback_device = sd.default.device[0]  # Default input device
+                if loopback_device is None:
+                    raise Exception("No audio input device available for output capture.")
 
             def audio_callback(indata, frames, time, status):
                 if status:
@@ -197,14 +270,18 @@ class AudioCapture:
             )
             self.stream.start()
             self.is_recording = True
-            logger.info(f"Output capture started using device: {devices[loopback_device]['name']}")
-            print("Output capture initiated. Press Ctrl+C to stop.")
+            
+            if isinstance(loopback_device, str):
+                device_name = loopback_device
+            else:
+                device_name = devices[loopback_device]['name'] if loopback_device < len(devices) else "Default"
+            logger.info(f"Output capture started using device: {device_name}")
             
         except Exception as e:
             logger.error(f"Failed to start output capture: {e}")
-            print(f"Failed to start output capture: {e}")
-            print("Tip: Enable 'Stereo Mix' or similar loopback device in Windows sound settings")
-            raise
+            # Don't raise the exception, just log it and continue
+            logger.info("Output capture unavailable. System audio recording disabled.")
+            return False
 
     def record_fixed_duration(self, duration: float, device: Optional[int] = None) -> np.ndarray:
         """Record audio for a fixed duration."""

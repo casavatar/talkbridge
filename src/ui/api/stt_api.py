@@ -3,7 +3,7 @@
 TalkBridge UI - Stt Api
 =======================
 
-Módulo stt_api para TalkBridge
+STT API module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

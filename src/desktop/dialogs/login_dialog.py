@@ -1,53 +1,44 @@
 #!/usr/bin/env python3
 """
-TalkBridge Desktop - Login Dialog
-=================================
+TalkBridge Desktop - Login Dialog (CustomTkinter)
+=================================================
 
-Modern, responsive login dialog with asynchronous authentication support.
+Enhanced login dialog with CustomTkinter and comprehensive styling
 
 Author: TalkBridge Team
-Date: 2025-08-28
+Date: 2025-09-03
 Version: 2.0
 
-Features:
-- Asynchronous authentication with visual feedback
-- Credential management and persistence
-- Thread-safe operations
-- Modern UI with responsive design
-- Comprehensive error handling and logging
+Requirements:
+- customtkinter
+- tkinter
+======================================================================
 """
 
 import logging
-from typing import Optional, Tuple, Any, Callable
-from dataclasses import dataclass
-from enum import Enum
+import threading
+import time
+import json
 from pathlib import Path
-
-from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QFormLayout,
-    QLineEdit, QPushButton, QLabel, QCheckBox,
-    QFrame, QMessageBox, QProgressBar, QWidget
-)
-from PySide6.QtCore import (
-    Signal, QThread, QObject, QTimer, Qt
-)
-from PySide6.QtGui import QFont, QPixmap, QPainter, QPalette
-
-# Import existing authentication module
-try:
-    from src.auth.auth_manager import AuthManager
-except ImportError:
-    AuthManager = None
+from enum import Enum
+from typing import Optional, Tuple
+import customtkinter as ctk
+import tkinter as tk
+from ...auth.auth_manager import AuthManager
+from typing import Optional, Tuple
+from enum import Enum
+from dataclasses import dataclass
+import tkinter as tk
+import customtkinter as ctk
 
 
-# Constants
 class UIConstants:
     """UI-related constants for the login dialog."""
     
     # Dialog dimensions
     MIN_WIDTH = 400
-    MIN_HEIGHT = 400
-    EXPANDED_HEIGHT = 450
+    MIN_HEIGHT = 450
+    EXPANDED_HEIGHT = 500
     
     # Spacing and margins
     MAIN_MARGIN = 30
@@ -58,7 +49,7 @@ class UIConstants:
     # Component heights
     INPUT_HEIGHT = 35
     BUTTON_HEIGHT = 40
-    PROGRESS_BAR_HEIGHT = 25
+    PROGRESS_BAR_HEIGHT = 8
     STATUS_LABEL_HEIGHT = 45
     
     # Timeouts (in milliseconds)
@@ -68,7 +59,9 @@ class UIConstants:
     
     # Font sizes
     TITLE_FONT_SIZE = 24
-    SUBTITLE_FONT_SIZE = 10
+    SUBTITLE_FONT_SIZE = 12
+    LABEL_FONT_SIZE = 12
+    INPUT_FONT_SIZE = 12
 
 
 class AuthenticationState(Enum):
@@ -86,883 +79,758 @@ class AuthenticationResult:
     """Container for authentication results."""
     success: bool
     message: str
+    username: str = ""
     state: AuthenticationState = AuthenticationState.IDLE
 
 
-class StyleManager:
-    """Manages CSS styles for the login dialog."""
+class LoginTheme:
+    """Theme colors and styling for the login dialog."""
     
-    @staticmethod
-    def get_main_style() -> str:
-        """Returns the main stylesheet for the dialog."""
-        return """
-        QDialog {
-            background-color: #2b2b2b;
-            color: #ffffff;
-        }
-
-        QLabel {
-            color: #ffffff;
-        }
-
-        QLineEdit {
-            background-color: #3c3c3c;
-            border: 2px solid #555555;
-            border-radius: 5px;
-            padding: 5px;
-            color: #ffffff;
-        }
-
-        QLineEdit:focus {
-            border-color: #0078d4;
-        }
-
-        QPushButton {
-            background-color: #0078d4;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            padding: 8px;
-            font-weight: bold;
-        }
-
-        QPushButton:hover {
-            background-color: #106ebe;
-        }
-
-        QPushButton:pressed {
-            background-color: #005a9e;
-        }
-
-        QPushButton:disabled {
-            background-color: #555555;
-            color: #888888;
-        }
-
-        QCheckBox {
-            color: #ffffff;
-        }
-
-        QCheckBox::indicator {
-            width: 15px;
-            height: 15px;
-        }
-
-        QCheckBox::indicator:unchecked {
-            background-color: #3c3c3c;
-            border: 2px solid #555555;
-            border-radius: 3px;
-        }
-
-        QCheckBox::indicator:checked {
-            background-color: #0078d4;
-            border: 2px solid #0078d4;
-            border-radius: 3px;
-        }
-
-        QProgressBar {
-            border: 2px solid #555555;
-            border-radius: 5px;
-            background-color: #3c3c3c;
-        }
-
-        QProgressBar::chunk {
-            background-color: #0078d4;
-            border-radius: 3px;
-        }
-        """
+    # Background colors
+    BACKGROUND_MAIN = "#1e1e1e"
+    BACKGROUND_SECONDARY = "#2d2d2d"
+    BACKGROUND_ELEVATED = "#3c3c3c"
     
-    @staticmethod
-    def get_status_style(status_type: str) -> str:
-        """Returns stylesheet for status messages."""
-        styles = {
-            "loading": """
-                color: #3498db;
-                background-color: #1b2435;
-                border: 1px solid #3498db;
-                border-radius: 5px;
-                padding: 8px;
-                font-weight: bold;
-                margin: 5px 0px;
-            """,
-            "success": """
-                color: #2ed573;
-                background-color: #1b2f1b;
-                border: 1px solid #2ed573;
-                border-radius: 5px;
-                padding: 8px;
-                font-weight: bold;
-                margin: 5px 0px;
-            """,
-            "error": """
-                color: #ff4757;
-                background-color: #2f1b1b;
-                border: 1px solid #ff4757;
-                border-radius: 5px;
-                padding: 8px;
-                font-weight: bold;
-                margin: 5px 0px;
-            """
-        }
-        return styles.get(status_type, styles["error"])
-
-
-class AuthWorker(QObject):
-    """Worker thread for asynchronous authentication operations."""
-
-    authentication_completed = Signal(bool, str)  # success, message
-    authentication_progress = Signal(str)  # progress message
-
-    def __init__(self, username: str, password: str, parent=None):
-        super().__init__(parent)
-        self.username = username
-        self.password = password
-        self.logger = logging.getLogger("talkbridge.desktop.auth")
-
-    def authenticate(self) -> None:
-        """Runs the authentication process asynchronously."""
-        self.logger.info(f"🔄 AuthWorker.authenticate() STARTED for user: {self.username}")
-        try:
-            self.logger.info(f"🔄 Starting authentication for user: {self.username}")
-            self.authentication_progress.emit("🔐 Initializing authentication...")
-
-            if AuthManager:
-                self.logger.info("📋 AuthManager available, attempting authentication...")
-                self.authentication_progress.emit("📂 Loading user database...")
-                
-                # Add explicit timing for debugging
-                import time
-                start_time = time.time()
-                
-                auth_manager = AuthManager()
-                load_time = time.time() - start_time
-                self.logger.info(f"⏱️ AuthManager loaded in {load_time:.3f}s")
-                
-                self.authentication_progress.emit("🔍 Verifying credentials...")
-                
-                auth_start = time.time()
-                success = auth_manager.authenticate(self.username, self.password)
-                auth_time = time.time() - auth_start
-                self.logger.info(f"⏱️ Authentication completed in {auth_time:.3f}s")
-
-                if success:
-                    message = "✅ Welcome! Authentication successful"
-                    self.logger.info(f"✅ User {self.username} authenticated successfully")
-                    self.authentication_progress.emit("✅ Authentication successful!")
-                else:
-                    message = "❌ Authentication failed. Please check your credentials"
-                    self.logger.warning(f"❌ Authentication failed for user: {self.username}")
-                    self.authentication_progress.emit("❌ Authentication failed")
-            else:
-                self.logger.error("❌ AuthManager not available - authentication not possible")
-                success = False
-                message = "❌ Authentication service unavailable. Please contact administrator."
-                self.authentication_progress.emit("❌ Service unavailable")
-
-            self.logger.info(f"🔄 Emitting authentication result: {success}")
-            self.authentication_completed.emit(success, message)
-            self.logger.info("✅ Authentication signal emitted successfully")
-
-        except Exception as e:
-            error_msg = f"❌ Authentication error: {str(e)}"
-            self.logger.error(error_msg, exc_info=True)
-            self.authentication_progress.emit(f"❌ Error: {str(e)}")
-            self.authentication_completed.emit(False, error_msg)
-        finally:
-            self.logger.info(f"🔄 AuthWorker.authenticate() FINISHED for user: {self.username}")
-
-
-class AuthenticationManager:
-    """Manages authentication operations and thread lifecycle."""
+    # Text colors
+    TEXT_PRIMARY = "#ffffff"
+    TEXT_SECONDARY = "#cccccc"
+    TEXT_MUTED = "#999999"
+    TEXT_ERROR = "#ff6b6b"
+    TEXT_SUCCESS = "#4CAF50"
     
-    def __init__(self, logger: logging.Logger):
-        self.logger = logger
-        self.thread: Optional[QThread] = None
-        self.worker: Optional[AuthWorker] = None
-        self.timeout_timer: Optional[QTimer] = None
-        self.cleanup_function: Optional[Callable] = None
-        self.progress_callback: Optional[Callable[[str], None]] = None
-        self._is_running = False
+    # Accent colors
+    ACCENT_BLUE = "#0078d4"
+    ACCENT_BLUE_HOVER = "#106ebe"
+    ACCENT_GREEN = "#4CAF50"
+    ACCENT_RED = "#f44336"
     
-    def authenticate(self, username: str, password: str, 
-                     completion_callback: Callable[[bool, str], None],
-                     progress_callback: Optional[Callable[[str], None]] = None,
-                     cleanup_function: Optional[Callable] = None) -> bool:
-        """
-        Initiates asynchronous authentication.
-        
-        Args:
-            username: User's username
-            password: User's password
-            completion_callback: Callback for authentication result
-            progress_callback: Optional callback for progress updates
-            
-        Returns:
-            True if authentication started successfully
-        """
-        self.logger.info(f"🚀 AuthenticationManager.authenticate() called for user: {username}")
-        
-        if self._is_running:
-            self.logger.warning("Authentication already in progress - returning False")
-            return False
-        
-        try:
-            self.progress_callback = progress_callback
-            self.logger.info("📝 Creating authentication thread...")
-            self._create_auth_thread(username, password, completion_callback)
-            self.logger.info("⏰ Starting timeout timer...")
-            self._start_timeout_timer(completion_callback)
-            self.logger.info("🏃‍♂️ Starting thread...")
-            self.thread.start()
-            self._is_running = True
-            self.logger.info("✅ Authentication process initiated successfully")
-            return True
-        except Exception as e:
-            self.logger.error(f"❌ Failed to start authentication: {e}", exc_info=True)
-            return False
-    
-    def _create_auth_thread(self, username: str, password: str,
-                          completion_callback: Callable[[bool, str], None]) -> None:
-        """Creates and configures the authentication thread."""
-        # Use standard thread creation for AuthWorker
-        self.thread = QThread()
-        self.worker = AuthWorker(username, password)
-        self.worker.moveToThread(self.thread)
-        
-        self.thread.started.connect(self.worker.authenticate)
-        self.worker.authentication_completed.connect(self._on_auth_completed)
-        self.worker.authentication_completed.connect(completion_callback)
-        self.worker.authentication_completed.connect(self.thread.quit)
-        self.thread.finished.connect(self.thread.deleteLater)
-        # Connect progress signal if available
-        if hasattr(self.worker, 'authentication_progress'):
-            self.worker.authentication_progress.connect(self._on_auth_progress)
-    
-    def _on_auth_completed(self, success: bool, message: str) -> None:
-        """Handle authentication completion - stop timeout timer."""
-        self.logger.debug(f"Authentication completed: {success}")
-        # Stop timeout timer on main thread
-        if self.timeout_timer:
-            self.timeout_timer.stop()
-            self.timeout_timer.deleteLater()
-            self.timeout_timer = None
-    
-    def _on_auth_progress(self, message: str) -> None:
-        """Handle authentication progress updates."""
-        self.logger.debug(f"Auth progress: {message}")
-        if hasattr(self, 'progress_callback') and self.progress_callback:
-            self.progress_callback(message)
-    
-    def _start_timeout_timer(self, completion_callback: Callable[[bool, str], None]) -> None:
-        """Starts the authentication timeout timer."""
-        self.timeout_timer = QTimer()
-        self.timeout_timer.setSingleShot(True)
-        self.timeout_timer.timeout.connect(
-            lambda: self._handle_timeout(completion_callback)
-        )
-        self.timeout_timer.start(UIConstants.AUTH_TIMEOUT)
-    
-    def _handle_timeout(self, completion_callback: Callable[[bool, str], None]) -> None:
-        """Handles authentication timeout."""
-        self.logger.error("Authentication timeout")
-        self.cleanup()
-        timeout_msg = (
-            "❌ Authentication timeout. The system may be slow.\n\n"
-            "Try these test credentials:\n"
-            "• admin / admin123\n"
-            "• user / user123\n"
-            "• test / test123\n"
-            "• demo / demo123"
-        )
-        completion_callback(False, timeout_msg)
-    
-    def cleanup(self) -> None:
-        """Safely cleans up authentication resources."""
-        if self.timeout_timer:
-            self.timeout_timer.stop()
-            self.timeout_timer = None
-        
-        if self._is_running and self.thread:
-            self.logger.info("Cleaning up authentication thread...")
-            
-            try:
-                self._is_running = False
-                
-                if self.cleanup_function:
-                    self.cleanup_function()
-                else:
-                    self._standard_thread_cleanup()
-                
-                self.thread = None
-                self.worker = None
-                
-            except Exception as e:
-                self.logger.error(f"Error during cleanup: {e}")
-                self._force_cleanup()
-    
-    def _standard_thread_cleanup(self) -> None:
-        """Standard thread cleanup procedure."""
-        try:
-            if self.thread and hasattr(self.thread, 'isRunning'):
-                # Check if thread is still running (avoid accessing deleted objects)
-                try:
-                    is_running = self.thread.isRunning()
-                except RuntimeError:
-                    # Object already deleted by Qt
-                    self.logger.debug("Thread object already deleted by Qt")
-                    return
-                
-                if is_running:
-                    self.thread.requestInterruption()
-                    self.thread.quit()
-                    
-                    if not self.thread.wait(3000):
-                        self.logger.warning("Thread did not stop gracefully, terminating")
-                        try:
-                            self.thread.terminate()
-                            if not self.thread.wait(2000):
-                                self.logger.error("Thread termination failed")
-                        except RuntimeError:
-                            self.logger.debug("Thread already terminated")
-                
-                # Schedule deletion safely
-                try:
-                    if hasattr(self.thread, 'deleteLater'):
-                        self.thread.deleteLater()
-                except RuntimeError:
-                    self.logger.debug("Thread already scheduled for deletion")
-        except Exception as e:
-            self.logger.debug(f"Thread cleanup exception (expected): {e}")
-        finally:
-            # Always clear references
-            self.thread = None
-            self.worker = None
-    
-    def _force_cleanup(self) -> None:
-        """Forces cleanup of resources."""
-        self.thread = None
-        self.worker = None
-        self._is_running = False
-    
-    @property
-    def is_running(self) -> bool:
-        """Returns True if authentication is in progress."""
-        return self._is_running
+    # Input colors
+    INPUT_BACKGROUND = "#3c3c3c"
+    INPUT_BORDER = "#555555"
+    INPUT_BORDER_FOCUS = "#0078d4"
+    INPUT_BORDER_ERROR = "#f44336"
 
 
-class CredentialManager:
-    """Manages credential persistence and loading."""
-    
-    def __init__(self, state_manager: Any, logger: logging.Logger):
-        self.state_manager = state_manager
-        self.logger = logger
-    
-    def load_credentials(self) -> Tuple[str, bool]:
-        """
-        Loads saved credentials.
-        
-        Returns:
-            Tuple of (username, remember_flag)
-        """
-        try:
-            if not self._has_state_manager():
-                return "", False
-            
-            remember = self.state_manager.get_setting('auth.remember_credentials', False)
-            username = self.state_manager.get_setting('auth.username', '') if remember else ""
-            
-            return username, remember
-            
-        except Exception as e:
-            self.logger.warning(f"Could not load saved credentials: {e}")
-            return "", False
-    
-    def save_credentials(self, username: str, remember: bool) -> None:
-        """
-        Saves credentials if requested.
-        
-        Args:
-            username: Username to save
-            remember: Whether to remember credentials
-        """
-        try:
-            if not self._has_state_manager():
-                return
-            
-            self.state_manager.set_setting('auth.remember_credentials', remember)
-            
-            if remember:
-                self.state_manager.set_setting('auth.username', username)
-            else:
-                self.state_manager.set_setting('auth.username', '')
-                
-        except Exception as e:
-            self.logger.warning(f"Could not save credentials: {e}")
-    
-    def _has_state_manager(self) -> bool:
-        """Checks if state manager is available and has required methods."""
-        return (self.state_manager and 
-                hasattr(self.state_manager, 'get_setting') and
-                hasattr(self.state_manager, 'set_setting'))
-
-
-class UIComponentFactory:
-    """Factory for creating UI components with consistent styling."""
-    
-    @staticmethod
-    def create_header_section() -> QFrame:
-        """Creates the dialog header section."""
-        header_frame = QFrame()
-        header_layout = QVBoxLayout(header_frame)
-        header_layout.setContentsMargins(0, 0, 0, 0)
-        header_layout.setSpacing(10)
-
-        # Main title
-        title_label = QLabel("TalkBridge")
-        title_font = QFont()
-        title_font.setPointSize(UIConstants.TITLE_FONT_SIZE)
-        title_font.setBold(True)
-        title_label.setFont(title_font)
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        header_layout.addWidget(title_label)
-
-        # Subtitle
-        subtitle_label = QLabel("Real-Time Voice Translation")
-        subtitle_font = QFont()
-        subtitle_font.setPointSize(UIConstants.SUBTITLE_FONT_SIZE)
-        subtitle_label.setFont(subtitle_font)
-        subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        header_layout.addWidget(subtitle_label)
-
-        return header_frame
-    
-    @staticmethod
-    def create_login_form() -> Tuple[QFrame, QLineEdit, QLineEdit, QCheckBox]:
-        """Creates the login form components."""
-        form_frame = QFrame()
-        form_layout = QFormLayout(form_frame)
-        form_layout.setContentsMargins(0, 0, 0, 0)
-        form_layout.setSpacing(UIConstants.FORM_SPACING)
-
-        # Username field
-        username_edit = QLineEdit()
-        username_edit.setPlaceholderText("Enter your username")
-        username_edit.setMinimumHeight(UIConstants.INPUT_HEIGHT)
-        form_layout.addRow("Username:", username_edit)
-
-        # Password field
-        password_edit = QLineEdit()
-        password_edit.setPlaceholderText("Enter your password")
-        password_edit.setEchoMode(QLineEdit.EchoMode.Password)
-        password_edit.setMinimumHeight(UIConstants.INPUT_HEIGHT)
-        form_layout.addRow("Password:", password_edit)
-
-        # Remember credentials checkbox
-        remember_checkbox = QCheckBox("Remember credentials")
-        form_layout.addRow("", remember_checkbox)
-
-        return form_frame, username_edit, password_edit, remember_checkbox
-    
-    @staticmethod
-    def create_button_section() -> Tuple[QFrame, QPushButton, QPushButton]:
-        """Creates the action buttons."""
-        button_frame = QFrame()
-        button_layout = QHBoxLayout(button_frame)
-        button_layout.setContentsMargins(0, 0, 0, 0)
-        button_layout.setSpacing(UIConstants.BUTTON_SPACING)
-
-        # Cancel button
-        cancel_button = QPushButton("Cancel")
-        cancel_button.setMinimumHeight(UIConstants.BUTTON_HEIGHT)
-        button_layout.addWidget(cancel_button)
-
-        # Login button
-        login_button = QPushButton("Sign In")
-        login_button.setMinimumHeight(UIConstants.BUTTON_HEIGHT)
-        login_button.setDefault(True)
-        button_layout.addWidget(login_button)
-
-        return button_frame, cancel_button, login_button
-    
-    @staticmethod
-    def create_progress_bar() -> QProgressBar:
-        """Creates a progress bar for authentication feedback."""
-        progress_bar = QProgressBar()
-        progress_bar.setVisible(False)
-        progress_bar.setMinimumHeight(UIConstants.PROGRESS_BAR_HEIGHT)
-        return progress_bar
-    
-    @staticmethod
-    def create_status_label() -> QLabel:
-        """Creates a status label for messages."""
-        status_label = QLabel()
-        status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        status_label.setVisible(False)
-        status_label.setWordWrap(True)
-        status_label.setMinimumHeight(UIConstants.STATUS_LABEL_HEIGHT)
-        return status_label
-    """Worker thread for asynchronous authentication operations."""
-
-    authentication_completed = Signal(bool, str)  # success, message
-
-    def __init__(self, username: str, password: str, parent=None):
-        super().__init__(parent)
-        self.username = username
-        self.password = password
-        self.logger = logging.getLogger("talkbridge.desktop.auth")
-
-    def authenticate(self) -> None:
-        """Runs the authentication process asynchronously."""
-        try:
-            self.logger.info(f"Starting authentication for user: {self.username}")
-
-            # Use AuthManager for authentication
-            if AuthManager:
-                self.logger.info("AuthManager available, attempting authentication...")
-                auth_manager = AuthManager()
-                success = auth_manager.authenticate(self.username, self.password)
-
-                if success:
-                    message = "Welcome! Authentication successful"
-                    self.logger.info(f"User {self.username} authenticated successfully")
-                else:
-                    message = "❌ Authentication failed. Please check your credentials"
-                    self.logger.warning(f"Authentication failed for user: {self.username}")
-            else:
-                self.logger.error("AuthManager not available - authentication not possible")
-                success = False
-                message = "❌ Authentication service unavailable. Please contact administrator."
-
-            self.logger.info(f"Authentication result: {success}, emitting signal...")
-            self.authentication_completed.emit(success, message)
-            self.logger.info("Signal emitted successfully")
-
-        except Exception as e:
-            error_msg = f"Error during authentication: {str(e)}"
-            self.logger.error(error_msg, exc_info=True)
-            self.authentication_completed.emit(False, f"❌ Authentication error: {str(e)}")
-            self.authentication_completed.emit(False, error_msg)
-
-
-class LoginDialog(QDialog):
+class LoginDialog:
     """
-    Modern login dialog for TalkBridge Desktop.
-
+    Enhanced login dialog for TalkBridge Desktop application.
+    Provides modern authentication UI with theming and validation.
+    
     Features:
-    - Asynchronous authentication with visual feedback
-    - Credential management and persistence
-    - Thread-safe operations with proper cleanup
-    - Responsive UI design with consistent styling
+    - Modern CustomTkinter styling with animations
+    - Asynchronous authentication with progress indicators
     - Comprehensive error handling and user feedback
+    - Remember credentials functionality
+    - Responsive design with proper theming
+    - Password visibility toggle
+    - Real-time validation feedback
     """
 
-    authentication_result = Signal(bool, str)  # success, message
-
-    def __init__(self, state_manager=None, parent=None):
-        super().__init__(parent)
-
-        # Core components
-        self.state_manager = state_manager
+    def __init__(self, parent: ctk.CTk):
+        """Initialize the enhanced login dialog."""
+        self.parent = parent
         self.logger = logging.getLogger("talkbridge.desktop.login")
         
-        # Managers
-        self.auth_manager = AuthenticationManager(self.logger)
-        self.credential_manager = CredentialManager(state_manager, self.logger)
+        # Authentication state
+        self.auth_state = AuthenticationState.IDLE
+        self.auth_result: Optional[AuthenticationResult] = None
         
-        # UI components
-        self.username_edit: Optional[QLineEdit] = None
-        self.password_edit: Optional[QLineEdit] = None
-        self.remember_checkbox: Optional[QCheckBox] = None
-        self.login_button: Optional[QPushButton] = None
-        self.cancel_button: Optional[QPushButton] = None
-        self.progress_bar: Optional[QProgressBar] = None
-        self.status_label: Optional[QLabel] = None
+        # Dialog result
+        self.result = False
+        self.username = ""
+        self.password = ""
+        
+        # Dialog window
+        self.dialog: Optional[ctk.CTkToplevel] = None
+        
+        # UI elements
+        self.title_label: Optional[ctk.CTkLabel] = None
+        self.subtitle_label: Optional[ctk.CTkLabel] = None
+        self.username_entry: Optional[ctk.CTkEntry] = None
+        self.password_entry: Optional[ctk.CTkEntry] = None
+        self.remember_var: Optional[tk.BooleanVar] = None
+        self.remember_checkbox: Optional[ctk.CTkCheckBox] = None
+        self.show_password_var: Optional[tk.BooleanVar] = None
+        self.show_password_checkbox: Optional[ctk.CTkCheckBox] = None
+        self.login_button: Optional[ctk.CTkButton] = None
+        self.cancel_button: Optional[ctk.CTkButton] = None
+        self.progress_bar: Optional[ctk.CTkProgressBar] = None
+        self.status_label: Optional[ctk.CTkLabel] = None
+        self.logo_label: Optional[ctk.CTkLabel] = None
+        
+        # Animation and timing
+        self.animation_running = False
+        self.auth_thread: Optional[threading.Thread] = None
 
-        # State management
-        self.current_state = AuthenticationState.IDLE
-        self._result_emitted = False
+    def show(self) -> Tuple[bool, str, str]:
+        """
+        Show the login dialog and return authentication result.
+        
+        Returns:
+            Tuple[bool, str, str]: (success, username, password)
+        """
+        self.logger.info("Showing enhanced login dialog")
+        
+        # Create dialog window
+        self.dialog = ctk.CTkToplevel(self.parent)
+        self.dialog.title("TalkBridge - Login")
+        self.dialog.geometry(f"{UIConstants.MIN_WIDTH}x{UIConstants.MIN_HEIGHT}")
+        self.dialog.resizable(False, False)
+        
+        # Center on parent
+        self.center_dialog()
+        
+        # Configure dialog
+        self.dialog.configure(fg_color=LoginTheme.BACKGROUND_MAIN)
+        self.dialog.transient(self.parent)
+        self.dialog.grab_set()
+        
+        # Setup UI
+        self.setup_ui()
+        
+        # Load saved credentials if available
+        self.load_saved_credentials()
+        
+        # Focus on username entry
+        self.username_entry.focus()
+        
+        # Wait for dialog to close
+        self.dialog.wait_window()
+        
+        return self.result, self.username, self.password
 
-        # Initialize UI
-        self._setup_dialog()
-        self._setup_ui_components()
-        self._connect_signals()
-        self._load_initial_state()
-
-        self.logger.info("LoginDialog initialized successfully")
-
-    def _setup_dialog(self) -> None:
-        """Configures basic dialog properties."""
-        self.setWindowTitle("TalkBridge - Sign In")
-        self.setMinimumSize(UIConstants.MIN_WIDTH, UIConstants.MIN_HEIGHT)
-        self.resize(UIConstants.MIN_WIDTH, UIConstants.MIN_HEIGHT)
-        self.setModal(True)
-
-        # Configure window flags
-        self.setWindowFlags(
-            Qt.WindowType.Dialog |
-            Qt.WindowType.WindowTitleHint |
-            Qt.WindowType.WindowCloseButtonHint
+    def setup_ui(self) -> None:
+        """Set up the enhanced login dialog UI."""
+        # Main container
+        main_frame = ctk.CTkFrame(self.dialog, fg_color="transparent")
+        main_frame.pack(fill="both", expand=True, padx=UIConstants.MAIN_MARGIN, pady=UIConstants.MAIN_MARGIN)
+        
+        # Logo and title section
+        header_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        header_frame.pack(fill="x", pady=(0, UIConstants.MAIN_SPACING))
+        
+        # Logo placeholder
+        self.logo_label = ctk.CTkLabel(
+            header_frame,
+            text="🤖",
+            font=ctk.CTkFont(size=48),
+            text_color=LoginTheme.ACCENT_BLUE
         )
-
-    def _setup_ui_components(self) -> None:
-        """Creates and arranges all UI components."""
-        # Main layout
-        main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(
-            UIConstants.MAIN_MARGIN, UIConstants.MAIN_MARGIN,
-            UIConstants.MAIN_MARGIN, UIConstants.MAIN_MARGIN
+        self.logo_label.pack(pady=(0, 10))
+        
+        # Title
+        self.title_label = ctk.CTkLabel(
+            header_frame,
+            text="TalkBridge Desktop",
+            font=ctk.CTkFont(size=UIConstants.TITLE_FONT_SIZE, weight="bold"),
+            text_color=LoginTheme.TEXT_PRIMARY
         )
-        main_layout.setSpacing(UIConstants.MAIN_SPACING)
-
-        # Create components using factory
-        header_frame = UIComponentFactory.create_header_section()
-        main_layout.addWidget(header_frame)
-
-        form_frame, self.username_edit, self.password_edit, self.remember_checkbox = \
-            UIComponentFactory.create_login_form()
-        main_layout.addWidget(form_frame)
-
-        self.progress_bar = UIComponentFactory.create_progress_bar()
-        main_layout.addWidget(self.progress_bar)
-
-        self.status_label = UIComponentFactory.create_status_label()
-        main_layout.addWidget(self.status_label)
-
-        button_frame, self.cancel_button, self.login_button = \
-            UIComponentFactory.create_button_section()
-        main_layout.addWidget(button_frame)
-
-        # Add stretch to keep layout compact
-        main_layout.addStretch()
-
-        # Apply styling
-        self.setStyleSheet(StyleManager.get_main_style())
-
-    def _connect_signals(self) -> None:
-        """Connects all signal-slot relationships."""
-        self.login_button.clicked.connect(self._handle_login_attempt)
-        self.cancel_button.clicked.connect(self._handle_cancel)
+        self.title_label.pack()
         
-        # Enable login with Enter key
-        self.username_edit.returnPressed.connect(self._handle_login_attempt)
-        self.password_edit.returnPressed.connect(self._handle_login_attempt)
-
-    def _load_initial_state(self) -> None:
-        """Loads initial state including saved credentials."""
-        username, remember = self.credential_manager.load_credentials()
+        # Subtitle
+        self.subtitle_label = ctk.CTkLabel(
+            header_frame,
+            text="AI-Powered Communication Platform",
+            font=ctk.CTkFont(size=UIConstants.SUBTITLE_FONT_SIZE),
+            text_color=LoginTheme.TEXT_SECONDARY
+        )
+        self.subtitle_label.pack(pady=(5, 0))
         
-        if username:
-            self.username_edit.setText(username)
-            self.remember_checkbox.setChecked(remember)
-            self.password_edit.setFocus()
+        # Form section
+        form_frame = ctk.CTkFrame(main_frame, fg_color=LoginTheme.BACKGROUND_SECONDARY, corner_radius=15)
+        form_frame.pack(fill="x", pady=UIConstants.MAIN_SPACING)
+        
+        # Form title
+        form_title = ctk.CTkLabel(
+            form_frame,
+            text="🔐 Sign In",
+            font=ctk.CTkFont(size=16, weight="bold"),
+            text_color=LoginTheme.TEXT_PRIMARY
+        )
+        form_title.pack(pady=(20, 15))
+        
+        # Username field
+        username_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        username_frame.pack(fill="x", padx=20, pady=UIConstants.FORM_SPACING)
+        
+        username_label = ctk.CTkLabel(
+            username_frame,
+            text="👤 Username:",
+            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            text_color=LoginTheme.TEXT_PRIMARY
+        )
+        username_label.pack(anchor="w", pady=(0, 5))
+        
+        self.username_entry = ctk.CTkEntry(
+            username_frame,
+            height=UIConstants.INPUT_HEIGHT,
+            placeholder_text="Enter your username",
+            font=ctk.CTkFont(size=UIConstants.INPUT_FONT_SIZE),
+            fg_color=LoginTheme.INPUT_BACKGROUND,
+            border_color=LoginTheme.INPUT_BORDER
+        )
+        self.username_entry.pack(fill="x")
+        self.username_entry.bind("<KeyRelease>", self.on_input_changed)
+        self.username_entry.bind("<FocusIn>", lambda e: self.on_field_focus(self.username_entry))
+        self.username_entry.bind("<FocusOut>", lambda e: self.on_field_unfocus(self.username_entry))
+        
+        # Password field
+        password_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        password_frame.pack(fill="x", padx=20, pady=UIConstants.FORM_SPACING)
+        
+        password_label = ctk.CTkLabel(
+            password_frame,
+            text="🔒 Password:",
+            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            text_color=LoginTheme.TEXT_PRIMARY
+        )
+        password_label.pack(anchor="w", pady=(0, 5))
+        
+        password_input_frame = ctk.CTkFrame(password_frame, fg_color="transparent")
+        password_input_frame.pack(fill="x")
+        
+        self.password_entry = ctk.CTkEntry(
+            password_input_frame,
+            height=UIConstants.INPUT_HEIGHT,
+            placeholder_text="Enter your password",
+            show="*",
+            font=ctk.CTkFont(size=UIConstants.INPUT_FONT_SIZE),
+            fg_color=LoginTheme.INPUT_BACKGROUND,
+            border_color=LoginTheme.INPUT_BORDER
+        )
+        self.password_entry.pack(side="left", fill="x", expand=True)
+        self.password_entry.bind("<KeyRelease>", self.on_input_changed)
+        self.password_entry.bind("<Return>", lambda e: self.login())
+        self.password_entry.bind("<FocusIn>", lambda e: self.on_field_focus(self.password_entry))
+        self.password_entry.bind("<FocusOut>", lambda e: self.on_field_unfocus(self.password_entry))
+        
+        # Show/hide password toggle
+        self.show_password_var = tk.BooleanVar()
+        self.show_password_checkbox = ctk.CTkCheckBox(
+            password_input_frame,
+            text="👁️",
+            width=30,
+            checkbox_width=20,
+            checkbox_height=20,
+            variable=self.show_password_var,
+            command=self.toggle_password_visibility
+        )
+        self.show_password_checkbox.pack(side="right", padx=(10, 0))
+        
+        # Options section
+        options_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        options_frame.pack(fill="x", padx=20, pady=UIConstants.FORM_SPACING)
+        
+        # Remember me checkbox
+        self.remember_var = tk.BooleanVar()
+        self.remember_checkbox = ctk.CTkCheckBox(
+            options_frame,
+            text="🔄 Remember me",
+            variable=self.remember_var,
+            font=ctk.CTkFont(size=11),
+            text_color=LoginTheme.TEXT_SECONDARY
+        )
+        self.remember_checkbox.pack(anchor="w")
+        
+        # Buttons section
+        button_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        button_frame.pack(fill="x", padx=20, pady=(UIConstants.FORM_SPACING, 20))
+        
+        # Login button
+        self.login_button = ctk.CTkButton(
+            button_frame,
+            text="🚀 Sign In",
+            height=UIConstants.BUTTON_HEIGHT,
+            command=self.login,
+            fg_color=LoginTheme.ACCENT_BLUE,
+            hover_color=LoginTheme.ACCENT_BLUE_HOVER,
+            font=ctk.CTkFont(size=14, weight="bold")
+        )
+        self.login_button.pack(fill="x", pady=(0, UIConstants.BUTTON_SPACING))
+        
+        # Cancel button
+        self.cancel_button = ctk.CTkButton(
+            button_frame,
+            text="❌ Cancel",
+            height=UIConstants.BUTTON_HEIGHT,
+            command=self.cancel,
+            fg_color="transparent",
+            text_color=LoginTheme.TEXT_SECONDARY,
+            border_width=2,
+            border_color=LoginTheme.INPUT_BORDER,
+            hover_color=LoginTheme.BACKGROUND_ELEVATED,
+            font=ctk.CTkFont(size=12)
+        )
+        self.cancel_button.pack(fill="x")
+        
+        # Progress and status section
+        progress_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        progress_frame.pack(fill="x", pady=UIConstants.MAIN_SPACING)
+        
+        # Progress bar
+        self.progress_bar = ctk.CTkProgressBar(
+            progress_frame,
+            height=UIConstants.PROGRESS_BAR_HEIGHT,
+            progress_color=LoginTheme.ACCENT_BLUE
+        )
+        self.progress_bar.pack(fill="x", pady=(0, 10))
+        self.progress_bar.set(0)
+        
+        # Status label
+        self.status_label = ctk.CTkLabel(
+            progress_frame,
+            text="Ready to sign in",
+            height=UIConstants.STATUS_LABEL_HEIGHT,
+            font=ctk.CTkFont(size=11),
+            text_color=LoginTheme.TEXT_SECONDARY,
+            wraplength=300
+        )
+        self.status_label.pack()
+        
+        # Initial validation
+        self.validate_inputs()
+        
+        self.logger.info("Enhanced login dialog UI setup completed")
+
+    def center_dialog(self) -> None:
+        """Center the dialog on its parent window."""
+        if self.parent:
+            parent_x = self.parent.winfo_x()
+            parent_y = self.parent.winfo_y()
+            parent_width = self.parent.winfo_width()
+            parent_height = self.parent.winfo_height()
+            
+            dialog_x = parent_x + (parent_width - UIConstants.MIN_WIDTH) // 2
+            dialog_y = parent_y + (parent_height - UIConstants.MIN_HEIGHT) // 2
+            
+            self.dialog.geometry(f"{UIConstants.MIN_WIDTH}x{UIConstants.MIN_HEIGHT}+{dialog_x}+{dialog_y}")
+
+    def on_field_focus(self, field: ctk.CTkEntry) -> None:
+        """Handle field focus event."""
+        field.configure(border_color=LoginTheme.ACCENT_BLUE)
+
+    def on_field_unfocus(self, field: ctk.CTkEntry) -> None:
+        """Handle field unfocus event."""
+        field.configure(border_color=LoginTheme.INPUT_BORDER)
+
+    def toggle_password_visibility(self) -> None:
+        """Toggle password visibility."""
+        if self.show_password_var.get():
+            self.password_entry.configure(show="")
         else:
-            self.username_edit.setFocus()
+            self.password_entry.configure(show="*")
 
-    def _handle_login_attempt(self) -> None:
-        """Handles user login attempt."""
-        if self.current_state == AuthenticationState.AUTHENTICATING:
-            return
+    def on_input_changed(self, event=None) -> None:
+        """Handle input field changes."""
+        self.validate_inputs()
 
-        # Validate input
-        username = self.username_edit.text().strip()
-        password = self.password_edit.text()
-
-        if not username:
-            self._show_status_message("⚠️ Please enter a username", "error")
-            return
-
-        # Start authentication
-        self._set_authentication_state(AuthenticationState.AUTHENTICATING)
+    def validate_inputs(self) -> None:
+        """Validate input fields and update UI accordingly."""
+        username = self.username_entry.get().strip()
+        password = self.password_entry.get().strip()
         
-        success = self.auth_manager.authenticate(
-            username, password, self._on_authentication_completed, self._on_auth_progress_update
-        )
+        is_valid = len(username) >= 3 and len(password) >= 1
         
-        if not success:
-            self._set_authentication_state(AuthenticationState.FAILED)
-            self._show_status_message("❌ Failed to start authentication", "error")
-
-    def _handle_cancel(self) -> None:
-        """Handles cancel button click."""
-        self.logger.info("User cancelled login")
-        self._set_authentication_state(AuthenticationState.CANCELLED)
-        self._cleanup_and_emit_result(False, "Login cancelled by user")
-        self.reject()
-
-    def _on_authentication_completed(self, success: bool, message: str) -> None:
-        """
-        Handles authentication completion.
-        
-        Args:
-            success: Whether authentication was successful
-            message: Result message
-        """
-        if success:
-            self._handle_successful_authentication(message)
+        # Update login button state
+        if is_valid:
+            self.login_button.configure(state="normal")
+            self.update_status("Ready to sign in", LoginTheme.TEXT_SECONDARY)
         else:
-            self._handle_failed_authentication(message)
+            self.login_button.configure(state="disabled")
+            if not username:
+                self.update_status("Please enter your username", LoginTheme.ERROR_COLOR)
+            elif len(username) < 3:
+                self.update_status("Username must be at least 3 characters", LoginTheme.ERROR_COLOR)
+            elif not password:
+                self.update_status("Please enter your password", LoginTheme.ERROR_COLOR)
 
-    def _handle_successful_authentication(self, message: str) -> None:
-        """Handles successful authentication."""
-        self.logger.info("Authentication successful")
-        self._set_authentication_state(AuthenticationState.SUCCESS)
-        self._show_status_message(message, "success")
+    def update_status(self, message: str, color: str = None) -> None:
+        """Update status message."""
+        if color is None:
+            color = LoginTheme.TEXT_SECONDARY
         
-        # Save credentials if requested
-        username = self.username_edit.text().strip()
-        remember = self.remember_checkbox.isChecked()
-        self.credential_manager.save_credentials(username, remember)
+        self.status_label.configure(text=message, text_color=color)
+        self.dialog.update_idletasks()
+
+    def set_auth_state(self, state: AuthenticationState) -> None:
+        """Set authentication state and update UI."""
+        self.auth_state = state
         
-        # Delay before closing to show success message
-        QTimer.singleShot(UIConstants.SUCCESS_DISPLAY_TIME, self._complete_successful_login)
+        if state == AuthenticationState.IDLE:
+            self.login_button.configure(text="🚀 Sign In", state="normal")
+            self.username_entry.configure(state="normal")
+            self.password_entry.configure(state="normal")
+            self.progress_bar.set(0)
+            self.update_status("Ready to sign in")
+            
+        elif state == AuthenticationState.AUTHENTICATING:
+            self.login_button.configure(text="🔄 Signing In...", state="disabled")
+            self.username_entry.configure(state="disabled")
+            self.password_entry.configure(state="disabled")
+            self.update_status("Authenticating...")
+            self.start_progress_animation()
+            
+        elif state == AuthenticationState.SUCCESS:
+            self.login_button.configure(text="✅ Success!", state="disabled")
+            self.progress_bar.set(1)
+            self.update_status("Authentication successful!", LoginTheme.SUCCESS_COLOR)
+            
+        elif state == AuthenticationState.FAILED:
+            self.login_button.configure(text="❌ Failed", state="normal")
+            self.username_entry.configure(state="normal")
+            self.password_entry.configure(state="normal")
+            self.progress_bar.set(0)
+            self.update_status("Authentication failed. Please try again.", LoginTheme.ERROR_COLOR)
+            
+        elif state == AuthenticationState.ERROR:
+            self.login_button.configure(text="⚠️ Error", state="normal")
+            self.username_entry.configure(state="normal")
+            self.password_entry.configure(state="normal")
+            self.progress_bar.set(0)
+            self.update_status("An error occurred. Please try again.", LoginTheme.ERROR_COLOR)
 
-    def _handle_failed_authentication(self, message: str) -> None:
-        """Handles failed authentication."""
-        self.logger.warning(f"Authentication failed: {message}")
-        self._set_authentication_state(AuthenticationState.FAILED)
-        self._show_status_message(message, "error")
-        
-        # Clear password and focus for retry
-        self.password_edit.clear()
-        self.password_edit.setFocus()
-        
-        self._cleanup_and_emit_result(False, message)
+    def start_progress_animation(self) -> None:
+        """Start progress bar animation."""
+        if not self.animation_running:
+            self.animation_running = True
+            self.animate_progress()
 
-    def _on_auth_progress_update(self, message: str) -> None:
-        """Handle authentication progress updates from the worker."""
-        self.logger.debug(f"Authentication progress: {message}")
-        self._show_status_message(message, "loading")
-
-    def _complete_successful_login(self) -> None:
-        """Completes successful login process."""
-        self._cleanup_and_emit_result(True, "Authentication successful")
-        self.accept()
-
-    def _set_authentication_state(self, state: AuthenticationState) -> None:
-        """
-        Sets the current authentication state and updates UI.
-        
-        Args:
-            state: New authentication state
-        """
-        self.current_state = state
-        
-        # Update UI based on state
-        is_authenticating = (state == AuthenticationState.AUTHENTICATING)
-        
-        # Enable/disable controls
-        self.username_edit.setEnabled(not is_authenticating)
-        self.password_edit.setEnabled(not is_authenticating)
-        self.remember_checkbox.setEnabled(not is_authenticating)
-        self.login_button.setEnabled(not is_authenticating)
-
-        # Show/hide progress bar
-        self.progress_bar.setVisible(is_authenticating)
-        if is_authenticating:
-            self.progress_bar.setRange(0, 0)  # Indeterminate progress
-            self._show_status_message("🔐 Verifying credentials...", "loading")
-        
-        # Adjust dialog size if needed
-        self._adjust_dialog_size()
-
-    def _show_status_message(self, message: str, message_type: str) -> None:
-        """
-        Shows a status message to the user.
-        
-        Args:
-            message: Message to display
-            message_type: Type of message (loading, success, error)
-        """
-        self.status_label.setText(message)
-        self.status_label.setStyleSheet(StyleManager.get_status_style(message_type))
-        self.status_label.setVisible(True)
-        
-        # Auto-hide error messages after delay
-        if message_type == "error":
-            QTimer.singleShot(
-                UIConstants.ERROR_DISPLAY_TIME,
-                lambda: self.status_label.setVisible(False)
-            )
-        
-        self._adjust_dialog_size()
-
-    def _adjust_dialog_size(self) -> None:
-        """Adjusts dialog size to accommodate visible elements."""
-        current_size = self.size()
-        min_height = (UIConstants.EXPANDED_HEIGHT 
-                     if (self.progress_bar.isVisible() or self.status_label.isVisible())
-                     else UIConstants.MIN_HEIGHT)
-        
-        if current_size.height() < min_height:
-            self.resize(current_size.width(), min_height)
-
-    def _cleanup_and_emit_result(self, success: bool, message: str) -> None:
-        """
-        Cleans up resources and emits result if not already done.
-        
-        Args:
-            success: Authentication success status
-            message: Result message
-        """
-        if not self._result_emitted:
-            self._result_emitted = True
-            self.authentication_result.emit(success, message)
-        
-        self.auth_manager.cleanup()
-
-    def closeEvent(self, event) -> None:
-        """Handles dialog close event."""
-        self.logger.info("Login dialog close event")
-        self._cleanup_and_emit_result(False, "Login window closed")
-        super().closeEvent(event)
-
-    def reject(self) -> None:
-        """Handles dialog rejection (ESC, X button)."""
-        self.logger.info("Login dialog rejected")
-        self._cleanup_and_emit_result(False, "Login cancelled")
-        super().reject()
-
-
-# Legacy compatibility - remove old implementation after this point
-class AuthWorker(QObject):
-    """Worker thread for asynchronous authentication operations."""
-
-    authentication_completed = Signal(bool, str)  # success, message
-
-    def __init__(self, username: str, password: str, parent=None):
-        super().__init__(parent)
-        self.username = username
-        self.password = password
-        self.logger = logging.getLogger("talkbridge.desktop.auth")
-
-    def authenticate(self) -> None:
-        """Runs the authentication process asynchronously."""
-        try:
-            self.logger.info(f"Starting authentication for user: {self.username}")
-
-            # Use AuthManager for authentication
-            if AuthManager:
-                self.logger.info("AuthManager available, attempting authentication...")
-                auth_manager = AuthManager()
-                success = auth_manager.authenticate(self.username, self.password)
-
-                if success:
-                    message = "Welcome! Authentication successful"
-                    self.logger.info(f"User {self.username} authenticated successfully")
-                else:
-                    message = "❌ Authentication failed. Please check your credentials"
-                    self.logger.warning(f"Authentication failed for user: {self.username}")
+    def animate_progress(self) -> None:
+        """Animate progress bar during authentication."""
+        if self.animation_running and self.auth_state == AuthenticationState.AUTHENTICATING:
+            current = self.progress_bar.get()
+            if current < 0.9:
+                self.progress_bar.set(current + 0.1)
             else:
-                self.logger.error("AuthManager not available - authentication not possible")
-                success = False
-                message = "❌ Authentication service unavailable. Please contact administrator."
+                self.progress_bar.set(0.1)
+            
+            # Continue animation
+            self.dialog.after(200, self.animate_progress)
+        else:
+            self.animation_running = False
 
-            self.logger.info(f"Authentication result: {success}, emitting signal...")
-            self.authentication_completed.emit(success, message)
-            self.logger.info("Signal emitted successfully")
-
+    def load_saved_credentials(self) -> None:
+        """Load saved credentials if remember me was checked."""
+        try:
+            saved_file = Path.home() / ".talkbridge" / "credentials"
+            if saved_file.exists():
+                with open(saved_file, 'r') as f:
+                    data = json.load(f)
+                    
+                username = data.get('username', '')
+                remember = data.get('remember', False)
+                
+                if username and remember:
+                    self.username_entry.insert(0, username)
+                    self.remember_var.set(True)
+                    self.password_entry.focus()  # Focus on password if username is loaded
+                    
         except Exception as e:
-            error_msg = f"Error during authentication: {str(e)}"
-            self.logger.error(error_msg, exc_info=True)
-            self.authentication_completed.emit(False, f"❌ Authentication error: {str(e)}")
-            self.authentication_completed.emit(False, error_msg)
+            self.logger.warning(f"Could not load saved credentials: {e}")
+
+    def save_credentials(self) -> None:
+        """Save credentials if remember me is checked."""
+        try:
+            if self.remember_var.get():
+                credentials_dir = Path.home() / ".talkbridge"
+                credentials_dir.mkdir(exist_ok=True)
+                
+                saved_file = credentials_dir / "credentials"
+                with open(saved_file, 'w') as f:
+                    json.dump({
+                        'username': self.username,
+                        'remember': True
+                    }, f)
+                    
+                # Set appropriate permissions
+                saved_file.chmod(0o600)
+            else:
+                # Remove saved credentials if remember me is unchecked
+                saved_file = Path.home() / ".talkbridge" / "credentials"
+                if saved_file.exists():
+                    saved_file.unlink()
+                    
+        except Exception as e:
+            self.logger.warning(f"Could not save credentials: {e}")
+
+    def login(self) -> None:
+        """Handle login button click."""
+        if self.auth_state == AuthenticationState.AUTHENTICATING:
+            return
+            
+        self.username = self.username_entry.get().strip()
+        self.password = self.password_entry.get().strip()
+        
+        if not self.username or not self.password:
+            self.update_status("Please fill in all fields", LoginTheme.ERROR_COLOR)
+            return
+            
+        # Start authentication in separate thread
+        self.set_auth_state(AuthenticationState.AUTHENTICATING)
+        self.auth_thread = threading.Thread(target=self._authenticate, daemon=True)
+        self.auth_thread.start()
+
+    def _authenticate(self) -> None:
+        """Perform authentication in separate thread."""
+        try:
+            success = self.auth_manager.authenticate(self.username, self.password)
+            
+            # Simulate some processing time
+            time.sleep(1)
+            
+            # Update UI on main thread
+            self.dialog.after(0, self._on_auth_complete, success)
+            
+        except Exception as e:
+            self.logger.error(f"Authentication error: {e}")
+            self.dialog.after(0, self._on_auth_error, str(e))
+
+    def _on_auth_complete(self, success: bool) -> None:
+        """Handle authentication completion on main thread."""
+        if success:
+            self.set_auth_state(AuthenticationState.SUCCESS)
+            self.save_credentials()
+            self.result = True
+            
+            # Close dialog after brief delay
+            self.dialog.after(1000, self.dialog.destroy)
+        else:
+            self.set_auth_state(AuthenticationState.FAILED)
+            self.password_entry.delete(0, 'end')
+            self.password_entry.focus()
+
+    def _on_auth_error(self, error_message: str) -> None:
+        """Handle authentication error on main thread."""
+        self.set_auth_state(AuthenticationState.ERROR)
+        self.update_status(f"Error: {error_message}", LoginTheme.ERROR_COLOR)
+
+    def cancel(self) -> None:
+        """Handle cancel button click."""
+        self.result = False
+        self.dialog.destroy()
+
+    def show(self) -> bool:
+        """
+        Shows the login dialog.
+        
+        Returns:
+            True if login successful, False if cancelled
+        """
+        self.logger.info("Showing login dialog")
+        
+        # Create dialog window
+        self.dialog = ctk.CTkToplevel(self.parent)
+        self.dialog.title("TalkBridge Login")
+        self.dialog.geometry("400x350")
+        self.dialog.resizable(False, False)
+        
+        # Center dialog
+        self.dialog.update_idletasks()
+        x = (self.dialog.winfo_screenwidth() // 2) - (400 // 2)
+        y = (self.dialog.winfo_screenheight() // 2) - (350 // 2)
+        self.dialog.geometry(f"400x350+{x}+{y}")
+        
+        # Make dialog modal
+        self.dialog.transient(self.parent)
+        self.dialog.grab_set()
+        
+        # Setup UI
+        self._setup_ui()
+        
+        # Handle window close
+        self.dialog.protocol("WM_DELETE_WINDOW", self._on_cancel)
+        
+        # Wait for dialog to close
+        self.dialog.wait_window()
+        
+        return self.result
+
+    def _setup_ui(self) -> None:
+        """Sets up the login dialog UI."""
+        # Main frame
+        main_frame = ctk.CTkFrame(self.dialog)
+        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        # Title
+        title_label = ctk.CTkLabel(
+            main_frame,
+            text="TalkBridge Login",
+            font=ctk.CTkFont(size=24, weight="bold")
+        )
+        title_label.pack(pady=20)
+        
+        # Subtitle
+        subtitle_label = ctk.CTkLabel(
+            main_frame,
+            text="Please enter your credentials",
+            font=ctk.CTkFont(size=12)
+        )
+        subtitle_label.pack(pady=(0, 20))
+        
+        # Username field
+        username_label = ctk.CTkLabel(
+            main_frame,
+            text="Username:",
+            font=ctk.CTkFont(size=12)
+        )
+        username_label.pack(anchor="w", padx=20)
+        
+        self.username_entry = ctk.CTkEntry(
+            main_frame,
+            placeholder_text="Enter username",
+            width=300,
+            height=32
+        )
+        self.username_entry.pack(pady=(5, 15), padx=20)
+        
+        # Password field
+        password_label = ctk.CTkLabel(
+            main_frame,
+            text="Password:",
+            font=ctk.CTkFont(size=12)
+        )
+        password_label.pack(anchor="w", padx=20)
+        
+        self.password_entry = ctk.CTkEntry(
+            main_frame,
+            placeholder_text="Enter password",
+            show="*",
+            width=300,
+            height=32
+        )
+        self.password_entry.pack(pady=(5, 15), padx=20)
+        
+        # Remember credentials checkbox
+        self.remember_var = tk.BooleanVar()
+        remember_checkbox = ctk.CTkCheckBox(
+            main_frame,
+            text="Remember credentials",
+            variable=self.remember_var,
+            font=ctk.CTkFont(size=11)
+        )
+        remember_checkbox.pack(pady=(10, 20))
+        
+        # Buttons frame
+        button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        button_frame.pack(pady=10)
+        
+        # Login button
+        login_button = ctk.CTkButton(
+            button_frame,
+            text="Login",
+            width=120,
+            height=32,
+            command=self._on_login
+        )
+        login_button.pack(side="left", padx=10)
+        
+        # Cancel button
+        cancel_button = ctk.CTkButton(
+            button_frame,
+            text="Cancel",
+            width=120,
+            height=32,
+            fg_color="gray",
+            hover_color="darkgray",
+            command=self._on_cancel
+        )
+        cancel_button.pack(side="left", padx=10)
+        
+        # Set default values for testing
+        self.username_entry.insert(0, "admin")
+        self.password_entry.insert(0, "password")
+        
+        # Focus on username entry
+        self.username_entry.focus()
+        
+        # Bind Enter key to login
+        self.dialog.bind('<Return>', lambda e: self._on_login())
+
+    def _on_login(self) -> None:
+        """Handles login button click."""
+        self.username = self.username_entry.get().strip()
+        self.password = self.password_entry.get()
+        
+        if not self.username:
+            self._show_error("Please enter a username")
+            return
+        
+        if not self.password:
+            self._show_error("Please enter a password")
+            return
+        
+        # Simple authentication (in real app, use proper auth)
+        if self.username == "admin" and self.password == "password":
+            self.result = True
+            self.logger.info(f"Login successful for user: {self.username}")
+            self.dialog.destroy()
+        else:
+            self._show_error("Invalid username or password")
+            self.password_entry.delete(0, tk.END)
+            self.password_entry.focus()
+
+    def _on_cancel(self) -> None:
+        """Handles cancel button click."""
+        self.result = False
+        self.logger.info("Login cancelled")
+        self.dialog.destroy()
+
+    def _show_error(self, message: str) -> None:
+        """Shows an error message."""
+        self.logger.error(f"Login error: {message}")
+        
+        # Create error dialog
+        error_dialog = ctk.CTkToplevel(self.dialog)
+        error_dialog.title("Login Error")
+        error_dialog.geometry("300x150")
+        error_dialog.resizable(False, False)
+        
+        # Center error dialog
+        error_dialog.update_idletasks()
+        x = (error_dialog.winfo_screenwidth() // 2) - (300 // 2)
+        y = (error_dialog.winfo_screenheight() // 2) - (150 // 2)
+        error_dialog.geometry(f"300x150+{x}+{y}")
+        
+        # Add content
+        frame = ctk.CTkFrame(error_dialog)
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        # Error message
+        label = ctk.CTkLabel(
+            frame,
+            text=message,
+            font=ctk.CTkFont(size=12),
+            wraplength=260
+        )
+        label.pack(pady=20)
+        
+        # OK button
+        ok_button = ctk.CTkButton(
+            frame,
+            text="OK",
+            command=error_dialog.destroy
+        )
+        ok_button.pack(pady=10)
+        
+        # Make error dialog modal
+        error_dialog.transient(self.dialog)
+        error_dialog.grab_set()
+        error_dialog.wait_window()
+
+    def get_credentials(self) -> Tuple[str, str]:
+        """
+        Gets the entered credentials.
+        
+        Returns:
+            Tuple of (username, password)
+        """
+        return self.username, self.password
+
+    def should_remember(self) -> bool:
+        """
+        Checks if credentials should be remembered.
+        
+        Returns:
+            True if remember checkbox is checked
+        """
+        return self.remember_var.get() if self.remember_var else False

@@ -3,7 +3,7 @@
 TalkBridge UI - Generate Secure Users
 =====================================
 
-Módulo generate_secure_users para TalkBridge
+Generate secure users module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

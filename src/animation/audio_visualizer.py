@@ -3,7 +3,7 @@
 TalkBridge Animation - Audio Visualizer
 =======================================
 
-Módulo audio_visualizer para TalkBridge
+Audio visualizer module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

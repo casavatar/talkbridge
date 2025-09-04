@@ -3,7 +3,7 @@
 TalkBridge UI - Dashboard
 =========================
 
-Módulo dashboard para TalkBridge
+Dashboard module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

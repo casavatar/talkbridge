@@ -3,7 +3,7 @@
 TalkBridge STT - Integration Example
 ====================================
 
-Módulo integration_example para TalkBridge
+Integration example module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

@@ -3,7 +3,7 @@
 TalkBridge Demo - Face Sync Demo
 ================================
 
-Módulo face_sync_demo para TalkBridge
+Face sync demo module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

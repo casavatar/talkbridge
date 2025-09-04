@@ -3,7 +3,7 @@
 TalkBridge UI - Login
 =====================
 
-Módulo login para TalkBridge
+Login module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

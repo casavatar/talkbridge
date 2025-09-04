@@ -16,7 +16,7 @@ Functions:
 - get_whisper_engine: Get or create a Whisper engine instance.
 - is_model_loaded: Check if Whisper model is currently loaded.
 - get_loaded_model: Get the currently loaded Whisper model.
-- __init__: Función __init__
+- __init__: Function __init__
 - transcribe: Mock transcription that returns a placeholder message.
 - __init__: Initialize Whisper engine.
 - _detect_device: Detect and validate the best available device.

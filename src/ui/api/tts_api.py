@@ -3,7 +3,7 @@
 TalkBridge UI - Tts Api
 =======================
 
-Módulo tts_api para TalkBridge
+TTS API module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

@@ -3,7 +3,7 @@
 TalkBridge Animation - Face Sync
 ================================
 
-Módulo face_sync para TalkBridge
+Face sync module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

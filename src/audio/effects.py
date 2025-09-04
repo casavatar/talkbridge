@@ -3,7 +3,7 @@
 TalkBridge Audio - Effects
 ==========================
 
-Módulo effects para TalkBridge
+Effects module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

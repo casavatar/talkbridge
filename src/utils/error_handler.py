@@ -19,7 +19,7 @@ Functions:
 - suppress_non_critical: Optionally suppress non-critical errors (extend as needed).
 - raise_or_log: Raise critical errors, log and suppress non-critical ones.
 - wrap_function: Decorator to auto-log uncaught errors in a function.
-- wrapper: Función wrapper
+- wrapper: Function wrapper
 ======================================================================
 """
 

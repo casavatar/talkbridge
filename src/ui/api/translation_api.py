@@ -3,7 +3,7 @@
 TalkBridge UI - Translation Api
 ===============================
 
-Módulo translation_api para TalkBridge
+Translation API module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

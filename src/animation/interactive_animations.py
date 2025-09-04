@@ -3,7 +3,7 @@
 TalkBridge Animation - Interactive Animations
 =============================================
 
-Módulo interactive_animations para TalkBridge
+Interactive animations module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

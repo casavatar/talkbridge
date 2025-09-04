@@ -3,7 +3,7 @@
 TalkBridge Audio - Generator
 ============================
 
-Módulo generator para TalkBridge
+Generator module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

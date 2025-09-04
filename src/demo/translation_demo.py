@@ -3,7 +3,7 @@
 TalkBridge Demo - Translation Demo
 ==================================
 
-Módulo translation_demo para TalkBridge
+Translation demo module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

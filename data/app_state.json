@@ -4,14 +4,14 @@
     "tts": {
       "name": "tts",
       "status": "cancelled",
-      "last_update": "2025-08-28T15:48:07.614176",
+      "last_update": "2025-09-03T21:47:52.154780",
       "error_message": null,
       "metadata": {}
     },
     "audio": {
       "name": "audio",
       "status": "connected",
-      "last_update": "2025-08-28T15:46:34.384840",
+      "last_update": "2025-09-03T21:46:11.235517",
       "error_message": null,
       "metadata": {}
     },
@@ -45,5 +45,5 @@
     }
   },
   "ui_preferences": {},
-  "last_save_time": "2025-08-28T15:48:07.630186"
+  "last_save_time": "2025-09-03T21:47:52.155116"
 }

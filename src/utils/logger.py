@@ -3,7 +3,7 @@
 TalkBridge Utils - Logger
 =========================
 
-Módulo logger para TalkBridge
+Logger module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

@@ -1,6 +1,7 @@
-2025-08-28 15:03:01,873 [ERROR] Error in chat: 404 Client Error: Not Found for url: http://localhost:11434/api/chat
-2025-08-28 15:03:11,651 [ERROR] Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
-2025-08-28 15:03:11,651 [ERROR] Speech synthesis failed: Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
-2025-08-28 15:10:13,003 [ERROR] Error in chat: 404 Client Error: Not Found for url: http://localhost:11434/api/chat
-2025-08-28 15:10:13,877 [ERROR] Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
-2025-08-28 15:10:13,877 [ERROR] Speech synthesis failed: Default voice synthesis failed: Model is multi-speaker but no `speaker` is provided.
+2025-09-03 16:56:45,239 [ERROR] Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 16:56:45,780 [ERROR] Transcription failed: Audio duration not acceptable: /tmp/tmpwndgi5sl.wav
+2025-09-03 17:36:47,665 [ERROR] Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 17:36:48,235 [ERROR] Transcription failed: Audio duration not acceptable: /tmp/tmp2ul5quee.wav
+2025-09-03 19:26:40,739 [ERROR] Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 19:26:41,311 [ERROR] Transcription failed: Audio duration not acceptable: /tmp/tmph77y0vy_.wav
+2025-09-03 21:46:14,591 [ERROR] Failed to start output capture: No input device matching 'alsa_output.pci-0000_2d_00.1.hdmi-stereo-extra2.monitor'

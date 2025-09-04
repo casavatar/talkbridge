@@ -2,7 +2,7 @@
 TalkBridge Animation - Loading Animation
 ========================================
 
-Módulo loading_animation para TalkBridge
+Loading animation module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -17,12 +17,12 @@ Functions:
 - start: Start the loading animation.
 - stop: Stop the loading animation.
 - _animate: Override this method in subclasses.
-- __init__: Función __init__
+- __init__: Function __init__
 - _animate: Animate the spinner.
-- __init__: Función __init__
+- __init__: Function __init__
 - update: Update progress value.
 - _animate: Animate the progress bar.
-- __init__: Función __init__
+- __init__: Function __init__
 ======================================================================
 """
 

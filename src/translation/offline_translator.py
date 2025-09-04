@@ -3,7 +3,7 @@
 TalkBridge Translation - Offline Translator
 ===========================================
 
-Módulo offline_translator para TalkBridge
+Offline translator module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

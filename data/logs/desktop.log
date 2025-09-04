@@ -1198,3 +1198,593 @@
 2025-08-28 15:48:07,614 - talkbridge.desktop.app - INFO - Cleanup completed
 2025-08-28 15:48:07,614 - talkbridge.desktop - INFO - Application finished with code: 0
 2025-08-28 15:48:07,629 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-03 15:40:00,713 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 15:40:00,713 - root - INFO - ✓ PySide6 available
+2025-09-03 15:40:00,714 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 15:40:00,714 - root - INFO - ✓ Audio Capture available
+2025-09-03 15:40:00,714 - root - INFO - ✓ Authentication Manager available
+2025-09-03 15:40:00,714 - root - INFO - ✓ Translation Engine available
+2025-09-03 15:40:00,714 - root - INFO - ✓ Argos Translate available
+2025-09-03 15:40:00,714 - root - INFO - ✓ MediaPipe available
+2025-09-03 15:40:00,714 - root - INFO - ✓ Coqui TTS available
+2025-09-03 15:40:00,714 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 15:40:00,714 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 15:40:00,714 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 15:40:00,769 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 15:40:00,769 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 15:40:01,786 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 15:40:01,786 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 15:40:01,786 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 15:40:01,787 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 15:40:01,787 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 15:40:01,787 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 15:40:01,787 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 15:40:01,787 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 15:40:01,787 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 15:40:01,789 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 15:41:22,436 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 15:41:22,436 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 15:41:22,436 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 15:41:22,436 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 15:41:22,436 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 15:41:22,436 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 15:41:22,436 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 15:41:22,437 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 15:41:22,437 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 15:41:22,437 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 15:41:22,437 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 15:41:22,437 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 15:41:22,437 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 15:41:22,438 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 15:41:23,867 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 15:41:23,867 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 15:41:23,867 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 15:41:23,972 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 15:41:23,972 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 15:41:23,972 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 15:41:23,973 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 15:41:23,973 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 15:41:23,974 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 15:41:23,977 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 15:41:23,978 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 15:41:23,978 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 15:41:24,039 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 15:41:24,057 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 15:41:24,062 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 15:41:24,063 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 15:41:24,063 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 15:41:24,063 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 15:41:24,085 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 15:41:28,163 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-03 15:41:28,164 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-03 15:41:28,165 - src.audio.capture - INFO - Recording 5 seconds of audio...
+2025-09-03 15:41:33,175 - src.audio.capture - INFO - Recording completed
+2025-09-03 15:41:33,177 - src.audio.capture - INFO - Audio saved to: /tmp/tmpiediy8nx.wav
+2025-09-03 15:41:33,189 - src.stt.whisper_engine - INFO - Loading Whisper model: base
+2025-09-03 15:41:33,778 - src.stt.whisper_engine - INFO - Successfully loaded Whisper model: base
+2025-09-03 15:41:33,946 - src.stt.whisper_engine - INFO - Transcribing file: /tmp/tmpiediy8nx.wav
+2025-09-03 15:41:34,591 - src.stt.whisper_engine - INFO - Transcription result: ...
+2025-09-03 15:41:58,765 - src.desktop.components.avatar_tab.CameraController - INFO - Camera state changed to: starting
+2025-09-03 15:42:18,751 - talkbridge.desktop.mainwindow - INFO - Closing main window...
+2025-09-03 15:42:18,752 - talkbridge.desktop.mainwindow - INFO - Main window closed
+2025-09-03 15:42:18,752 - talkbridge.desktop.app - INFO - Cleaning up application resources...
+2025-09-03 15:42:18,753 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-03 15:42:18,753 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-03 15:42:18,753 - talkbridge.desktop.app - INFO - Cleanup completed
+2025-09-03 15:42:18,753 - talkbridge.desktop - INFO - Application finished with code: 0
+2025-09-03 15:42:45,291 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 15:42:45,291 - root - INFO - ✓ PySide6 available
+2025-09-03 15:42:45,291 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 15:42:45,291 - root - INFO - ✓ Audio Capture available
+2025-09-03 15:42:45,291 - root - INFO - ✓ Authentication Manager available
+2025-09-03 15:42:45,291 - root - INFO - ✓ Translation Engine available
+2025-09-03 15:42:45,291 - root - INFO - ✓ Argos Translate available
+2025-09-03 15:42:45,291 - root - INFO - ✓ MediaPipe available
+2025-09-03 15:42:45,291 - root - INFO - ✓ Coqui TTS available
+2025-09-03 15:42:45,292 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 15:42:45,292 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 15:42:45,292 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 15:42:45,337 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 15:42:45,338 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 15:42:46,353 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 15:42:46,353 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 15:42:46,353 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 15:42:46,354 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 15:42:46,354 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 15:42:46,354 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 15:42:46,354 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 15:42:46,354 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 15:42:46,354 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 15:42:46,356 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 15:42:49,937 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 15:42:49,937 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 15:42:49,937 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 15:42:49,937 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 15:42:49,938 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 15:42:49,938 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 15:42:49,938 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 15:42:49,938 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 15:42:49,938 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 15:42:49,938 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 15:42:49,938 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 15:42:49,939 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 15:42:49,939 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 15:42:49,940 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 15:42:51,367 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 15:42:51,368 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 15:42:51,368 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 15:42:51,472 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 15:42:51,472 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 15:42:51,472 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 15:42:51,473 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 15:42:51,473 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 15:42:51,473 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 15:42:51,476 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 15:42:51,477 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 15:42:51,477 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 15:42:51,534 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 15:42:51,551 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 15:42:51,553 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 15:42:51,554 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 15:42:51,554 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 15:42:51,554 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 15:42:51,573 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 15:43:20,322 - talkbridge.desktop.mainwindow - INFO - Closing main window...
+2025-09-03 15:43:20,323 - talkbridge.desktop.mainwindow - INFO - Main window closed
+2025-09-03 15:43:20,323 - talkbridge.desktop.app - INFO - Cleaning up application resources...
+2025-09-03 15:43:20,323 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-03 15:43:20,324 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-03 15:43:20,324 - talkbridge.desktop.app - INFO - Cleanup completed
+2025-09-03 15:43:20,324 - talkbridge.desktop - INFO - Application finished with code: 0
+2025-09-03 15:43:20,337 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-03 15:56:54,151 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 15:56:54,151 - root - INFO - ✓ PySide6 available
+2025-09-03 15:56:54,151 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 15:56:54,151 - root - INFO - ✓ Audio Capture available
+2025-09-03 15:56:54,151 - root - INFO - ✓ Authentication Manager available
+2025-09-03 15:56:54,151 - root - INFO - ✓ Translation Engine available
+2025-09-03 15:56:54,151 - root - INFO - ✓ Argos Translate available
+2025-09-03 15:56:54,151 - root - INFO - ✓ MediaPipe available
+2025-09-03 15:56:54,151 - root - INFO - ✓ Coqui TTS available
+2025-09-03 15:56:54,151 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 15:56:54,151 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 15:56:54,152 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 15:56:54,199 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 15:56:54,200 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 15:56:55,215 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 15:56:55,215 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 15:56:55,215 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 15:56:55,216 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 15:56:55,216 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 15:56:55,216 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 15:56:55,216 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 15:56:55,216 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 15:56:55,216 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 15:56:55,218 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 15:57:03,008 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 15:57:03,008 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 15:57:03,008 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 15:57:03,008 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 15:57:03,008 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 15:57:03,008 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 15:57:03,008 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 15:57:03,008 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 15:57:03,009 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 15:57:03,009 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 15:57:03,009 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 15:57:03,009 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 15:57:03,009 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 15:57:03,010 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 15:57:04,438 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 15:57:04,438 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 15:57:04,439 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 15:57:04,544 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 15:57:04,544 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 15:57:04,544 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 15:57:04,545 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 15:57:04,545 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 15:57:04,545 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 15:57:04,548 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 15:57:04,549 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 15:57:04,549 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 15:57:04,611 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 15:57:04,628 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 15:57:04,630 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 15:57:04,631 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 15:57:04,631 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 15:57:04,631 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 15:57:04,653 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 15:57:07,159 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 15:57:07,160 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-03 15:57:07,160 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-03 15:57:07,161 - src.audio.capture - INFO - Microphone capture started successfully
+2025-09-03 15:57:07,161 - src.audio.capture - ERROR - Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 15:57:07,178 - src.stt.whisper_engine - INFO - Loading Whisper model: base
+2025-09-03 15:57:07,698 - src.stt.whisper_engine - INFO - Successfully loaded Whisper model: base
+2025-09-03 15:57:07,699 - src.stt.audio_utils - WARNING - Audio duration too short: 0.01s
+2025-09-03 15:57:07,699 - src.stt.whisper_engine - ERROR - Transcription failed: Audio duration not acceptable: /tmp/tmp91nrpnz1.wav
+2025-09-03 15:57:07,699 - src.audio.capture - INFO - Audio capture stopped
+2025-09-03 15:57:21,148 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 16:56:17,360 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 16:56:17,360 - root - INFO - ✓ PySide6 available
+2025-09-03 16:56:17,360 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 16:56:17,361 - root - INFO - ✓ Audio Capture available
+2025-09-03 16:56:17,361 - root - INFO - ✓ Authentication Manager available
+2025-09-03 16:56:17,361 - root - INFO - ✓ Translation Engine available
+2025-09-03 16:56:17,361 - root - INFO - ✓ Argos Translate available
+2025-09-03 16:56:17,361 - root - INFO - ✓ MediaPipe available
+2025-09-03 16:56:17,361 - root - INFO - ✓ Coqui TTS available
+2025-09-03 16:56:17,361 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 16:56:17,361 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 16:56:17,361 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 16:56:17,407 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 16:56:17,407 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 16:56:18,422 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 16:56:18,422 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 16:56:18,422 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 16:56:18,423 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 16:56:18,423 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 16:56:18,423 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 16:56:18,423 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 16:56:18,423 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 16:56:18,423 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 16:56:18,425 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 16:56:23,314 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 16:56:23,315 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 16:56:23,315 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 16:56:23,315 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 16:56:23,315 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 16:56:23,315 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 16:56:23,315 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 16:56:23,315 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 16:56:23,316 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 16:56:23,316 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 16:56:23,316 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 16:56:23,316 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 16:56:23,316 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 16:56:23,317 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 16:56:24,772 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 16:56:24,772 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 16:56:24,773 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 16:56:24,872 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 16:56:24,873 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 16:56:24,873 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 16:56:24,873 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 16:56:24,873 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 16:56:24,873 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 16:56:24,877 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 16:56:24,878 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 16:56:24,878 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 16:56:24,939 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 16:56:24,956 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 16:56:24,958 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 16:56:24,959 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 16:56:24,959 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 16:56:24,959 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 16:56:24,979 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 16:56:25,832 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:56:30,067 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:56:45,237 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 16:56:45,238 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-03 16:56:45,238 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-03 16:56:45,239 - src.audio.capture - INFO - Microphone capture started successfully
+2025-09-03 16:56:45,239 - src.audio.capture - ERROR - Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 16:56:45,255 - src.stt.whisper_engine - INFO - Loading Whisper model: base
+2025-09-03 16:56:45,779 - src.stt.whisper_engine - INFO - Successfully loaded Whisper model: base
+2025-09-03 16:56:45,780 - src.stt.audio_utils - WARNING - Audio duration too short: 0.01s
+2025-09-03 16:56:45,780 - src.stt.whisper_engine - ERROR - Transcription failed: Audio duration not acceptable: /tmp/tmpwndgi5sl.wav
+2025-09-03 16:56:45,780 - src.audio.capture - INFO - Audio capture stopped
+2025-09-03 16:56:54,398 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:56:54,774 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:57:24,784 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:57:54,776 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:58:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:58:54,804 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:59:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 16:59:54,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:00:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:00:54,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:01:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:01:54,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:02:24,782 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:02:54,802 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:03:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:03:54,804 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:04:24,802 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:04:54,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:05:24,780 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:05:54,802 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:06:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:06:54,277 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:06:54,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:07:09,829 - src.desktop.components.avatar_tab.CameraController - INFO - Camera state changed to: starting
+2025-09-03 17:07:24,776 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:07:54,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:08:21,638 - talkbridge.desktop.mainwindow - INFO - Closing main window...
+2025-09-03 17:08:21,639 - talkbridge.desktop.mainwindow - INFO - Main window closed
+2025-09-03 17:08:21,640 - talkbridge.desktop.app - INFO - Cleaning up application resources...
+2025-09-03 17:08:21,640 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-03 17:08:21,640 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-03 17:08:21,640 - talkbridge.desktop.app - INFO - Cleanup completed
+2025-09-03 17:08:21,640 - talkbridge.desktop - INFO - Application finished with code: 0
+2025-09-03 17:36:23,354 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 17:36:23,354 - root - INFO - ✓ PySide6 available
+2025-09-03 17:36:23,354 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 17:36:23,354 - root - INFO - ✓ Audio Capture available
+2025-09-03 17:36:23,355 - root - INFO - ✓ Authentication Manager available
+2025-09-03 17:36:23,355 - root - INFO - ✓ Translation Engine available
+2025-09-03 17:36:23,355 - root - INFO - ✓ Argos Translate available
+2025-09-03 17:36:23,355 - root - INFO - ✓ MediaPipe available
+2025-09-03 17:36:23,355 - root - INFO - ✓ Coqui TTS available
+2025-09-03 17:36:23,355 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 17:36:23,355 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 17:36:23,355 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 17:36:23,402 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 17:36:23,403 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 17:36:24,418 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 17:36:24,418 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 17:36:24,418 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 17:36:24,419 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 17:36:24,419 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 17:36:24,419 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 17:36:24,419 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 17:36:24,419 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 17:36:24,419 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 17:36:24,421 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 17:36:36,025 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 17:36:36,025 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 17:36:36,025 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 17:36:36,025 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 17:36:36,025 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 17:36:36,025 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 17:36:36,025 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 17:36:36,026 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 17:36:36,026 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 17:36:36,026 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 17:36:36,026 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 17:36:36,026 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 17:36:36,026 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 17:36:36,028 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 17:36:37,605 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 17:36:37,605 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 17:36:37,606 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 17:36:37,701 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 17:36:37,701 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 17:36:37,701 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 17:36:37,702 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 17:36:37,703 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 17:36:37,703 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 17:36:37,707 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 17:36:37,707 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 17:36:37,707 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 17:36:37,773 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 17:36:37,793 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 17:36:37,795 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 17:36:37,796 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 17:36:37,796 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 17:36:37,796 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 17:36:37,819 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 17:36:38,760 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:36:44,163 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:36:47,663 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 17:36:47,664 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-03 17:36:47,664 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-03 17:36:47,665 - src.audio.capture - INFO - Microphone capture started successfully
+2025-09-03 17:36:47,665 - src.audio.capture - ERROR - Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 17:36:47,681 - src.stt.whisper_engine - INFO - Loading Whisper model: base
+2025-09-03 17:36:48,234 - src.stt.whisper_engine - INFO - Successfully loaded Whisper model: base
+2025-09-03 17:36:48,235 - src.stt.audio_utils - WARNING - Audio duration too short: 0.01s
+2025-09-03 17:36:48,235 - src.stt.whisper_engine - ERROR - Transcription failed: Audio duration not acceptable: /tmp/tmp2ul5quee.wav
+2025-09-03 17:36:48,235 - src.audio.capture - INFO - Audio capture stopped
+2025-09-03 17:37:07,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:37:37,777 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:38:07,797 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:38:37,780 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:39:07,794 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:39:37,804 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:40:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:40:37,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:41:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:41:37,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:42:07,791 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:42:37,783 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:43:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:43:37,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:44:07,796 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:44:37,777 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:45:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:45:37,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:46:07,790 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:46:37,789 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:47:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:47:37,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:48:07,793 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:48:37,774 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:49:07,782 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:49:37,776 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:50:07,776 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:50:37,782 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:51:07,797 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:51:37,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:52:07,774 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:52:37,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:53:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:53:37,802 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:54:07,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:54:37,782 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:55:07,785 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:55:37,785 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:56:07,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:56:37,774 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:57:07,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:57:15,355 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 17:57:21,850 - talkbridge.desktop.mainwindow - INFO - Closing main window...
+2025-09-03 17:57:21,851 - talkbridge.desktop.mainwindow - INFO - Main window closed
+2025-09-03 17:57:21,852 - talkbridge.desktop.app - INFO - Cleaning up application resources...
+2025-09-03 17:57:21,852 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-03 17:57:21,852 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-03 17:57:21,852 - talkbridge.desktop.app - INFO - Cleanup completed
+2025-09-03 17:57:21,853 - talkbridge.desktop - INFO - Application finished with code: 0
+2025-09-03 19:23:26,959 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 19:23:26,959 - root - INFO - ✓ PySide6 available
+2025-09-03 19:23:26,959 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 19:23:26,959 - root - INFO - ✓ Audio Capture available
+2025-09-03 19:23:26,959 - root - INFO - ✓ Authentication Manager available
+2025-09-03 19:23:26,959 - root - INFO - ✓ Translation Engine available
+2025-09-03 19:23:26,959 - root - INFO - ✓ Argos Translate available
+2025-09-03 19:23:26,959 - root - INFO - ✓ MediaPipe available
+2025-09-03 19:23:26,960 - root - INFO - ✓ Coqui TTS available
+2025-09-03 19:23:26,960 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 19:23:26,960 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 19:23:26,960 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 19:23:27,004 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 19:23:27,004 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 19:23:28,019 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 19:23:28,020 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 19:23:28,020 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 19:23:28,021 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 19:23:28,021 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 19:23:28,021 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 19:23:28,021 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 19:23:28,021 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 19:23:28,021 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 19:23:28,023 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 19:23:52,954 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 19:23:52,954 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 19:23:52,955 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 19:23:52,955 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 19:23:52,955 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 19:23:52,955 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 19:23:52,955 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 19:23:52,955 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 19:23:52,956 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 19:23:52,956 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 19:23:52,956 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 19:23:52,956 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 19:23:52,956 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 19:23:52,957 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 19:23:54,385 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 19:23:54,386 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 19:23:54,386 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 19:23:54,481 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 19:23:54,481 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 19:23:54,481 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 19:23:54,483 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 19:23:54,483 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 19:23:54,483 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 19:23:54,487 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 19:23:54,488 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 19:23:54,488 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 19:23:54,554 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 19:23:54,573 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 19:23:54,575 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 19:23:54,576 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 19:23:54,576 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 19:23:54,576 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 19:23:54,599 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 19:23:55,441 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 19:24:24,783 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 19:24:54,783 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 19:25:24,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 19:25:54,803 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 19:26:14,420 - src.desktop.components.avatar_tab.CameraController - INFO - Camera state changed to: starting
+2025-09-03 19:26:24,774 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 19:26:40,734 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 19:26:40,735 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-03 19:26:40,735 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-03 19:26:40,739 - src.audio.capture - INFO - Microphone capture started successfully
+2025-09-03 19:26:40,739 - src.audio.capture - ERROR - Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
+2025-09-03 19:26:40,755 - src.stt.whisper_engine - INFO - Loading Whisper model: base
+2025-09-03 19:26:41,311 - src.stt.whisper_engine - INFO - Successfully loaded Whisper model: base
+2025-09-03 19:26:41,311 - src.stt.audio_utils - WARNING - Audio duration too short: 0.01s
+2025-09-03 19:26:41,311 - src.stt.whisper_engine - ERROR - Transcription failed: Audio duration not acceptable: /tmp/tmph77y0vy_.wav
+2025-09-03 19:26:41,312 - src.audio.capture - INFO - Audio capture stopped
+2025-09-03 19:26:47,517 - talkbridge.desktop.mainwindow - INFO - Closing main window...
+2025-09-03 19:26:47,518 - talkbridge.desktop.mainwindow - INFO - Main window closed
+2025-09-03 19:26:47,519 - talkbridge.desktop.app - INFO - Cleaning up application resources...
+2025-09-03 19:26:47,519 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-03 19:26:47,519 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-03 19:26:47,520 - talkbridge.desktop.app - INFO - Cleanup completed
+2025-09-03 19:26:47,520 - talkbridge.desktop - INFO - Application finished with code: 0
+2025-09-03 21:45:43,547 - talkbridge.desktop - INFO - Starting TalkBridge Desktop Application...
+2025-09-03 21:45:43,547 - root - INFO - ✓ PySide6 available
+2025-09-03 21:45:43,547 - root - INFO - ✓ TTS Synthesizer available
+2025-09-03 21:45:43,547 - root - INFO - ✓ Audio Capture available
+2025-09-03 21:45:43,547 - root - INFO - ✓ Authentication Manager available
+2025-09-03 21:45:43,547 - root - INFO - ✓ Translation Engine available
+2025-09-03 21:45:43,547 - root - INFO - ✓ Argos Translate available
+2025-09-03 21:45:43,547 - root - INFO - ✓ MediaPipe available
+2025-09-03 21:45:43,547 - root - INFO - ✓ Coqui TTS available
+2025-09-03 21:45:43,547 - root - INFO - Dependencies Status: 3/3 core modules, 4/4 total TalkBridge modules
+2025-09-03 21:45:43,547 - talkbridge.desktop - INFO - Dependencies check completed
+2025-09-03 21:45:43,547 - talkbridge.desktop - INFO - Qt thread cleanup configured
+2025-09-03 21:45:43,593 - talkbridge.desktop.app - INFO - TalkBridgeApplication initialized
+2025-09-03 21:45:43,593 - talkbridge.desktop - INFO - Application configured successfully
+2025-09-03 21:45:44,607 - talkbridge.desktop.app - INFO - Initializing core components...
+2025-09-03 21:45:44,607 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-03 21:45:44,607 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-03 21:45:44,608 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-03 21:45:44,608 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-03 21:45:44,608 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-03 21:45:44,608 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-03 21:45:44,608 - talkbridge.desktop.app - INFO - Core components initialized successfully
+2025-09-03 21:45:44,608 - talkbridge.desktop.app - INFO - Login attempt 1/3
+2025-09-03 21:45:44,610 - talkbridge.desktop.login - INFO - LoginDialog initialized successfully
+2025-09-03 21:46:09,548 - talkbridge.desktop.login - INFO - 🚀 AuthenticationManager.authenticate() called for user: admin
+2025-09-03 21:46:09,548 - talkbridge.desktop.login - INFO - 📝 Creating authentication thread...
+2025-09-03 21:46:09,548 - talkbridge.desktop.login - INFO - ⏰ Starting timeout timer...
+2025-09-03 21:46:09,548 - talkbridge.desktop.login - INFO - 🏃‍♂️ Starting thread...
+2025-09-03 21:46:09,548 - talkbridge.desktop.login - INFO - ✅ Authentication process initiated successfully
+2025-09-03 21:46:09,549 - talkbridge.desktop.auth - INFO - Starting authentication for user: admin
+2025-09-03 21:46:09,549 - talkbridge.desktop.auth - INFO - AuthManager available, attempting authentication...
+2025-09-03 21:46:09,549 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 21:46:09,549 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-03 21:46:09,549 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-03 21:46:09,549 - talkbridge.desktop.auth - INFO - User admin authenticated successfully
+2025-09-03 21:46:09,549 - talkbridge.desktop.auth - INFO - Authentication result: True, emitting signal...
+2025-09-03 21:46:09,550 - talkbridge.desktop.auth - INFO - Signal emitted successfully
+2025-09-03 21:46:09,551 - talkbridge.desktop.login - INFO - Authentication successful
+2025-09-03 21:46:11,128 - talkbridge.desktop.app - INFO - User authenticated successfully
+2025-09-03 21:46:11,129 - talkbridge.desktop.login - INFO - Cleaning up authentication thread...
+2025-09-03 21:46:11,129 - talkbridge.desktop.app - INFO - Authentication successful
+2025-09-03 21:46:11,234 - talkbridge.desktop.app - INFO - Initializing services...
+2025-09-03 21:46:11,234 - talkbridge.desktop.bridge - INFO - Initializing all services...
+2025-09-03 21:46:11,235 - talkbridge.desktop.tts - INFO - TTSService initialized (available: True)
+2025-09-03 21:46:11,235 - talkbridge.desktop.audio - INFO - AudioService initialized (available: True)
+2025-09-03 21:46:11,236 - talkbridge.desktop.bridge - INFO - Service initialization completed: 2/2 successful
+2025-09-03 21:46:11,236 - talkbridge.desktop.app - INFO - Services initialized successfully
+2025-09-03 21:46:11,240 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 21:46:11,240 - talkbridge.desktop.chat - INFO - Services initialized successfully: WhisperEngine, ConversationManager
+2025-09-03 21:46:11,240 - talkbridge.desktop.chat - WARNING - Services not available: Translator: 'ollama'
+2025-09-03 21:46:11,304 - talkbridge.desktop.mainwindow - INFO - All tabs created successfully
+2025-09-03 21:46:11,322 - talkbridge.desktop.mainwindow - INFO - UI setup completed
+2025-09-03 21:46:11,324 - talkbridge.desktop.mainwindow - INFO - Menu bar created
+2025-09-03 21:46:11,324 - talkbridge.desktop.mainwindow - INFO - Status bar created
+2025-09-03 21:46:11,325 - talkbridge.desktop.mainwindow - INFO - Signals connected
+2025-09-03 21:46:11,325 - talkbridge.desktop.mainwindow - INFO - MainWindow initialized with integrated tabs
+2025-09-03 21:46:11,347 - talkbridge.desktop.app - INFO - Application fully initialized
+2025-09-03 21:46:12,275 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 21:46:14,405 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-03 21:46:14,406 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-03 21:46:14,406 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-03 21:46:14,585 - src.audio.capture - INFO - Microphone capture started successfully
+2025-09-03 21:46:14,591 - src.audio.capture - INFO - Found PulseAudio monitor: alsa_output.pci-0000_2d_00.1.hdmi-stereo-extra2.monitor
+2025-09-03 21:46:14,591 - src.audio.capture - ERROR - Failed to start output capture: No input device matching 'alsa_output.pci-0000_2d_00.1.hdmi-stereo-extra2.monitor'
+2025-09-03 21:46:14,591 - src.audio.capture - INFO - Output capture unavailable. System audio recording disabled.
+2025-09-03 21:46:14,601 - src.stt.whisper_engine - INFO - Loading Whisper model: base
+2025-09-03 21:46:15,130 - src.stt.whisper_engine - INFO - Successfully loaded Whisper model: base
+2025-09-03 21:46:15,131 - src.stt.audio_utils - WARNING - Audio duration too short: 0.01s
+2025-09-03 21:46:15,131 - src.stt.audio_utils - WARNING - Audio duration (0.01s) may be problematic but attempting transcription
+2025-09-03 21:46:15,232 - src.stt.whisper_engine - INFO - Transcribing file: /tmp/tmp_bbvmjne.wav
+2025-09-03 21:46:15,541 - src.stt.whisper_engine - INFO - Transcription result: ...
+2025-09-03 21:46:15,542 - src.audio.capture - INFO - Audio capture stopped
+2025-09-03 21:46:40,774 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 21:47:10,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 21:47:40,773 - src.ollama.ollama_client - INFO - Ollama server is available: 200
+2025-09-03 21:47:52,152 - talkbridge.desktop.mainwindow - INFO - Closing main window...
+2025-09-03 21:47:52,153 - talkbridge.desktop.mainwindow - INFO - Main window closed
+2025-09-03 21:47:52,154 - talkbridge.desktop.app - INFO - Cleaning up application resources...
+2025-09-03 21:47:52,154 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-03 21:47:52,155 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-03 21:47:52,155 - talkbridge.desktop.app - INFO - Cleanup completed
+2025-09-03 21:47:52,155 - talkbridge.desktop - INFO - Application finished with code: 0

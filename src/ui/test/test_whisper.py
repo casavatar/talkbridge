@@ -3,7 +3,7 @@
 TalkBridge UI - Test Whisper
 ============================
 
-Módulo test_whisper para TalkBridge
+Test whisper module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19

@@ -3,7 +3,7 @@
 TalkBridge Ollama - Prompt Engineer
 ===================================
 
-Motor/Engine del módulo
+Module engine
 
 Author: TalkBridge Team
 Date: 2025-08-19

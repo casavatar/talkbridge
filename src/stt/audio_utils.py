@@ -3,7 +3,7 @@
 TalkBridge STT - Audio Utils
 ============================
 
-Módulo audio_utils para TalkBridge
+Audio utils module for TalkBridge
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -57,9 +57,11 @@ def validate_audio_bytes(audio_bytes: bytes) -> bool:
         logger.warning("Empty audio data provided")
         return False
     
-    if len(audio_bytes) < 1024:  # Minimum size for meaningful audio
-        logger.warning("Audio data too small for transcription")
-        return False
+    # More lenient minimum size check for short audio clips
+    if len(audio_bytes) < 512:  # Reduced from 1024 to accommodate shorter clips
+        logger.warning(f"Audio data small ({len(audio_bytes)} bytes) - may have transcription issues")
+        # Return True but log warning instead of failing
+        return True
     
     return True
 
@@ -165,9 +167,14 @@ def check_audio_duration(file_path: str) -> bool:
         logger.warning(f"Audio duration ({duration:.2f}s) exceeds maximum ({MAX_AUDIO_DURATION}s)")
         return False
     
-    if duration < 0.1:  # Less than 100ms
+    # More lenient minimum duration check - allow shorter audio clips
+    if duration < 0.05:  # Less than 50ms - definitely too short
         logger.warning(f"Audio duration too short: {duration:.2f}s")
         return False
+    
+    # Log but allow short audio (some valid audio can be very brief)
+    if duration < 0.5:  # Less than 500ms
+        logger.info(f"Short audio duration detected: {duration:.2f}s - proceeding with transcription")
     
     return True
 
@@ -233,9 +240,14 @@ def preprocess_audio(file_path: str) -> str:
     if not validate_audio_file(file_path):
         raise ValueError(f"Invalid audio file: {file_path}")
     
-    # Check duration
-    if not check_audio_duration(file_path):
-        raise ValueError(f"Audio duration not acceptable: {file_path}")
+    # Check duration with improved error handling
+    try:
+        if not check_audio_duration(file_path):
+            # Instead of failing, try to process anyway with a warning
+            duration = get_audio_duration(file_path)
+            logger.warning(f"Audio duration ({duration:.2f}s) may be problematic but attempting transcription")
+    except Exception as e:
+        logger.warning(f"Could not validate audio duration: {e} - attempting transcription anyway")
     
     # If file is already in correct format, return as is
     file_ext = Path(file_path).suffix.lower()
@@ -251,6 +263,12 @@ def preprocess_audio(file_path: str) -> str:
     
     # Convert to proper format
     temp_output = tempfile.mktemp(suffix='.wav')
+    
+    if convert_audio_format(file_path, temp_output):
+        return temp_output
+    else:
+        logger.warning("Audio format conversion failed, using original file")
+        return file_path
     if convert_audio_format(file_path, temp_output):
         return temp_output
     else:

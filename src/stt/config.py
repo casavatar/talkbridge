@@ -3,7 +3,7 @@
 TalkBridge STT - Config
 =======================
 
-Configuración del módulo
+Module configuration
 
 Author: TalkBridge Team
 Date: 2025-08-19
@@ -61,6 +61,7 @@ MODEL_CACHE_ENABLED = True  # Cache downloaded models locally
 # Audio Format Settings
 SUPPORTED_FORMATS = [".wav", ".mp3", ".m4a", ".flac", ".ogg"]
 MAX_AUDIO_DURATION = 300  # Maximum audio duration in seconds (5 minutes)
+MIN_AUDIO_DURATION = 0.05  # Minimum audio duration in seconds (50ms)
 
 # Logging Settings
 LOG_LEVEL = "INFO"  # Logging level for STT operations
@@ -69,6 +70,7 @@ LOG_TRANSCRIPTION = True  # Log transcription results
 # Error Handling
 RETRY_ATTEMPTS = 3  # Number of retry attempts for failed transcriptions
 TIMEOUT_SECONDS = 30  # Timeout for transcription operations
+GRACEFUL_DEGRADATION = True  # Continue processing even with minor errors
 
 # Quality Settings
 CONFIDENCE_THRESHOLD = 0.0  # Minimum confidence score (0.0 to 1.0)

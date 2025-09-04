@@ -13,8 +13,8 @@ Requirements:
 - PyQt6
 ======================================================================
 Functions:
-- __post_init__: Función __post_init__
-- __init__: Función __init__
+- __post_init__: Function __post_init__
+- __init__: Function __init__
 - initialize: Initializes the StateManager by loading configuration and state.
 - _load_main_config: Loads the main configuration from config.yaml.
 - _get_default_config: Returns default configuration.

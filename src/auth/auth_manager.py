@@ -3,7 +3,7 @@
 TalkBridge UI - Auth Manager
 ============================
 
-Gestor/Manager del módulo
+Module manager
 
 Author: TalkBridge Team
 Date: 2025-08-19

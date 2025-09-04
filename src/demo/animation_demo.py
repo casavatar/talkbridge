@@ -18,7 +18,7 @@ Functions:
 - demo_interactive_animations: Demo the interactive animations.
 - demo_animation_manager: Demo the animation manager.
 - main: Main demo function.
-- demo_audio_callback: Función demo_audio_callback
+- demo_audio_callback: Function demo_audio_callback
 ======================================================================
 """
 
