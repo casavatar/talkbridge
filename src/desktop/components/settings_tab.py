@@ -6,8 +6,8 @@ TalkBridge Desktop - Settings Tab (CustomTkinter)
 Settings tab for TTS, translation and animation with CustomTkinter.
 
 Author: TalkBridge Team
-Date: 2025-09-03
-Version: 2.0
+Date: 2025-09-08
+Version: 2.1
 
 Requirements:
 - customtkinter
@@ -26,6 +26,24 @@ import customtkinter as ctk
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+# Import unified theme
+try:
+    from src.desktop.ui.theme import (
+        ColorPalette, Typography, Spacing, Dimensions, 
+        ComponentThemes, UIText, Icons, UXGuidelines
+    )
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
+
+# Import UI utilities and theme
+try:
+    from src.desktop.ui.ui_utils import clean_text
+    from src.desktop.ui.theme import ComponentThemes, Typography, ColorPalette, Dimensions
+    UI_THEME_AVAILABLE = True
+except ImportError:
+    UI_THEME_AVAILABLE = False
+
 try:
     from src.config import get_config
     CONFIG_AVAILABLE = True
@@ -36,55 +54,73 @@ except ImportError:
 class SettingsTheme:
     """Theme configuration for the settings tab."""
     
-    # Base colors
-    BACKGROUND_MAIN = "#1e1e1e"
-    BACKGROUND_SECONDARY = "#2d2d2d"
-    BACKGROUND_ELEVATED = "#3c3c3c"
-    
-    # Text colors
-    TEXT_PRIMARY = "#ffffff"
-    TEXT_SECONDARY = "#cccccc"
-    TEXT_HINT = "#888888"
-    
-    # Accent colors
-    ACCENT_BLUE = "#0078d4"
-    ACCENT_BLUE_HOVER = "#106ebe"
-    ACCENT_GREEN = "#4CAF50"
-    ACCENT_GREEN_HOVER = "#45a049"
-    ACCENT_ORANGE = "#FF9800"
-    ACCENT_ORANGE_HOVER = "#F57C00"
-    
-    # Input colors
-    INPUT_BACKGROUND = "#3c3c3c"
-    INPUT_BORDER = "#555555"
-    INPUT_BORDER_FOCUS = "#0078d4"
-    
-    # Success and error colors
-    SUCCESS_COLOR = "#4CAF50"
-    WARNING_COLOR = "#FF9800"
-    ERROR_COLOR = "#f44336"
+    # Use unified theme if available, otherwise fallback to original colors
+    if THEME_AVAILABLE:
+        BACKGROUND_MAIN = ColorPalette.BACKGROUND_PRIMARY
+        BACKGROUND_SECONDARY = ColorPalette.BACKGROUND_SECONDARY
+        BACKGROUND_ELEVATED = ColorPalette.BACKGROUND_ELEVATED
+        
+        TEXT_PRIMARY = ColorPalette.TEXT_PRIMARY
+        TEXT_SECONDARY = ColorPalette.TEXT_SECONDARY
+        TEXT_HINT = ColorPalette.TEXT_HINT
+        
+        ACCENT_BLUE = ColorPalette.ACCENT_PRIMARY
+        ACCENT_BLUE_HOVER = ColorPalette.ACCENT_PRIMARY_HOVER
+        ACCENT_GREEN = ColorPalette.SUCCESS
+        ACCENT_GREEN_HOVER = ColorPalette.SUCCESS_HOVER
+        ACCENT_ORANGE = ColorPalette.WARNING
+        ACCENT_ORANGE_HOVER = ColorPalette.WARNING_HOVER
+        
+        INPUT_BACKGROUND = ColorPalette.INPUT_BACKGROUND
+        INPUT_BORDER = ColorPalette.BORDER_DEFAULT
+        INPUT_BORDER_FOCUS = ColorPalette.BORDER_FOCUS
+        
+        SUCCESS_COLOR = ColorPalette.SUCCESS
+        WARNING_COLOR = ColorPalette.WARNING
+        ERROR_COLOR = ColorPalette.ERROR
+    else:
+        # Fallback colors
+        BACKGROUND_MAIN = "#1e1e1e"
+        BACKGROUND_SECONDARY = "#2d2d2d"
+        BACKGROUND_ELEVATED = "#3c3c3c"
+        
+        TEXT_PRIMARY = "#ffffff"
+        TEXT_SECONDARY = "#cccccc"
+        TEXT_HINT = "#888888"
+        
+        ACCENT_BLUE = "#0078d4"
+        ACCENT_BLUE_HOVER = "#106ebe"
+        ACCENT_GREEN = "#4CAF50"
+        ACCENT_GREEN_HOVER = "#45a049"
+        ACCENT_ORANGE = "#FF9800"
+        ACCENT_ORANGE_HOVER = "#F57C00"
+        
+        INPUT_BACKGROUND = "#3c3c3c"
+        INPUT_BORDER = "#555555"
+        INPUT_BORDER_FOCUS = "#0078d4"
+        
+        SUCCESS_COLOR = "#4CAF50"
+        WARNING_COLOR = "#FF9800"
+        ERROR_COLOR = "#f44336"
 
 
-class UIConstants:
-    """UI layout constants for the settings tab."""
-    
-    # Spacing
-    MAIN_MARGIN = 20
-    SECTION_SPACING = 15
-    ITEM_SPACING = 10
-    SMALL_SPACING = 5
-    
-    # Sizes
-    BUTTON_HEIGHT = 40
-    INPUT_HEIGHT = 35
-    SLIDER_HEIGHT = 25
-    TAB_HEIGHT = 300
-    
-    # Fonts
-    TITLE_FONT_SIZE = 20
-    SECTION_FONT_SIZE = 16
-    LABEL_FONT_SIZE = 12
-    INPUT_FONT_SIZE = 11
+# Spacing (using theme if available)
+MAIN_MARGIN = Spacing.MARGIN_MAIN if THEME_AVAILABLE else 20
+SECTION_SPACING = Spacing.LG if THEME_AVAILABLE else 15
+ITEM_SPACING = Spacing.SM if THEME_AVAILABLE else 10
+SMALL_SPACING = Spacing.XS if THEME_AVAILABLE else 5
+
+# Sizes (using theme if available)
+BUTTON_HEIGHT = Dimensions.HEIGHT_BUTTON if THEME_AVAILABLE else 40
+INPUT_HEIGHT = Dimensions.HEIGHT_INPUT if THEME_AVAILABLE else 35
+SLIDER_HEIGHT = Dimensions.HEIGHT_SLIDER if THEME_AVAILABLE else 25
+TAB_HEIGHT = 300
+
+# Fonts (using theme if available)
+TITLE_FONT_SIZE = Typography.FONT_SIZE_H1 if THEME_AVAILABLE else 20
+SECTION_FONT_SIZE = Typography.FONT_SIZE_H3 if THEME_AVAILABLE else 16
+LABEL_FONT_SIZE = Typography.FONT_SIZE_BODY if THEME_AVAILABLE else 12
+INPUT_FONT_SIZE = Typography.FONT_SIZE_CAPTION if THEME_AVAILABLE else 11
 
 
 class SettingsTab:
@@ -173,19 +209,18 @@ class SettingsTab:
         """Set up the enhanced settings user interface."""
         # Main frame with themed background
         self.main_frame = ctk.CTkFrame(self.parent, fg_color=SettingsTheme.BACKGROUND_MAIN)
-        self.main_frame.pack(fill="both", expand=True, padx=UIConstants.MAIN_MARGIN, pady=UIConstants.MAIN_MARGIN)
+        self.main_frame.pack(fill="both", expand=True, padx=MAIN_MARGIN, pady=MAIN_MARGIN)
         
         # Title section
         title_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
-        title_frame.pack(fill="x", pady=(0, UIConstants.SECTION_SPACING))
+        title_frame.pack(fill="x", pady=(0, SECTION_SPACING))
         
         self.title_label = ctk.CTkLabel(
             title_frame,
-            text="⚙️ System Settings",
-            font=ctk.CTkFont(size=UIConstants.TITLE_FONT_SIZE, weight="bold"),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            text=clean_text("System Settings") if THEME_AVAILABLE else "System Settings",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=TITLE_FONT_SIZE, weight="bold"), "text_color": SettingsTheme.TEXT_PRIMARY}
         )
-        self.title_label.pack(pady=UIConstants.ITEM_SPACING)
+        self.title_label.pack(pady=ITEM_SPACING)
         
         # Settings tabs
         self.tabview = ctk.CTkTabview(
@@ -195,9 +230,9 @@ class SettingsTab:
             segmented_button_selected_color=SettingsTheme.ACCENT_BLUE,
             segmented_button_selected_hover_color=SettingsTheme.ACCENT_BLUE_HOVER,
             text_color=SettingsTheme.TEXT_PRIMARY,
-            height=UIConstants.TAB_HEIGHT
+            height=TAB_HEIGHT
         )
-        self.tabview.pack(fill="both", expand=True, pady=UIConstants.SECTION_SPACING)
+        self.tabview.pack(fill="both", expand=True, pady=SECTION_SPACING)
         
         # Create tabs
         self._create_tts_tab()
@@ -228,25 +263,23 @@ class SettingsTab:
         
         # Voice Synthesis Engine Section
         engine_frame = ctk.CTkFrame(tts_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        engine_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        engine_frame.pack(fill="x", pady=SECTION_SPACING)
         
         engine_title = ctk.CTkLabel(
             engine_frame,
-            text="🔊 Voice Synthesis Engine",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            text=clean_text("Voice Synthesis Engine") if THEME_AVAILABLE else "Voice Synthesis Engine",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"), "text_color": SettingsTheme.TEXT_PRIMARY}
         )
         engine_title.pack(anchor="w", padx=15, pady=(15, 10))
         
         # Engine selection
         engine_selection_frame = ctk.CTkFrame(engine_frame, fg_color="transparent")
-        engine_selection_frame.pack(fill="x", padx=15, pady=UIConstants.ITEM_SPACING)
+        engine_selection_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         ctk.CTkLabel(
             engine_selection_frame,
-            text="TTS Engine:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            text=clean_text("TTS Engine:") if THEME_AVAILABLE else "TTS Engine:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
         ).pack(side="left")
         
         self.tts_engine_var = tk.StringVar(value="TTS Coqui (Local)")
@@ -260,22 +293,19 @@ class SettingsTab:
                 "System (SAPI)"
             ],
             variable=self.tts_engine_var,
-            fg_color=SettingsTheme.INPUT_BACKGROUND,
-            border_color=SettingsTheme.INPUT_BORDER,
-            button_color=SettingsTheme.ACCENT_BLUE,
-            command=self._on_tts_engine_changed
+            command=self._on_tts_engine_changed,
+            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": SettingsTheme.INPUT_BACKGROUND, "border_color": SettingsTheme.INPUT_BORDER, "button_color": SettingsTheme.ACCENT_BLUE}
         )
         self.tts_engine_combo.pack(side="right", padx=(10, 0))
         
         # TTS Model selection
         model_selection_frame = ctk.CTkFrame(engine_frame, fg_color="transparent")
-        model_selection_frame.pack(fill="x", padx=15, pady=UIConstants.ITEM_SPACING)
+        model_selection_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         ctk.CTkLabel(
             model_selection_frame,
-            text="Voice Model:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            text=clean_text("Voice Model:") if THEME_AVAILABLE else "Voice Model:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
         ).pack(side="left")
         
         self.tts_model_var = tk.StringVar(value="tts_models/en/ljspeech/tacotron2-DDC")
@@ -296,12 +326,12 @@ class SettingsTab:
         
         # Voice selection
         voice_selection_frame = ctk.CTkFrame(engine_frame, fg_color="transparent")
-        voice_selection_frame.pack(fill="x", padx=15, pady=(UIConstants.ITEM_SPACING, 15))
+        voice_selection_frame.pack(fill="x", padx=15, pady=(ITEM_SPACING, 15))
         
         ctk.CTkLabel(
             voice_selection_frame,
             text="Voice:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         ).pack(side="left")
         
@@ -318,12 +348,12 @@ class SettingsTab:
         
         # Voice Parameters Section
         params_frame = ctk.CTkFrame(tts_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        params_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        params_frame.pack(fill="x", pady=SECTION_SPACING)
         
         params_title = ctk.CTkLabel(
             params_frame,
             text="🎛️ Voice Parameters",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         params_title.pack(anchor="w", padx=15, pady=(15, 10))
@@ -365,24 +395,24 @@ class SettingsTab:
         
         # Translation Service Section
         service_frame = ctk.CTkFrame(trans_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        service_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        service_frame.pack(fill="x", pady=SECTION_SPACING)
         
         service_title = ctk.CTkLabel(
             service_frame,
             text="🌐 Translation Service",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         service_title.pack(anchor="w", padx=15, pady=(15, 10))
         
         # Service selection
         service_selection_frame = ctk.CTkFrame(service_frame, fg_color="transparent")
-        service_selection_frame.pack(fill="x", padx=15, pady=UIConstants.ITEM_SPACING)
+        service_selection_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         ctk.CTkLabel(
             service_selection_frame,
             text="Service:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         ).pack(side="left")
         
@@ -399,24 +429,24 @@ class SettingsTab:
         
         # Language Configuration Section
         lang_frame = ctk.CTkFrame(trans_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        lang_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        lang_frame.pack(fill="x", pady=SECTION_SPACING)
         
         lang_title = ctk.CTkLabel(
             lang_frame,
             text="🗣️ Language Configuration",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         lang_title.pack(anchor="w", padx=15, pady=(15, 10))
         
         # Source language
         source_lang_frame = ctk.CTkFrame(lang_frame, fg_color="transparent")
-        source_lang_frame.pack(fill="x", padx=15, pady=UIConstants.ITEM_SPACING)
+        source_lang_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         ctk.CTkLabel(
             source_lang_frame,
             text="Source Language:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         ).pack(side="left")
         
@@ -433,12 +463,12 @@ class SettingsTab:
         
         # Target language
         target_lang_frame = ctk.CTkFrame(lang_frame, fg_color="transparent")
-        target_lang_frame.pack(fill="x", padx=15, pady=(UIConstants.ITEM_SPACING, 15))
+        target_lang_frame.pack(fill="x", padx=15, pady=(ITEM_SPACING, 15))
         
         ctk.CTkLabel(
             target_lang_frame,
             text="Target Language:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         ).pack(side="left")
         
@@ -455,7 +485,7 @@ class SettingsTab:
 
     def _create_animation_tab(self):
         """Create the animation settings tab."""
-        anim_tab = self.tabview.add("🎭 Animation")
+        anim_tab = self.tabview.add("Animation")
         
         anim_scroll = ctk.CTkScrollableFrame(
             anim_tab,
@@ -466,12 +496,12 @@ class SettingsTab:
         
         # Animation Controls Section
         controls_frame = ctk.CTkFrame(anim_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        controls_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        controls_frame.pack(fill="x", pady=SECTION_SPACING)
         
         controls_title = ctk.CTkLabel(
             controls_frame,
-            text="🎭 Animation Controls",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
+            text="Animation Controls",
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         controls_title.pack(anchor="w", padx=15, pady=(15, 10))
@@ -486,7 +516,7 @@ class SettingsTab:
             fg_color=SettingsTheme.ACCENT_BLUE,
             hover_color=SettingsTheme.ACCENT_BLUE_HOVER
         )
-        self.enable_animations_checkbox.pack(anchor="w", padx=15, pady=UIConstants.ITEM_SPACING)
+        self.enable_animations_checkbox.pack(anchor="w", padx=15, pady=ITEM_SPACING)
         
         # Animation speed
         self._create_slider_control(
@@ -509,24 +539,24 @@ class SettingsTab:
         
         # Device Configuration Section
         device_frame = ctk.CTkFrame(audio_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        device_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        device_frame.pack(fill="x", pady=SECTION_SPACING)
         
         device_title = ctk.CTkLabel(
             device_frame,
             text="🎤 Audio Devices",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         device_title.pack(anchor="w", padx=15, pady=(15, 10))
         
         # Input device
         input_device_frame = ctk.CTkFrame(device_frame, fg_color="transparent")
-        input_device_frame.pack(fill="x", padx=15, pady=UIConstants.ITEM_SPACING)
+        input_device_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         ctk.CTkLabel(
             input_device_frame,
             text="Input Device:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         ).pack(side="left")
         
@@ -554,24 +584,24 @@ class SettingsTab:
         
         # Application Preferences Section
         prefs_frame = ctk.CTkFrame(general_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        prefs_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        prefs_frame.pack(fill="x", pady=SECTION_SPACING)
         
         prefs_title = ctk.CTkLabel(
             prefs_frame,
             text="🔧 Application Preferences",
-            font=ctk.CTkFont(size=UIConstants.SECTION_FONT_SIZE, weight="bold"),
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         prefs_title.pack(anchor="w", padx=15, pady=(15, 10))
         
         # Theme selection
         theme_frame = ctk.CTkFrame(prefs_frame, fg_color="transparent")
-        theme_frame.pack(fill="x", padx=15, pady=(UIConstants.ITEM_SPACING, 15))
+        theme_frame.pack(fill="x", padx=15, pady=(ITEM_SPACING, 15))
         
         ctk.CTkLabel(
             theme_frame,
             text="Theme:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         ).pack(side="left")
         
@@ -589,49 +619,49 @@ class SettingsTab:
     def _create_action_buttons(self):
         """Create action buttons section."""
         buttons_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
-        buttons_frame.pack(fill="x", pady=UIConstants.SECTION_SPACING)
+        buttons_frame.pack(fill="x", pady=SECTION_SPACING)
         
         # Save button
         self.save_button = ctk.CTkButton(
             buttons_frame,
             text="💾 Save Settings",
-            height=UIConstants.BUTTON_HEIGHT,
+            height=BUTTON_HEIGHT,
             fg_color=SettingsTheme.ACCENT_GREEN,
             hover_color=SettingsTheme.ACCENT_GREEN_HOVER,
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self._save_settings
         )
-        self.save_button.pack(side="left", padx=(0, UIConstants.ITEM_SPACING))
+        self.save_button.pack(side="left", padx=(0, ITEM_SPACING))
         
         # Reset button
         self.reset_button = ctk.CTkButton(
             buttons_frame,
-            text="🔄 Reset Values",
-            height=UIConstants.BUTTON_HEIGHT,
+            text="Reset Values",
+            height=BUTTON_HEIGHT,
             fg_color=SettingsTheme.ACCENT_ORANGE,
             hover_color=SettingsTheme.ACCENT_ORANGE_HOVER,
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self._reset_settings
         )
-        self.reset_button.pack(side="left", padx=UIConstants.ITEM_SPACING)
+        self.reset_button.pack(side="left", padx=ITEM_SPACING)
         
         # Export button
         self.export_button = ctk.CTkButton(
             buttons_frame,
             text="📤 Export Config",
-            height=UIConstants.BUTTON_HEIGHT,
+            height=BUTTON_HEIGHT,
             fg_color=SettingsTheme.ACCENT_BLUE,
             hover_color=SettingsTheme.ACCENT_BLUE_HOVER,
             font=ctk.CTkFont(size=14, weight="bold"),
             command=self._export_settings
         )
-        self.export_button.pack(side="left", padx=UIConstants.ITEM_SPACING)
+        self.export_button.pack(side="left", padx=ITEM_SPACING)
         
         # Import button
         self.import_button = ctk.CTkButton(
             buttons_frame,
             text="📥 Import Config",
-            height=UIConstants.BUTTON_HEIGHT,
+            height=BUTTON_HEIGHT,
             fg_color=SettingsTheme.INPUT_BACKGROUND,
             hover_color=SettingsTheme.BACKGROUND_ELEVATED,
             border_width=2,
@@ -645,13 +675,13 @@ class SettingsTab:
     def _create_slider_control(self, parent, label_text, min_value, max_value, default_value, var_setter):
         """Create a slider control with label and value display."""
         control_frame = ctk.CTkFrame(parent, fg_color="transparent")
-        control_frame.pack(fill="x", padx=15, pady=UIConstants.ITEM_SPACING)
+        control_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         # Label
         label = ctk.CTkLabel(
             control_frame,
             text=label_text,
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_PRIMARY
         )
         label.pack(side="left")
@@ -663,7 +693,7 @@ class SettingsTab:
         value_label = ctk.CTkLabel(
             control_frame,
             text=f"{default_value:.2f}",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=SettingsTheme.TEXT_SECONDARY,
             width=50
         )

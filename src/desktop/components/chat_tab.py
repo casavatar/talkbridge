@@ -6,8 +6,8 @@ TalkBridge Desktop - Chat Tab (CustomTkinter)
 Translated chat tab with voice input and spoken response.
 
 Author: TalkBridge Team
-Date: 2025-09-03
-Version: 2.0
+Date: 2025-09-08
+Version: 2.1
 
 Requirements:
 - customtkinter
@@ -27,6 +27,31 @@ import customtkinter as ctk
 # Import backend modules
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+# Import logging utilities
+try:
+    from src.desktop.logging_config import get_logger, log_exception, add_error_context
+    LOGGING_UTILS_AVAILABLE = True
+except ImportError:
+    LOGGING_UTILS_AVAILABLE = False
+
+# Import UI utilities and theme
+try:
+    from src.desktop.ui.ui_utils import clean_text
+    from src.desktop.ui.theme import ComponentThemes, Typography, ColorPalette
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
+
+# Import unified theme
+try:
+    from src.desktop.ui.theme import (
+        ColorPalette, Typography, Spacing, Dimensions, 
+        ComponentThemes, UIText, Icons, UXGuidelines
+    )
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
 
 try:
     from src.audio.capture import AudioCapture
@@ -176,13 +201,13 @@ class MessageWidget:
             bg_color = ChatTheme.USER_MESSAGE_BG
             border_color = ChatTheme.USER_MESSAGE_BORDER
             align = "e"
-            sender_text = "👤 You"
+            sender_text = "You" if THEME_AVAILABLE else "You"
             sender_color = "#87CEEB"
         else:
             bg_color = ChatTheme.ASSISTANT_MESSAGE_BG
             border_color = ChatTheme.ASSISTANT_MESSAGE_BORDER
             align = "w"
-            sender_text = "🤖 Assistant"
+            sender_text = "Assistant" if THEME_AVAILABLE else "Assistant"
             sender_color = "#DDA0DD"
         
         # Inner frame for message content
@@ -316,7 +341,12 @@ class ChatTab:
         self.parent = parent
         self.state_manager = state_manager
         self.core_bridge = core_bridge
+        # Logger with enhanced error handling
         self.logger = logging.getLogger("talkbridge.desktop.chat")
+        
+        # Add error context for better debugging
+        if LOGGING_UTILS_AVAILABLE:
+            add_error_context(self.logger, "ChatTab")
         
         # Backend components
         self.audio_capture: Optional[AudioCapture] = None
@@ -381,9 +411,8 @@ class ChatTab:
         
         title_label = ctk.CTkLabel(
             title_frame,
-            text="🤖 AI Chat with Translation & Voice",
-            font=ctk.CTkFont(size=20, weight="bold"),
-            text_color=ChatTheme.TEXT_PRIMARY
+            text=clean_text("AI Chat with Translation & Voice") if THEME_AVAILABLE else "AI Chat with Translation & Voice",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=20, weight="bold"), "text_color": ChatTheme.TEXT_PRIMARY}
         )
         title_label.pack(side="left")
         
@@ -407,9 +436,8 @@ class ChatTab:
         # Language selection
         lang_label = ctk.CTkLabel(
             settings_row1,
-            text="🌍 Language:",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            text_color=ChatTheme.TEXT_PRIMARY
+            text=clean_text("Language:") if THEME_AVAILABLE else "Language:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12, weight="bold"), "text_color": ChatTheme.TEXT_PRIMARY}
         )
         lang_label.pack(side="left", padx=(0, 10))
         
@@ -420,8 +448,7 @@ class ChatTab:
                    "Japanese (ja)", "Korean (ko)"],
             width=150,
             command=self.on_language_changed,
-            fg_color=ChatTheme.INPUT_BACKGROUND,
-            border_color=ChatTheme.INPUT_BORDER
+            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.INPUT_BACKGROUND, "border_color": ChatTheme.INPUT_BORDER}
         )
         self.language_combo.set("English (en)")
         self.language_combo.pack(side="left", padx=5)
@@ -429,9 +456,8 @@ class ChatTab:
         # Model selection
         model_label = ctk.CTkLabel(
             settings_row1,
-            text="🧠 AI Model:",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            text_color=ChatTheme.TEXT_PRIMARY
+            text=clean_text("AI Model:") if THEME_AVAILABLE else "AI Model:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12, weight="bold"), "text_color": ChatTheme.TEXT_PRIMARY}
         )
         model_label.pack(side="left", padx=(20, 10))
         
@@ -440,8 +466,7 @@ class ChatTab:
             values=["llama3.2:3b", "llama3.2:1b", "gemma2:2b", "codellama:7b", "mistral:7b"],
             width=150,
             command=self.on_model_changed,
-            fg_color=ChatTheme.INPUT_BACKGROUND,
-            border_color=ChatTheme.INPUT_BORDER
+            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.INPUT_BACKGROUND, "border_color": ChatTheme.INPUT_BORDER}
         )
         self.model_combo.set("llama3.2:3b")
         self.model_combo.pack(side="left", padx=5)
@@ -453,7 +478,7 @@ class ChatTab:
         # Voice toggle
         self.voice_switch = ctk.CTkSwitch(
             settings_row2,
-            text="🎤 Voice Input",
+            text=clean_text("Voice Input") if THEME_AVAILABLE else "Voice Input",
             command=self.toggle_voice_feature,
             fg_color=ChatTheme.ACCENT_GREEN
         )
@@ -462,7 +487,7 @@ class ChatTab:
         # Translation toggle
         self.translation_switch = ctk.CTkSwitch(
             settings_row2,
-            text="🌐 Translation",
+            text=clean_text("Translation") if THEME_AVAILABLE else "Translation",
             command=self.toggle_translation_feature,
             fg_color=ChatTheme.ACCENT_BLUE
         )
@@ -471,7 +496,7 @@ class ChatTab:
         # TTS toggle
         self.tts_switch = ctk.CTkSwitch(
             settings_row2,
-            text="🔊 Text-to-Speech",
+            text=clean_text("Text-to-Speech") if THEME_AVAILABLE else "Text-to-Speech",
             command=self.toggle_tts_feature,
             fg_color=ChatTheme.ACCENT_ORANGE
         )
@@ -483,21 +508,19 @@ class ChatTab:
         
         export_button = ctk.CTkButton(
             button_frame,
-            text="💾 Export",
+            text=clean_text("Export") if THEME_AVAILABLE else "Export",
             width=80,
             command=self.export_conversation,
-            fg_color=ChatTheme.ACCENT_BLUE,
-            hover_color=ChatTheme.ACCENT_BLUE_HOVER
+            **ComponentThemes.get_button_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.ACCENT_BLUE, "hover_color": ChatTheme.ACCENT_BLUE_HOVER}
         )
         export_button.pack(side="right", padx=5)
         
         clear_button = ctk.CTkButton(
             button_frame,
-            text="🗑️ Clear",
+            text=clean_text("Clear") if THEME_AVAILABLE else "Clear",
             width=80,
             command=self.clear_chat,
-            fg_color=ChatTheme.ACCENT_RED,
-            hover_color="#c62828"
+            **ComponentThemes.get_button_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.ACCENT_RED, "hover_color": "#c62828"}
         )
         clear_button.pack(side="right", padx=5)
         
@@ -510,9 +533,8 @@ class ChatTab:
         
         chat_title = ctk.CTkLabel(
             chat_header,
-            text="💬 Conversation",
-            font=ctk.CTkFont(size=16, weight="bold"),
-            text_color=ChatTheme.TEXT_PRIMARY
+            text=clean_text("Conversation") if THEME_AVAILABLE else "Conversation",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=16, weight="bold"), "text_color": ChatTheme.TEXT_PRIMARY}
         )
         chat_title.pack(side="left")
         
@@ -559,26 +581,24 @@ class ChatTab:
         input_frame.pack(fill="x", padx=10, pady=10)
         
         # Voice recording button with enhanced styling
+        voice_theme = ComponentThemes.get_button_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.ACCENT_GREEN, "hover_color": "#45a049", "font": ctk.CTkFont(size=16)}
+        voice_theme["height"] = 40  # Override height to ensure consistent sizing
         self.voice_button = ctk.CTkButton(
             input_frame,
-            text="🎤",
+            text=clean_text("Mic") if THEME_AVAILABLE else "Mic",
             width=50,
-            height=40,
             command=self.toggle_voice_input,
-            fg_color=ChatTheme.ACCENT_GREEN,
-            hover_color="#45a049",
-            font=ctk.CTkFont(size=16)
+            **voice_theme
         )
         self.voice_button.pack(side="left", padx=(0, 10))
         
         # Text input with enhanced styling
+        input_theme = ComponentThemes.get_input_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12), "fg_color": ChatTheme.INPUT_BACKGROUND, "border_color": ChatTheme.INPUT_BORDER}
+        input_theme["height"] = 40  # Override height to ensure consistent sizing
         self.input_entry = ctk.CTkEntry(
             input_frame,
-            placeholder_text="Type your message or use voice input... (Press Enter to send)",
-            font=ctk.CTkFont(size=12),
-            height=40,
-            fg_color=ChatTheme.INPUT_BACKGROUND,
-            border_color=ChatTheme.INPUT_BORDER
+            placeholder_text=clean_text("Type your message or use voice input... (Press Enter to send)") if THEME_AVAILABLE else "Type your message or use voice input... (Press Enter to send)",
+            **input_theme
         )
         self.input_entry.pack(side="left", fill="x", expand=True, padx=5)
         self.input_entry.bind("<Return>", lambda e: self.send_message())
@@ -586,15 +606,14 @@ class ChatTab:
         self.input_entry.bind("<FocusOut>", self.on_input_unfocus)
         
         # Send button with enhanced styling
+        send_theme = ComponentThemes.get_button_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.ACCENT_BLUE, "hover_color": ChatTheme.ACCENT_BLUE_HOVER, "font": ctk.CTkFont(size=12, weight="bold")}
+        send_theme["height"] = 40  # Override height to ensure consistent sizing
         self.send_button = ctk.CTkButton(
             input_frame,
-            text="📤 Send",
+            text=clean_text("Send") if THEME_AVAILABLE else "Send",
             width=100,
-            height=40,
             command=self.send_message,
-            fg_color=ChatTheme.ACCENT_BLUE,
-            hover_color=ChatTheme.ACCENT_BLUE_HOVER,
-            font=ctk.CTkFont(size=12, weight="bold")
+            **send_theme
         )
         self.send_button.pack(side="right", padx=(10, 0))
         
@@ -616,8 +635,7 @@ class ChatTab:
         self.status_label = ctk.CTkLabel(
             status_frame,
             text="Ready to chat",
-            font=ctk.CTkFont(size=11),
-            text_color=ChatTheme.TEXT_SECONDARY
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=11), "text_color": ChatTheme.TEXT_SECONDARY}
         )
         self.status_label.pack(side="left", padx=10, pady=8)
         
@@ -625,8 +643,7 @@ class ChatTab:
         self.message_count_label = ctk.CTkLabel(
             status_frame,
             text="Messages: 0",
-            font=ctk.CTkFont(size=10),
-            text_color=ChatTheme.TEXT_MUTED
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=10), "text_color": ChatTheme.TEXT_MUTED}
         )
         self.message_count_label.pack(side="right", padx=10, pady=8)
         
@@ -742,34 +759,108 @@ class ChatTab:
         self.add_message("System", "Welcome to TalkBridge Chat! You can type messages or use voice input.", "system")
 
     def initialize_components(self) -> None:
-        """Initializes backend components."""
+        """Initialize backend components with robust error handling."""
         self.logger.info("Initializing chat components")
         
         try:
+            # Initialize Audio Capture with validation
             if AUDIO_AVAILABLE:
-                self.audio_capture = AudioCapture()
-                self.logger.info("Audio capture initialized")
+                try:
+                    self.audio_capture = AudioCapture()
+                    # Validate that required methods are available
+                    if not hasattr(self.audio_capture, 'record_chunk'):
+                        self.logger.warning("AudioCapture missing record_chunk method - voice recording may not work")
+                    else:
+                        self.logger.debug("AudioCapture record_chunk method available")
+                    self.logger.info("Audio capture initialized")
+                except Exception as audio_error:
+                    if LOGGING_UTILS_AVAILABLE:
+                        log_exception(self.logger, audio_error, "Audio capture initialization")
+                    else:
+                        self.logger.error(f"Audio capture initialization failed: {audio_error}", exc_info=True)
+                    self.audio_capture = None
+            else:
+                self.logger.warning("Audio module not available - voice features disabled")
+                self.audio_capture = None
             
+            # Initialize Whisper Engine with validation
             if WHISPER_AVAILABLE:
-                self.whisper_engine = WhisperEngine()
-                self.logger.info("Whisper engine initialized")
+                try:
+                    self.whisper_engine = WhisperEngine()
+                    self.logger.info("Whisper engine initialized")
+                except Exception as whisper_error:
+                    self.logger.error(f"Whisper engine initialization failed: {whisper_error}")
+                    self.whisper_engine = None
             
+            # Initialize Translator with validation
             if TRANSLATION_AVAILABLE:
-                self.translator = Translator()
-                self.logger.info("Translator initialized")
+                try:
+                    self.translator = Translator()
+                    self.logger.info("Translator initialized")
+                except KeyError as config_error:
+                    self.logger.warning(f"Translator config missing: {config_error} - translation features disabled")
+                    self.translator = None
+                except Exception as translation_error:
+                    self.logger.error(f"Translator initialization failed: {translation_error}")
+                    self.translator = None
+            else:
+                self.logger.warning("Translation module not available - translation features disabled")
+                self.translator = None
             
+            # Initialize Ollama Client with enhanced error handling
             if OLLAMA_AVAILABLE:
-                self.ollama_client = OllamaClient()
-                self.logger.info("Ollama client initialized")
+                try:
+                    # Check if Ollama server is accessible before initializing
+                    self.ollama_client = OllamaClient()
+                    
+                    # Test connection to Ollama server
+                    if hasattr(self.ollama_client, 'test_connection'):
+                        if not self.ollama_client.test_connection():
+                            self.logger.warning("Ollama server not accessible - chat functionality limited")
+                            self.ollama_client = None
+                        else:
+                            self.logger.info("Ollama client initialized and connected")
+                    else:
+                        # If no test_connection method, assume it's working
+                        self.logger.info("Ollama client initialized")
+                        
+                except Exception as ollama_error:
+                    if LOGGING_UTILS_AVAILABLE:
+                        log_exception(self.logger, ollama_error, "Ollama client initialization")
+                    else:
+                        self.logger.error(f"Ollama client initialization failed: {ollama_error}", exc_info=True)
+                    self.logger.info("Continuing without Ollama - AI chat features will be disabled")
+                    self.ollama_client = None
+            else:
+                self.logger.info("Ollama not available - AI chat features will be disabled")
             
+            # Initialize TTS Synthesizer with validation
             if TTS_AVAILABLE:
-                self.tts_synthesizer = TTSSynthesizer()
-                self.logger.info("TTS synthesizer initialized")
+                try:
+                    self.tts_synthesizer = TTSSynthesizer()
+                    self.logger.info("TTS synthesizer initialized")
+                except Exception as tts_error:
+                    self.logger.error(f"TTS synthesizer initialization failed: {tts_error}")
+                    self.tts_synthesizer = None
+            
+            # Log initialization summary
+            components = []
+            if self.audio_capture: components.append("Audio")
+            if self.whisper_engine: components.append("Speech-to-Text")
+            if self.translator: components.append("Translation")
+            if self.ollama_client: components.append("AI Chat")
+            if self.tts_synthesizer: components.append("Text-to-Speech")
+            
+            self.logger.info(f"Chat components initialized: {', '.join(components) if components else 'None'}")
             
         except Exception as e:
-            self.logger.error(f"Error initializing components: {e}")
+            if LOGGING_UTILS_AVAILABLE:
+                log_exception(self.logger, e, "Chat component initialization")
+            else:
+                self.logger.error(f"Error initializing components: {e}", exc_info=True)
             if self.error_occurred_callback:
                 self.error_occurred_callback(f"Component initialization error: {e}")
+            # Continue with partial initialization rather than failing completely
 
     def send_message(self) -> None:
         """Sends a text message."""
@@ -860,33 +951,90 @@ class ChatTab:
         self.update_status("Processing voice input...")
 
     def _record_voice(self) -> None:
-        """Records voice input in background thread."""
+        """Records voice input in background thread with robust error handling."""
         try:
+            # Validate preconditions
             if not self.audio_capture:
+                self.logger.warning("Audio capture not available")
+                self.update_status("Audio capture not available")
+                self.is_recording = False
+                return
+            
+            # Initialize audio data list
+            audio_data = []
+            sample_rate = 16000
+            chunk_duration = 0.1
+            
+            # Check if record_chunk method exists
+            if not hasattr(self.audio_capture, 'record_chunk'):
+                self.logger.error("AudioCapture missing record_chunk method - using fallback recording")
+                self.update_status("Using fallback audio recording")
+                # Try to use alternative recording method
+                if hasattr(self.audio_capture, 'record_fixed_duration'):
+                    try:
+                        # Use fixed duration recording as fallback
+                        while self.is_recording:
+                            chunk = self.audio_capture.record_fixed_duration(chunk_duration)
+                            if chunk is not None and len(chunk) > 0:
+                                audio_data.append(chunk)
+                            time.sleep(0.05)  # Small delay between chunks
+                    except Exception as fallback_error:
+                        self.logger.error(f"Fallback recording failed: {fallback_error}")
+                        self.update_status("Audio recording failed")
+                else:
+                    self.logger.error("No viable audio recording method available")
+                    self.update_status("Audio recording not available")
+                self.is_recording = False
                 return
             
             # Record audio while recording flag is True
-            audio_data = []
-            sample_rate = 16000
+            
+            self.logger.info(f"Starting voice recording with sample_rate={sample_rate}")
             
             while self.is_recording:
-                # Record small chunks
-                chunk = self.audio_capture.record_chunk(duration=0.1, sample_rate=sample_rate)
-                if chunk is not None:
-                    audio_data.append(chunk)
-                time.sleep(0.1)
+                try:
+                    # Record small chunks with timeout protection
+                    chunk = self.audio_capture.record_chunk(
+                        duration=chunk_duration, 
+                        sample_rate=sample_rate
+                    )
+                    
+                    if chunk is not None and len(chunk) > 0:
+                        audio_data.append(chunk)
+                    else:
+                        self.logger.warning("Received empty audio chunk")
+                        
+                except Exception as chunk_error:
+                    self.logger.warning(f"Audio chunk recording failed: {chunk_error}")
+                    # Continue recording despite chunk errors
+                    
+                time.sleep(chunk_duration)  # Prevent CPU overload
             
+            # Process recorded audio if available
             if audio_data:
-                # Combine audio chunks
-                import numpy as np
-                full_audio = np.concatenate(audio_data)
-                
-                # Process with speech-to-text
-                self._process_voice_input(full_audio, sample_rate)
+                try:
+                    # Combine audio chunks
+                    import numpy as np
+                    full_audio = np.concatenate(audio_data)
+                    self.logger.info(f"Recorded {len(full_audio)} audio samples")
+                    
+                    # Process with speech-to-text
+                    self._process_voice_input(full_audio, sample_rate)
+                    
+                except Exception as processing_error:
+                    self.logger.error(f"Audio processing failed: {processing_error}")
+                    self.update_status("Audio processing failed")
+            else:
+                self.logger.warning("No audio data recorded")
+                self.update_status("No audio data captured")
             
         except Exception as e:
-            self.logger.error(f"Voice recording error: {e}")
+            if LOGGING_UTILS_AVAILABLE:
+                log_exception(self.logger, e, "Voice recording")
+            else:
+                self.logger.error(f"Voice recording error: {e}", exc_info=True)
             self.update_status("Voice recording failed")
+        finally:
             self.is_recording = False
             self.voice_button.configure(text="🎤 Voice", fg_color="green", hover_color="darkgreen")
 

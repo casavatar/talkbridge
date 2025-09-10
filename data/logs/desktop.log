@@ -1788,3 +1788,1887 @@
 2025-09-03 21:47:52,155 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
 2025-09-03 21:47:52,155 - talkbridge.desktop.app - INFO - Cleanup completed
 2025-09-03 21:47:52,155 - talkbridge.desktop - INFO - Application finished with code: 0
+2025-09-04 17:53:23,109 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-04 17:53:23,109 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-04 17:53:23,393 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-04 17:53:25,596 - root - WARNING - TTS module not available
+2025-09-04 17:53:25,750 - root - WARNING - Animation module not available
+2025-09-04 17:53:25,775 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-04 17:53:25,775 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-04 17:53:25,776 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-04 17:53:25,842 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-04 17:53:25,844 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-04 17:53:25,845 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-04 17:53:25,846 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-04 17:53:25,846 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-04 17:53:25,846 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-04 17:53:25,848 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-04 17:53:25,850 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-04 17:53:25,850 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-04 17:53:25,851 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-04 17:53:25,851 - talkbridge.desktop.login - INFO - Showing login dialog
+2025-09-04 17:59:30,380 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-04 17:59:30,380 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-04 17:59:30,844 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-04 17:59:33,014 - root - WARNING - TTS module not available
+2025-09-04 17:59:33,174 - root - WARNING - Animation module not available
+2025-09-04 17:59:33,198 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-04 17:59:33,198 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-04 17:59:33,198 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-04 17:59:33,253 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-04 17:59:33,255 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-04 17:59:33,257 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-04 17:59:33,258 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-04 17:59:33,258 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-04 17:59:33,258 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-04 17:59:33,260 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-04 17:59:33,261 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-04 17:59:33,261 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-04 17:59:33,262 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-04 17:59:33,262 - talkbridge.desktop.login - INFO - Showing login dialog
+2025-09-04 18:02:42,053 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-04 18:02:42,053 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-04 18:02:42,536 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-04 18:02:44,769 - root - WARNING - TTS module not available
+2025-09-04 18:02:44,929 - root - WARNING - Animation module not available
+2025-09-04 18:02:44,953 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-04 18:02:44,953 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-04 18:02:44,953 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-04 18:02:45,015 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-04 18:02:45,017 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-04 18:02:45,019 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-04 18:02:45,019 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-04 18:02:45,020 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-04 18:02:45,020 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-04 18:02:45,021 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-04 18:02:45,023 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-04 18:02:45,023 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-04 18:02:45,024 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-04 18:02:45,024 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-04 18:02:45,090 - talkbridge.desktop.application - ERROR - Error in login dialog: type object 'LoginTheme' has no attribute 'ERROR_COLOR'
+2025-09-04 18:06:11,229 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-04 18:06:11,229 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-04 18:06:11,706 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-04 18:06:13,891 - root - WARNING - TTS module not available
+2025-09-04 18:06:14,058 - root - WARNING - Animation module not available
+2025-09-04 18:06:14,083 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-04 18:06:14,083 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-04 18:06:14,083 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-04 18:06:14,252 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-04 18:06:14,254 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-04 18:06:14,255 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-04 18:06:14,256 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-04 18:06:14,256 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-04 18:06:14,256 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-04 18:06:14,258 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-04 18:06:14,260 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-04 18:06:14,260 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-04 18:06:14,261 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-04 18:06:14,261 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-04 18:06:14,320 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 16:01:21,057 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 16:01:21,057 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 16:01:21,339 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 16:01:23,625 - root - WARNING - TTS module not available
+2025-09-07 16:01:23,789 - root - WARNING - Animation module not available
+2025-09-07 16:01:23,803 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 16:01:23,803 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 16:01:23,803 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 16:01:23,837 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 16:01:23,840 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 16:01:23,841 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 16:01:23,842 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 16:01:23,842 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 16:01:23,842 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 16:01:23,845 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 16:01:23,847 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 16:01:23,847 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 16:01:23,848 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 16:01:23,849 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 16:01:23,907 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 16:25:03,052 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 16:25:03,052 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 16:25:03,355 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 16:25:05,638 - root - WARNING - TTS module not available
+2025-09-07 16:25:05,804 - root - WARNING - Animation module not available
+2025-09-07 16:25:05,818 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 16:25:05,818 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 16:25:05,818 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 16:25:05,853 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 16:25:05,855 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 16:25:05,858 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 16:25:05,859 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 16:25:05,859 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 16:25:05,859 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 16:25:05,861 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 16:25:05,863 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 16:25:05,863 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 16:25:05,864 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 16:25:05,864 - talkbridge.desktop.application - ERROR - Critical application error: 'TalkBridgeApplication' object has no attribute 'loading_label'
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Desarrollo/Python/talkbridge/src/desktop/app/application.py", line 158, in run
+    if not self._handle_authentication_with_retry():
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ingek/Documents/Desarrollo/Python/talkbridge/src/desktop/app/application.py", line 368, in _handle_authentication_with_retry
+    login_success = self._show_login_dialog()
+  File "/home/ingek/Documents/Desarrollo/Python/talkbridge/src/desktop/app/application.py", line 589, in _show_login_dialog
+    self.loading_label.configure(text="Waiting for authentication...")
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'TalkBridgeApplication' object has no attribute 'loading_label'
+2025-09-07 16:25:05,865 - talkbridge.desktop.application - CRITICAL - Critical Error: An unexpected error occurred:
+'TalkBridgeApplication' object has no attribute 'loading_label'
+2025-09-07 16:26:59,651 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 16:26:59,651 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 16:26:59,926 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 16:27:02,326 - root - WARNING - TTS module not available
+2025-09-07 16:27:02,500 - root - WARNING - Animation module not available
+2025-09-07 16:27:02,515 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 16:27:02,515 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 16:27:02,515 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 16:27:02,548 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 16:27:02,550 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 16:27:02,552 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 16:27:02,553 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 16:27:02,553 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 16:27:02,553 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 16:27:02,555 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 16:27:02,557 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 16:27:02,557 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 16:27:02,558 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 16:27:02,559 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 16:27:02,560 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 16:27:02,625 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 16:49:22,686 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 16:49:22,687 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 16:49:23,144 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 16:49:25,314 - root - WARNING - TTS module not available
+2025-09-07 16:49:25,472 - root - WARNING - Animation module not available
+2025-09-07 16:49:25,487 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 16:49:25,487 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 16:49:25,487 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 16:49:25,521 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 16:49:25,524 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 16:49:25,526 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 16:49:25,527 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 16:49:25,527 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 16:49:25,527 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 16:49:25,530 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 16:49:25,531 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 16:49:25,531 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 16:49:25,533 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 16:49:25,535 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 16:49:25,535 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 16:49:25,587 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 18:34:17,197 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 18:34:17,197 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 18:34:17,667 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 18:34:19,900 - root - WARNING - TTS module not available
+2025-09-07 18:34:20,059 - root - WARNING - Animation module not available
+2025-09-07 18:34:20,075 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 18:34:20,075 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 18:34:20,075 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 18:34:20,112 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 18:34:20,114 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 18:34:20,117 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 18:34:20,118 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 18:34:20,118 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 18:34:20,119 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 18:34:20,120 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 18:34:20,122 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 18:34:20,122 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 18:34:20,123 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 18:34:20,125 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 18:34:20,125 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 18:34:20,186 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 18:47:14,493 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 18:47:14,493 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 18:47:15,006 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 18:47:17,244 - root - WARNING - TTS module not available
+2025-09-07 18:47:17,405 - root - WARNING - Animation module not available
+2025-09-07 18:47:17,420 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 18:47:17,420 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 18:47:17,420 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 18:47:17,456 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 18:47:17,458 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 18:47:17,460 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 18:47:17,461 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 18:47:17,461 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 18:47:17,461 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 18:47:17,463 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 18:47:17,464 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 18:47:17,464 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 18:47:17,466 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 18:47:17,468 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 18:47:17,468 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 18:47:17,530 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 18:47:41,234 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-07 18:51:58,869 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 18:51:58,869 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 18:51:59,389 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 18:52:01,646 - root - WARNING - TTS module not available
+2025-09-07 18:52:01,811 - root - WARNING - Animation module not available
+2025-09-07 18:52:01,826 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 18:52:01,826 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 18:52:01,826 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 18:52:01,862 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 18:52:01,865 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 18:52:01,868 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 18:52:01,869 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 18:52:01,869 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 18:52:01,870 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 18:52:01,872 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 18:52:01,874 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 18:52:01,874 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 18:52:01,875 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 18:52:01,877 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 18:52:01,877 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 18:52:01,968 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 18:52:42,417 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 18:52:42,417 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-07 18:52:44,418 - talkbridge.desktop.login - ERROR - Authentication error: main thread is not in main loop
+2025-09-07 18:53:15,212 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-07 18:57:49,204 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-07 18:57:49,204 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-07 18:57:49,721 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-07 18:57:51,953 - root - WARNING - TTS module not available
+2025-09-07 18:57:52,116 - root - WARNING - Animation module not available
+2025-09-07 18:57:52,130 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-07 18:57:52,130 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-07 18:57:52,130 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-07 18:57:52,163 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-07 18:57:52,166 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-07 18:57:52,167 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-07 18:57:52,168 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Desarrollo/Python/talkbridge/config/config.yaml
+2025-09-07 18:57:52,168 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-07 18:57:52,168 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-07 18:57:52,171 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-07 18:57:52,173 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-07 18:57:52,174 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-07 18:57:52,175 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-07 18:57:52,177 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 18:57:52,177 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-07 18:57:52,284 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-07 18:58:20,113 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Desarrollo/Python/talkbridge/src/json/users.json
+2025-09-07 18:58:20,113 - src.auth.auth_manager - WARNING - Authentication failed: invalid password for user 'admin'
+2025-09-07 18:58:22,114 - talkbridge.desktop.login - WARNING - Cannot schedule auth completion callback: main thread is not in main loop
+2025-09-07 18:58:37,464 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-07 18:58:37,487 - talkbridge.desktop.application - ERROR - Error showing retry dialog: grab failed: window not viewable
+2025-09-07 18:58:37,487 - talkbridge.desktop.application - INFO - User chose to exit after failed login
+2025-09-07 18:58:37,487 - talkbridge.desktop.application - INFO - Authentication cancelled or failed
+2025-09-07 18:58:37,487 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-07 18:58:37,487 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-07 18:58:37,487 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-07 18:58:37,487 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-07 18:58:37,488 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-07 18:58:37,488 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 14:44:11,204 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 14:44:11,204 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 14:44:11,494 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 14:44:14,873 - root - WARNING - TTS module not available
+2025-09-09 14:44:15,075 - root - WARNING - Animation module not available
+2025-09-09 14:44:15,098 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 14:44:15,098 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 14:44:15,098 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 14:44:15,099 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 14:44:15,099 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 14:44:15,099 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 14:44:15,099 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 14:44:15,100 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 14:44:15,100 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 14:44:15,100 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 14:44:15,100 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 14:44:15,100 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 14:44:15,100 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 14:44:15,100 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 14:44:15,137 - talkbridge.desktop.login - ERROR - Error setting up login dialog UI: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'corner_radius'
+2025-09-09 14:44:15,137 - talkbridge.desktop.login - ERROR - Error creating login dialog: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'corner_radius'
+2025-09-09 14:44:15,137 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 14:45:13,037 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 14:45:13,037 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 14:45:13,313 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 14:45:15,459 - root - WARNING - TTS module not available
+2025-09-09 14:45:15,618 - root - WARNING - Animation module not available
+2025-09-09 14:45:15,632 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 14:45:15,632 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 14:45:15,632 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 14:45:15,632 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 14:45:15,632 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 14:45:15,633 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 14:45:15,633 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 14:45:15,633 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 14:45:15,633 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 14:45:15,633 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 14:45:15,633 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 14:45:15,633 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 14:45:15,633 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 14:45:15,633 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 14:45:15,669 - talkbridge.desktop.login - ERROR - Error setting up login dialog UI: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'font'
+2025-09-09 14:45:15,669 - talkbridge.desktop.login - ERROR - Error creating login dialog: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'font'
+2025-09-09 14:45:15,669 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 14:45:57,909 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 14:45:57,909 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 14:45:58,175 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 14:46:00,303 - root - WARNING - TTS module not available
+2025-09-09 14:46:00,467 - root - WARNING - Animation module not available
+2025-09-09 14:46:00,482 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 14:46:00,482 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 14:46:00,482 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 14:46:00,482 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 14:46:00,482 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 14:46:00,483 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 14:46:00,483 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 14:46:00,483 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 14:46:00,483 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 14:46:00,483 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 14:46:00,483 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 14:46:00,483 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 14:46:00,483 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 14:46:00,483 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 14:46:00,519 - talkbridge.desktop.login - ERROR - Error setting up login dialog UI: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'fg_color'
+2025-09-09 14:46:00,519 - talkbridge.desktop.login - ERROR - Error creating login dialog: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'fg_color'
+2025-09-09 14:46:00,519 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 14:47:04,552 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 14:47:04,553 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 14:47:04,833 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 14:47:06,992 - root - WARNING - TTS module not available
+2025-09-09 14:47:07,149 - root - WARNING - Animation module not available
+2025-09-09 14:47:07,163 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 14:47:07,163 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 14:47:07,163 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 14:47:07,164 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 14:47:07,164 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 14:47:07,164 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 14:47:07,164 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 14:47:07,164 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 14:47:07,164 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 14:47:07,164 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 14:47:07,164 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 14:47:07,164 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 14:47:07,165 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 14:47:07,165 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 14:47:07,231 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 14:47:50,672 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 14:47:50,672 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 14:47:52,673 - talkbridge.desktop.login - WARNING - Cannot schedule auth completion callback: main thread is not in main loop
+2025-09-09 14:59:17,128 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 14:59:17,130 - talkbridge.desktop.application - ERROR - Error showing retry dialog: grab failed: window not viewable
+2025-09-09 14:59:17,131 - talkbridge.desktop.application - INFO - User chose to exit after failed login
+2025-09-09 14:59:17,131 - talkbridge.desktop.application - INFO - Authentication cancelled or failed
+2025-09-09 14:59:17,131 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 14:59:17,131 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 14:59:17,131 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 14:59:17,131 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 14:59:17,131 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 14:59:17,131 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 15:02:34,004 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 15:02:34,004 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 15:02:34,266 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 15:02:36,391 - root - WARNING - TTS module not available
+2025-09-09 15:02:36,550 - root - WARNING - Animation module not available
+2025-09-09 15:02:36,564 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 15:02:36,565 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 15:02:36,565 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 15:02:36,565 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 15:02:36,565 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 15:02:36,565 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 15:02:36,566 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 15:02:36,566 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 15:02:36,566 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 15:02:36,566 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 15:02:36,566 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 15:02:36,566 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 15:02:36,566 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 15:02:36,566 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 15:02:36,628 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 15:03:01,384 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 15:03:01,384 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 15:03:03,385 - talkbridge.desktop.login - WARNING - Cannot schedule auth completion callback: main thread is not in main loop
+2025-09-09 15:03:29,814 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 15:07:21,603 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 15:07:21,603 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 15:07:21,883 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 15:07:24,108 - root - WARNING - TTS module not available
+2025-09-09 15:07:24,263 - root - WARNING - Animation module not available
+2025-09-09 15:07:24,279 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 15:07:24,279 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 15:07:24,279 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 15:07:24,280 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 15:07:24,280 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 15:07:24,280 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 15:07:24,280 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 15:07:24,281 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 15:07:24,281 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 15:07:24,281 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 15:07:24,281 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 15:07:24,281 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 15:07:24,281 - src.auth.auth_manager - INFO - Loaded 10 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 15:07:24,281 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 15:07:24,282 - src.auth.auth_manager - INFO - === DEVELOPMENT TEST USER CREATED ===
+2025-09-09 15:07:24,282 - src.auth.auth_manager - INFO - Username: test
+2025-09-09 15:07:24,282 - src.auth.auth_manager - INFO - Password: test
+2025-09-09 15:07:24,282 - src.auth.auth_manager - INFO - === USE FOR TESTING ONLY ===
+2025-09-09 15:07:24,282 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 15:07:24,344 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 15:07:51,007 - talkbridge.desktop.login - ERROR - Authentication error: 'LoginDialog' object has no attribute 'root'
+2025-09-09 15:08:06,996 - talkbridge.desktop.login - ERROR - Authentication error: 'LoginDialog' object has no attribute 'root'
+2025-09-09 15:10:18,819 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 15:10:18,820 - talkbridge.desktop.application - ERROR - Error showing retry dialog: grab failed: window not viewable
+2025-09-09 15:10:18,820 - talkbridge.desktop.application - INFO - User chose to exit after failed login
+2025-09-09 15:10:18,820 - talkbridge.desktop.application - INFO - Authentication cancelled or failed
+2025-09-09 15:10:18,820 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 15:10:18,820 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 15:10:18,820 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 15:10:18,820 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 15:10:18,820 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 15:10:18,820 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 15:10:18,820 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 15:35:35,153 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 15:35:35,153 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 15:35:35,439 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 15:35:37,624 - root - WARNING - TTS module not available
+2025-09-09 15:35:37,781 - root - WARNING - Animation module not available
+2025-09-09 15:35:37,795 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 15:35:37,795 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 15:35:37,795 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 15:35:37,795 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 15:35:37,795 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 15:35:37,796 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 15:35:37,796 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 15:35:37,796 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 15:35:37,796 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 15:35:37,796 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 15:35:37,796 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 15:35:37,796 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 15:35:37,796 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 15:35:37,796 - src.auth.auth_manager - INFO - Development test user already exists
+2025-09-09 15:35:37,796 - src.auth.auth_manager - INFO - Username: test, Password: test
+2025-09-09 15:35:37,797 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 15:35:37,865 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 15:35:59,512 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 15:35:59,512 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 15:36:00,519 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 15:36:00,519 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 15:36:00,558 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 15:36:02,068 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 15:36:02,068 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 15:36:02,068 - talkbridge.desktop.application - ERROR - Error showing main window: MainWindow.__init__() got multiple values for argument 'state_manager'
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/app/application.py", line 659, in _show_main_window
+    self.main_window = MainWindow(
+                       ~~~~~~~~~~^
+        self.root,
+        ^^^^^^^^^^
+        state_manager=self.state_manager,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        core_bridge=self.core_bridge
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: MainWindow.__init__() got multiple values for argument 'state_manager'
+2025-09-09 15:36:02,069 - talkbridge.desktop.application - ERROR - Critical application error: MainWindow.__init__() got multiple values for argument 'state_manager'
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/app/application.py", line 193, in run
+    self._show_main_window()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/app/application.py", line 659, in _show_main_window
+    self.main_window = MainWindow(
+                       ~~~~~~~~~~^
+        self.root,
+        ^^^^^^^^^^
+        state_manager=self.state_manager,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        core_bridge=self.core_bridge
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: MainWindow.__init__() got multiple values for argument 'state_manager'
+2025-09-09 15:36:02,070 - talkbridge.desktop.application - CRITICAL - Critical Error: An unexpected error occurred:
+MainWindow.__init__() got multiple values for argument 'state_manager'
+2025-09-09 16:52:50,653 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 16:52:50,653 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 16:52:50,936 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 16:52:53,210 - root - WARNING - TTS module not available
+2025-09-09 16:52:53,379 - root - WARNING - Animation module not available
+2025-09-09 16:52:53,394 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 16:52:53,394 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 16:52:53,394 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 16:52:53,394 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 16:52:53,394 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 16:52:53,395 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 16:52:53,395 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 16:52:53,395 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 16:52:53,395 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 16:52:53,395 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 16:52:53,395 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 16:52:53,395 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 16:52:53,395 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 16:52:53,395 - src.auth.auth_manager - INFO - Development test user already exists
+2025-09-09 16:52:53,395 - src.auth.auth_manager - INFO - Username: test, Password: test
+2025-09-09 16:52:53,395 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 16:52:53,460 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 16:53:27,024 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 16:53:27,024 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 16:53:28,030 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 16:53:28,030 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 16:53:28,072 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 16:53:29,582 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 16:53:29,582 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 16:53:29,604 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 16:53:29,735 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 16:53:29,735 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 16:53:29,735 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 16:53:29,736 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 16:53:29,736 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 16:53:29,736 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 16:53:29,736 - talkbridge.desktop.chat - ERROR - Error initializing components: 'ollama'
+2025-09-09 16:53:29,736 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 16:53:29,736 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 16:53:29,736 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 16:53:29,737 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 16:53:29,737 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 16:53:29,737 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 16:53:29,737 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 16:53:29,737 - talkbridge.desktop.chat - ERROR - Error initializing components: 'ollama'
+2025-09-09 16:53:29,737 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 16:53:29,773 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 16:53:29,773 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 16:53:29,773 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 16:53:29,773 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 16:53:29,773 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 16:53:29,972 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 16:53:29,972 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 16:53:29,986 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 16:53:29,994 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 16:53:29,995 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 16:53:48,702 - talkbridge.desktop.avatar - ERROR - Failed to start camera: Could not open camera
+2025-09-09 16:55:00,029 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:00,029 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:00,034 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:01,280 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:01,280 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:01,285 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:09,284 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:09,285 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:09,289 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:11,042 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:11,042 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:11,047 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:11,462 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:11,462 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:11,466 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:12,128 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:12,128 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:12,133 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:45,869 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:45,869 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:45,873 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:46,505 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:46,505 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:46,510 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:55:47,031 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:55:47,031 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:55:47,036 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:56:23,836 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:56:23,836 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:56:23,840 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:56:28,179 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:56:28,179 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:56:28,183 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:56:33,215 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 16:56:33,215 - talkbridge.desktop.chat - ERROR - Voice recording error: 'AudioCapture' object has no attribute 'record_chunk'
+2025-09-09 16:56:33,220 - talkbridge.desktop.chat - INFO - Status updated: Voice recording failed
+2025-09-09 16:56:40,255 - talkbridge.desktop.mainwindow - INFO - Window close requested
+2025-09-09 16:56:40,255 - talkbridge.desktop.avatar - INFO - Avatar tab cleanup completed
+2025-09-09 16:56:40,256 - talkbridge.desktop.avatar - INFO - Setting up avatar tab UI
+2025-09-09 17:00:14,524 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 17:00:14,524 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 17:00:14,524 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 17:00:14,524 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 17:00:14,524 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 17:11:57,667 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 17:11:57,667 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 17:11:57,947 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 17:12:00,211 - root - WARNING - TTS module not available
+2025-09-09 17:12:00,375 - root - WARNING - Animation module not available
+2025-09-09 17:12:00,389 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 17:12:00,389 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 17:12:00,389 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 17:12:00,389 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 17:12:00,389 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 17:12:00,390 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 17:12:00,390 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 17:12:00,390 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 17:12:00,390 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 17:12:00,390 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 17:12:00,390 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 17:12:00,390 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 17:12:00,390 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 17:12:00,390 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 17:12:00,465 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 17:14:19,065 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 17:14:19,065 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 17:14:20,071 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 17:14:20,071 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 17:14:20,109 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 17:14:21,619 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 17:14:21,619 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 17:14:21,640 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 17:14:21,777 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 17:14:21,778 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 17:14:21,778 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 17:14:21,778 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 17:14:21,778 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 17:14:21,778 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 17:14:21,778 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - ERROR - Translator initialization failed: 'ollama'
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 17:14:21,779 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 17:14:21,779 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 17:14:21,779 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 17:14:21,779 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 17:14:21,780 - talkbridge.desktop.chat - ERROR - Translator initialization failed: 'ollama'
+2025-09-09 17:14:21,780 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 17:14:21,780 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 17:14:21,780 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 17:14:21,813 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 17:14:21,813 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 17:14:21,813 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 17:14:21,813 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 17:14:21,813 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 17:14:21,972 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 17:14:21,972 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 17:14:21,986 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 17:14:22,003 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 17:14:22,003 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 17:15:12,630 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 17:15:12,631 - talkbridge.desktop.chat - ERROR - AudioCapture missing record_chunk method
+2025-09-09 17:15:12,638 - talkbridge.desktop.chat - INFO - Status updated: Audio recording method not available
+2025-09-09 17:15:14,197 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 17:15:14,197 - talkbridge.desktop.chat - ERROR - AudioCapture missing record_chunk method
+2025-09-09 17:15:14,203 - talkbridge.desktop.chat - INFO - Status updated: Audio recording method not available
+2025-09-09 17:15:15,372 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 17:15:15,372 - talkbridge.desktop.chat - ERROR - AudioCapture missing record_chunk method
+2025-09-09 17:15:15,377 - talkbridge.desktop.chat - INFO - Status updated: Audio recording method not available
+2025-09-09 17:15:16,041 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 17:15:16,041 - talkbridge.desktop.chat - ERROR - AudioCapture missing record_chunk method
+2025-09-09 17:15:16,049 - talkbridge.desktop.chat - INFO - Status updated: Audio recording method not available
+2025-09-09 17:15:16,913 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 17:15:16,913 - talkbridge.desktop.chat - ERROR - AudioCapture missing record_chunk method
+2025-09-09 17:15:16,917 - talkbridge.desktop.chat - INFO - Status updated: Audio recording method not available
+2025-09-09 17:15:19,660 - talkbridge.desktop.avatar - INFO - Attempting to start camera...
+2025-09-09 17:15:19,660 - talkbridge.desktop.avatar - INFO - Trying camera index 0
+2025-09-09 17:15:19,661 - talkbridge.desktop.avatar - WARNING - Camera 0 could not be opened
+2025-09-09 17:15:19,661 - talkbridge.desktop.avatar - INFO - Trying camera index 1
+2025-09-09 17:15:19,661 - talkbridge.desktop.avatar - WARNING - Camera 1 could not be opened
+2025-09-09 17:15:19,661 - talkbridge.desktop.avatar - INFO - Trying camera index 2
+2025-09-09 17:15:19,662 - talkbridge.desktop.avatar - WARNING - Camera 2 could not be opened
+2025-09-09 17:15:19,662 - talkbridge.desktop.avatar - ERROR - Failed to start camera: Could not open any camera (indices 0-2 tested)
+2025-09-09 17:15:19,669 - talkbridge.desktop.avatar - INFO - Camera stopped
+2025-09-09 17:15:28,913 - talkbridge.desktop.avatar - INFO - Attempting to start camera...
+2025-09-09 17:15:28,913 - talkbridge.desktop.avatar - INFO - Trying camera index 0
+2025-09-09 17:15:28,913 - talkbridge.desktop.avatar - WARNING - Camera 0 could not be opened
+2025-09-09 17:15:28,913 - talkbridge.desktop.avatar - INFO - Trying camera index 1
+2025-09-09 17:15:28,914 - talkbridge.desktop.avatar - WARNING - Camera 1 could not be opened
+2025-09-09 17:15:28,914 - talkbridge.desktop.avatar - INFO - Trying camera index 2
+2025-09-09 17:15:28,914 - talkbridge.desktop.avatar - WARNING - Camera 2 could not be opened
+2025-09-09 17:15:28,914 - talkbridge.desktop.avatar - ERROR - Failed to start camera: Could not open any camera (indices 0-2 tested)
+2025-09-09 17:15:28,921 - talkbridge.desktop.avatar - INFO - Camera stopped
+2025-09-09 17:15:37,443 - talkbridge.desktop.mainwindow - INFO - Window close requested
+2025-09-09 17:15:37,444 - talkbridge.desktop.avatar - INFO - Avatar tab cleanup completed
+2025-09-09 17:15:37,444 - talkbridge.desktop.avatar - INFO - Setting up avatar tab UI
+2025-09-09 17:15:59,023 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 17:15:59,024 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 17:15:59,024 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 17:15:59,024 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 17:15:59,024 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 17:23:52,363 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 17:23:52,363 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 17:23:52,363 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 17:23:52,363 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 17:23:52,652 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 17:23:52,652 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 17:23:54,923 - root - WARNING - TTS module not available
+2025-09-09 17:23:55,102 - root - WARNING - Animation module not available
+2025-09-09 17:23:55,116 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 17:23:55,116 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 17:23:55,116 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 17:23:55,116 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 17:23:55,116 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 17:23:55,117 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 17:23:55,117 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 17:23:55,117 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 17:23:55,117 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 17:23:55,117 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 17:23:55,117 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 17:23:55,117 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 17:23:55,117 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 17:23:55,117 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 17:23:55,180 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 17:24:10,970 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 17:24:10,970 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 17:24:11,978 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 17:24:11,978 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 17:24:12,026 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 17:24:13,535 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 17:24:13,535 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 17:24:13,556 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 17:24:13,677 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 17:24:13,677 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 17:24:13,677 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 17:24:13,677 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 17:24:13,677 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 17:24:13,677 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 17:24:13,677 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - ERROR - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 17:24:13,678 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 17:24:13,678 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 17:24:13,678 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 17:24:13,678 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 17:24:13,679 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 17:24:13,679 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 17:24:13,679 - talkbridge.desktop.chat - ERROR - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 17:24:13,679 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 17:24:13,679 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 17:24:13,679 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 17:24:13,679 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 17:24:13,718 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 17:24:13,718 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 17:24:13,718 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 17:24:13,719 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 17:24:13,719 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 17:24:13,894 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 17:24:13,894 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 17:24:13,908 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 17:24:13,919 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 17:24:13,920 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 17:24:15,777 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 17:24:15,777 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 17:24:15,777 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 17:24:15,777 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 17:24:15,777 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 17:24:15,778 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 17:24:15,778 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 17:25:00,495 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 17:25:00,495 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 17:25:00,495 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 17:25:00,495 - talkbridge.test - INFO - INFO: This should appear in console/desktop.log
+2025-09-09 17:25:00,495 - talkbridge.test - WARNING - WARNING: This should appear in console/desktop.log
+2025-09-09 17:25:00,495 - talkbridge.test - ERROR - ERROR: This should appear in console/desktop.log AND errors.log
+2025-09-09 17:25:00,495 - talkbridge.test - CRITICAL - CRITICAL: This should appear in console/desktop.log AND errors.log
+2025-09-09 17:25:00,495 - talkbridge.test - ERROR - Exception occurred during test
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/verify_logging.py", line 55, in test_error_logging
+    raise ValueError("Test error for logging verification")
+ValueError: Test error for logging verification
+2025-09-09 17:26:09,847 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 17:26:09,847 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 17:26:09,847 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 17:26:09,847 - talkbridge.test - INFO - INFO: This should appear in console/desktop.log
+2025-09-09 17:26:09,847 - talkbridge.test - WARNING - WARNING: This should appear in console/desktop.log
+2025-09-09 17:26:09,848 - talkbridge.test - ERROR - ERROR: This should appear in console/desktop.log AND errors.log
+2025-09-09 17:26:09,848 - talkbridge.test - CRITICAL - CRITICAL: This should appear in console/desktop.log AND errors.log
+2025-09-09 17:26:09,848 - talkbridge.test - ERROR - Exception occurred during test
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/verify_logging.py", line 55, in test_error_logging
+    raise ValueError("Test error for logging verification")
+ValueError: Test error for logging verification
+2025-09-09 17:45:18,408 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 17:45:18,408 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 17:45:18,408 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 17:45:18,408 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 17:45:18,430 - talkbridge.desktop.main - ERROR - Critical error starting application: Too early to use font: no default root window
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/main.py", line 226, in main
+    from src.desktop.app.application import TalkBridgeApplication
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/app/application.py", line 38, in <module>
+    from src.desktop.dialogs.login_dialog import LoginDialog
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/dialogs/login_dialog.py", line 32, in <module>
+    from src.desktop.ui_constants import UIConstants, icon, clean_text, strip_variation_selectors
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/ui_constants.py", line 36, in <module>
+    class UIConstants:
+    ...<58 lines>...
+            }
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/ui_constants.py", line 40, in UIConstants
+    UI_FONT = ctk.CTkFont(family="DejaVu Sans", size=13)
+  File "/home/ingek/miniconda3/lib/python3.13/site-packages/customtkinter/windows/widgets/font/ctk_font.py", line 39, in __init__
+    super().__init__(family=ThemeManager.theme["CTkFont"]["family"] if family is None else family,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     size=-abs(self._size),
+                     ^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+                     underline=underline,
+                     ^^^^^^^^^^^^^^^^^^^^
+                     overstrike=overstrike)
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ingek/miniconda3/lib/python3.13/tkinter/font.py", line 72, in __init__
+    root = tkinter._get_default_root('use font')
+  File "/home/ingek/miniconda3/lib/python3.13/tkinter/__init__.py", line 323, in _get_default_root
+    raise RuntimeError(f"Too early to {what}: no default root window")
+RuntimeError: Too early to use font: no default root window
+2025-09-09 17:46:29,373 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 17:46:29,373 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 17:46:29,373 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 17:46:29,373 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 17:46:29,673 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 17:46:29,673 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 17:46:31,827 - root - WARNING - TTS module not available
+2025-09-09 17:46:31,989 - root - WARNING - Animation module not available
+2025-09-09 17:46:32,003 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 17:46:32,003 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 17:46:32,003 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 17:46:32,003 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 17:46:32,003 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 17:46:32,004 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 17:46:32,004 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 17:46:32,004 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 17:46:32,004 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 17:46:32,004 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 17:46:32,004 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 17:46:32,004 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 17:46:32,004 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 17:46:32,004 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 17:46:32,065 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 17:47:11,599 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 17:47:11,599 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 17:47:12,605 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 17:47:12,605 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 17:47:12,650 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 17:47:14,159 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 17:47:14,160 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 17:47:14,180 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 17:47:14,182 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: name 'UI_CONSTANTS_AVAILABLE' is not defined
+2025-09-09 17:47:14,215 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 17:47:14,215 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 17:47:14,215 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 17:47:14,215 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 17:47:14,215 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 17:47:14,406 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 17:47:14,406 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 17:47:14,427 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 17:47:14,436 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 17:47:14,436 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 17:47:26,274 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 17:47:26,274 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 17:47:26,274 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 17:47:26,274 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 17:47:26,275 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 17:47:26,275 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 17:47:26,275 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 18:00:18,850 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:00:18,850 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:00:18,850 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:00:18,850 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:00:19,138 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:00:19,138 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:00:21,369 - root - WARNING - TTS module not available
+2025-09-09 18:00:21,528 - root - WARNING - Animation module not available
+2025-09-09 18:00:21,542 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:00:21,542 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:00:21,542 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:00:21,543 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:00:21,543 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:00:21,543 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:00:21,543 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:00:21,543 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:00:21,543 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:00:21,544 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:00:21,544 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:00:21,544 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:00:21,544 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:00:21,544 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:00:21,563 - talkbridge.desktop.login - ERROR - Error setting up login dialog UI: customtkinter.windows.widgets.ctk_entry.CTkEntry() got multiple values for keyword argument 'fg_color'
+2025-09-09 18:00:21,563 - talkbridge.desktop.login - ERROR - Error creating login dialog: customtkinter.windows.widgets.ctk_entry.CTkEntry() got multiple values for keyword argument 'fg_color'
+2025-09-09 18:00:21,563 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 18:09:11,367 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:09:11,367 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:09:11,367 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:09:11,367 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:09:11,647 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:09:11,647 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:09:13,828 - root - WARNING - TTS module not available
+2025-09-09 18:09:13,989 - root - WARNING - Animation module not available
+2025-09-09 18:09:14,004 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:09:14,004 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:09:14,004 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:09:14,004 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:09:14,004 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:09:14,005 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:09:14,005 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:09:14,005 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:09:14,005 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:09:14,005 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:09:14,005 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:09:14,005 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:09:14,005 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:09:14,005 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:09:14,024 - talkbridge.desktop.login - ERROR - Error setting up login dialog UI: customtkinter.windows.widgets.ctk_entry.CTkEntry() got multiple values for keyword argument 'fg_color'
+2025-09-09 18:09:14,024 - talkbridge.desktop.login - ERROR - Error creating login dialog: customtkinter.windows.widgets.ctk_entry.CTkEntry() got multiple values for keyword argument 'fg_color'
+2025-09-09 18:09:14,024 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 18:13:05,531 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:13:05,531 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:13:05,531 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:13:05,531 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:13:05,980 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:13:05,980 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:13:08,120 - root - WARNING - TTS module not available
+2025-09-09 18:13:08,279 - root - WARNING - Animation module not available
+2025-09-09 18:13:08,293 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:13:08,293 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:13:08,294 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:13:08,294 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:13:08,294 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:13:08,294 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:13:08,295 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:13:08,295 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:13:08,295 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:13:08,295 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:13:08,295 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:13:08,295 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:13:08,295 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:13:08,295 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:13:08,332 - talkbridge.desktop.login - ERROR - Error setting up login dialog UI: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'fg_color'
+2025-09-09 18:13:08,332 - talkbridge.desktop.login - ERROR - Error creating login dialog: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'fg_color'
+2025-09-09 18:13:08,332 - talkbridge.desktop.application - INFO - Authentication cancelled
+2025-09-09 18:15:20,476 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:15:20,476 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:15:20,476 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:15:20,476 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:15:20,762 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:15:20,763 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:15:22,994 - root - WARNING - TTS module not available
+2025-09-09 18:15:23,159 - root - WARNING - Animation module not available
+2025-09-09 18:15:23,175 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:15:23,175 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:15:23,175 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:15:23,176 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:15:23,176 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:15:23,176 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:15:23,176 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:15:23,176 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:15:23,177 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:15:23,177 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:15:23,177 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:15:23,177 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:15:23,177 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:15:23,177 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:15:23,251 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 18:15:42,065 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:15:42,066 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 18:15:43,072 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 18:15:43,072 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 18:15:43,103 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 18:15:44,613 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 18:15:44,613 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 18:15:44,634 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 18:15:44,726 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 18:15:44,758 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 18:15:44,758 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 18:15:44,758 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 18:15:44,758 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 18:15:44,758 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 18:15:44,919 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 18:15:44,919 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 18:15:44,933 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 18:15:44,937 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 18:15:44,938 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 18:15:48,894 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 18:15:48,894 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 18:15:48,894 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 18:15:48,894 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 18:15:48,894 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 18:15:48,894 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 18:15:48,894 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 18:16:40,350 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:16:40,350 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:16:40,350 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:16:40,350 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:16:40,639 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:16:40,639 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:16:42,819 - root - WARNING - TTS module not available
+2025-09-09 18:16:42,977 - root - WARNING - Animation module not available
+2025-09-09 18:16:42,990 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:16:42,990 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:16:42,990 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:16:42,991 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:16:42,991 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:16:42,991 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:16:42,992 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:16:42,992 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:16:42,992 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:16:42,992 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:16:42,992 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:16:42,992 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:16:42,992 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:16:42,992 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:16:43,059 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 18:16:54,331 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:16:54,332 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 18:16:55,337 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 18:16:55,338 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 18:16:55,373 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 18:16:56,883 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 18:16:56,883 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 18:16:56,903 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 18:16:56,994 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 18:16:57,025 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 18:16:57,025 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 18:16:57,025 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 18:16:57,025 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 18:16:57,026 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 18:16:57,180 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 18:16:57,180 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 18:16:57,194 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 18:16:57,204 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 18:16:57,204 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 18:17:03,537 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 18:17:03,537 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 18:17:03,537 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 18:17:03,537 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 18:17:03,537 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 18:17:03,537 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 18:17:03,537 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 18:24:53,630 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:24:53,630 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:24:53,630 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:24:53,630 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:24:54,105 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:24:54,105 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:24:56,260 - root - WARNING - TTS module not available
+2025-09-09 18:24:56,415 - root - WARNING - Animation module not available
+2025-09-09 18:24:56,430 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:24:56,430 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:24:56,430 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:24:56,430 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:24:56,430 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:24:56,431 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:24:56,431 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:24:56,431 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:24:56,431 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:24:56,431 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:24:56,431 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:24:56,431 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:24:56,431 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:24:56,431 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:24:56,500 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 18:25:15,474 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:25:15,474 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 18:25:16,480 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 18:25:16,480 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 18:25:16,514 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 18:25:18,024 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 18:25:18,024 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 18:25:18,044 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 18:25:18,137 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 18:25:18,169 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 18:25:18,169 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 18:25:18,169 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 18:25:18,169 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 18:25:18,169 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 18:25:18,324 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 18:25:18,324 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 18:25:18,337 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 18:25:18,342 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 18:25:18,342 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 18:25:20,405 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 18:25:20,405 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 18:25:20,405 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 18:25:20,405 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 18:25:20,405 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 18:25:20,406 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 18:25:20,406 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 18:26:29,757 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 18:26:29,757 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 18:26:29,757 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 18:26:29,757 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 18:26:30,198 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 18:26:30,199 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 18:26:32,324 - root - WARNING - TTS module not available
+2025-09-09 18:26:32,477 - root - WARNING - Animation module not available
+2025-09-09 18:26:32,490 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 18:26:32,490 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 18:26:32,490 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 18:26:32,490 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 18:26:32,490 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 18:26:32,491 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 18:26:32,491 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 18:26:32,491 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 18:26:32,491 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 18:26:32,491 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 18:26:32,491 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 18:26:32,491 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 18:26:32,492 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:26:32,492 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 18:26:32,559 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 18:26:38,748 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 18:26:38,748 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:18:54,322 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:18:54,323 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:18:54,323 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:18:54,323 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:18:54,396 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:18:57,066 - argostranslate.utils - INFO - ('Looking for cached Spacy xx_sent_ud_sm.',)
+2025-09-09 21:19:02,637 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/tts/voice_cloner.py:46 - ignored
+2025-09-09 21:19:02,637 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/tts/synthesizer.py:36 - ignored
+2025-09-09 21:19:02,854 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/animation/face_sync.py:43 - ignored
+2025-09-09 21:19:02,855 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/animation/camera_manager.py:49 - ignored
+2025-09-09 21:19:02,877 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:19:02,877 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:19:02,877 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:19:02,877 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:19:02,877 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:19:02,878 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:19:02,878 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:19:02,878 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:19:02,878 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:19:02,878 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:19:02,878 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:19:02,878 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:19:02,878 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:19:02,878 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:19:02,961 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:19:24,089 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:19:24,089 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:19:25,094 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:19:25,094 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:19:25,147 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:19:26,657 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:19:26,657 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:19:26,677 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:19:26,771 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 21:19:26,803 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:19:26,820 - talkbridge.desktop.avatar - INFO - MediaPipe face mesh initialized
+2025-09-09 21:19:26,820 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:19:26,820 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:19:26,820 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:19:26,971 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:19:26,971 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:19:26,984 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:19:26,995 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:19:26,996 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:19:45,746 - talkbridge.desktop.avatar - INFO - Attempting to start camera...
+2025-09-09 21:19:45,746 - talkbridge.desktop.avatar - INFO - Trying camera index 0
+2025-09-09 21:19:45,749 - talkbridge.desktop.avatar - WARNING - Camera 0 could not be opened
+2025-09-09 21:19:45,749 - talkbridge.desktop.avatar - INFO - Trying camera index 1
+2025-09-09 21:19:45,749 - talkbridge.desktop.avatar - WARNING - Camera 1 could not be opened
+2025-09-09 21:19:45,749 - talkbridge.desktop.avatar - INFO - Trying camera index 2
+2025-09-09 21:19:45,749 - talkbridge.desktop.avatar - WARNING - Camera 2 could not be opened
+2025-09-09 21:19:45,749 - talkbridge.desktop.avatar - ERROR - [AvatarTab] Camera startup: Exception: Could not open any camera (indices 0-2 tested)
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/components/avatar_tab.py", line 322, in start_camera
+    raise Exception(error_msg)
+Exception: Could not open any camera (indices 0-2 tested)
+2025-09-09 21:19:45,767 - talkbridge.desktop.avatar - INFO - Camera stopped
+2025-09-09 21:20:04,714 - talkbridge.desktop.mainwindow - INFO - Window close requested
+2025-09-09 21:20:04,714 - talkbridge.desktop.avatar - INFO - Avatar tab cleanup completed
+2025-09-09 21:20:04,714 - talkbridge.desktop.avatar - INFO - Setting up avatar tab UI
+2025-09-09 21:20:53,723 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 21:20:53,723 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 21:20:53,723 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 21:20:53,723 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 21:20:53,723 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 21:20:53,723 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 21:20:53,724 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 21:23:25,857 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:23:25,857 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:23:25,857 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:23:25,857 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:23:26,320 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:23:26,320 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:23:29,590 - root - WARNING - TTS module not available
+2025-09-09 21:23:29,787 - root - WARNING - Animation module not available
+2025-09-09 21:23:29,810 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:23:29,810 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:23:29,810 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:23:29,811 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:23:29,811 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:23:29,811 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:23:29,811 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:23:29,811 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:23:29,812 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:23:29,812 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:23:29,812 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:23:29,812 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:23:29,812 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:23:29,812 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:23:29,888 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:25:18,233 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:25:18,233 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:25:18,233 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:25:18,233 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:25:18,670 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:25:18,670 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:25:20,794 - root - WARNING - TTS module not available
+2025-09-09 21:25:20,950 - root - WARNING - Animation module not available
+2025-09-09 21:25:20,963 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:25:20,964 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:25:20,964 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:25:20,964 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:25:20,964 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:25:20,964 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:25:20,965 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:25:20,965 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:25:20,965 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:25:20,965 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:25:20,965 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:25:20,965 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:25:20,965 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:25:20,965 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:25:21,039 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:25:36,366 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:25:36,366 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:25:37,372 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:25:37,372 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:25:37,412 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:25:38,921 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:25:38,921 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:25:38,941 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:25:39,033 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 21:25:39,064 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:25:39,064 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 21:25:39,064 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:25:39,064 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:25:39,064 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:25:39,209 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:25:39,210 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:25:39,223 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:25:39,228 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:25:39,228 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:27:29,543 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:27:29,543 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:27:29,543 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:27:29,543 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:27:29,842 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:27:29,843 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:27:32,159 - root - WARNING - TTS module not available
+2025-09-09 21:27:32,334 - root - WARNING - Animation module not available
+2025-09-09 21:27:32,348 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:27:32,348 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:27:32,348 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:27:32,349 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:27:32,349 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:27:32,350 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:27:32,350 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:27:32,350 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:27:32,350 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:27:32,350 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:27:32,350 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:27:32,350 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:27:32,350 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:27:32,350 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:27:32,457 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:27:48,277 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:27:48,277 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:27:48,277 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:27:48,277 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:27:48,717 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:27:48,717 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:27:50,828 - root - WARNING - TTS module not available
+2025-09-09 21:27:50,985 - root - WARNING - Animation module not available
+2025-09-09 21:27:50,998 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:27:50,998 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:27:50,998 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:27:50,999 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:27:50,999 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:27:50,999 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:27:50,999 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:27:50,999 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:27:51,000 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:27:51,000 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:27:51,000 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:27:51,000 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:27:51,000 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:27:51,000 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:27:51,076 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:27:59,083 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:27:59,083 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:28:00,089 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:28:00,089 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:28:00,134 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:28:01,644 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:28:01,644 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:28:01,665 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:28:01,708 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 21:28:01,738 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:28:01,738 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 21:28:01,738 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:28:01,738 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:28:01,738 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:28:01,876 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:28:01,876 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:28:01,890 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:28:01,896 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:28:01,897 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:28:36,839 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:28:36,839 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:28:36,839 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:28:36,839 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:28:37,295 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:28:37,295 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:28:39,487 - root - WARNING - TTS module not available
+2025-09-09 21:28:39,642 - root - WARNING - Animation module not available
+2025-09-09 21:28:39,656 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:28:39,656 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:28:39,656 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:28:39,656 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:28:39,656 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:28:39,657 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:28:39,657 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:28:39,657 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:28:39,657 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:28:39,657 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:28:39,657 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:28:39,657 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:28:39,657 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:28:39,657 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:28:39,734 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:36:52,514 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:36:52,514 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:36:52,514 - talkbridge.desktop.main - ERROR - Logging configuration test - ERROR level logging to errors.log working
+2025-09-09 21:36:52,514 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:36:52,548 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:36:54,050 - argostranslate.utils - INFO - ('Looking for cached Spacy xx_sent_ud_sm.',)
+2025-09-09 21:36:58,776 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/tts/voice_cloner.py:46 - ignored
+2025-09-09 21:36:58,776 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/tts/synthesizer.py:36 - ignored
+2025-09-09 21:36:58,950 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/animation/face_sync.py:43 - ignored
+2025-09-09 21:36:58,951 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/animation/camera_manager.py:49 - ignored
+2025-09-09 21:36:58,965 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:36:58,965 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:36:58,965 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:36:58,965 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:36:58,965 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:36:58,966 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:36:58,966 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:36:58,966 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:36:58,966 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:36:58,966 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:36:58,966 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:36:58,966 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:36:58,966 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:36:58,966 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:36:59,035 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:37:15,114 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:37:15,114 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:37:16,120 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:37:16,120 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:37:16,158 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:37:17,668 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:37:17,668 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:37:17,686 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:37:17,726 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_button.CTkButton() got multiple values for keyword argument 'height'
+2025-09-09 21:37:17,755 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:37:17,762 - talkbridge.desktop.avatar - INFO - MediaPipe face mesh initialized
+2025-09-09 21:37:17,762 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:37:17,762 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:37:17,762 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:37:17,904 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:37:17,904 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:37:17,917 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:37:17,923 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:37:17,924 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:37:31,283 - talkbridge.desktop.avatar - INFO - Attempting to start camera...
+2025-09-09 21:37:31,283 - talkbridge.desktop.avatar - INFO - Trying camera index 0
+2025-09-09 21:37:31,284 - talkbridge.desktop.avatar - WARNING - Camera 0 could not be opened
+2025-09-09 21:37:31,284 - talkbridge.desktop.avatar - INFO - Trying camera index 1
+2025-09-09 21:37:31,285 - talkbridge.desktop.avatar - WARNING - Camera 1 could not be opened
+2025-09-09 21:37:31,285 - talkbridge.desktop.avatar - INFO - Trying camera index 2
+2025-09-09 21:37:31,285 - talkbridge.desktop.avatar - WARNING - Camera 2 could not be opened
+2025-09-09 21:37:31,285 - talkbridge.desktop.avatar - ERROR - [AvatarTab] Camera startup: Exception: Could not open any camera (indices 0-2 tested)
+Traceback (most recent call last):
+  File "/home/ingek/Documents/Development/Python/talkbridge/src/desktop/components/avatar_tab.py", line 322, in start_camera
+    raise Exception(error_msg)
+Exception: Could not open any camera (indices 0-2 tested)
+2025-09-09 21:37:31,301 - talkbridge.desktop.avatar - INFO - Camera stopped
+2025-09-09 21:38:15,968 - talkbridge.desktop.chat - INFO - Text-to-speech enabled
+2025-09-09 21:38:15,968 - talkbridge.desktop.chat - INFO - Status updated: Text-to-speech enabled
+2025-09-09 21:38:16,489 - talkbridge.desktop.chat - INFO - Text-to-speech disabled
+2025-09-09 21:38:16,489 - talkbridge.desktop.chat - INFO - Status updated: Text-to-speech disabled
+2025-09-09 21:38:26,737 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 21:38:26,737 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 21:38:26,737 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 21:38:26,737 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 21:38:26,737 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 21:38:26,738 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 21:38:26,738 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 21:43:02,793 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:43:02,793 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:43:02,793 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:43:03,240 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:43:03,240 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:43:05,342 - root - WARNING - TTS module not available
+2025-09-09 21:43:05,501 - root - WARNING - Animation module not available
+2025-09-09 21:43:05,515 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:43:05,515 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:43:05,515 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:43:05,516 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:43:05,516 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:43:05,516 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:43:05,516 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:43:05,517 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:43:05,517 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:43:05,517 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:43:05,517 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:43:05,517 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:43:05,517 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:43:05,517 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:43:05,594 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:44:07,259 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:44:07,259 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:44:07,259 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:44:07,718 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:44:07,718 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:44:09,882 - root - WARNING - TTS module not available
+2025-09-09 21:44:10,037 - root - WARNING - Animation module not available
+2025-09-09 21:44:10,051 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:44:10,051 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:44:10,051 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:44:10,051 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:44:10,051 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:44:10,052 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:44:10,052 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:44:10,052 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:44:10,052 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:44:10,052 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:44:10,052 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:44:10,052 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:44:10,052 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:44:10,052 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:44:10,125 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:44:19,907 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:44:19,907 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:44:20,913 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:44:20,913 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:44:20,958 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:44:22,468 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:44:22,468 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:44:22,488 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:44:22,533 - talkbridge.desktop.mainwindow - ERROR - Error initializing chat tab: customtkinter.windows.widgets.ctk_entry.CTkEntry() got multiple values for keyword argument 'height'
+2025-09-09 21:44:22,564 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:44:22,564 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 21:44:22,564 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:44:22,565 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:44:22,565 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:44:22,702 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:44:22,702 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:44:22,716 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:44:22,721 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:44:22,721 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:44:26,618 - talkbridge.desktop.chat - INFO - Status updated: Audio capture not available
+2025-09-09 21:44:30,113 - talkbridge.desktop.avatar - INFO - Attempting to start camera...
+2025-09-09 21:44:30,113 - talkbridge.desktop.avatar - INFO - Trying camera index 0
+2025-09-09 21:44:30,114 - talkbridge.desktop.avatar - WARNING - Camera 0 could not be opened
+2025-09-09 21:44:30,114 - talkbridge.desktop.avatar - INFO - Trying camera index 1
+2025-09-09 21:44:30,114 - talkbridge.desktop.avatar - WARNING - Camera 1 could not be opened
+2025-09-09 21:44:30,114 - talkbridge.desktop.avatar - INFO - Trying camera index 2
+2025-09-09 21:44:30,115 - talkbridge.desktop.avatar - WARNING - Camera 2 could not be opened
+2025-09-09 21:44:30,115 - talkbridge.desktop.avatar - WARNING - [AvatarTab] No camera available: Could not open any camera (indices 0-2 tested)
+2025-09-09 21:44:30,131 - talkbridge.desktop.avatar - INFO - Camera stopped
+2025-09-09 21:44:45,119 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 21:44:45,119 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 21:44:45,119 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 21:44:45,119 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 21:44:45,119 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 21:44:45,120 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 21:44:45,120 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 21:47:18,964 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:47:18,965 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:47:18,965 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:47:19,430 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:47:19,430 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:47:21,587 - root - WARNING - TTS module not available
+2025-09-09 21:47:21,748 - root - WARNING - Animation module not available
+2025-09-09 21:47:21,763 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:47:21,763 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:47:21,763 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:47:21,763 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:47:21,764 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:47:21,764 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:47:21,764 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:47:21,764 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:47:21,764 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:47:21,764 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:47:21,764 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:47:21,764 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:47:21,765 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:47:21,765 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:47:21,844 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:47:26,846 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:47:26,846 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:47:27,852 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:47:27,852 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:47:27,899 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:47:29,408 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:47:29,408 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:47:29,430 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:47:29,485 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 21:47:29,485 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 21:47:29,485 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 21:47:29,485 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 21:47:29,486 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 21:47:29,486 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 21:47:29,486 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 21:47:29,486 - talkbridge.desktop.chat - ERROR - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 21:47:29,486 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 21:47:29,487 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 21:47:29,487 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 21:47:29,487 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 21:47:29,487 - talkbridge.desktop.chat - ERROR - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 21:47:29,488 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 21:47:29,488 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 21:47:29,488 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 21:47:29,488 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 21:47:29,519 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:47:29,519 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 21:47:29,519 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:47:29,520 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:47:29,520 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:47:29,660 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:47:29,660 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:47:29,674 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:47:29,679 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:47:29,680 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:51:51,261 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:51:51,261 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:51:51,261 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:51:51,297 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:51:52,874 - argostranslate.utils - INFO - ('Looking for cached Spacy xx_sent_ud_sm.',)
+2025-09-09 21:51:57,634 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/tts/voice_cloner.py:46 - ignored
+2025-09-09 21:51:57,635 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/tts/synthesizer.py:36 - ignored
+2025-09-09 21:51:57,834 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/animation/face_sync.py:43 - ignored
+2025-09-09 21:51:57,835 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/animation/camera_manager.py:49 - ignored
+2025-09-09 21:51:57,849 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:51:57,849 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:51:57,849 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:51:57,849 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:51:57,849 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:51:57,850 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:51:57,850 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:51:57,850 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:51:57,850 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:51:57,850 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:51:57,850 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:51:57,850 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:51:57,850 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:51:57,850 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:51:57,931 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:52:06,206 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:52:06,206 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:52:07,212 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:52:07,212 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:52:07,250 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:52:08,759 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:52:08,759 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:52:08,779 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:52:08,837 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 21:52:08,837 - src.audio.capture - INFO - Using device default sample rate: 48000
+2025-09-09 21:52:08,837 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=48000, channels=1, device=None
+2025-09-09 21:52:08,837 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 21:52:08,837 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 21:52:08,837 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 21:52:08,837 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - ERROR - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 21:52:08,838 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 21:52:08,838 - src.audio.capture - INFO - Using device default sample rate: 48000
+2025-09-09 21:52:08,838 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=48000, channels=1, device=None
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 21:52:08,838 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 21:52:08,838 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 21:52:08,839 - talkbridge.desktop.chat - ERROR - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 21:52:08,839 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 21:52:08,839 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 21:52:08,839 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, AI Chat
+2025-09-09 21:52:08,839 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 21:52:08,870 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:52:08,877 - talkbridge.desktop.avatar - INFO - MediaPipe face mesh initialized
+2025-09-09 21:52:08,877 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:52:08,878 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:52:08,878 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:52:09,051 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:52:09,051 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:52:09,066 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:52:09,074 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:52:09,075 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:52:12,432 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 21:52:12,432 - talkbridge.desktop.chat - ERROR - [ChatTab] AudioCapture missing record_chunk method
+2025-09-09 21:52:12,434 - talkbridge.desktop.chat - INFO - Status updated: Audio recording method not available
+2025-09-09 21:53:32,930 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 21:53:32,930 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 21:53:32,930 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 21:53:32,930 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 21:53:32,930 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 21:53:32,931 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 21:53:32,931 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 21:57:13,816 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:57:13,816 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:57:13,816 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:57:14,282 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:57:14,282 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:57:16,621 - root - WARNING - TTS module not available
+2025-09-09 21:57:16,790 - root - WARNING - Animation module not available
+2025-09-09 21:57:16,804 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:57:16,804 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:57:16,804 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:57:16,804 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:57:16,805 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:57:16,805 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:57:16,806 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:57:16,806 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:57:16,806 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:57:16,806 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:57:16,806 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:57:16,806 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:57:16,806 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:57:16,806 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:57:16,888 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:58:07,676 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 21:58:07,676 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 21:58:07,676 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 21:58:08,130 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 21:58:08,130 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 21:58:10,309 - root - WARNING - TTS module not available
+2025-09-09 21:58:10,464 - root - WARNING - Animation module not available
+2025-09-09 21:58:10,477 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 21:58:10,477 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 21:58:10,477 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 21:58:10,477 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 21:58:10,477 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 21:58:10,478 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 21:58:10,478 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 21:58:10,478 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 21:58:10,478 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 21:58:10,478 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 21:58:10,478 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 21:58:10,478 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 21:58:10,478 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:58:10,479 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 21:58:10,557 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 21:58:31,033 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 21:58:31,033 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 21:58:32,038 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 21:58:32,039 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 21:58:32,077 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 21:58:33,587 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 21:58:33,587 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 21:58:33,607 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 21:58:33,660 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 21:58:33,660 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 21:58:33,660 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 21:58:33,660 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 21:58:33,660 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 21:58:33,661 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 21:58:33,661 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 21:58:33,661 - talkbridge.desktop.chat - INFO - Translator initialized
+2025-09-09 21:58:33,661 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 21:58:33,661 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 21:58:33,661 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, Translation, AI Chat
+2025-09-09 21:58:33,661 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 21:58:33,662 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 21:58:33,662 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 21:58:33,662 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - INFO - Translator initialized
+2025-09-09 21:58:33,662 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 21:58:33,662 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, Translation, AI Chat
+2025-09-09 21:58:33,662 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 21:58:33,694 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 21:58:33,694 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 21:58:33,694 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 21:58:33,694 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 21:58:33,694 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 21:58:33,831 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 21:58:33,831 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 21:58:33,844 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 21:58:33,849 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 21:58:33,849 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 21:58:37,281 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 21:58:37,282 - talkbridge.desktop.chat - ERROR - [ChatTab] AudioCapture missing record_chunk method - using fallback recording
+2025-09-09 21:58:37,283 - talkbridge.desktop.chat - INFO - Status updated: Using fallback audio recording
+2025-09-09 21:58:37,283 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 21:58:37,429 - src.audio.capture - INFO - Recording completed
+2025-09-09 21:58:37,429 - talkbridge.desktop.chat - ERROR - [ChatTab] Fallback recording failed: cannot access local variable 'audio_data' where it is not associated with a value
+2025-09-09 21:58:37,430 - talkbridge.desktop.chat - INFO - Status updated: Audio recording failed
+2025-09-09 21:58:43,641 - talkbridge.desktop.application - INFO - Main window closing
+2025-09-09 21:58:43,641 - talkbridge.desktop.application - INFO - Cleaning up application resources
+2025-09-09 21:58:43,641 - talkbridge.desktop.bridge - INFO - Cleaning up CoreBridge resources...
+2025-09-09 21:58:43,641 - talkbridge.desktop.bridge - INFO - CoreBridge cleanup completed
+2025-09-09 21:58:43,641 - talkbridge.desktop.state - INFO - Cleaning up StateManager...
+2025-09-09 21:58:43,642 - talkbridge.desktop.application - INFO - Application cleanup completed
+2025-09-09 21:58:43,642 - talkbridge.desktop.main - INFO - Application finished with exit code: 0
+2025-09-09 22:00:02,085 - talkbridge.desktop.main - INFO - Desktop application logging configured
+2025-09-09 22:00:02,085 - talkbridge.desktop.main - INFO - Log files: desktop=/home/ingek/Documents/Development/Python/talkbridge/data/logs/desktop.log, errors=/home/ingek/Documents/Development/Python/talkbridge/data/logs/errors.log
+2025-09-09 22:00:02,085 - talkbridge.desktop.main - INFO - Starting TalkBridge Desktop (CustomTkinter)
+2025-09-09 22:00:02,561 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/translation/offline_translator.py:36 - ignored
+2025-09-09 22:00:02,561 - src.translation.offline_translator - WARNING - argos-translate not available. Install with: pip install argos-translate
+2025-09-09 22:00:04,707 - root - WARNING - TTS module not available
+2025-09-09 22:00:04,878 - root - WARNING - Animation module not available
+2025-09-09 22:00:04,894 - talkbridge.desktop.application - INFO - Enhanced TalkBridge Application initialized
+2025-09-09 22:00:04,894 - talkbridge.desktop.application - INFO - Starting enhanced application run sequence
+2025-09-09 22:00:04,895 - talkbridge.desktop.application - INFO - Initializing core components...
+2025-09-09 22:00:04,895 - talkbridge.desktop.state - INFO - StateManager created
+2025-09-09 22:00:04,895 - talkbridge.desktop.state - INFO - Initializing StateManager...
+2025-09-09 22:00:04,896 - talkbridge.desktop.state - INFO - Configuration loaded from /home/ingek/Documents/Development/Python/talkbridge/config/config.yaml
+2025-09-09 22:00:04,896 - talkbridge.desktop.state - INFO - Application state loaded
+2025-09-09 22:00:04,897 - talkbridge.desktop.state - INFO - StateManager initialized successfully
+2025-09-09 22:00:04,897 - talkbridge.desktop.bridge - INFO - CoreBridge initialized
+2025-09-09 22:00:04,897 - talkbridge.desktop.application - INFO - Core components initialized successfully
+2025-09-09 22:00:04,897 - talkbridge.desktop.application - INFO - Authentication attempt 1/3
+2025-09-09 22:00:04,897 - talkbridge.desktop.application - INFO - Showing login dialog
+2025-09-09 22:00:04,897 - src.auth.auth_manager - INFO - Loaded 11 users from /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 22:00:04,897 - talkbridge.desktop.login - INFO - Showing enhanced login dialog
+2025-09-09 22:00:04,975 - talkbridge.desktop.login - INFO - Enhanced login dialog UI setup completed
+2025-09-09 22:00:09,776 - src.auth.auth_manager - INFO - Saved users to /home/ingek/Documents/Development/Python/talkbridge/src/json/users.json
+2025-09-09 22:00:09,776 - src.auth.auth_manager - INFO - Authentication successful for user 'admin' (salted)
+2025-09-09 22:00:10,782 - talkbridge.desktop.application - INFO - Authentication successful for user: admin
+2025-09-09 22:00:10,782 - talkbridge.desktop.application - INFO - Showing enhanced splash screen
+2025-09-09 22:00:10,820 - talkbridge.desktop.application - INFO - Starting service initialization
+2025-09-09 22:00:12,329 - talkbridge.desktop.application - INFO - Services initialization completed successfully
+2025-09-09 22:00:12,329 - talkbridge.desktop.application - INFO - Showing main window
+2025-09-09 22:00:12,350 - talkbridge.desktop.chat - INFO - Setting up enhanced chat tab UI
+2025-09-09 22:00:12,403 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 22:00:12,403 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 22:00:12,403 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 22:00:12,403 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 22:00:12,403 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 22:00:12,403 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 22:00:12,403 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Translator initialized
+2025-09-09 22:00:12,404 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, Translation, AI Chat
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Enhanced chat tab UI setup completed
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Initializing chat components
+2025-09-09 22:00:12,404 - src.audio.capture - INFO - Using device default sample rate: 44100
+2025-09-09 22:00:12,404 - src.audio.capture - INFO - AudioCapture initialized with sample_rate=44100, channels=1, device=None
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - WARNING - AudioCapture missing record_chunk method - voice recording may not work
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Audio capture initialized
+2025-09-09 22:00:12,404 - src.stt.whisper_engine - INFO - Initialized Whisper engine with model: base, device: cpu
+2025-09-09 22:00:12,404 - talkbridge.desktop.chat - INFO - Whisper engine initialized
+2025-09-09 22:00:12,405 - talkbridge.desktop.chat - INFO - Translator initialized
+2025-09-09 22:00:12,405 - talkbridge.logging.protection - WARNING - Attempted logging.basicConfig override from /home/ingek/Documents/Development/Python/talkbridge/src/ollama/ollama_client.py:59 - ignored
+2025-09-09 22:00:12,405 - talkbridge.desktop.chat - INFO - Ollama client initialized
+2025-09-09 22:00:12,405 - talkbridge.desktop.chat - INFO - Chat components initialized: Audio, Speech-to-Text, Translation, AI Chat
+2025-09-09 22:00:12,405 - talkbridge.desktop.mainwindow - INFO - Chat tab initialized
+2025-09-09 22:00:12,436 - talkbridge.desktop.avatar - INFO - Avatar tab UI setup completed
+2025-09-09 22:00:12,436 - talkbridge.desktop.avatar - WARNING - MediaPipe not available - face detection disabled
+2025-09-09 22:00:12,436 - talkbridge.desktop.mainwindow - INFO - Avatar tab initialized
+2025-09-09 22:00:12,436 - talkbridge.desktop.settings - INFO - Using default settings
+2025-09-09 22:00:12,436 - talkbridge.desktop.settings - INFO - Setting up settings tab UI
+2025-09-09 22:00:12,573 - talkbridge.desktop.settings - INFO - Enhanced settings tab initialized
+2025-09-09 22:00:12,574 - talkbridge.desktop.mainwindow - INFO - Settings tab initialized
+2025-09-09 22:00:12,588 - talkbridge.desktop.mainwindow - INFO - Enhanced main window initialized successfully
+2025-09-09 22:00:12,593 - talkbridge.desktop.application - INFO - Main window displayed successfully
+2025-09-09 22:00:12,594 - talkbridge.desktop.application - INFO - Starting main application loop
+2025-09-09 22:00:14,826 - talkbridge.desktop.chat - INFO - Status updated: Recording... Click Stop when finished
+2025-09-09 22:00:14,826 - talkbridge.desktop.chat - ERROR - [ChatTab] AudioCapture missing record_chunk method - using fallback recording
+2025-09-09 22:00:14,827 - talkbridge.desktop.chat - INFO - Status updated: Using fallback audio recording
+2025-09-09 22:00:14,827 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:14,964 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:15,015 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:15,130 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:15,180 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:15,296 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:15,346 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:15,462 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:15,512 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:15,627 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:15,677 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:15,793 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:15,843 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:15,958 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:16,009 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:16,124 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:16,174 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:16,289 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:16,340 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:16,455 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:16,505 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:16,620 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:16,671 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:16,786 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:16,836 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:16,951 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,001 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:17,116 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,167 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:17,282 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,332 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:17,447 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,497 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:17,612 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,663 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:17,772 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,823 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:17,938 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:17,988 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:18,103 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:18,153 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:18,268 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:18,319 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:18,434 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:18,484 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:18,599 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:18,649 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:18,764 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:18,815 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:18,930 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:18,980 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:19,095 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:19,145 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:19,261 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:19,311 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:19,426 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:19,476 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:19,591 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:19,641 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:19,757 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:19,807 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:19,922 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:19,972 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:20,087 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:20,138 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:20,253 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:20,303 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:20,418 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:20,468 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:20,583 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:20,634 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:20,749 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:20,799 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:20,914 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:20,964 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:21,079 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:21,130 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:21,245 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:21,295 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:21,410 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:21,460 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:21,575 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:21,626 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:21,741 - src.audio.capture - INFO - Recording completed
+2025-09-09 22:00:21,791 - src.audio.capture - INFO - Recording 0.1 seconds of audio...
+2025-09-09 22:00:21,906 - src.audio.capture - INFO - Recording completed

@@ -33,6 +33,16 @@ import customtkinter as ctk
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
+# Import logging protection early
+from src.desktop.logging_config import mark_logging_configured, ensure_error_logging
+
+# Import and configure UI constants
+from src.desktop.ui.ui_utils import configure_ui, icon, clean_text, strip_variation_selectors
+from src.desktop.ui.theme import ComponentThemes, Dimensions, Typography, ColorPalette
+
+# Configure UI early
+configure_ui()
+
 # Basic suppression setup (before heavy imports)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TF warnings
 os.environ['GLOG_minloglevel'] = '2'      # Suppress MediaPipe warnings
@@ -47,43 +57,102 @@ try:
 except ImportError:
     pass  # Fallback already configured above
 
-# Set CustomTkinter appearance
-ctk.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
-ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+# Apply unified theme (configuration done by ui_constants.configure_ui())
+try:
+    from src.desktop.ui.theme import get_customtkinter_theme
+    theme_config = get_customtkinter_theme()
+    # Note: CustomTkinter theme configuration is applied at widget level
+except ImportError:
+    pass  # Fallback to default theme
 
 
 def setup_application_logging(log_level: int = logging.INFO) -> None:
     """
-    Configures the logging system for the desktop application.
+    Configures the comprehensive logging system for the desktop application.
+    
+    Features:
+    - General application logs to desktop.log
+    - Error-level logs to errors.log  
+    - Console output for development
+    - Proper formatting and error handling
     
     Args:
-        log_level: The logging level to use
+        log_level: The logging level to use for general logging
     """
-    # Set up logging
+    # Set up logging directory
     log_dir = project_root / "data" / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     
-    log_file = log_dir / "desktop_ctk.log"
+    # Define log files
+    desktop_log_file = log_dir / "desktop.log"
+    errors_log_file = log_dir / "errors.log"
     
-    # Configure logging
-    logging.basicConfig(
-        level=log_level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler(sys.stdout)
-        ]
+    # Clear any existing logging configuration to avoid conflicts
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
+    
+    # Create formatters
+    detailed_formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    error_formatter = logging.Formatter(
+        '%(asctime)s [%(levelname)s] %(name)s:%(lineno)d - %(message)s'
     )
     
-    # Set specific loggers
+    # Create handlers
+    handlers = []
+    
+    # 1. Desktop log handler (all logs >= INFO)
+    desktop_handler = logging.FileHandler(desktop_log_file, encoding='utf-8')
+    desktop_handler.setLevel(log_level)
+    desktop_handler.setFormatter(detailed_formatter)
+    handlers.append(desktop_handler)
+    
+    # 2. Error log handler (only ERROR and CRITICAL)
+    error_handler = logging.FileHandler(errors_log_file, encoding='utf-8')
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(error_formatter)
+    handlers.append(error_handler)
+    
+    # 3. Console handler for development
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(log_level)
+    console_handler.setFormatter(detailed_formatter)
+    handlers.append(console_handler)
+    
+    # Configure root logger
+    logging.basicConfig(
+        level=logging.DEBUG,  # Set to DEBUG to capture all levels
+        handlers=handlers,
+        force=True  # Force reconfiguration
+    )
+    
+    # Set specific logger levels
     logging.getLogger("talkbridge").setLevel(log_level)
     
-    # Suppress noisy loggers
+    # Suppress noisy third-party loggers
     logging.getLogger("matplotlib").setLevel(logging.WARNING)
     logging.getLogger("PIL").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
     
+    # Test logging configuration
     logger = logging.getLogger("talkbridge.desktop.main")
     logger.info("Desktop application logging configured")
+    logger.info(f"Log files: desktop={desktop_log_file}, errors={errors_log_file}")
+    
+    # Test error logging (using debug level to avoid noise in error logs)
+    try:
+        # This will create a test entry to verify logging is working
+        logger.debug("Logging configuration test - DEBUG level logging working")
+    except Exception as e:
+        print(f"Warning: Error logging test failed: {e}")
+    
+    # Mark logging as configured to prevent module overrides
+    mark_logging_configured()
+    
+    # Ensure error logging is working
+    ensure_error_logging()
 
 
 def check_dependencies() -> Tuple[bool, str]:

@@ -63,6 +63,10 @@ class AuthManager:
         src_dir = Path(__file__).parent.parent
         self.users_file = src_dir / users_file
         self.users = self._load_users_cached()
+        
+        # In development mode, add a simple test user for easier testing
+        if os.getenv('TALKBRIDGE_DEV_MODE', 'false').lower() == 'true':
+            self._ensure_dev_user_exists()
     
     def _load_users_cached(self) -> Dict[str, Dict]:
         """
@@ -186,6 +190,41 @@ class AuthManager:
         
         logger.info("Created secure default users with enhanced security features")
         return default_users
+    
+    def _ensure_dev_user_exists(self) -> None:
+        """Ensure a simple test user exists for development mode."""
+        dev_username = "test"
+        dev_password = "test"
+        
+        # Check if dev user already exists
+        if dev_username not in self.users:
+            # Create simple test user
+            salt = generate_salt()
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+            dev_user = {
+                "password": self._hash_password_with_salt(dev_password, salt),
+                "salt": salt,
+                "role": "user",
+                "email": "test@talkbridge.local",
+                "created_at": current_time,
+                "last_login": None,
+                "password_changed_at": current_time,
+                "account_locked": False,
+                "failed_login_attempts": 0,
+                "requires_password_change": False
+            }
+            
+            self.users[dev_username] = dev_user
+            self._save_users(self.users)
+            
+            logger.info("=== DEVELOPMENT TEST USER CREATED ===")
+            logger.info(f"Username: {dev_username}")
+            logger.info(f"Password: {dev_password}")
+            logger.info("=== USE FOR TESTING ONLY ===")
+        else:
+            logger.info("Development test user already exists")
+            logger.info("Username: test, Password: test")
     
     def _save_users(self, users: Dict[str, Dict]) -> None:
         """

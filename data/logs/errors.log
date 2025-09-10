@@ -1,7 +1,6 @@
-2025-09-03 16:56:45,239 [ERROR] Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
-2025-09-03 16:56:45,780 [ERROR] Transcription failed: Audio duration not acceptable: /tmp/tmpwndgi5sl.wav
-2025-09-03 17:36:47,665 [ERROR] Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
-2025-09-03 17:36:48,235 [ERROR] Transcription failed: Audio duration not acceptable: /tmp/tmp2ul5quee.wav
-2025-09-03 19:26:40,739 [ERROR] Failed to start output capture: No loopback/monitor device found. Enable 'Stereo Mix' in Windows sound settings.
-2025-09-03 19:26:41,311 [ERROR] Transcription failed: Audio duration not acceptable: /tmp/tmph77y0vy_.wav
-2025-09-03 21:46:14,591 [ERROR] Failed to start output capture: No input device matching 'alsa_output.pci-0000_2d_00.1.hdmi-stereo-extra2.monitor'
+2025-09-09 21:52:08,838 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 21:52:08,839 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Translator initialization failed: 'ollama'
+2025-09-09 21:52:12,432 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] AudioCapture missing record_chunk method
+2025-09-09 21:58:37,282 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] AudioCapture missing record_chunk method - using fallback recording
+2025-09-09 21:58:37,429 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Fallback recording failed: cannot access local variable 'audio_data' where it is not associated with a value
+2025-09-09 22:00:14,826 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] AudioCapture missing record_chunk method - using fallback recording

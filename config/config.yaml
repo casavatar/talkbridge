@@ -6,3 +6,6 @@ ui:
   window_size:
     height: 887
     width: 1116
+ollama:
+  base_url: "http://localhost:11434"
+  model: "llama2"

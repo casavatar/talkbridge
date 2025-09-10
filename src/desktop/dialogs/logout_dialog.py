@@ -135,7 +135,7 @@ class LogoutDialog:
         # Logout button
         logout_button = ctk.CTkButton(
             button_frame,
-            text="🔓 Logout",
+            text="Logout",
             width=120,
             height=35,
             fg_color="#f44336",

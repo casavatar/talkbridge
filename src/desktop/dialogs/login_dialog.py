@@ -6,8 +6,8 @@ TalkBridge Desktop - Login Dialog (CustomTkinter)
 Enhanced login dialog with CustomTkinter and comprehensive styling
 
 Author: TalkBridge Team
-Date: 2025-09-03
-Version: 2.0
+Date: 2025-09-08
+Version: 2.1
 
 Requirements:
 - customtkinter
@@ -22,46 +22,55 @@ import json
 from pathlib import Path
 from enum import Enum
 from typing import Optional, Tuple
-import customtkinter as ctk
-import tkinter as tk
-from ...auth.auth_manager import AuthManager
-from typing import Optional, Tuple
-from enum import Enum
 from dataclasses import dataclass
 import tkinter as tk
 import customtkinter as ctk
+from ...auth.auth_manager import AuthManager
+
+# Import UI utilities for consistent styling
+try:
+    from src.desktop.ui.ui_utils import icon, clean_text, strip_variation_selectors
+    UI_UTILS_AVAILABLE = True
+except ImportError:
+    UI_UTILS_AVAILABLE = False
+
+try:
+    from src.desktop.ui.theme import (
+        ColorPalette, Typography, Spacing, Dimensions, 
+        ComponentThemes, UIText, Icons, UXGuidelines
+    )
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
 
 
-class UIConstants:
-    """UI-related constants for the login dialog."""
-    
-    # Dialog dimensions
-    MIN_WIDTH = 400
-    MIN_HEIGHT = 450
-    EXPANDED_HEIGHT = 500
-    
-    # Spacing and margins
-    MAIN_MARGIN = 30
-    MAIN_SPACING = 20
-    FORM_SPACING = 15
-    BUTTON_SPACING = 15
-    
-    # Component heights
-    INPUT_HEIGHT = 35
-    BUTTON_HEIGHT = 40
-    PROGRESS_BAR_HEIGHT = 8
-    STATUS_LABEL_HEIGHT = 45
-    
-    # Timeouts (in milliseconds)
-    AUTH_TIMEOUT = 3000  # 3 seconds
-    SUCCESS_DISPLAY_TIME = 1500  # 1.5 seconds
-    ERROR_DISPLAY_TIME = 8000  # 8 seconds
-    
-    # Font sizes
-    TITLE_FONT_SIZE = 24
-    SUBTITLE_FONT_SIZE = 12
-    LABEL_FONT_SIZE = 12
-    INPUT_FONT_SIZE = 12
+# Dialog dimensions (increased height by 20%)
+MIN_WIDTH = 500
+MIN_HEIGHT = 720  # Increased from 600 to 720 (20% increase)
+EXPANDED_HEIGHT = 780  # Increased from 650 to 780 (20% increase)
+
+# Spacing and margins (using theme if available)
+MAIN_MARGIN = Spacing.MARGIN_MAIN if THEME_AVAILABLE else 25
+MAIN_SPACING = Spacing.LG if THEME_AVAILABLE else 15
+FORM_SPACING = Spacing.MD if THEME_AVAILABLE else 12
+BUTTON_SPACING = Spacing.SM if THEME_AVAILABLE else 10
+
+# Component heights (using theme if available)
+INPUT_HEIGHT = Dimensions.HEIGHT_INPUT if THEME_AVAILABLE else 40
+BUTTON_HEIGHT = Dimensions.HEIGHT_BUTTON if THEME_AVAILABLE else 45
+PROGRESS_BAR_HEIGHT = 6
+STATUS_LABEL_HEIGHT = 30
+
+# Timeouts (in milliseconds)
+AUTH_TIMEOUT = 3000  # 3 seconds
+SUCCESS_DISPLAY_TIME = 1500  # 1.5 seconds
+ERROR_DISPLAY_TIME = 8000  # 8 seconds
+
+# Font sizes (using theme if available)
+TITLE_FONT_SIZE = Typography.FONT_SIZE_H1 if THEME_AVAILABLE else 22
+SUBTITLE_FONT_SIZE = Typography.FONT_SIZE_CAPTION if THEME_AVAILABLE else 11
+LABEL_FONT_SIZE = Typography.FONT_SIZE_CAPTION if THEME_AVAILABLE else 11
+INPUT_FONT_SIZE = Typography.FONT_SIZE_BODY if THEME_AVAILABLE else 12
 
 
 class AuthenticationState(Enum):
@@ -86,29 +95,52 @@ class AuthenticationResult:
 class LoginTheme:
     """Theme colors and styling for the login dialog."""
     
-    # Background colors
-    BACKGROUND_MAIN = "#1e1e1e"
-    BACKGROUND_SECONDARY = "#2d2d2d"
-    BACKGROUND_ELEVATED = "#3c3c3c"
-    
-    # Text colors
-    TEXT_PRIMARY = "#ffffff"
-    TEXT_SECONDARY = "#cccccc"
-    TEXT_MUTED = "#999999"
-    TEXT_ERROR = "#ff6b6b"
-    TEXT_SUCCESS = "#4CAF50"
-    
-    # Accent colors
-    ACCENT_BLUE = "#0078d4"
-    ACCENT_BLUE_HOVER = "#106ebe"
-    ACCENT_GREEN = "#4CAF50"
-    ACCENT_RED = "#f44336"
-    
-    # Input colors
-    INPUT_BACKGROUND = "#3c3c3c"
-    INPUT_BORDER = "#555555"
-    INPUT_BORDER_FOCUS = "#0078d4"
-    INPUT_BORDER_ERROR = "#f44336"
+    # Use unified theme if available, otherwise fallback to original colors
+    if THEME_AVAILABLE:
+        # Background colors
+        BACKGROUND_MAIN = ColorPalette.BACKGROUND_PRIMARY
+        BACKGROUND_SECONDARY = ColorPalette.BACKGROUND_SECONDARY
+        BACKGROUND_ELEVATED = ColorPalette.BACKGROUND_ELEVATED
+        
+        # Text colors
+        TEXT_PRIMARY = ColorPalette.TEXT_PRIMARY
+        TEXT_SECONDARY = ColorPalette.TEXT_SECONDARY
+        TEXT_MUTED = ColorPalette.TEXT_TERTIARY
+        TEXT_ERROR = ColorPalette.ERROR
+        TEXT_SUCCESS = ColorPalette.SUCCESS
+        
+        # Accent colors
+        ACCENT_BLUE = ColorPalette.ACCENT_PRIMARY
+        ACCENT_BLUE_HOVER = ColorPalette.ACCENT_PRIMARY_HOVER
+        ACCENT_GREEN = ColorPalette.SUCCESS
+        ACCENT_RED = ColorPalette.ERROR
+        
+        # Input colors
+        INPUT_BACKGROUND = ColorPalette.INPUT_BACKGROUND
+        INPUT_BORDER = ColorPalette.BORDER_DEFAULT
+        INPUT_BORDER_FOCUS = ColorPalette.BORDER_FOCUS
+        INPUT_BORDER_ERROR = ColorPalette.BORDER_ERROR
+    else:
+        # Fallback colors
+        BACKGROUND_MAIN = "#1e1e1e"
+        BACKGROUND_SECONDARY = "#2d2d2d"
+        BACKGROUND_ELEVATED = "#3c3c3c"
+        
+        TEXT_PRIMARY = "#ffffff"
+        TEXT_SECONDARY = "#cccccc"
+        TEXT_MUTED = "#999999"
+        TEXT_ERROR = "#ff6b6b"
+        TEXT_SUCCESS = "#4CAF50"
+        
+        ACCENT_BLUE = "#0078d4"
+        ACCENT_BLUE_HOVER = "#106ebe"
+        ACCENT_GREEN = "#4CAF50"
+        ACCENT_RED = "#f44336"
+        
+        INPUT_BACKGROUND = "#3c3c3c"
+        INPUT_BORDER = "#555555"
+        INPUT_BORDER_FOCUS = "#0078d4"
+        INPUT_BORDER_ERROR = "#f44336"
 
 
 class LoginDialog:
@@ -130,6 +162,9 @@ class LoginDialog:
         """Initialize the enhanced login dialog."""
         self.parent = parent
         self.logger = logging.getLogger("talkbridge.desktop.login")
+        
+        # Initialize authentication manager
+        self.auth_manager = AuthManager()
         
         # Authentication state
         self.auth_state = AuthenticationState.IDLE
@@ -171,58 +206,108 @@ class LoginDialog:
         """
         self.logger.info("Showing enhanced login dialog")
         
-        # Create dialog window
-        self.dialog = ctk.CTkToplevel(self.parent)
-        self.dialog.title("TalkBridge - Login")
-        self.dialog.geometry(f"{UIConstants.MIN_WIDTH}x{UIConstants.MIN_HEIGHT}")
-        self.dialog.resizable(False, False)
-        
-        # Center on parent
-        self.center_dialog()
-        
-        # Configure dialog
-        self.dialog.configure(fg_color=LoginTheme.BACKGROUND_MAIN)
-        self.dialog.transient(self.parent)
-        self.dialog.grab_set()
-        
-        # Setup UI
-        self.setup_ui()
-        
-        # Load saved credentials if available
-        self.load_saved_credentials()
-        
-        # Focus on username entry
-        self.username_entry.focus()
-        
-        # Wait for dialog to close
-        self.dialog.wait_window()
-        
-        return self.result, self.username, self.password
+        try:
+            # Create dialog window
+            self.dialog = ctk.CTkToplevel(self.parent)
+            self.dialog.title("TalkBridge - Login")
+            self.dialog.geometry(f"{MIN_WIDTH}x{MIN_HEIGHT}")
+            self.dialog.resizable(False, False)
+            
+            # Configure dialog
+            self.dialog.configure(fg_color=LoginTheme.BACKGROUND_MAIN)
+            
+            # Center on parent or screen
+            self.center_dialog()
+            
+            # Configure window properties
+            if self.parent and self.parent.winfo_exists():
+                self.dialog.transient(self.parent)
+            
+            # Setup UI before making visible
+            self.setup_ui()
+            
+            # Make dialog visible and focused
+            self.dialog.deiconify()  # Ensure dialog is visible
+            self.dialog.lift()       # Bring to front
+            self.dialog.attributes('-topmost', True)  # Stay on top
+            self.dialog.focus_force()  # Force focus
+            self.dialog.grab_set()     # Modal behavior
+            
+            # Load saved credentials if available
+            self.load_saved_credentials()
+            
+            # Focus on username entry after a short delay
+            self.dialog.after(100, self._focus_username_entry)
+            
+            # Wait for dialog to close
+            self.dialog.wait_window()
+            
+            return self.result, self.username, self.password
+            
+        except Exception as e:
+            self.logger.error(f"Error creating login dialog: {e}")
+            # Return failure if dialog creation fails
+            return False, "", ""
+
+    def _focus_username_entry(self):
+        """Set focus to username entry with error handling."""
+        try:
+            if self.username_entry and self.username_entry.winfo_exists():
+                self.username_entry.focus()
+        except Exception as e:
+            self.logger.warning(f"Error setting focus to username entry: {e}")
 
     def setup_ui(self) -> None:
-        """Set up the enhanced login dialog UI."""
-        # Main container
-        main_frame = ctk.CTkFrame(self.dialog, fg_color="transparent")
-        main_frame.pack(fill="both", expand=True, padx=UIConstants.MAIN_MARGIN, pady=UIConstants.MAIN_MARGIN)
+        """Set up the enhanced login dialog UI with proper layout."""
+        try:
+            # Main container with scrollable content
+            main_frame = ctk.CTkScrollableFrame(
+                self.dialog, 
+                fg_color="transparent",
+                scrollbar_button_color=LoginTheme.BACKGROUND_SECONDARY
+            )
+            main_frame.pack(fill="both", expand=True, padx=MAIN_MARGIN, pady=MAIN_MARGIN)
+            
+            # Header section
+            self._create_header_section(main_frame)
+            
+            # Form section
+            self._create_form_section(main_frame)
+            
+            # Status and progress section
+            self._create_status_section(main_frame)
+            
+            # Initial validation
+            self.validate_inputs()
+            
+            # Configure window close protocol
+            self.dialog.protocol("WM_DELETE_WINDOW", self.cancel)
+            
+            self.logger.info("Enhanced login dialog UI setup completed")
+            
+        except Exception as e:
+            self.logger.error(f"Error setting up login dialog UI: {e}")
+            raise
+
+    def _create_header_section(self, parent):
+        """Create the header section with logo and title."""
+        header_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        header_frame.pack(fill="x", pady=(0, MAIN_SPACING))
         
-        # Logo and title section
-        header_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
-        header_frame.pack(fill="x", pady=(0, UIConstants.MAIN_SPACING))
-        
-        # Logo placeholder
+        # Logo using clean text instead of emoji
         self.logo_label = ctk.CTkLabel(
             header_frame,
-            text="🤖",
-            font=ctk.CTkFont(size=48),
+            text=Icons.ROBOT if THEME_AVAILABLE else "AI",
+            font=ctk.CTkFont(size=40, weight="bold"),
             text_color=LoginTheme.ACCENT_BLUE
         )
-        self.logo_label.pack(pady=(0, 10))
+        self.logo_label.pack(pady=(0, 8))
         
         # Title
         self.title_label = ctk.CTkLabel(
             header_frame,
-            text="TalkBridge Desktop",
-            font=ctk.CTkFont(size=UIConstants.TITLE_FONT_SIZE, weight="bold"),
+            text=UIText.APP_NAME if THEME_AVAILABLE else "TalkBridge Desktop",
+            font=ctk.CTkFont(size=TITLE_FONT_SIZE, weight="bold"),
             text_color=LoginTheme.TEXT_PRIMARY
         )
         self.title_label.pack()
@@ -230,180 +315,242 @@ class LoginDialog:
         # Subtitle
         self.subtitle_label = ctk.CTkLabel(
             header_frame,
-            text="AI-Powered Communication Platform",
-            font=ctk.CTkFont(size=UIConstants.SUBTITLE_FONT_SIZE),
+            text=UIText.APP_SUBTITLE if THEME_AVAILABLE else "AI-Powered Communication Platform",
+            font=ctk.CTkFont(size=SUBTITLE_FONT_SIZE),
             text_color=LoginTheme.TEXT_SECONDARY
         )
-        self.subtitle_label.pack(pady=(5, 0))
+        self.subtitle_label.pack(pady=(3, 0))
+
+    def _create_form_section(self, parent):
+        """Create the form section with inputs and buttons."""
+        # Form container
+        form_frame = ctk.CTkFrame(
+            parent, 
+            fg_color=LoginTheme.BACKGROUND_SECONDARY, 
+            corner_radius=12
+        )
+        form_frame.pack(fill="x", pady=MAIN_SPACING)
         
-        # Form section
-        form_frame = ctk.CTkFrame(main_frame, fg_color=LoginTheme.BACKGROUND_SECONDARY, corner_radius=15)
-        form_frame.pack(fill="x", pady=UIConstants.MAIN_SPACING)
+        # Form content with padding
+        form_content = ctk.CTkFrame(form_frame, fg_color="transparent")
+        form_content.pack(fill="both", expand=True, padx=25, pady=20)
         
-        # Form title
+        # Form title using clean text
         form_title = ctk.CTkLabel(
-            form_frame,
-            text="🔐 Sign In",
+            form_content,
+            text=UIText.LOGIN_TITLE if THEME_AVAILABLE else "Sign In",
             font=ctk.CTkFont(size=16, weight="bold"),
             text_color=LoginTheme.TEXT_PRIMARY
         )
-        form_title.pack(pady=(20, 15))
+        form_title.pack(pady=(0, 15))
         
         # Username field
-        username_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
-        username_frame.pack(fill="x", padx=20, pady=UIConstants.FORM_SPACING)
+        self._create_username_field(form_content)
+        
+        # Password field
+        self._create_password_field(form_content)
+        
+        # Options
+        self._create_options_section(form_content)
+        
+        # Buttons
+        self._create_buttons_section(form_content)
+
+    def _create_username_field(self, parent):
+        """Create username input field."""
+        username_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        username_frame.pack(fill="x", pady=(0, FORM_SPACING))
         
         username_label = ctk.CTkLabel(
             username_frame,
-            text="👤 Username:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            text=UIText.USERNAME_LABEL if THEME_AVAILABLE else "Username:",
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=LoginTheme.TEXT_PRIMARY
         )
-        username_label.pack(anchor="w", pady=(0, 5))
+        username_label.pack(anchor="w", pady=(0, 4))
+        
+        entry_style = ComponentThemes.get_input_theme() if THEME_AVAILABLE else {
+            "fg_color": LoginTheme.INPUT_BACKGROUND,
+            "border_color": LoginTheme.INPUT_BORDER
+        }
         
         self.username_entry = ctk.CTkEntry(
             username_frame,
-            height=UIConstants.INPUT_HEIGHT,
-            placeholder_text="Enter your username",
-            font=ctk.CTkFont(size=UIConstants.INPUT_FONT_SIZE),
-            fg_color=LoginTheme.INPUT_BACKGROUND,
-            border_color=LoginTheme.INPUT_BORDER
+            placeholder_text=clean_text("Enter your username") if UI_UTILS_AVAILABLE else "Enter your username",
+            **entry_style
         )
         self.username_entry.pack(fill="x")
         self.username_entry.bind("<KeyRelease>", self.on_input_changed)
         self.username_entry.bind("<FocusIn>", lambda e: self.on_field_focus(self.username_entry))
         self.username_entry.bind("<FocusOut>", lambda e: self.on_field_unfocus(self.username_entry))
-        
-        # Password field
-        password_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
-        password_frame.pack(fill="x", padx=20, pady=UIConstants.FORM_SPACING)
+
+    def _create_password_field(self, parent):
+        """Create password input field with show/hide toggle."""
+        password_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        password_frame.pack(fill="x", pady=(0, FORM_SPACING))
         
         password_label = ctk.CTkLabel(
             password_frame,
-            text="🔒 Password:",
-            font=ctk.CTkFont(size=UIConstants.LABEL_FONT_SIZE),
+            text=UIText.PASSWORD_LABEL if THEME_AVAILABLE else "Password:",
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
             text_color=LoginTheme.TEXT_PRIMARY
         )
-        password_label.pack(anchor="w", pady=(0, 5))
+        password_label.pack(anchor="w", pady=(0, 4))
         
+        # Password input container
         password_input_frame = ctk.CTkFrame(password_frame, fg_color="transparent")
         password_input_frame.pack(fill="x")
         
+        entry_style = ComponentThemes.get_input_theme() if THEME_AVAILABLE else {
+            "fg_color": LoginTheme.INPUT_BACKGROUND,
+            "border_color": LoginTheme.INPUT_BORDER
+        }
+        
         self.password_entry = ctk.CTkEntry(
             password_input_frame,
-            height=UIConstants.INPUT_HEIGHT,
-            placeholder_text="Enter your password",
+            placeholder_text=clean_text("Enter your password") if UI_UTILS_AVAILABLE else "Enter your password",
             show="*",
-            font=ctk.CTkFont(size=UIConstants.INPUT_FONT_SIZE),
-            fg_color=LoginTheme.INPUT_BACKGROUND,
-            border_color=LoginTheme.INPUT_BORDER
+            **entry_style
         )
-        self.password_entry.pack(side="left", fill="x", expand=True)
+        self.password_entry.pack(side="left", fill="x", expand=True, padx=(0, 8))
         self.password_entry.bind("<KeyRelease>", self.on_input_changed)
         self.password_entry.bind("<Return>", lambda e: self.login())
         self.password_entry.bind("<FocusIn>", lambda e: self.on_field_focus(self.password_entry))
         self.password_entry.bind("<FocusOut>", lambda e: self.on_field_unfocus(self.password_entry))
         
-        # Show/hide password toggle
+        # Show/hide password toggle with accessible text
         self.show_password_var = tk.BooleanVar()
         self.show_password_checkbox = ctk.CTkCheckBox(
             password_input_frame,
-            text="👁️",
-            width=30,
-            checkbox_width=20,
-            checkbox_height=20,
+            text=UIText.SHOW_PASSWORD if THEME_AVAILABLE else "Show",
+            width=60,
+            height=28,
+            checkbox_width=18,
+            checkbox_height=18,
             variable=self.show_password_var,
-            command=self.toggle_password_visibility
+            command=self.toggle_password_visibility,
+            fg_color=LoginTheme.ACCENT_BLUE,
+            font=ctk.CTkFont(size=9)
         )
-        self.show_password_checkbox.pack(side="right", padx=(10, 0))
-        
-        # Options section
-        options_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
-        options_frame.pack(fill="x", padx=20, pady=UIConstants.FORM_SPACING)
+        self.show_password_checkbox.pack(side="right")
+
+    def _create_options_section(self, parent):
+        """Create options section with remember me checkbox."""
+        options_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        options_frame.pack(fill="x", pady=(0, FORM_SPACING))
         
         # Remember me checkbox
         self.remember_var = tk.BooleanVar()
         self.remember_checkbox = ctk.CTkCheckBox(
             options_frame,
-            text="🔄 Remember me",
+            text=UIText.REMEMBER_ME if THEME_AVAILABLE else "Remember me",
             variable=self.remember_var,
-            font=ctk.CTkFont(size=11),
-            text_color=LoginTheme.TEXT_SECONDARY
+            font=ctk.CTkFont(size=10),
+            text_color=LoginTheme.TEXT_SECONDARY,
+            fg_color=LoginTheme.ACCENT_BLUE,
+            height=20
         )
         self.remember_checkbox.pack(anchor="w")
+
+    def _create_buttons_section(self, parent):
+        """Create buttons section with login and cancel buttons."""
+        button_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        button_frame.pack(fill="x", pady=(FORM_SPACING, 0))
         
-        # Buttons section
-        button_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
-        button_frame.pack(fill="x", padx=20, pady=(UIConstants.FORM_SPACING, 20))
+        # Login button with theme-aware styling
+        button_theme = ComponentThemes.get_button_theme("primary") if THEME_AVAILABLE else {}
+        # Remove all conflicting parameters from theme to avoid conflicts
+        excluded_params = ['height', 'command', 'text', 'corner_radius', 'font', 'fg_color', 'hover_color']
+        button_theme_clean = {k: v for k, v in button_theme.items() if k not in excluded_params} if THEME_AVAILABLE else {}
         
-        # Login button
+        # Login button with consistent styling
+        button_style = ComponentThemes.get_button_theme() if THEME_AVAILABLE else {
+            "fg_color": LoginTheme.ACCENT_BLUE,
+            "hover_color": LoginTheme.ACCENT_BLUE_HOVER
+        }
+        
         self.login_button = ctk.CTkButton(
             button_frame,
-            text="🚀 Sign In",
-            height=UIConstants.BUTTON_HEIGHT,
+            text=clean_text("Sign In") if UI_UTILS_AVAILABLE else "Sign In",
             command=self.login,
-            fg_color=LoginTheme.ACCENT_BLUE,
-            hover_color=LoginTheme.ACCENT_BLUE_HOVER,
-            font=ctk.CTkFont(size=14, weight="bold")
+            image=icon("login") if UI_UTILS_AVAILABLE else None,
+            compound="left",
+            **button_style
         )
-        self.login_button.pack(fill="x", pady=(0, UIConstants.BUTTON_SPACING))
+        self.login_button.pack(fill="x", pady=(0, BUTTON_SPACING if THEME_AVAILABLE else 10))
         
-        # Cancel button
+        # Cancel button with secondary styling
+        cancel_theme = ComponentThemes.get_button_theme("secondary") if THEME_AVAILABLE else {
+            "fg_color": "transparent",
+            "text_color": LoginTheme.TEXT_SECONDARY,
+            "border_width": 2,
+            "border_color": LoginTheme.INPUT_BORDER,
+            "hover_color": LoginTheme.BACKGROUND_ELEVATED
+        }
+        
         self.cancel_button = ctk.CTkButton(
             button_frame,
-            text="❌ Cancel",
-            height=UIConstants.BUTTON_HEIGHT,
+            text=clean_text("Cancel") if UI_UTILS_AVAILABLE else "Cancel",
             command=self.cancel,
-            fg_color="transparent",
-            text_color=LoginTheme.TEXT_SECONDARY,
-            border_width=2,
-            border_color=LoginTheme.INPUT_BORDER,
-            hover_color=LoginTheme.BACKGROUND_ELEVATED,
-            font=ctk.CTkFont(size=12)
+            image=icon("close") if UI_UTILS_AVAILABLE else None,
+            compound="left",
+            **cancel_theme
         )
         self.cancel_button.pack(fill="x")
-        
-        # Progress and status section
-        progress_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
-        progress_frame.pack(fill="x", pady=UIConstants.MAIN_SPACING)
+
+    def _create_status_section(self, parent):
+        """Create status and progress section."""
+        status_frame = ctk.CTkFrame(parent, fg_color="transparent")
+        status_frame.pack(fill="x", pady=MAIN_SPACING)
         
         # Progress bar
         self.progress_bar = ctk.CTkProgressBar(
-            progress_frame,
-            height=UIConstants.PROGRESS_BAR_HEIGHT,
-            progress_color=LoginTheme.ACCENT_BLUE
+            status_frame,
+            height=PROGRESS_BAR_HEIGHT,
+            progress_color=LoginTheme.ACCENT_BLUE,
+            corner_radius=3
         )
-        self.progress_bar.pack(fill="x", pady=(0, 10))
+        self.progress_bar.pack(fill="x", pady=(0, 8))
         self.progress_bar.set(0)
         
         # Status label
         self.status_label = ctk.CTkLabel(
-            progress_frame,
+            status_frame,
             text="Ready to sign in",
-            height=UIConstants.STATUS_LABEL_HEIGHT,
-            font=ctk.CTkFont(size=11),
+            height=STATUS_LABEL_HEIGHT,
+            font=ctk.CTkFont(size=10),
             text_color=LoginTheme.TEXT_SECONDARY,
-            wraplength=300
+            wraplength=400
         )
         self.status_label.pack()
-        
-        # Initial validation
-        self.validate_inputs()
-        
-        self.logger.info("Enhanced login dialog UI setup completed")
 
     def center_dialog(self) -> None:
-        """Center the dialog on its parent window."""
-        if self.parent:
-            parent_x = self.parent.winfo_x()
-            parent_y = self.parent.winfo_y()
-            parent_width = self.parent.winfo_width()
-            parent_height = self.parent.winfo_height()
-            
-            dialog_x = parent_x + (parent_width - UIConstants.MIN_WIDTH) // 2
-            dialog_y = parent_y + (parent_height - UIConstants.MIN_HEIGHT) // 2
-            
-            self.dialog.geometry(f"{UIConstants.MIN_WIDTH}x{UIConstants.MIN_HEIGHT}+{dialog_x}+{dialog_y}")
+        """Center the dialog on its parent window or screen."""
+        try:
+            if self.parent and self.parent.winfo_viewable():
+                # Parent is visible, center on parent
+                parent_x = self.parent.winfo_x()
+                parent_y = self.parent.winfo_y()
+                parent_width = self.parent.winfo_width()
+                parent_height = self.parent.winfo_height()
+                
+                dialog_x = parent_x + (parent_width - MIN_WIDTH) // 2
+                dialog_y = parent_y + (parent_height - MIN_HEIGHT) // 2
+                
+                self.dialog.geometry(f"{MIN_WIDTH}x{MIN_HEIGHT}+{dialog_x}+{dialog_y}")
+            else:
+                # Parent is hidden or not available, center on screen
+                screen_width = self.dialog.winfo_screenwidth()
+                screen_height = self.dialog.winfo_screenheight()
+                
+                dialog_x = (screen_width - MIN_WIDTH) // 2
+                dialog_y = (screen_height - MIN_HEIGHT) // 2
+                
+                self.dialog.geometry(f"{MIN_WIDTH}x{MIN_HEIGHT}+{dialog_x}+{dialog_y}")
+        except Exception as e:
+            # Fallback to default geometry if positioning fails
+            self.logger.warning(f"Error centering dialog: {e}, using default position")
+            self.dialog.geometry(f"{MIN_WIDTH}x{MIN_HEIGHT}")
 
     def on_field_focus(self, field: ctk.CTkEntry) -> None:
         """Handle field focus event."""
@@ -434,60 +581,109 @@ class LoginDialog:
         # Update login button state
         if is_valid:
             self.login_button.configure(state="normal")
-            self.update_status("Ready to sign in", LoginTheme.TEXT_SECONDARY)
+            self.update_status(UIText.READY if THEME_AVAILABLE else "Ready to sign in", LoginTheme.TEXT_SECONDARY)
         else:
             self.login_button.configure(state="disabled")
             if not username:
-                self.update_status("Please enter your username", LoginTheme.ERROR_COLOR)
+                self.update_status("Please enter your username", LoginTheme.TEXT_ERROR)
             elif len(username) < 3:
-                self.update_status("Username must be at least 3 characters", LoginTheme.ERROR_COLOR)
+                self.update_status("Username must be at least 3 characters", LoginTheme.TEXT_ERROR)
             elif not password:
-                self.update_status("Please enter your password", LoginTheme.ERROR_COLOR)
+                self.update_status("Please enter your password", LoginTheme.TEXT_ERROR)
 
     def update_status(self, message: str, color: str = None) -> None:
         """Update status message."""
-        if color is None:
-            color = LoginTheme.TEXT_SECONDARY
-        
-        self.status_label.configure(text=message, text_color=color)
-        self.dialog.update_idletasks()
+        try:
+            if not self.dialog or not self.dialog.winfo_exists():
+                return
+                
+            if color is None:
+                color = LoginTheme.TEXT_SECONDARY
+            
+            if self.status_label and self.status_label.winfo_exists():
+                self.status_label.configure(text=message, text_color=color)
+                self.dialog.update_idletasks()
+        except (tk.TclError, RuntimeError) as e:
+            self.logger.warning(f"Cannot update status: {e}")
 
     def set_auth_state(self, state: AuthenticationState) -> None:
         """Set authentication state and update UI."""
-        self.auth_state = state
-        
-        if state == AuthenticationState.IDLE:
-            self.login_button.configure(text="🚀 Sign In", state="normal")
-            self.username_entry.configure(state="normal")
-            self.password_entry.configure(state="normal")
-            self.progress_bar.set(0)
-            self.update_status("Ready to sign in")
+        try:
+            if not self.dialog or not self.dialog.winfo_exists():
+                return
+                
+            self.auth_state = state
             
-        elif state == AuthenticationState.AUTHENTICATING:
-            self.login_button.configure(text="🔄 Signing In...", state="disabled")
-            self.username_entry.configure(state="disabled")
-            self.password_entry.configure(state="disabled")
-            self.update_status("Authenticating...")
-            self.start_progress_animation()
-            
-        elif state == AuthenticationState.SUCCESS:
-            self.login_button.configure(text="✅ Success!", state="disabled")
-            self.progress_bar.set(1)
-            self.update_status("Authentication successful!", LoginTheme.SUCCESS_COLOR)
-            
-        elif state == AuthenticationState.FAILED:
-            self.login_button.configure(text="❌ Failed", state="normal")
-            self.username_entry.configure(state="normal")
-            self.password_entry.configure(state="normal")
-            self.progress_bar.set(0)
-            self.update_status("Authentication failed. Please try again.", LoginTheme.ERROR_COLOR)
-            
-        elif state == AuthenticationState.ERROR:
-            self.login_button.configure(text="⚠️ Error", state="normal")
-            self.username_entry.configure(state="normal")
-            self.password_entry.configure(state="normal")
-            self.progress_bar.set(0)
-            self.update_status("An error occurred. Please try again.", LoginTheme.ERROR_COLOR)
+            if state == AuthenticationState.IDLE:
+                if self.login_button and self.login_button.winfo_exists():
+                    self.login_button.configure(
+                        text=UIText.SIGN_IN_BUTTON if THEME_AVAILABLE else "Sign In", 
+                        state="normal"
+                    )
+                if self.username_entry and self.username_entry.winfo_exists():
+                    self.username_entry.configure(state="normal")
+                if self.password_entry and self.password_entry.winfo_exists():
+                    self.password_entry.configure(state="normal")
+                if self.progress_bar and self.progress_bar.winfo_exists():
+                    self.progress_bar.set(0)
+                self.update_status(UIText.READY if THEME_AVAILABLE else "Ready to sign in")
+                
+            elif state == AuthenticationState.AUTHENTICATING:
+                if self.login_button and self.login_button.winfo_exists():
+                    self.login_button.configure(
+                        text=UIText.SIGNING_IN if THEME_AVAILABLE else "Signing in...", 
+                        state="disabled"
+                    )
+                if self.username_entry and self.username_entry.winfo_exists():
+                    self.username_entry.configure(state="disabled")
+                if self.password_entry and self.password_entry.winfo_exists():
+                    self.password_entry.configure(state="disabled")
+                self.update_status(UIText.SIGNING_IN if THEME_AVAILABLE else "Authenticating...")
+                self.start_progress_animation()
+                
+            elif state == AuthenticationState.SUCCESS:
+                if self.login_button and self.login_button.winfo_exists():
+                    self.login_button.configure(
+                        text=UIText.AUTH_SUCCESS if THEME_AVAILABLE else "Success!", 
+                        state="disabled"
+                    )
+                if self.progress_bar and self.progress_bar.winfo_exists():
+                    self.progress_bar.set(1)
+                self.update_status(
+                    "Authentication successful!" if THEME_AVAILABLE else "Authentication successful!", 
+                    LoginTheme.TEXT_SUCCESS
+                )
+                
+            elif state == AuthenticationState.FAILED:
+                if self.login_button and self.login_button.winfo_exists():
+                    self.login_button.configure(
+                        text=UIText.AUTH_FAILED if THEME_AVAILABLE else "Authentication failed", 
+                        state="normal"
+                    )
+                if self.username_entry and self.username_entry.winfo_exists():
+                    self.username_entry.configure(state="normal")
+                if self.password_entry and self.password_entry.winfo_exists():
+                    self.password_entry.configure(state="normal")
+                if self.progress_bar and self.progress_bar.winfo_exists():
+                    self.progress_bar.set(0)
+                self.update_status("Authentication failed. Please try again.", LoginTheme.TEXT_ERROR)
+                
+            elif state == AuthenticationState.TIMEOUT:
+                if self.login_button and self.login_button.winfo_exists():
+                    self.login_button.configure(
+                        text=UIText.AUTH_TIMEOUT if THEME_AVAILABLE else "Request timed out", 
+                        state="normal"
+                    )
+                if self.username_entry and self.username_entry.winfo_exists():
+                    self.username_entry.configure(state="normal")
+                if self.password_entry and self.password_entry.winfo_exists():
+                    self.password_entry.configure(state="normal")
+                if self.progress_bar and self.progress_bar.winfo_exists():
+                    self.progress_bar.set(0)
+                self.update_status("Authentication timed out. Please try again.", LoginTheme.TEXT_ERROR)
+                
+        except (tk.TclError, RuntimeError) as e:
+            self.logger.warning(f"Cannot update auth state: {e}")
 
     def start_progress_animation(self) -> None:
         """Start progress bar animation."""
@@ -497,16 +693,28 @@ class LoginDialog:
 
     def animate_progress(self) -> None:
         """Animate progress bar during authentication."""
-        if self.animation_running and self.auth_state == AuthenticationState.AUTHENTICATING:
-            current = self.progress_bar.get()
-            if current < 0.9:
-                self.progress_bar.set(current + 0.1)
+        try:
+            if not self.dialog or not self.dialog.winfo_exists():
+                self.animation_running = False
+                return
+                
+            if self.animation_running and self.auth_state == AuthenticationState.AUTHENTICATING:
+                if self.progress_bar and self.progress_bar.winfo_exists():
+                    current = self.progress_bar.get()
+                    if current < 0.9:
+                        self.progress_bar.set(current + 0.1)
+                    else:
+                        self.progress_bar.set(0.1)
+                
+                # Continue animation
+                try:
+                    self.dialog.after(200, self.animate_progress)
+                except (tk.TclError, RuntimeError):
+                    self.animation_running = False
             else:
-                self.progress_bar.set(0.1)
-            
-            # Continue animation
-            self.dialog.after(200, self.animate_progress)
-        else:
+                self.animation_running = False
+        except Exception as e:
+            self.logger.warning(f"Error in progress animation: {e}")
             self.animation_running = False
 
     def load_saved_credentials(self) -> None:
@@ -524,9 +732,14 @@ class LoginDialog:
                     self.username_entry.insert(0, username)
                     self.remember_var.set(True)
                     self.password_entry.focus()  # Focus on password if username is loaded
+                    return
                     
         except Exception as e:
             self.logger.warning(f"Could not load saved credentials: {e}")
+        
+        # Set default values for testing if no saved credentials
+        self.username_entry.insert(0, "admin")
+        self.password_entry.insert(0, "password")
 
     def save_credentials(self) -> None:
         """Save credentials if remember me is checked."""
@@ -562,260 +775,107 @@ class LoginDialog:
         self.password = self.password_entry.get().strip()
         
         if not self.username or not self.password:
-            self.update_status("Please fill in all fields", LoginTheme.ERROR_COLOR)
+            self.update_status("Please fill in all fields", LoginTheme.TEXT_ERROR)
             return
             
-        # Start authentication in separate thread
+        # Perform authentication synchronously to avoid threading issues
         self.set_auth_state(AuthenticationState.AUTHENTICATING)
-        self.auth_thread = threading.Thread(target=self._authenticate, daemon=True)
-        self.auth_thread.start()
+        
+        # Use after_idle to perform authentication in the next event loop iteration
+        self.dialog.after_idle(self._perform_authentication)
 
-    def _authenticate(self) -> None:
-        """Perform authentication in separate thread."""
+    def _perform_authentication(self) -> None:
+        """Perform authentication synchronously in the main thread."""
         try:
+            # Disable UI during authentication
+            self.login_button.configure(state="disabled")
+            self.cancel_button.configure(state="disabled")
+            self.username_entry.configure(state="disabled")
+            self.password_entry.configure(state="disabled")
+            
+            # Update UI to show authentication in progress
+            if self.dialog:
+                self.dialog.update_idletasks()
+            
+            # Perform authentication
             success = self.auth_manager.authenticate(self.username, self.password)
             
-            # Simulate some processing time
-            time.sleep(1)
+            # Re-enable UI
+            self.login_button.configure(state="normal")
+            self.cancel_button.configure(state="normal")
+            self.username_entry.configure(state="normal")
+            self.password_entry.configure(state="normal")
             
-            # Update UI on main thread
-            self.dialog.after(0, self._on_auth_complete, success)
+            # Handle authentication result
+            self._on_auth_complete(success)
             
         except Exception as e:
             self.logger.error(f"Authentication error: {e}")
-            self.dialog.after(0, self._on_auth_error, str(e))
+            # Re-enable UI on error
+            self.login_button.configure(state="normal")
+            self.cancel_button.configure(state="normal")
+            self.username_entry.configure(state="normal")
+            self.password_entry.configure(state="normal")
+            
+            self._on_auth_error(str(e))
+
+    def _authenticate(self) -> None:
+        """Perform authentication in separate thread - DEPRECATED."""
+        # This method is now deprecated in favor of synchronous authentication
+        pass
 
     def _on_auth_complete(self, success: bool) -> None:
         """Handle authentication completion on main thread."""
-        if success:
-            self.set_auth_state(AuthenticationState.SUCCESS)
-            self.save_credentials()
-            self.result = True
-            
-            # Close dialog after brief delay
-            self.dialog.after(1000, self.dialog.destroy)
-        else:
-            self.set_auth_state(AuthenticationState.FAILED)
-            self.password_entry.delete(0, 'end')
-            self.password_entry.focus()
+        try:
+            if not self.dialog or not self.dialog.winfo_exists():
+                self.logger.warning("Dialog no longer exists in auth completion")
+                return
+                
+            if success:
+                self.set_auth_state(AuthenticationState.SUCCESS)
+                self.save_credentials()
+                self.result = True
+                
+                # Close dialog after brief delay
+                try:
+                    self.dialog.after(1000, self._safe_destroy_dialog)
+                except (tk.TclError, RuntimeError) as e:
+                    self.logger.warning(f"Cannot schedule dialog destruction: {e}")
+                    self._safe_destroy_dialog()  # Try to destroy immediately
+            else:
+                self.set_auth_state(AuthenticationState.FAILED)
+                if self.password_entry and self.password_entry.winfo_exists():
+                    self.password_entry.delete(0, 'end')
+                    self.password_entry.focus()
+                    
+        except Exception as e:
+            self.logger.error(f"Error in auth completion handler: {e}")
+
+    def _safe_destroy_dialog(self) -> None:
+        """Safely destroy the dialog with error handling."""
+        try:
+            if self.dialog and self.dialog.winfo_exists():
+                self.dialog.destroy()
+        except (tk.TclError, RuntimeError) as e:
+            self.logger.warning(f"Error destroying dialog: {e}")
 
     def _on_auth_error(self, error_message: str) -> None:
         """Handle authentication error on main thread."""
-        self.set_auth_state(AuthenticationState.ERROR)
-        self.update_status(f"Error: {error_message}", LoginTheme.ERROR_COLOR)
+        try:
+            if not self.dialog or not self.dialog.winfo_exists():
+                self.logger.warning("Dialog no longer exists in auth error handler")
+                return
+                
+            self.set_auth_state(AuthenticationState.FAILED)
+            self.update_status(f"Error: {error_message}", LoginTheme.TEXT_ERROR)
+            
+        except Exception as e:
+            self.logger.error(f"Error in auth error handler: {e}")
 
     def cancel(self) -> None:
         """Handle cancel button click."""
         self.result = False
-        self.dialog.destroy()
-
-    def show(self) -> bool:
-        """
-        Shows the login dialog.
-        
-        Returns:
-            True if login successful, False if cancelled
-        """
-        self.logger.info("Showing login dialog")
-        
-        # Create dialog window
-        self.dialog = ctk.CTkToplevel(self.parent)
-        self.dialog.title("TalkBridge Login")
-        self.dialog.geometry("400x350")
-        self.dialog.resizable(False, False)
-        
-        # Center dialog
-        self.dialog.update_idletasks()
-        x = (self.dialog.winfo_screenwidth() // 2) - (400 // 2)
-        y = (self.dialog.winfo_screenheight() // 2) - (350 // 2)
-        self.dialog.geometry(f"400x350+{x}+{y}")
-        
-        # Make dialog modal
-        self.dialog.transient(self.parent)
-        self.dialog.grab_set()
-        
-        # Setup UI
-        self._setup_ui()
-        
-        # Handle window close
-        self.dialog.protocol("WM_DELETE_WINDOW", self._on_cancel)
-        
-        # Wait for dialog to close
-        self.dialog.wait_window()
-        
-        return self.result
-
-    def _setup_ui(self) -> None:
-        """Sets up the login dialog UI."""
-        # Main frame
-        main_frame = ctk.CTkFrame(self.dialog)
-        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Title
-        title_label = ctk.CTkLabel(
-            main_frame,
-            text="TalkBridge Login",
-            font=ctk.CTkFont(size=24, weight="bold")
-        )
-        title_label.pack(pady=20)
-        
-        # Subtitle
-        subtitle_label = ctk.CTkLabel(
-            main_frame,
-            text="Please enter your credentials",
-            font=ctk.CTkFont(size=12)
-        )
-        subtitle_label.pack(pady=(0, 20))
-        
-        # Username field
-        username_label = ctk.CTkLabel(
-            main_frame,
-            text="Username:",
-            font=ctk.CTkFont(size=12)
-        )
-        username_label.pack(anchor="w", padx=20)
-        
-        self.username_entry = ctk.CTkEntry(
-            main_frame,
-            placeholder_text="Enter username",
-            width=300,
-            height=32
-        )
-        self.username_entry.pack(pady=(5, 15), padx=20)
-        
-        # Password field
-        password_label = ctk.CTkLabel(
-            main_frame,
-            text="Password:",
-            font=ctk.CTkFont(size=12)
-        )
-        password_label.pack(anchor="w", padx=20)
-        
-        self.password_entry = ctk.CTkEntry(
-            main_frame,
-            placeholder_text="Enter password",
-            show="*",
-            width=300,
-            height=32
-        )
-        self.password_entry.pack(pady=(5, 15), padx=20)
-        
-        # Remember credentials checkbox
-        self.remember_var = tk.BooleanVar()
-        remember_checkbox = ctk.CTkCheckBox(
-            main_frame,
-            text="Remember credentials",
-            variable=self.remember_var,
-            font=ctk.CTkFont(size=11)
-        )
-        remember_checkbox.pack(pady=(10, 20))
-        
-        # Buttons frame
-        button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
-        button_frame.pack(pady=10)
-        
-        # Login button
-        login_button = ctk.CTkButton(
-            button_frame,
-            text="Login",
-            width=120,
-            height=32,
-            command=self._on_login
-        )
-        login_button.pack(side="left", padx=10)
-        
-        # Cancel button
-        cancel_button = ctk.CTkButton(
-            button_frame,
-            text="Cancel",
-            width=120,
-            height=32,
-            fg_color="gray",
-            hover_color="darkgray",
-            command=self._on_cancel
-        )
-        cancel_button.pack(side="left", padx=10)
-        
-        # Set default values for testing
-        self.username_entry.insert(0, "admin")
-        self.password_entry.insert(0, "password")
-        
-        # Focus on username entry
-        self.username_entry.focus()
-        
-        # Bind Enter key to login
-        self.dialog.bind('<Return>', lambda e: self._on_login())
-
-    def _on_login(self) -> None:
-        """Handles login button click."""
-        self.username = self.username_entry.get().strip()
-        self.password = self.password_entry.get()
-        
-        if not self.username:
-            self._show_error("Please enter a username")
-            return
-        
-        if not self.password:
-            self._show_error("Please enter a password")
-            return
-        
-        # Simple authentication (in real app, use proper auth)
-        if self.username == "admin" and self.password == "password":
-            self.result = True
-            self.logger.info(f"Login successful for user: {self.username}")
-            self.dialog.destroy()
-        else:
-            self._show_error("Invalid username or password")
-            self.password_entry.delete(0, tk.END)
-            self.password_entry.focus()
-
-    def _on_cancel(self) -> None:
-        """Handles cancel button click."""
-        self.result = False
-        self.logger.info("Login cancelled")
-        self.dialog.destroy()
-
-    def _show_error(self, message: str) -> None:
-        """Shows an error message."""
-        self.logger.error(f"Login error: {message}")
-        
-        # Create error dialog
-        error_dialog = ctk.CTkToplevel(self.dialog)
-        error_dialog.title("Login Error")
-        error_dialog.geometry("300x150")
-        error_dialog.resizable(False, False)
-        
-        # Center error dialog
-        error_dialog.update_idletasks()
-        x = (error_dialog.winfo_screenwidth() // 2) - (300 // 2)
-        y = (error_dialog.winfo_screenheight() // 2) - (150 // 2)
-        error_dialog.geometry(f"300x150+{x}+{y}")
-        
-        # Add content
-        frame = ctk.CTkFrame(error_dialog)
-        frame.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Error message
-        label = ctk.CTkLabel(
-            frame,
-            text=message,
-            font=ctk.CTkFont(size=12),
-            wraplength=260
-        )
-        label.pack(pady=20)
-        
-        # OK button
-        ok_button = ctk.CTkButton(
-            frame,
-            text="OK",
-            command=error_dialog.destroy
-        )
-        ok_button.pack(pady=10)
-        
-        # Make error dialog modal
-        error_dialog.transient(self.dialog)
-        error_dialog.grab_set()
-        error_dialog.wait_window()
+        self._safe_destroy_dialog()
 
     def get_credentials(self) -> Tuple[str, str]:
         """

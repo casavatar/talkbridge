@@ -433,5 +433,63 @@ def test_audio_system():
         print(f"❌ Audio system test failed: {e}")
         return False
 
+    def record_chunk(self, duration: float = 0.1, sample_rate: Optional[int] = None) -> Optional[np.ndarray]:
+        """
+        Record a small chunk of audio for streaming applications.
+        
+        Args:
+            duration: Duration in seconds to record (default: 0.1s)
+            sample_rate: Sample rate to use (default: instance sample_rate)
+            
+        Returns:
+            Optional[np.ndarray]: Audio data chunk or None if recording fails
+            
+        Note:
+            This method is designed for real-time streaming where small chunks
+            are continuously captured and processed.
+        """
+        try:
+            # Validate inputs
+            if duration <= 0:
+                logger.warning(f"Invalid duration {duration}, using default 0.1s")
+                duration = 0.1
+                
+            if sample_rate is None:
+                sample_rate = self.sample_rate
+            elif not isinstance(sample_rate, int) or sample_rate <= 0:
+                logger.warning(f"Invalid sample_rate {sample_rate}, using instance rate {self.sample_rate}")
+                sample_rate = self.sample_rate
+            
+            # Check if audio system is available
+            if not hasattr(sd, 'rec') or not callable(sd.rec):
+                logger.error("SoundDevice recording not available")
+                return None
+            
+            # Record the chunk
+            frames = int(duration * sample_rate)
+            recording = sd.rec(
+                frames,
+                samplerate=sample_rate,
+                channels=self.channels,
+                dtype=np.float32,
+                device=self.device
+            )
+            sd.wait()  # Wait until recording is finished
+            
+            # Validate recording result
+            if recording is None or len(recording) == 0:
+                logger.warning("Empty recording chunk received")
+                return None
+                
+            # Flatten if mono channel
+            if self.channels == 1 and recording.ndim > 1:
+                recording = recording.flatten()
+                
+            return recording
+            
+        except Exception as e:
+            logger.error(f"Failed to record audio chunk: {e}")
+            return None
+
 if __name__ == "__main__":
     test_audio_system()

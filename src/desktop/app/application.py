@@ -6,8 +6,8 @@ TalkBridge Desktop - Application (CustomTkinter)
 Application module for TalkBridge with CustomTkinter
 
 Author: TalkBridge Team
-Date: 2025-09-03
-Version: 2.0
+Date: 2025-09-08
+Version: 2.1
 
 Requirements:
 - customtkinter
@@ -39,25 +39,48 @@ from src.desktop.dialogs.login_dialog import LoginDialog
 from src.desktop.app.main_window import MainWindow
 from src.desktop.services.core_bridge import CoreBridge
 
+# Import unified theme
+try:
+    from src.desktop.ui.theme import (
+        ColorPalette, Typography, Spacing, Dimensions, 
+        ComponentThemes, UIText, Icons, UXGuidelines
+    )
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
+
 
 class ApplicationTheme:
     """Theme configuration for the application."""
     
-    # Base colors
-    BACKGROUND_MAIN = "#1e1e1e"
-    BACKGROUND_SECONDARY = "#2d2d2d"
-    BACKGROUND_SPLASH = "#0f0f0f"
-    
-    # Text colors
-    TEXT_PRIMARY = "#ffffff"
-    TEXT_SECONDARY = "#cccccc"
-    TEXT_ACCENT = "#0078d4"
-    
-    # Accent colors
-    ACCENT_BLUE = "#0078d4"
-    ACCENT_GREEN = "#4CAF50"
-    ERROR_COLOR = "#f44336"
-    WARNING_COLOR = "#ff9800"
+    # Use unified theme if available, otherwise fallback to original colors
+    if THEME_AVAILABLE:
+        BACKGROUND_MAIN = ColorPalette.BACKGROUND_PRIMARY
+        BACKGROUND_SECONDARY = ColorPalette.BACKGROUND_SECONDARY
+        BACKGROUND_SPLASH = ColorPalette.BACKGROUND_PRIMARY
+        
+        TEXT_PRIMARY = ColorPalette.TEXT_PRIMARY
+        TEXT_SECONDARY = ColorPalette.TEXT_SECONDARY
+        TEXT_ACCENT = ColorPalette.ACCENT_PRIMARY
+        
+        ACCENT_BLUE = ColorPalette.ACCENT_PRIMARY
+        ACCENT_GREEN = ColorPalette.SUCCESS
+        ERROR_COLOR = ColorPalette.ERROR
+        WARNING_COLOR = ColorPalette.WARNING
+    else:
+        # Fallback colors
+        BACKGROUND_MAIN = "#1e1e1e"
+        BACKGROUND_SECONDARY = "#2d2d2d"
+        BACKGROUND_SPLASH = "#0f0f0f"
+        
+        TEXT_PRIMARY = "#ffffff"
+        TEXT_SECONDARY = "#cccccc"
+        TEXT_ACCENT = "#0078d4"
+        
+        ACCENT_BLUE = "#0078d4"
+        ACCENT_GREEN = "#4CAF50"
+        ERROR_COLOR = "#f44336"
+        WARNING_COLOR = "#ff9800"
 
 
 class SplashConstants:
@@ -143,30 +166,33 @@ class TalkBridgeApplication:
         try:
             self.logger.info("Starting enhanced application run sequence")
             
-            # Show splash screen first
-            self._show_enhanced_splash_screen()
-            
-            # Initialize core components with progress updates
+            # Initialize core components first (without splash screen)
             if not self._initialize_core_components():
                 self.logger.error("Core components initialization failed")
-                self._close_splash_screen()
                 self._show_critical_error("Initialization Error", 
                                         "Failed to initialize core components.")
                 return 1
             
-            # Authentication loop with retry logic
+            # Authentication first - show login dialog immediately
             if not self._handle_authentication_with_retry():
                 self.logger.info("Authentication cancelled or failed")
-                self._close_splash_screen()
                 return 0
             
-            # Initialize services asynchronously with progress
-            self._initialize_services_async()
+            # After successful authentication, show splash screen during service initialization
+            self._show_enhanced_splash_screen()
             
-            # Show main window after authentication
+            # Initialize services synchronously to ensure proper flow
+            if not self._initialize_services():
+                self.logger.error("Services initialization failed")
+                self._close_splash_screen()
+                self._show_critical_error("Services Error", 
+                                        "Failed to initialize application services.")
+                return 1
+            
+            # Show main window after all initialization is complete
             self._show_main_window()
             
-            # Close splash screen
+            # Close splash screen after main window is shown
             self._close_splash_screen()
             
             # Start main loop
@@ -242,11 +268,11 @@ class TalkBridgeApplication:
         logo_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
         logo_frame.pack(fill="x", pady=(0, 20))
         
-        # App logo (using emoji for now, can be replaced with actual image)
+        # App logo using clean text instead of emoji
         logo_label = ctk.CTkLabel(
             logo_frame,
-            text="🤖",
-            font=ctk.CTkFont(size=SplashConstants.LOGO_SIZE),
+            text=Icons.ROBOT if THEME_AVAILABLE else "AI",
+            font=ctk.CTkFont(size=SplashConstants.LOGO_SIZE, weight="bold"),
             text_color=ApplicationTheme.ACCENT_BLUE
         )
         logo_label.pack(pady=(0, 10))
@@ -254,7 +280,7 @@ class TalkBridgeApplication:
         # App title
         title_label = ctk.CTkLabel(
             logo_frame,
-            text="TalkBridge Desktop",
+            text=UIText.APP_NAME if THEME_AVAILABLE else "TalkBridge Desktop",
             font=ctk.CTkFont(size=SplashConstants.TITLE_FONT_SIZE, weight="bold"),
             text_color=ApplicationTheme.TEXT_PRIMARY
         )
@@ -263,7 +289,7 @@ class TalkBridgeApplication:
         # Subtitle
         subtitle_label = ctk.CTkLabel(
             logo_frame,
-            text="AI-Powered Communication Platform",
+            text=UIText.APP_SUBTITLE if THEME_AVAILABLE else "AI-Powered Communication Platform",
             font=ctk.CTkFont(size=SplashConstants.SUBTITLE_FONT_SIZE),
             text_color=ApplicationTheme.TEXT_SECONDARY
         )
@@ -362,14 +388,12 @@ class TalkBridgeApplication:
             self.current_login_attempt += 1
             
             self.logger.info(f"Authentication attempt {self.current_login_attempt}/{self.max_login_attempts}")
-            self._update_splash_status(f"Authentication ({self.current_login_attempt}/{self.max_login_attempts})...")
             
             # Show login dialog
             login_success = self._show_login_dialog()
             
             if login_success:
                 self.authenticated = True
-                self._update_splash_status("Authentication successful!", 0.8)
                 return True
             
             # Handle failed attempt
@@ -503,7 +527,7 @@ class TalkBridgeApplication:
             # Error icon
             icon_label = ctk.CTkLabel(
                 main_frame,
-                text="❌",
+                text="X",
                 font=ctk.CTkFont(size=40),
                 text_color=ApplicationTheme.ERROR_COLOR
             )
@@ -585,23 +609,13 @@ class TalkBridgeApplication:
         """
         self.logger.info("Showing login dialog")
         
-        if self.splash_window:
-            self.loading_label.configure(text="Waiting for authentication...")
-            self.progress_bar.set(0.8)
-            self.splash_window.update()
-        
         try:
             login_dialog = LoginDialog(self.root)
-            result = login_dialog.show()
+            success, username, password = login_dialog.show()
             
-            if result:
+            if success:
                 self.authenticated = True
-                self.logger.info("Authentication successful")
-                
-                if self.splash_window:
-                    self.progress_bar.set(1.0)
-                    self.splash_window.update()
-                
+                self.logger.info(f"Authentication successful for user: {username}")
                 return True
             else:
                 self.logger.info("Authentication cancelled")
@@ -611,44 +625,41 @@ class TalkBridgeApplication:
             self.logger.exception(f"Error in login dialog: {e}")
             return False
 
-    def _initialize_services_async(self) -> None:
-        """Initializes services asynchronously."""
-        self.logger.info("Starting async service initialization")
-        
-        def init_services():
-            try:
-                time.sleep(1)  # Simulate initialization time
-                
-                # Close splash screen
-                if self.splash_window:
-                    self.splash_window.destroy()
-                    self.splash_window = None
-                
-                # Show main window
-                self._show_main_window()
-                
-                self.services_initialized = True
-                self.logger.info("Services initialization completed")
-                
-            except Exception as e:
-                self.logger.exception(f"Error initializing services: {e}")
-                self.exit_code = 1
-                self.root.quit()
-        
-        # Start initialization in background thread
-        init_thread = threading.Thread(target=init_services, daemon=True)
-        init_thread.start()
+    def _initialize_services(self) -> bool:
+        """Initializes services synchronously with progress updates."""
+        try:
+            self.logger.info("Starting service initialization")
+            self._update_splash_status("Initializing services...", 0.7)
+            
+            # Simulate initialization time with progress updates
+            import time
+            time.sleep(0.5)
+            self._update_splash_status("Loading modules...", 0.8)
+            
+            time.sleep(0.5)
+            self._update_splash_status("Finalizing setup...", 0.9)
+            
+            time.sleep(0.5)
+            self._update_splash_status("Ready!", 1.0)
+            
+            self.services_initialized = True
+            self.logger.info("Services initialization completed successfully")
+            return True
+            
+        except Exception as e:
+            self.logger.exception(f"Error initializing services: {e}")
+            return False
 
     def _show_main_window(self) -> None:
         """Shows the application's main window."""
         self.logger.info("Showing main window")
         
         try:
-            # Create main window
+            # Create main window with correct parameter mapping
             self.main_window = MainWindow(
-                self.root,
                 state_manager=self.state_manager,
-                core_bridge=self.core_bridge
+                core_bridge=self.core_bridge,
+                parent=self.root
             )
             
             # Show root window
@@ -690,35 +701,6 @@ class TalkBridgeApplication:
             
         except Exception as e:
             self.logger.error(f"Error initializing core components: {e}")
-            return False
-
-    def _show_login_dialog(self) -> bool:
-        """Show the login dialog and handle authentication."""
-        try:
-            self.logger.info("Showing login dialog")
-            
-            # Temporarily hide splash screen
-            if self.splash_window:
-                self.splash_window.withdraw()
-            
-            # Create and show login dialog
-            login_dialog = LoginDialog(self.root)
-            success, username, password = login_dialog.show()
-            
-            # Restore splash screen
-            if self.splash_window:
-                self.splash_window.deiconify()
-            
-            if success:
-                self.logger.info(f"Login successful for user: {username}")
-                # Here you would normally validate credentials with backend
-                return True
-            else:
-                self.logger.info("Login cancelled or failed")
-                return False
-                
-        except Exception as e:
-            self.logger.error(f"Error in login dialog: {e}")
             return False
 
     def _initialize_services_async(self):

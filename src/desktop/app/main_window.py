@@ -6,8 +6,8 @@ TalkBridge Desktop - Main Window (CustomTkinter)
 Main window with integrated tabs for chat, avatar and settings.
 
 Author: TalkBridge Team
-Date: 2025-09-03
-Version: 2.0
+Date: 2025-09-08
+Version: 2.1
 
 Requirements:
 - customtkinter
@@ -37,54 +37,77 @@ from src.desktop.components.chat_tab import ChatTab
 from src.desktop.components.avatar_tab import AvatarTab  
 from src.desktop.components.settings_tab import SettingsTab
 
+# Import unified theme
+try:
+    from src.desktop.ui.theme import (
+        ColorPalette, Typography, Spacing, Dimensions, 
+        ComponentThemes, UIText, Icons, UXGuidelines
+    )
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
+
 
 class MainWindowTheme:
     """Theme configuration for the main window."""
     
-    # Base colors
-    BACKGROUND_MAIN = "#1e1e1e"
-    BACKGROUND_SECONDARY = "#2d2d2d"
-    BACKGROUND_ELEVATED = "#3c3c3c"
-    
-    # Text colors
-    TEXT_PRIMARY = "#ffffff"
-    TEXT_SECONDARY = "#cccccc"
-    TEXT_HINT = "#888888"
-    
-    # Accent colors
-    ACCENT_BLUE = "#0078d4"
-    ACCENT_BLUE_HOVER = "#106ebe"
-    ACCENT_RED = "#f44336"
-    ACCENT_RED_HOVER = "#d32f2f"
-    
-    # Tab colors
-    TAB_SELECTED = "#3c3c3c"
-    TAB_UNSELECTED = "#2d2d2d"
-    TAB_HOVER = "#4a4a4a"
+    # Use unified theme if available, otherwise fallback to original colors
+    if THEME_AVAILABLE:
+        BACKGROUND_MAIN = ColorPalette.BACKGROUND_PRIMARY
+        BACKGROUND_SECONDARY = ColorPalette.BACKGROUND_SECONDARY
+        BACKGROUND_ELEVATED = ColorPalette.BACKGROUND_ELEVATED
+        
+        TEXT_PRIMARY = ColorPalette.TEXT_PRIMARY
+        TEXT_SECONDARY = ColorPalette.TEXT_SECONDARY
+        TEXT_HINT = ColorPalette.TEXT_HINT
+        
+        ACCENT_BLUE = ColorPalette.ACCENT_PRIMARY
+        ACCENT_BLUE_HOVER = ColorPalette.ACCENT_PRIMARY_HOVER
+        ACCENT_RED = ColorPalette.ERROR
+        ACCENT_RED_HOVER = ColorPalette.ERROR_HOVER
+        
+        TAB_SELECTED = ColorPalette.BACKGROUND_ELEVATED
+        TAB_UNSELECTED = ColorPalette.BACKGROUND_SECONDARY
+        TAB_HOVER = ColorPalette.BACKGROUND_SURFACE
+    else:
+        # Fallback colors
+        BACKGROUND_MAIN = "#1e1e1e"
+        BACKGROUND_SECONDARY = "#2d2d2d"
+        BACKGROUND_ELEVATED = "#3c3c3c"
+        
+        TEXT_PRIMARY = "#ffffff"
+        TEXT_SECONDARY = "#cccccc"
+        TEXT_HINT = "#888888"
+        
+        ACCENT_BLUE = "#0078d4"
+        ACCENT_BLUE_HOVER = "#106ebe"
+        ACCENT_RED = "#f44336"
+        ACCENT_RED_HOVER = "#d32f2f"
+        
+        TAB_SELECTED = "#3c3c3c"
+        TAB_UNSELECTED = "#2d2d2d"
+        TAB_HOVER = "#4a4a4a"
 
 
-class UIConstants:
-    """UI layout constants for the main window."""
-    
-    # Window dimensions
-    MIN_WIDTH = 1200
-    MIN_HEIGHT = 800
-    DEFAULT_WIDTH = 1400
-    DEFAULT_HEIGHT = 900
-    
-    # Spacing
-    MARGIN = 10
-    TITLE_MARGIN = 15
-    BUTTON_SPACING = 10
-    
-    # Component heights
-    TITLE_HEIGHT = 50
-    STATUS_HEIGHT = 30
-    BUTTON_HEIGHT = 35
-    
-    # Fonts
-    TITLE_FONT_SIZE = 18
-    BUTTON_FONT_SIZE = 12
+# Window dimensions
+MIN_WIDTH = 1200
+MIN_HEIGHT = 800
+DEFAULT_WIDTH = 1400
+DEFAULT_HEIGHT = 900
+
+# Spacing (using theme if available)
+MARGIN = Spacing.SM if THEME_AVAILABLE else 10
+TITLE_MARGIN = Spacing.LG if THEME_AVAILABLE else 15
+BUTTON_SPACING = Spacing.SM if THEME_AVAILABLE else 10
+
+# Component heights (using theme if available)
+TITLE_HEIGHT = 50
+STATUS_HEIGHT = Dimensions.HEIGHT_STATUS_BAR if THEME_AVAILABLE else 30
+BUTTON_HEIGHT = Dimensions.HEIGHT_BUTTON if THEME_AVAILABLE else 35
+
+# Fonts (using theme if available)
+TITLE_FONT_SIZE = Typography.FONT_SIZE_H3 if THEME_AVAILABLE else 18
+BUTTON_FONT_SIZE = Typography.FONT_SIZE_BODY if THEME_AVAILABLE else 12
 
 
 class MainWindow:
@@ -142,14 +165,18 @@ class MainWindow:
     def setup_window(self):
         """Set up the main window."""
         if self.parent:
-            self.window = ctk.CTkToplevel(self.parent)
+            # Use the parent window directly instead of creating a new toplevel
+            self.window = self.parent
+            # Update the parent window's title to be more descriptive
+            self.window.title("TalkBridge Desktop - AI Communication Platform")
         else:
             self.window = ctk.CTk()
+            # Configure window
+            self.window.title("TalkBridge Desktop - AI Communication Platform")
         
-        # Configure window
-        self.window.title("TalkBridge Desktop - AI Communication Platform")
-        self.window.geometry(f"{UIConstants.DEFAULT_WIDTH}x{UIConstants.DEFAULT_HEIGHT}")
-        self.window.minsize(UIConstants.MIN_WIDTH, UIConstants.MIN_HEIGHT)
+        # Configure window geometry and constraints
+        self.window.geometry(f"{DEFAULT_WIDTH}x{DEFAULT_HEIGHT}")
+        self.window.minsize(MIN_WIDTH, MIN_HEIGHT)
         
         # Apply main theme
         self.window.configure(fg_color=MainWindowTheme.BACKGROUND_MAIN)
@@ -178,7 +205,7 @@ class MainWindow:
         self.title_frame = ctk.CTkFrame(
             self.main_frame,
             fg_color=MainWindowTheme.BACKGROUND_SECONDARY,
-            height=UIConstants.TITLE_HEIGHT,
+            height=TITLE_HEIGHT,
             corner_radius=0
         )
         self.title_frame.pack(fill="x", padx=0, pady=0)
@@ -186,25 +213,25 @@ class MainWindow:
         
         # Title and branding
         title_container = ctk.CTkFrame(self.title_frame, fg_color="transparent")
-        title_container.pack(side="left", fill="both", expand=True, padx=UIConstants.TITLE_MARGIN)
+        title_container.pack(side="left", fill="both", expand=True, padx=TITLE_MARGIN)
         
-        # App icon and title
+        # App icon and title using clean text
         self.title_label = ctk.CTkLabel(
             title_container,
-            text="🤖 TalkBridge Desktop - AI Communication Platform",
-            font=ctk.CTkFont(size=UIConstants.TITLE_FONT_SIZE, weight="bold"),
+            text=UIText.MAIN_TITLE if THEME_AVAILABLE else "TalkBridge Desktop - AI Communication Platform",
+            font=ctk.CTkFont(size=TITLE_FONT_SIZE, weight="bold"),
             text_color=MainWindowTheme.ACCENT_BLUE
         )
-        self.title_label.pack(side="left", pady=UIConstants.MARGIN)
+        self.title_label.pack(side="left", pady=MARGIN)
         
         # Right side controls
         controls_frame = ctk.CTkFrame(self.title_frame, fg_color="transparent")
-        controls_frame.pack(side="right", padx=UIConstants.TITLE_MARGIN)
+        controls_frame.pack(side="right", padx=TITLE_MARGIN)
         
         # Window controls
         self.minimize_button = ctk.CTkButton(
             controls_frame,
-            text="–",
+            text="-",
             width=30,
             height=25,
             fg_color="transparent",
@@ -228,18 +255,18 @@ class MainWindow:
         )
         self.maximize_button.pack(side="left", padx=(0, 5))
         
-        # Logout button
+        # Logout button with clean text
         self.logout_button = ctk.CTkButton(
             controls_frame,
-            text="🔓 Logout",
+            text="Logout",
             width=80,
-            height=UIConstants.BUTTON_HEIGHT,
+            height=BUTTON_HEIGHT,
             fg_color=MainWindowTheme.ACCENT_RED,
             hover_color=MainWindowTheme.ACCENT_RED_HOVER,
-            font=ctk.CTkFont(size=UIConstants.BUTTON_FONT_SIZE, weight="bold"),
+            font=ctk.CTkFont(size=BUTTON_FONT_SIZE, weight="bold"),
             command=self.show_logout_dialog
         )
-        self.logout_button.pack(side="left", padx=(UIConstants.BUTTON_SPACING, 0))
+        self.logout_button.pack(side="left", padx=(BUTTON_SPACING, 0))
 
     def create_tabs(self):
         """Create the main tab interface."""
@@ -255,12 +282,12 @@ class MainWindow:
             text_color=MainWindowTheme.TEXT_PRIMARY,
             anchor="nw"
         )
-        self.tabview.pack(fill="both", expand=True, padx=UIConstants.MARGIN, pady=(0, UIConstants.MARGIN))
+        self.tabview.pack(fill="both", expand=True, padx=MARGIN, pady=(0, MARGIN))
         
-        # Create tabs
-        chat_tab_frame = self.tabview.add("💬 Chat")
-        avatar_tab_frame = self.tabview.add("🎭 Avatar")
-        settings_tab_frame = self.tabview.add("⚙️ Settings")
+        # Create tabs with clean text labels
+        chat_tab_frame = self.tabview.add(UIText.CHAT_TAB if THEME_AVAILABLE else "Chat")
+        avatar_tab_frame = self.tabview.add(UIText.AVATAR_TAB if THEME_AVAILABLE else "Avatar")
+        settings_tab_frame = self.tabview.add(UIText.SETTINGS_TAB if THEME_AVAILABLE else "Settings")
         
         try:
             # Initialize tab components
@@ -294,14 +321,14 @@ class MainWindow:
             self.logger.error(f"Error initializing settings tab: {e}")
         
         # Set default tab
-        self.tabview.set("💬 Chat")
+        self.tabview.set(UIText.CHAT_TAB if THEME_AVAILABLE else "Chat")
 
     def create_status_bar(self):
         """Create the enhanced status bar."""
         self.status_frame = ctk.CTkFrame(
             self.main_frame,
             fg_color=MainWindowTheme.BACKGROUND_SECONDARY,
-            height=UIConstants.STATUS_HEIGHT,
+            height=STATUS_HEIGHT,
             corner_radius=0
         )
         self.status_frame.pack(fill="x", side="bottom")
@@ -309,7 +336,7 @@ class MainWindow:
         
         # Status content
         status_container = ctk.CTkFrame(self.status_frame, fg_color="transparent")
-        status_container.pack(fill="both", expand=True, padx=UIConstants.MARGIN)
+        status_container.pack(fill="both", expand=True, padx=MARGIN)
         
         # Main status label
         self.status_label = ctk.CTkLabel(
@@ -355,11 +382,11 @@ class MainWindow:
         screen_height = self.window.winfo_screenheight()
         
         # Calculate position
-        x = (screen_width - UIConstants.DEFAULT_WIDTH) // 2
-        y = (screen_height - UIConstants.DEFAULT_HEIGHT) // 2
+        x = (screen_width - DEFAULT_WIDTH) // 2
+        y = (screen_height - DEFAULT_HEIGHT) // 2
         
         # Set position
-        self.window.geometry(f"{UIConstants.DEFAULT_WIDTH}x{UIConstants.DEFAULT_HEIGHT}+{x}+{y}")
+        self.window.geometry(f"{DEFAULT_WIDTH}x{DEFAULT_HEIGHT}+{x}+{y}")
 
     def minimize_window(self):
         """Minimize the window."""
@@ -490,496 +517,10 @@ class MainWindow:
 
     def run(self):
         """Run the main window event loop."""
-        if self.window:
+        # Only run mainloop if this window is standalone (no parent)
+        if self.window and not self.parent:
             self.window.mainloop()
+        elif self.parent:
+            # When using a parent window, the parent manages the mainloop
+            self.logger.info("MainWindow using parent's mainloop - not starting own event loop")
 
-    def __init__(self, root: ctk.CTk, state_manager=None, core_bridge=None):
-        """Initialize the main window."""
-        self.root = root
-        self.state_manager = state_manager
-        self.core_bridge = core_bridge
-        self.logger = logging.getLogger("talkbridge.desktop.mainwindow")
-
-        # Main widgets
-        self.main_frame: Optional[ctk.CTkFrame] = None
-        self.tab_view: Optional[ctk.CTkTabview] = None
-        self.chat_tab: Optional[ChatTab] = None
-        self.avatar_tab: Optional[AvatarTab] = None
-        self.settings_tab: Optional[SettingsTab] = None
-        self.status_frame: Optional[ctk.CTkFrame] = None
-        self.status_label: Optional[ctk.CTkLabel] = None
-
-        # Callbacks
-        self.window_closing_callback = None
-        self.logout_requested_callback = None
-        self.view_changed_callback = None
-
-        try:
-            self.setup_ui()
-            self.logger.info("UI setup completed")
-        except Exception as e:
-            self.logger.error(f"Error in setup_ui: {e}")
-            raise
-            
-        try:
-            self.create_menu_bar()
-            self.logger.info("Menu bar created")
-        except Exception as e:
-            self.logger.error(f"Error in create_menu_bar: {e}")
-            raise
-            
-        try:
-            self.create_status_bar()
-            self.logger.info("Status bar created")
-        except Exception as e:
-            self.logger.error(f"Error in create_status_bar: {e}")
-            raise
-            
-        try:
-            self.connect_signals()
-            self.logger.info("Signals connected")
-        except Exception as e:
-            self.logger.error(f"Error in connect_signals: {e}")
-            raise
-
-        # Configure window
-        self.configure_window()
-        self.center_window()
-
-    def setup_ui(self) -> None:
-        """Sets up the main interface with tab widget."""
-        self.logger.info("Setting up main UI")
-        
-        # Configure root window
-        self.root.title("TalkBridge Desktop - CustomTkinter Edition")
-        self.root.geometry("1200x800")
-        
-        # Create main frame
-        self.main_frame = ctk.CTkFrame(self.root)
-        self.main_frame.pack(fill="both", expand=True, padx=10, pady=10)
-        
-        # Create tab view
-        self.tab_view = ctk.CTkTabview(self.main_frame, width=1150, height=700)
-        self.tab_view.pack(fill="both", expand=True, padx=10, pady=10)
-        
-        # Add tabs
-        self.tab_view.add("Chat")
-        self.tab_view.add("Avatar")
-        self.tab_view.add("Settings")
-        
-        try:
-            # Create tab contents
-            self.create_tabs()
-            self.logger.info("Tabs created successfully")
-        except Exception as e:
-            self.logger.error(f"Error creating tabs: {e}")
-            # Create fallback content
-            fallback_label = ctk.CTkLabel(
-                self.tab_view.tab("Chat"),
-                text="Error loading components. Running in basic mode.",
-                font=ctk.CTkFont(size=16)
-            )
-            fallback_label.pack(expand=True)
-
-    def create_menu_bar(self) -> None:
-        """Creates the menu bar."""
-        self.logger.info("Creating menu bar")
-        
-        # Create menu frame
-        menu_frame = ctk.CTkFrame(self.root, height=40)
-        menu_frame.pack(fill="x", padx=10, pady=(10, 0))
-        menu_frame.pack_propagate(False)
-        
-        # File menu button
-        file_button = ctk.CTkButton(
-            menu_frame,
-            text="File",
-            width=80,
-            height=30,
-            command=self._show_file_menu
-        )
-        file_button.pack(side="left", padx=5, pady=5)
-        
-        # View menu button
-        view_button = ctk.CTkButton(
-            menu_frame,
-            text="View",
-            width=80,
-            height=30,
-            command=self._show_view_menu
-        )
-        view_button.pack(side="left", padx=5, pady=5)
-        
-        # Help menu button
-        help_button = ctk.CTkButton(
-            menu_frame,
-            text="Help",
-            width=80,
-            height=30,
-            command=self._show_help_menu
-        )
-        help_button.pack(side="left", padx=5, pady=5)
-        
-        # Logout button (right side)
-        logout_button = ctk.CTkButton(
-            menu_frame,
-            text="Logout",
-            width=80,
-            height=30,
-            fg_color="red",
-            hover_color="darkred",
-            command=self.logout
-        )
-        logout_button.pack(side="right", padx=5, pady=5)
-
-    def create_status_bar(self) -> None:
-        """Creates the status bar."""
-        self.logger.info("Creating status bar")
-        
-        # Create status frame
-        self.status_frame = ctk.CTkFrame(self.root, height=30)
-        self.status_frame.pack(fill="x", side="bottom", padx=10, pady=(0, 10))
-        self.status_frame.pack_propagate(False)
-        
-        # Status label
-        self.status_label = ctk.CTkLabel(
-            self.status_frame,
-            text="Ready",
-            font=ctk.CTkFont(size=12)
-        )
-        self.status_label.pack(side="left", padx=10, pady=5)
-
-    def create_tabs(self) -> None:
-        """Creates the tab contents."""
-        self.logger.info("Creating tab contents")
-        
-        try:
-            # Chat tab
-            self.chat_tab = ChatTab(
-                self.tab_view.tab("Chat"),
-                state_manager=self.state_manager,
-                core_bridge=self.core_bridge
-            )
-            self.logger.info("Chat tab created")
-            
-        except Exception as e:
-            self.logger.error(f"Error creating chat tab: {e}")
-            # Create fallback chat tab
-            fallback_label = ctk.CTkLabel(
-                self.tab_view.tab("Chat"),
-                text="Chat functionality temporarily unavailable",
-                font=ctk.CTkFont(size=14)
-            )
-            fallback_label.pack(expand=True)
-
-        try:
-            # Avatar tab  
-            self.avatar_tab = AvatarTab(
-                self.tab_view.tab("Avatar"),
-                state_manager=self.state_manager,
-                core_bridge=self.core_bridge
-            )
-            self.logger.info("Avatar tab created")
-            
-        except Exception as e:
-            self.logger.error(f"Error creating avatar tab: {e}")
-            # Create fallback avatar tab
-            fallback_label = ctk.CTkLabel(
-                self.tab_view.tab("Avatar"),
-                text="Avatar functionality temporarily unavailable",
-                font=ctk.CTkFont(size=14)
-            )
-            fallback_label.pack(expand=True)
-
-        try:
-            # Settings tab
-            self.settings_tab = SettingsTab(
-                self.tab_view.tab("Settings"),
-                state_manager=self.state_manager,
-                core_bridge=self.core_bridge
-            )
-            self.logger.info("Settings tab created")
-            
-        except Exception as e:
-            self.logger.error(f"Error creating settings tab: {e}")
-            # Create fallback settings tab
-            fallback_label = ctk.CTkLabel(
-                self.tab_view.tab("Settings"),
-                text="Settings functionality temporarily unavailable",
-                font=ctk.CTkFont(size=14)
-            )
-            fallback_label.pack(expand=True)
-
-    def connect_signals(self) -> None:
-        """Connects component signals."""
-        self.logger.info("Connecting signals")
-        
-        # Connect tab change event
-        def on_tab_change():
-            current_tab = self.tab_view.get()
-            self.status_label.configure(text=f"View: {current_tab}")
-            if self.view_changed_callback:
-                self.view_changed_callback(current_tab)
-        
-        # Monitor tab changes
-        self.tab_view.configure(command=on_tab_change)
-        
-        # Connect tab error signals if available
-        if hasattr(self.chat_tab, 'error_occurred_callback'):
-            self.chat_tab.error_occurred_callback = self.show_error_message
-            
-        if hasattr(self.avatar_tab, 'error_occurred_callback'):
-            self.avatar_tab.error_occurred_callback = self.show_error_message
-            
-        if hasattr(self.settings_tab, 'error_occurred_callback'):
-            self.settings_tab.error_occurred_callback = self.show_error_message
-
-    def configure_window(self) -> None:
-        """Configures window properties."""
-        self.logger.info("Configuring window properties")
-        
-        # Set minimum size
-        self.root.minsize(800, 600)
-        
-        # Configure grid weights
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
-
-    def center_window(self) -> None:
-        """Centers the window on the screen."""
-        self.root.update_idletasks()
-        
-        # Get screen dimensions
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
-        
-        # Get window dimensions
-        window_width = self.root.winfo_reqwidth()
-        window_height = self.root.winfo_reqheight()
-        
-        # Calculate position
-        x = (screen_width // 2) - (window_width // 2)
-        y = (screen_height // 2) - (window_height // 2)
-        
-        self.root.geometry(f"+{x}+{y}")
-
-    def show_error_message(self, message: str) -> None:
-        """Shows an error message to the user."""
-        self.logger.error(f"Displaying error message: {message}")
-        
-        # Create error dialog
-        dialog = ctk.CTkToplevel(self.root)
-        dialog.title("Error")
-        dialog.geometry("400x200")
-        dialog.resizable(False, False)
-        
-        # Center dialog
-        dialog.update_idletasks()
-        x = (dialog.winfo_screenwidth() // 2) - (400 // 2)
-        y = (dialog.winfo_screenheight() // 2) - (200 // 2)
-        dialog.geometry(f"400x200+{x}+{y}")
-        
-        # Add content
-        frame = ctk.CTkFrame(dialog)
-        frame.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Error message
-        label = ctk.CTkLabel(
-            frame,
-            text=message,
-            font=ctk.CTkFont(size=12),
-            wraplength=350
-        )
-        label.pack(pady=20)
-        
-        # OK button
-        ok_button = ctk.CTkButton(
-            frame,
-            text="OK",
-            command=dialog.destroy
-        )
-        ok_button.pack(pady=10)
-        
-        # Make dialog modal
-        dialog.transient(self.root)
-        dialog.grab_set()
-
-    def show_logout_dialog(self) -> bool:
-        """
-        Shows logout confirmation dialog.
-        
-        Returns:
-            True if user confirms logout, False otherwise
-        """
-        result = [False]  # Use list to modify from inner function
-        
-        # Create logout dialog
-        dialog = ctk.CTkToplevel(self.root)
-        dialog.title("Confirm Logout")
-        dialog.geometry("300x150")
-        dialog.resizable(False, False)
-        
-        # Center dialog
-        dialog.update_idletasks()
-        x = (dialog.winfo_screenwidth() // 2) - (300 // 2)
-        y = (dialog.winfo_screenheight() // 2) - (150 // 2)
-        dialog.geometry(f"300x150+{x}+{y}")
-        
-        # Add content
-        frame = ctk.CTkFrame(dialog)
-        frame.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Question
-        label = ctk.CTkLabel(
-            frame,
-            text="Are you sure you want to logout?",
-            font=ctk.CTkFont(size=12)
-        )
-        label.pack(pady=20)
-        
-        # Buttons frame
-        button_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        button_frame.pack(pady=10)
-        
-        def on_yes():
-            result[0] = True
-            dialog.destroy()
-        
-        def on_no():
-            result[0] = False
-            dialog.destroy()
-        
-        # Yes button
-        yes_button = ctk.CTkButton(
-            button_frame,
-            text="Yes",
-            width=80,
-            command=on_yes
-        )
-        yes_button.pack(side="left", padx=10)
-        
-        # No button
-        no_button = ctk.CTkButton(
-            button_frame,
-            text="No",
-            width=80,
-            command=on_no
-        )
-        no_button.pack(side="left", padx=10)
-        
-        # Make dialog modal
-        dialog.transient(self.root)
-        dialog.grab_set()
-        dialog.wait_window()
-        
-        return result[0]
-
-    def logout(self) -> None:
-        """Handles user logout."""
-        self.logger.info("Logout requested")
-        
-        if self.show_logout_dialog():
-            self.logger.info("User confirmed logout")
-            if self.logout_requested_callback:
-                self.logout_requested_callback()
-            self.root.quit()
-        else:
-            self.logger.info("User cancelled logout")
-
-    def _show_file_menu(self) -> None:
-        """Shows file menu options."""
-        # Create context menu
-        menu = tk.Menu(self.root, tearoff=0)
-        menu.add_command(label="New Session", command=lambda: self.status_label.configure(text="New Session"))
-        menu.add_command(label="Open...", command=lambda: self.status_label.configure(text="Open"))
-        menu.add_command(label="Save", command=lambda: self.status_label.configure(text="Save"))
-        menu.add_separator()
-        menu.add_command(label="Exit", command=self.root.quit)
-        
-        # Show menu at cursor position
-        try:
-            menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
-        finally:
-            menu.grab_release()
-
-    def _show_view_menu(self) -> None:
-        """Shows view menu options."""
-        # Create context menu
-        menu = tk.Menu(self.root, tearoff=0)
-        menu.add_command(label="Chat", command=lambda: self.tab_view.set("Chat"))
-        menu.add_command(label="Avatar", command=lambda: self.tab_view.set("Avatar"))
-        menu.add_command(label="Settings", command=lambda: self.tab_view.set("Settings"))
-        
-        # Show menu at cursor position
-        try:
-            menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
-        finally:
-            menu.grab_release()
-
-    def _show_help_menu(self) -> None:
-        """Shows help menu options."""
-        # Create context menu
-        menu = tk.Menu(self.root, tearoff=0)
-        menu.add_command(label="About", command=self._show_about_dialog)
-        menu.add_command(label="User Guide", command=lambda: self.status_label.configure(text="User Guide"))
-        
-        # Show menu at cursor position
-        try:
-            menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
-        finally:
-            menu.grab_release()
-
-    def _show_about_dialog(self) -> None:
-        """Shows about dialog."""
-        # Create about dialog
-        dialog = ctk.CTkToplevel(self.root)
-        dialog.title("About TalkBridge")
-        dialog.geometry("400x300")
-        dialog.resizable(False, False)
-        
-        # Center dialog
-        dialog.update_idletasks()
-        x = (dialog.winfo_screenwidth() // 2) - (400 // 2)
-        y = (dialog.winfo_screenheight() // 2) - (300 // 2)
-        dialog.geometry(f"400x300+{x}+{y}")
-        
-        # Add content
-        frame = ctk.CTkFrame(dialog)
-        frame.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Title
-        title_label = ctk.CTkLabel(
-            frame,
-            text="TalkBridge Desktop",
-            font=ctk.CTkFont(size=20, weight="bold")
-        )
-        title_label.pack(pady=20)
-        
-        # Version
-        version_label = ctk.CTkLabel(
-            frame,
-            text="Version 2.0 - CustomTkinter Edition",
-            font=ctk.CTkFont(size=12)
-        )
-        version_label.pack(pady=5)
-        
-        # Description
-        desc_label = ctk.CTkLabel(
-            frame,
-            text="AI-powered conversation and avatar system\nwith real-time translation and voice synthesis",
-            font=ctk.CTkFont(size=11),
-            justify="center"
-        )
-        desc_label.pack(pady=20)
-        
-        # OK button
-        ok_button = ctk.CTkButton(
-            frame,
-            text="OK",
-            command=dialog.destroy
-        )
-        ok_button.pack(pady=20)
-        
-        # Make dialog modal
-        dialog.transient(self.root)
-        dialog.grab_set()

@@ -18,9 +18,28 @@ Requirements:
 """
 
 import logging
+import time
 from typing import Optional
 import tkinter as tk
 import customtkinter as ctk
+
+# Import logging utilities
+try:
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    from src.desktop.logging_config import get_logger, log_exception, add_error_context
+    LOGGING_UTILS_AVAILABLE = True
+except ImportError:
+    LOGGING_UTILS_AVAILABLE = False
+
+# Import UI utilities and theme
+try:
+    from src.desktop.ui.ui_utils import clean_text
+    from src.desktop.ui.theme import ComponentThemes, Typography, ColorPalette
+    THEME_AVAILABLE = True
+except ImportError:
+    THEME_AVAILABLE = False
 
 # Try to import video processing modules
 try:
@@ -57,7 +76,13 @@ class AvatarTab:
         self.parent = parent
         self.state_manager = state_manager
         self.core_bridge = core_bridge
+        
+        # Logger with enhanced error handling
         self.logger = logging.getLogger("talkbridge.desktop.avatar")
+        
+        # Add error context for better debugging
+        if LOGGING_UTILS_AVAILABLE:
+            add_error_context(self.logger, "AvatarTab")
         
         # Video capture
         self.cap: Optional[cv2.VideoCapture] = None if not CV2_AVAILABLE else None
@@ -99,8 +124,8 @@ class AvatarTab:
         # Title
         title_label = ctk.CTkLabel(
             self.main_frame,
-            text="👤 Avatar & Animation",
-            font=ctk.CTkFont(size=18, weight="bold")
+            text=clean_text("Avatar & Animation") if THEME_AVAILABLE else "Avatar & Animation",
+            **ComponentThemes.get_label_theme("title") if THEME_AVAILABLE else {"font": ctk.CTkFont(size=18, weight="bold")}
         )
         title_label.pack(pady=(10, 5))
         
@@ -114,8 +139,8 @@ class AvatarTab:
         
         video_label = ctk.CTkLabel(
             video_frame,
-            text="📹 Video Display",
-            font=ctk.CTkFont(size=14, weight="bold")
+            text=clean_text("Video Display") if THEME_AVAILABLE else "Video Display",
+            **ComponentThemes.get_label_theme("subtitle") if THEME_AVAILABLE else {"font": ctk.CTkFont(size=14, weight="bold")}
         )
         video_label.pack(pady=(10, 5))
         
@@ -135,19 +160,17 @@ class AvatarTab:
         
         self.start_camera_button = ctk.CTkButton(
             video_controls,
-            text="📹 Start Camera",
+            text=clean_text("Start Camera") if THEME_AVAILABLE else "Start Camera",
             command=self.toggle_camera,
-            fg_color="#4CAF50",
-            hover_color="#45a049"
+            **ComponentThemes.get_button_theme("success") if THEME_AVAILABLE else {"fg_color": "#4CAF50", "hover_color": "#45a049"}
         )
         self.start_camera_button.pack(side="left", padx=5, pady=5)
         
         self.animation_button = ctk.CTkButton(
             video_controls,
-            text="🎭 Start Animation",
+            text=clean_text("Start Animation") if THEME_AVAILABLE else "Start Animation",
             command=self.toggle_animation,
-            fg_color="#2196F3",
-            hover_color="#1976D2"
+            **ComponentThemes.get_button_theme() if THEME_AVAILABLE else {"fg_color": "#2196F3", "hover_color": "#1976D2"}
         )
         self.animation_button.pack(side="left", padx=5, pady=5)
         
@@ -157,8 +180,8 @@ class AvatarTab:
         
         controls_label = ctk.CTkLabel(
             controls_frame,
-            text="⚙️ Controls",
-            font=ctk.CTkFont(size=14, weight="bold")
+            text=clean_text("Controls") if THEME_AVAILABLE else "Controls",
+            **ComponentThemes.get_label_theme("subtitle") if THEME_AVAILABLE else {"font": ctk.CTkFont(size=14, weight="bold")}
         )
         controls_label.pack(pady=(10, 5))
         
@@ -166,11 +189,12 @@ class AvatarTab:
         quality_frame = ctk.CTkFrame(controls_frame)
         quality_frame.pack(fill="x", padx=10, pady=5)
         
-        ctk.CTkLabel(quality_frame, text="Quality:").pack(pady=(10, 5))
+        ctk.CTkLabel(quality_frame, text=clean_text("Quality:") if THEME_AVAILABLE else "Quality:").pack(pady=(10, 5))
         self.quality_combo = ctk.CTkComboBox(
             quality_frame,
             values=["Low", "Medium", "High", "Ultra"],
-            command=self.on_quality_changed
+            command=self.on_quality_changed,
+            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {}
         )
         self.quality_combo.set("Medium")
         self.quality_combo.pack(pady=(0, 10))
@@ -179,7 +203,7 @@ class AvatarTab:
         sensitivity_frame = ctk.CTkFrame(controls_frame)
         sensitivity_frame.pack(fill="x", padx=10, pady=5)
         
-        ctk.CTkLabel(sensitivity_frame, text="Sensitivity:").pack(pady=(10, 5))
+        ctk.CTkLabel(sensitivity_frame, text=clean_text("Sensitivity:") if THEME_AVAILABLE else "Sensitivity:").pack(pady=(10, 5))
         self.sensitivity_slider = ctk.CTkSlider(
             sensitivity_frame,
             from_=0.1,
@@ -193,23 +217,25 @@ class AvatarTab:
         display_frame = ctk.CTkFrame(controls_frame)
         display_frame.pack(fill="x", padx=10, pady=5)
         
-        ctk.CTkLabel(display_frame, text="Display Options:").pack(pady=(10, 5))
+        ctk.CTkLabel(display_frame, text=clean_text("Display Options:") if THEME_AVAILABLE else "Display Options:").pack(pady=(10, 5))
         
         self.show_landmarks_var = tk.BooleanVar()
         landmarks_check = ctk.CTkCheckBox(
             display_frame,
-            text="Show Landmarks",
+            text=clean_text("Show Landmarks") if THEME_AVAILABLE else "Show Landmarks",
             variable=self.show_landmarks_var,
-            command=self.on_landmarks_changed
+            command=self.on_landmarks_changed,
+            **ComponentThemes.get_checkbox_theme() if THEME_AVAILABLE else {}
         )
         landmarks_check.pack(pady=2)
         
         self.show_mesh_var = tk.BooleanVar()
         mesh_check = ctk.CTkCheckBox(
             display_frame,
-            text="Show Face Mesh",
+            text=clean_text("Show Face Mesh") if THEME_AVAILABLE else "Show Face Mesh",
             variable=self.show_mesh_var,
-            command=self.on_mesh_changed
+            command=self.on_mesh_changed,
+            **ComponentThemes.get_checkbox_theme() if THEME_AVAILABLE else {}
         )
         mesh_check.pack(pady=2)
         
@@ -220,8 +246,7 @@ class AvatarTab:
         self.status_label = ctk.CTkLabel(
             status_frame,
             text="Camera: Inactive | Animation: Disabled",
-            font=ctk.CTkFont(size=10),
-            text_color="gray"
+            **ComponentThemes.get_label_theme("caption") if THEME_AVAILABLE else {"font": ctk.CTkFont(size=10), "text_color": "gray"}
         )
         self.status_label.pack(pady=10)
         
@@ -248,16 +273,61 @@ class AvatarTab:
             self.start_camera()
 
     def start_camera(self) -> None:
-        """Start camera capture."""
+        """Start camera capture with robust error handling and fallback options."""
+        # Check OpenCV availability
         if not CV2_AVAILABLE:
             self.update_status("Camera not available (OpenCV not installed)")
+            self.logger.warning("OpenCV not available - camera functionality disabled")
             return
             
         try:
-            self.cap = cv2.VideoCapture(0)
-            if not self.cap.isOpened():
-                raise Exception("Could not open camera")
+            self.logger.info("Attempting to start camera...")
+            
+            # Try multiple camera indices (0, 1, 2) to find working camera
+            camera_indices = [0, 1, 2]
+            camera_opened = False
+            
+            for idx in camera_indices:
+                try:
+                    self.logger.info(f"Trying camera index {idx}")
+                    self.cap = cv2.VideoCapture(idx)
+                    
+                    # Set camera properties for better compatibility
+                    self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+                    self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+                    self.cap.set(cv2.CAP_PROP_FPS, 30)
+                    
+                    # Test if camera is actually working
+                    if self.cap.isOpened():
+                        ret, test_frame = self.cap.read()
+                        if ret and test_frame is not None:
+                            self.logger.info(f"Camera {idx} opened successfully")
+                            camera_opened = True
+                            break
+                        else:
+                            self.logger.warning(f"Camera {idx} opened but no frame received")
+                            self.cap.release()
+                    else:
+                        self.logger.warning(f"Camera {idx} could not be opened")
+                        
+                except Exception as camera_error:
+                    self.logger.warning(f"Camera {idx} failed: {camera_error}")
+                    if self.cap:
+                        self.cap.release()
+                        self.cap = None
+            
+            if not camera_opened:
+                # All camera attempts failed - handle gracefully instead of raising
+                error_msg = "Could not open any camera (indices 0-2 tested)"
+                self.logger.warning(f"[AvatarTab] No camera available: {error_msg}")
                 
+                # Set camera as inactive and show fallback
+                self.camera_active = False
+                self.update_status("No camera found")
+                self._show_camera_fallback("No camera found. Please connect a camera device.")
+                return  # Exit gracefully instead of raising
+                
+            # Camera successfully opened
             self.camera_active = True
             self.start_camera_button.configure(text="📹 Stop Camera", fg_color="red")
             self.update_status("Camera: Active")
@@ -268,8 +338,33 @@ class AvatarTab:
             self.logger.info("Camera started successfully")
             
         except Exception as e:
-            self.logger.error(f"Failed to start camera: {e}")
-            self.update_status(f"Camera error: {e}")
+            # Handle all camera errors gracefully
+            if LOGGING_UTILS_AVAILABLE:
+                log_exception(self.logger, e, "Camera startup")
+            else:
+                self.logger.error(f"Failed to start camera: {e}", exc_info=True)
+            
+            # Clean up any partial initialization
+            if hasattr(self, 'cap') and self.cap:
+                self.cap.release()
+                self.cap = None
+            
+            self.camera_active = False
+            
+            # Provide user-friendly error messages
+            if "permission" in str(e).lower():
+                error_message = "Camera access denied. Please check permissions."
+            elif "busy" in str(e).lower() or "in use" in str(e).lower():
+                error_message = "Camera is being used by another application."
+            elif "not found" in str(e).lower() or "could not open" in str(e).lower():
+                error_message = "No camera found. Please connect a camera device."
+            else:
+                error_message = f"Camera error: {str(e)[:50]}..."
+            
+            self.update_status(error_message)
+            
+            # Show fallback content
+            self._show_camera_fallback(error_message)
 
     def stop_camera(self) -> None:
         """Stop camera capture."""
@@ -292,28 +387,125 @@ class AvatarTab:
         self.update_status("Camera: Inactive")
         self.logger.info("Camera stopped")
 
+    def _show_camera_fallback(self, error_message: str) -> None:
+        """Display fallback content when camera is not available."""
+        try:
+            # Clear canvas
+            self.avatar_canvas.delete("all")
+            
+            # Show error icon and message
+            self.avatar_canvas.create_text(
+                200, 120,
+                text="📷",
+                fill="#ff6b6b",
+                font=("Arial", 24)
+            )
+            
+            self.avatar_canvas.create_text(
+                200, 160,
+                text="Camera Not Available",
+                fill="white",
+                font=("Arial", 12, "bold")
+            )
+            
+            # Show error details (truncated)
+            error_text = error_message[:40] + "..." if len(error_message) > 40 else error_message
+            self.avatar_canvas.create_text(
+                200, 180,
+                text=error_text,
+                fill="#cccccc",
+                font=("Arial", 9)
+            )
+            
+            # Show suggestions
+            self.avatar_canvas.create_text(
+                200, 210,
+                text="• Check camera connections",
+                fill="#aaaaaa",
+                font=("Arial", 8)
+            )
+            
+            self.avatar_canvas.create_text(
+                200, 225,
+                text="• Close other camera apps",
+                fill="#aaaaaa",
+                font=("Arial", 8)
+            )
+            
+            self.avatar_canvas.create_text(
+                200, 240,
+                text="• Grant camera permissions",
+                fill="#aaaaaa",
+                font=("Arial", 8)
+            )
+            
+        except Exception as fallback_error:
+            self.logger.error(f"Failed to show camera fallback: {fallback_error}")
+            # Basic fallback if even the fallback fails
+            self.avatar_canvas.delete("all")
+            self.avatar_canvas.create_text(
+                200, 150,
+                text="Camera Error",
+                fill="red",
+                font=("Arial", 14)
+            )
+        
+        self.update_status("Camera: Inactive")
+        self.logger.info("Camera stopped")
+
     def update_video_frame(self) -> None:
-        """Update video frame in canvas."""
+        """Update video frame in canvas with robust error handling."""
         if not self.camera_active or not self.cap:
             return
             
         try:
-            ret, frame = self.cap.read()
-            if not ret:
+            # Check if camera is still available
+            if not self.cap.isOpened():
+                self.logger.warning("Camera disconnected during operation")
+                self.stop_camera()
+                self._show_camera_fallback("Camera disconnected")
                 return
+            
+            ret, frame = self.cap.read()
+            if not ret or frame is None:
+                self.logger.warning("Failed to read frame from camera")
+                # Try a few more times before giving up
+                for retry in range(3):
+                    ret, frame = self.cap.read()
+                    if ret and frame is not None:
+                        break
+                    time.sleep(0.01)
+                
+                if not ret or frame is None:
+                    self.logger.error("Multiple frame read failures - stopping camera")
+                    self.stop_camera()
+                    self._show_camera_fallback("Camera read error")
+                    return
                 
             # Flip frame horizontally for mirror effect
             frame = cv2.flip(frame, 1)
             
             # Process face detection if enabled
             if self.face_mesh and MEDIAPIPE_AVAILABLE:
-                frame = self.process_face_detection(frame)
+                try:
+                    frame = self.process_face_detection(frame)
+                except Exception as face_error:
+                    self.logger.warning(f"Face detection error: {face_error}")
+                    # Continue without face detection
             
             # Resize frame to fit canvas
-            frame = cv2.resize(frame, (400, 300))
+            try:
+                frame = cv2.resize(frame, (400, 300))
+            except Exception as resize_error:
+                self.logger.error(f"Frame resize error: {resize_error}")
+                return
             
             # Convert to RGB and then to PhotoImage
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            try:
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            except Exception as color_error:
+                self.logger.error(f"Color conversion error: {color_error}")
+                return
             
             # Convert to PIL Image and then to PhotoImage
             try:
@@ -327,15 +519,33 @@ class AvatarTab:
                 self.avatar_canvas.image = photo  # Keep a reference
                 
             except ImportError:
-                # Fallback without PIL
-                pass
+                # Fallback without PIL - use basic text
+                self.avatar_canvas.delete("all")
+                self.avatar_canvas.create_text(
+                    200, 150,
+                    text="Camera Active\n(PIL not available for display)",
+                    fill="white",
+                    font=("Arial", 12),
+                    justify="center"
+                )
+            except Exception as display_error:
+                self.logger.error(f"Display error: {display_error}")
+                return
                 
-            # Schedule next frame
-            if self.camera_active:
+            # Schedule next frame if still active
+            if self.camera_active and self.cap and self.cap.isOpened():
                 self.avatar_canvas.after(30, self.update_video_frame)
+            else:
+                self.logger.warning("Camera no longer active - stopping frame updates")
                 
         except Exception as e:
-            self.logger.error(f"Error updating video frame: {e}")
+            if LOGGING_UTILS_AVAILABLE:
+                log_exception(self.logger, e, "Video frame update")
+            else:
+                self.logger.error(f"Error updating video frame: {e}", exc_info=True)
+            # On any major error, stop the camera gracefully
+            self.stop_camera()
+            self._show_camera_fallback(f"Video processing error: {str(e)[:30]}...")
 
     def process_face_detection(self, frame):
         """Process face detection and landmarks."""
@@ -382,10 +592,10 @@ class AvatarTab:
         self.animation_enabled = not self.animation_enabled
         
         if self.animation_enabled:
-            self.animation_button.configure(text="🎭 Stop Animation", fg_color="red")
+            self.animation_button.configure(text="Stop Animation", fg_color="red")
             self.update_status("Animation: Enabled")
         else:
-            self.animation_button.configure(text="🎭 Start Animation", fg_color="#2196F3")
+            self.animation_button.configure(text="Start Animation", fg_color="#2196F3")
             self.update_status("Animation: Disabled")
 
     def on_quality_changed(self, value: str) -> None:

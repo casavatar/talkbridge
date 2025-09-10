@@ -5,7 +5,7 @@
     "role": "admin",
     "email": "admin@talkbridge.local",
     "created_at": "2025-08-21 18:40:47",
-    "last_login": "2025-09-03 21:46:09",
+    "last_login": "2025-09-09 22:00:09",
     "password_changed_at": "2025-08-21 18:40:47",
     "account_locked": false,
     "failed_login_attempts": 0,
@@ -29,7 +29,7 @@
     "role": "user",
     "email": "user@talkbridge.local",
     "created_at": "2025-08-21 18:40:47",
-    "last_login": null,
+    "last_login": "2025-09-07 16:49:09",
     "password_changed_at": "2025-08-21 18:40:47",
     "account_locked": false,
     "failed_login_attempts": 0,
@@ -54,7 +54,7 @@
     "last_login": null,
     "password_changed_at": "2025-08-21 18:40:47",
     "account_locked": false,
-    "failed_login_attempts": 0,
+    "failed_login_attempts": 1,
     "requires_password_change": true,
     "permissions": [
       "voice_chat",
@@ -79,7 +79,7 @@
     "last_login": null,
     "password_changed_at": "2025-08-21 18:40:47",
     "account_locked": false,
-    "failed_login_attempts": 0,
+    "failed_login_attempts": 1,
     "requires_password_change": true,
     "permissions": [
       "voice_chat",
@@ -238,5 +238,17 @@
     "security_level": "medium",
     "two_factor_enabled": false,
     "session_timeout": 1800
+  },
+  "test": {
+    "password": "5edf243ba5fe5c06854ba2b942e2821d66edd392e9571f503aae177265dac898",
+    "salt": "9487cf983f82e27bac743cd39c833b915f5657c6665ad2172c9ebf0732a03b9e",
+    "role": "user",
+    "email": "test@talkbridge.local",
+    "created_at": "2025-09-09 15:07:24",
+    "last_login": "2025-09-09 15:35:23",
+    "password_changed_at": "2025-09-09 15:07:24",
+    "account_locked": false,
+    "failed_login_attempts": 0,
+    "requires_password_change": false
   }
 }

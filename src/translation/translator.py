@@ -24,11 +24,20 @@ import yaml
 
 class Translator:
     def __init__(self, config_path="config/config.yaml"):
-        with open(config_path, 'r') as f:
-            config = yaml.safe_load(f)
-        
-        self.base_url = config['ollama']['base_url'].rstrip("/")
-        self.model = config['ollama']['model']
+        try:
+            with open(config_path, 'r') as f:
+                config = yaml.safe_load(f)
+            
+            if 'ollama' not in config:
+                raise KeyError("Missing 'ollama' configuration section")
+                
+            self.base_url = config['ollama']['base_url'].rstrip("/")
+            self.model = config['ollama']['model']
+        except (FileNotFoundError, KeyError, yaml.YAMLError) as e:
+            # Fallback to default values if config is missing or invalid
+            print(f"Warning: Config issue ({e}), using default Ollama settings")
+            self.base_url = "http://localhost:11434"
+            self.model = "llama2"
 
     def translate(self, text, source_lang, target_lang):
         prompt = (
