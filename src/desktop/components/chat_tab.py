@@ -37,7 +37,7 @@ except ImportError:
 
 # Import UI utilities and theme
 try:
-    from src.desktop.ui.ui_utils import clean_text
+    from src.desktop.ui.ui_utils import clean_text, icon, strip_variation_selectors
     from src.desktop.ui.theme import ComponentThemes, Typography, ColorPalette
     THEME_AVAILABLE = True
 except ImportError:
@@ -119,6 +119,7 @@ class ChatTheme:
     INPUT_BACKGROUND = "#3c3c3c"
     INPUT_BORDER = "#555555"
     INPUT_BORDER_FOCUS = "#0078d4"
+    BORDER_SUBTLE = "#4a4a4a"
 
 
 class AudioVisualizer:
@@ -216,7 +217,7 @@ class MessageWidget:
             fg_color=bg_color,
             border_color=border_color,
             border_width=2,
-            corner_radius=10
+            corner_radius=Dimensions.RADIUS_MD
         )
         inner_frame.pack(fill="x", padx=5, pady=5)
         
@@ -227,7 +228,7 @@ class MessageWidget:
         sender_label = ctk.CTkLabel(
             header_frame,
             text=sender_text,
-            font=ctk.CTkFont(size=12, weight="bold"),
+            font=(Typography.FONT_FAMILY_PRIMARY, Typography.FONT_SIZE_BODY, Typography.FONT_WEIGHT_BOLD),
             text_color=sender_color
         )
         sender_label.pack(side="left")
@@ -236,7 +237,7 @@ class MessageWidget:
             time_label = ctk.CTkLabel(
                 header_frame,
                 text=self.timestamp,
-                font=ctk.CTkFont(size=10),
+                font=(Typography.FONT_FAMILY_PRIMARY, Typography.FONT_SIZE_CAPTION),
                 text_color=ChatTheme.TEXT_MUTED
             )
             time_label.pack(side="right")
@@ -246,12 +247,12 @@ class MessageWidget:
             inner_frame,
             height=60,
             wrap="word",
-            font=ctk.CTkFont(size=12),
+            font=(Typography.FONT_FAMILY_PRIMARY, Typography.FONT_SIZE_BODY),
             fg_color="transparent",
             scrollbar_button_color=border_color
         )
         message_text.pack(fill="both", expand=True, padx=10, pady=5)
-        message_text.insert("1.0", self.text)
+        message_text.insert("1.0", strip_variation_selectors(self.text))
         message_text.configure(state="disabled")
         
         # Translation if available
@@ -261,16 +262,18 @@ class MessageWidget:
             
             translation_label = ctk.CTkLabel(
                 translation_frame,
-                text="🌐 Translation:",
-                font=ctk.CTkFont(size=10, weight="bold"),
+                text="Translation:",
+                image=icon("globe"),
+                compound="left",
+                font=(Typography.FONT_FAMILY_PRIMARY, Typography.FONT_SIZE_CAPTION, Typography.FONT_WEIGHT_BOLD),
                 text_color=ChatTheme.TEXT_MUTED
             )
             translation_label.pack(anchor="w")
             
             translation_text = ctk.CTkLabel(
                 translation_frame,
-                text=self.translation,
-                font=ctk.CTkFont(size=11, slant="italic"),
+                text=strip_variation_selectors(self.translation),
+                font=(Typography.FONT_FAMILY_PRIMARY, Typography.FONT_SIZE_CAPTION, "italic"),
                 text_color=ChatTheme.TEXT_SECONDARY,
                 wraplength=400,
                 justify="left"
@@ -363,7 +366,8 @@ class ChatTab:
         self.voice_button: Optional[ctk.CTkButton] = None
         self.status_label: Optional[ctk.CTkLabel] = None
         self.language_combo: Optional[ctk.CTkComboBox] = None
-        self.model_combo: Optional[ctk.CTkComboBox] = None
+        self.tts_engine_display: Optional[ctk.CTkLabel] = None
+        self.translation_service_display: Optional[ctk.CTkLabel] = None
         self.recording_canvas: Optional[tk.Canvas] = None
         self.progress_bar: Optional[ctk.CTkProgressBar] = None
         
@@ -453,23 +457,35 @@ class ChatTab:
         self.language_combo.set("English (en)")
         self.language_combo.pack(side="left", padx=5)
         
-        # Model selection
-        model_label = ctk.CTkLabel(
+        # TTS Engine Status (read-only)
+        tts_label = ctk.CTkLabel(
             settings_row1,
-            text=clean_text("AI Model:") if THEME_AVAILABLE else "AI Model:",
+            text=clean_text("TTS:") if THEME_AVAILABLE else "TTS:",
             **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12, weight="bold"), "text_color": ChatTheme.TEXT_PRIMARY}
         )
-        model_label.pack(side="left", padx=(20, 10))
+        tts_label.pack(side="left", padx=(20, 10))
         
-        self.model_combo = ctk.CTkComboBox(
+        self.tts_engine_display = ctk.CTkLabel(
             settings_row1,
-            values=["llama3.2:3b", "llama3.2:1b", "gemma2:2b", "codellama:7b", "mistral:7b"],
-            width=150,
-            command=self.on_model_changed,
-            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.INPUT_BACKGROUND, "border_color": ChatTheme.INPUT_BORDER}
+            text="System (SAPI)",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12), "text_color": ChatTheme.TEXT_SECONDARY}
         )
-        self.model_combo.set("llama3.2:3b")
-        self.model_combo.pack(side="left", padx=5)
+        self.tts_engine_display.pack(side="left", padx=5)
+        
+        # Translation Service Status (read-only)
+        translation_label = ctk.CTkLabel(
+            settings_row1,
+            text=clean_text("Translation:") if THEME_AVAILABLE else "Translation:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12, weight="bold"), "text_color": ChatTheme.TEXT_PRIMARY}
+        )
+        translation_label.pack(side="left", padx=(20, 10))
+        
+        self.translation_service_display = ctk.CTkLabel(
+            settings_row1,
+            text="Google Translate",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12), "text_color": ChatTheme.TEXT_SECONDARY}
+        )
+        self.translation_service_display.pack(side="left", padx=5)
         
         # Toggle switches for features
         settings_row2 = ctk.CTkFrame(control_panel, fg_color="transparent")
@@ -567,7 +583,7 @@ class ChatTab:
         
         self.recording_canvas = tk.Canvas(
             recording_frame,
-            height=50,
+            height=Dimensions.HEIGHT_BUTTON,
             bg=ChatTheme.BACKGROUND_MAIN,
             highlightthickness=0
         )
@@ -617,7 +633,7 @@ class ChatTab:
         )
         self.send_button.pack(side="right", padx=(10, 0))
         
-        # Progress bar for processing indication
+        # Progress bar for processing indication (hidden by default)
         self.progress_bar = ctk.CTkProgressBar(
             input_main_frame,
             width=400,
@@ -626,18 +642,28 @@ class ChatTab:
         )
         self.progress_bar.pack(pady=(0, 10))
         self.progress_bar.set(0)
+        self.progress_bar.pack_forget()  # Hide by default
         
-        # Status bar with enhanced information
-        status_frame = ctk.CTkFrame(self.main_frame, fg_color=ChatTheme.BACKGROUND_SECONDARY, height=40)
+        # Status bar with enhanced information and improved visibility
+        status_frame = ctk.CTkFrame(
+            self.main_frame, 
+            fg_color=ChatTheme.BACKGROUND_ELEVATED, 
+            height=50,
+            corner_radius=Dimensions.RADIUS_MD,
+            border_width=1,
+            border_color=ChatTheme.BORDER_SUBTLE
+        )
         status_frame.pack(fill="x", padx=10, pady=(5, 10))
         status_frame.pack_propagate(False)
         
         self.status_label = ctk.CTkLabel(
             status_frame,
             text="Ready to chat",
-            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=11), "text_color": ChatTheme.TEXT_SECONDARY}
+            height=36,
+            font=(Typography.FONT_FAMILY_PRIMARY, 13, Typography.FONT_WEIGHT_REGULAR),
+            text_color=ChatTheme.TEXT_PRIMARY
         )
-        self.status_label.pack(side="left", padx=10, pady=8)
+        self.status_label.pack(side="left", padx=12, pady=8)
         
         # Message count indicator
         self.message_count_label = ctk.CTkLabel(
@@ -664,6 +690,41 @@ class ChatTab:
         self.current_model = value
         self.logger.info(f"AI model changed to: {value}")
         self.update_status(f"AI model set to {value}")
+    
+    def update_engine_displays(self, tts_engine: str = None, translation_service: str = None):
+        """Update the engine display labels from settings."""
+        if tts_engine and self.tts_engine_display:
+            self.tts_engine_display.configure(text=tts_engine)
+            self.logger.info(f"TTS engine display updated to: {tts_engine}")
+        
+        if translation_service and self.translation_service_display:
+            self.translation_service_display.configure(text=translation_service)
+            self.logger.info(f"Translation service display updated to: {translation_service}")
+    
+    def get_engine_settings_from_state(self):
+        """Load current engine settings from state manager."""
+        if self.state_manager:
+            try:
+                # Check for updated engine settings
+                current_engines = self.state_manager.get_setting("current_engines", {})
+                if current_engines:
+                    tts_engine = current_engines.get("tts_engine", "System (SAPI)")
+                    translation_service = current_engines.get("translation_service", "Google Translate")
+                else:
+                    # Fallback to engines settings
+                    settings = self.state_manager.get_setting("engines", {})
+                    tts_engine = settings.get("tts_engine", "System (SAPI)")
+                    translation_service = settings.get("translation_service", "Google Translate")
+                
+                self.update_engine_displays(tts_engine, translation_service)
+            except Exception as e:
+                self.logger.error(f"Failed to load engine settings: {e}")
+                # Set defaults
+                self.update_engine_displays("System (SAPI)", "Google Translate")
+    
+    def refresh_engine_displays(self):
+        """Refresh engine displays from current state - can be called periodically."""
+        self.get_engine_settings_from_state()
 
     def toggle_voice_feature(self) -> None:
         """Toggle voice input feature."""
@@ -732,13 +793,46 @@ class ChatTab:
                 self.logger.info(f"Conversation exported to {filename}")
         
         except Exception as e:
-            self.logger.error(f"Failed to export conversation: {e}")
+            self.logger.exception("Failed to export conversation:")
             self.update_status(f"Export failed: {e}")
 
     def update_progress(self, value: float) -> None:
         """Update progress bar."""
         if self.progress_bar:
             self.progress_bar.set(value)
+
+    def show_progress_bar(self) -> None:
+        """Show and reset the progress bar."""
+        if self.progress_bar:
+            self.progress_bar.set(0)
+            self.progress_bar.pack(pady=(0, 10))
+
+    def hide_progress_bar(self) -> None:
+        """Hide the progress bar."""
+        if self.progress_bar:
+            self.progress_bar.pack_forget()
+
+    def animate_progress(self, duration: int = 3000) -> None:
+        """Animate progress bar over specified duration in milliseconds."""
+        if not self.progress_bar:
+            return
+            
+        self.show_progress_bar()
+        steps = 100
+        interval = duration // steps
+        
+        def update_step(step: int):
+            if step <= steps and self.progress_bar:
+                progress_value = step / steps
+                self.progress_bar.set(progress_value)
+                if step < steps:
+                    # Schedule next update
+                    self.main_frame.after(interval, lambda: update_step(step + 1))
+                else:
+                    # Animation complete, hide progress bar
+                    self.main_frame.after(500, self.hide_progress_bar)
+        
+        update_step(0)
 
     def start_processing_animation(self) -> None:
         """Start processing animation."""
@@ -853,11 +947,14 @@ class ChatTab:
             
             self.logger.info(f"Chat components initialized: {', '.join(components) if components else 'None'}")
             
+            # Load engine settings from state manager
+            self.get_engine_settings_from_state()
+            
         except Exception as e:
             if LOGGING_UTILS_AVAILABLE:
                 log_exception(self.logger, e, "Chat component initialization")
             else:
-                self.logger.error(f"Error initializing components: {e}", exc_info=True)
+                self.logger.exception("Error initializing components:")
             if self.error_occurred_callback:
                 self.error_occurred_callback(f"Component initialization error: {e}")
             # Continue with partial initialization rather than failing completely
@@ -881,15 +978,29 @@ class ChatTab:
         """Processes a message through the AI pipeline."""
         try:
             self.update_status("Processing message...")
+            # Start progress bar animation for message processing
+            self.animate_progress(duration=4000)
             
             # Get AI response
             if self.ollama_client:
                 try:
-                    model = self.model_combo.get()
-                    response = self.ollama_client.chat(message, model=model)
-                    ai_response = response.get("response", "Sorry, I couldn't process that.")
+                    # Get model from settings instead of combo box
+                    model = self.current_model or "llama3.2:3b"
+                    
+                    # Format message for Ollama chat API
+                    messages = [{"role": "user", "content": message}]
+                    response = self.ollama_client.chat(model, messages)
+                    
+                    # Handle different response formats
+                    if isinstance(response, dict):
+                        ai_response = response.get("response", response.get("content", "Sorry, I couldn't process that."))
+                    elif isinstance(response, str):
+                        ai_response = response
+                    else:
+                        ai_response = "Sorry, I couldn't process that."
+                        
                 except Exception as e:
-                    self.logger.error(f"Ollama error: {e}")
+                    self.logger.exception("Ollama error:")
                     ai_response = "I'm having trouble connecting to the AI service."
             else:
                 ai_response = "AI service is not available."
@@ -904,14 +1015,18 @@ class ChatTab:
                     # Generate and play TTS in background
                     threading.Thread(target=self._play_tts, args=(ai_response,), daemon=True).start()
                 except Exception as e:
-                    self.logger.error(f"TTS error: {e}")
+                    self.logger.exception("TTS error:")
             
             self.update_status("Ready")
+            # Hide progress bar when processing completes
+            self.hide_progress_bar()
             
         except Exception as e:
-            self.logger.error(f"Error processing message: {e}")
+            self.logger.exception("Error processing message:")
             self.add_message("System", f"Error processing message: {e}", "error")
             self.update_status("Error")
+            # Hide progress bar on error
+            self.hide_progress_bar()
 
     def _play_tts(self, text: str) -> None:
         """Plays text-to-speech in background."""
@@ -922,7 +1037,7 @@ class ChatTab:
                     # Play audio (implementation depends on TTS backend)
                     pass
         except Exception as e:
-            self.logger.error(f"TTS playback error: {e}")
+            self.logger.exception("TTS playback error:")
 
     def toggle_voice_input(self) -> None:
         """Toggles voice recording."""
@@ -949,6 +1064,8 @@ class ChatTab:
         self.is_recording = False
         self.voice_button.configure(text="🎤 Voice", fg_color="green", hover_color="darkgreen")
         self.update_status("Processing voice input...")
+        # Start progress bar animation for voice processing
+        self.animate_progress(duration=3000)
 
     def _record_voice(self) -> None:
         """Records voice input in background thread with robust error handling."""
@@ -1032,11 +1149,13 @@ class ChatTab:
             if LOGGING_UTILS_AVAILABLE:
                 log_exception(self.logger, e, "Voice recording")
             else:
-                self.logger.error(f"Voice recording error: {e}", exc_info=True)
+                self.logger.exception("Voice recording error:")
             self.update_status("Voice recording failed")
         finally:
             self.is_recording = False
             self.voice_button.configure(text="🎤 Voice", fg_color="green", hover_color="darkgreen")
+            # Ensure progress bar is hidden if recording fails
+            self.hide_progress_bar()
 
     def _process_voice_input(self, audio_data, sample_rate: int) -> None:
         """Processes recorded voice input."""
@@ -1045,10 +1164,11 @@ class ChatTab:
             
             if not WHISPER_AVAILABLE or not self.whisper_engine:
                 self.update_status("Speech recognition not available")
+                self.hide_progress_bar()  # Hide progress bar on error
                 return
             
-            # Convert speech to text
-            text = self.whisper_engine.transcribe(audio_data, sample_rate)
+            # Convert speech to text using numpy array
+            text = self.whisper_engine.transcribe_numpy(audio_data, sample_rate)
             
             if text and text.strip():
                 # Set text in input field
@@ -1057,12 +1177,17 @@ class ChatTab:
                 
                 # Automatically send the message
                 self.send_message()
+                self.update_status("Message sent")
             else:
                 self.update_status("No speech detected")
             
+            # Hide progress bar after successful processing
+            self.hide_progress_bar()
+            
         except Exception as e:
-            self.logger.error(f"Voice processing error: {e}")
+            self.logger.exception("Voice processing error:")
             self.update_status("Voice processing failed")
+            self.hide_progress_bar()  # Hide progress bar on error
 
     def add_message(self, sender: str, message: str, msg_type: str = "user", translation: str = None) -> None:
         """Add a message to the chat with enhanced visual styling."""

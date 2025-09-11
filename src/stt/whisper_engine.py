@@ -229,6 +229,71 @@ class WhisperEngine:
             if temp_file and os.path.exists(temp_file):
                 cleanup_temp_file(temp_file)
     
+    def transcribe_numpy(self, audio_data, sample_rate: int, 
+                        language: Optional[str] = None) -> str:
+        """
+        Transcribe numpy audio array to text.
+        
+        Args:
+            audio_data: Audio data as numpy array
+            sample_rate: Sample rate of the audio
+            language: Language code (optional, auto-detected if None)
+            
+        Returns:
+            Transcribed text as string
+        """
+        if not self.is_loaded:
+            if not self.load_model():
+                raise RuntimeError("Failed to load Whisper model")
+        
+        try:
+            import numpy as np
+        except ImportError:
+            raise RuntimeError("NumPy is required for transcribe_numpy method")
+        
+        # Validate input
+        if audio_data is None or len(audio_data) == 0:
+            raise ValueError("Audio data is empty")
+        
+        if not isinstance(audio_data, np.ndarray):
+            raise ValueError("Audio data must be a numpy array")
+        
+        # Convert numpy array to bytes for processing
+        temp_file = None
+        try:
+            # Create temporary WAV file from numpy array
+            import soundfile as sf
+            
+            # Create temporary file
+            temp_fd, temp_file = tempfile.mkstemp(suffix='.wav', prefix='whisper_')
+            os.close(temp_fd)  # Close file descriptor, soundfile will handle the file
+            
+            # Ensure audio_data is float32 and in correct range
+            if audio_data.dtype != np.float32:
+                audio_data = audio_data.astype(np.float32)
+            
+            # Normalize if needed (sounddevice typically returns data in range [-1, 1])
+            if np.max(np.abs(audio_data)) > 1.0:
+                audio_data = audio_data / np.max(np.abs(audio_data))
+            
+            # Save as WAV file
+            sf.write(temp_file, audio_data, sample_rate)
+            
+            # Transcribe the file
+            result = self.transcribe_file(temp_file, language)
+            
+            return result
+            
+        except ImportError:
+            raise RuntimeError("soundfile library is required for numpy audio processing")
+        except Exception as e:
+            logger.error(f"Failed to process numpy audio data: {e}")
+            raise RuntimeError(f"Failed to process audio data: {e}")
+        finally:
+            # Clean up temporary file
+            if temp_file and os.path.exists(temp_file):
+                cleanup_temp_file(temp_file)
+
     def transcribe_file(self, file_path: str, 
                        language: Optional[str] = None) -> str:
         """

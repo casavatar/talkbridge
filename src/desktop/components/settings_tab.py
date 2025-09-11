@@ -38,7 +38,7 @@ except ImportError:
 
 # Import UI utilities and theme
 try:
-    from src.desktop.ui.ui_utils import clean_text
+    from src.desktop.ui.ui_utils import clean_text, icon
     from src.desktop.ui.theme import ComponentThemes, Typography, ColorPalette, Dimensions
     UI_THEME_AVAILABLE = True
 except ImportError:
@@ -156,6 +156,11 @@ class SettingsTab:
         
         # TTS Settings
         self.tts_engine_var = None
+        self.tts_engine_combo = None
+        self.tts_api_var = None
+        self.tts_api_entry = None
+        self.tts_api_frame = None
+        self.tts_api_label = None
         self.tts_model_var = None
         self.tts_voice_var = None
         self.tts_speed_var = None
@@ -164,6 +169,14 @@ class SettingsTab:
         
         # Translation Settings
         self.translation_service_var = None
+        self.translation_service_combo = None
+        self.translation_api_var = None
+        self.translation_api_entry = None
+        self.translation_api_frame = None
+        self.translation_api_label = None
+        self.translation_local_model_var = None
+        self.translation_local_model_combo = None
+        self.translation_local_model_frame = None
         self.source_lang_var = None
         self.target_lang_var = None
         self.auto_detect_var = None
@@ -282,21 +295,45 @@ class SettingsTab:
             **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
         ).pack(side="left")
         
-        self.tts_engine_var = tk.StringVar(value="TTS Coqui (Local)")
+        self.tts_engine_var = tk.StringVar(value="System (SAPI)")
         self.tts_engine_combo = ctk.CTkComboBox(
             engine_selection_frame,
             values=[
-                "TTS Coqui (Local)",
-                "OpenAI TTS (API)",
-                "Azure Speech (API)",
-                "Google TTS (API)",
-                "System (SAPI)"
+                "System (SAPI)",
+                "OpenAI TTS",
+                "Eleven Labs",
+                "Local TTS"
             ],
             variable=self.tts_engine_var,
             command=self._on_tts_engine_changed,
             **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": SettingsTheme.INPUT_BACKGROUND, "border_color": SettingsTheme.INPUT_BORDER, "button_color": SettingsTheme.ACCENT_BLUE}
         )
         self.tts_engine_combo.pack(side="right", padx=(10, 0))
+        
+        # API Key section (initially hidden)
+        self.tts_api_frame = ctk.CTkFrame(engine_frame, fg_color="transparent")
+        self.tts_api_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+        
+        self.tts_api_label = ctk.CTkLabel(
+            self.tts_api_frame,
+            text=clean_text("API Key:") if THEME_AVAILABLE else "API Key:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
+        )
+        self.tts_api_label.pack(side="left")
+        
+        self.tts_api_var = tk.StringVar()
+        self.tts_api_entry = ctk.CTkEntry(
+            self.tts_api_frame,
+            textvariable=self.tts_api_var,
+            placeholder_text="Enter API Key",
+            show="*",
+            width=250,
+            **ComponentThemes.get_entry_theme() if THEME_AVAILABLE else {"fg_color": SettingsTheme.INPUT_BACKGROUND, "border_color": SettingsTheme.INPUT_BORDER}
+        )
+        self.tts_api_entry.pack(side="right", padx=(10, 0))
+        
+        # Hide API key section by default
+        self.tts_api_frame.pack_forget()
         
         # TTS Model selection
         model_selection_frame = ctk.CTkFrame(engine_frame, fg_color="transparent")
@@ -399,9 +436,8 @@ class SettingsTab:
         
         service_title = ctk.CTkLabel(
             service_frame,
-            text="🌐 Translation Service",
-            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            text=clean_text("Translation Service") if THEME_AVAILABLE else "Translation Service",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"), "text_color": SettingsTheme.TEXT_PRIMARY}
         )
         service_title.pack(anchor="w", padx=15, pady=(15, 10))
         
@@ -411,77 +447,74 @@ class SettingsTab:
         
         ctk.CTkLabel(
             service_selection_frame,
-            text="Service:",
-            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            text=clean_text("Translation Service:") if THEME_AVAILABLE else "Translation Service:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
         ).pack(side="left")
         
         self.translation_service_var = tk.StringVar(value="Google Translate")
         self.translation_service_combo = ctk.CTkComboBox(
             service_selection_frame,
-            values=["Google Translate", "Microsoft Translator", "DeepL", "Local AI"],
+            values=[
+                "Google Translate",
+                "Microsoft Translator",
+                "DeepL",
+                "Local Model"
+            ],
             variable=self.translation_service_var,
-            fg_color=SettingsTheme.INPUT_BACKGROUND,
-            border_color=SettingsTheme.INPUT_BORDER,
-            button_color=SettingsTheme.ACCENT_BLUE
+            command=self._on_translation_service_changed,
+            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": SettingsTheme.INPUT_BACKGROUND, "border_color": SettingsTheme.INPUT_BORDER, "button_color": SettingsTheme.ACCENT_BLUE}
         )
         self.translation_service_combo.pack(side="right", padx=(10, 0))
         
-        # Language Configuration Section
-        lang_frame = ctk.CTkFrame(trans_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
-        lang_frame.pack(fill="x", pady=SECTION_SPACING)
+        # API Key section (initially hidden)
+        self.translation_api_frame = ctk.CTkFrame(service_frame, fg_color="transparent")
+        self.translation_api_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
-        lang_title = ctk.CTkLabel(
-            lang_frame,
-            text="🗣️ Language Configuration",
-            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
-            text_color=SettingsTheme.TEXT_PRIMARY
+        self.translation_api_label = ctk.CTkLabel(
+            self.translation_api_frame,
+            text=clean_text("API Key:") if THEME_AVAILABLE else "API Key:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
         )
-        lang_title.pack(anchor="w", padx=15, pady=(15, 10))
+        self.translation_api_label.pack(side="left")
         
-        # Source language
-        source_lang_frame = ctk.CTkFrame(lang_frame, fg_color="transparent")
-        source_lang_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+        self.translation_api_var = tk.StringVar()
+        self.translation_api_entry = ctk.CTkEntry(
+            self.translation_api_frame,
+            textvariable=self.translation_api_var,
+            placeholder_text="Enter API Key",
+            show="*",
+            width=250,
+            **ComponentThemes.get_entry_theme() if THEME_AVAILABLE else {"fg_color": SettingsTheme.INPUT_BACKGROUND, "border_color": SettingsTheme.INPUT_BORDER}
+        )
+        self.translation_api_entry.pack(side="right", padx=(10, 0))
+        
+        # Local Model selection (initially hidden)
+        self.translation_local_model_frame = ctk.CTkFrame(service_frame, fg_color="transparent")
+        self.translation_local_model_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
         
         ctk.CTkLabel(
-            source_lang_frame,
-            text="Source Language:",
-            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
-            text_color=SettingsTheme.TEXT_PRIMARY
+            self.translation_local_model_frame,
+            text=clean_text("Local Model:") if THEME_AVAILABLE else "Local Model:",
+            **ComponentThemes.get_label_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=LABEL_FONT_SIZE), "text_color": SettingsTheme.TEXT_PRIMARY}
         ).pack(side="left")
         
-        self.source_lang_var = tk.StringVar(value="Auto-detect")
-        self.source_lang_combo = ctk.CTkComboBox(
-            source_lang_frame,
-            values=["Auto-detect", "English", "Spanish", "French", "German", "Italian", "Portuguese"],
-            variable=self.source_lang_var,
-            fg_color=SettingsTheme.INPUT_BACKGROUND,
-            border_color=SettingsTheme.INPUT_BORDER,
-            button_color=SettingsTheme.ACCENT_BLUE
+        self.translation_local_model_var = tk.StringVar(value="llama3:8b")
+        self.translation_local_model_combo = ctk.CTkComboBox(
+            self.translation_local_model_frame,
+            values=[
+                "llama3:8b",
+                "mistral:7b",
+                "gemma2:2b",
+                "codellama:7b"
+            ],
+            variable=self.translation_local_model_var,
+            **ComponentThemes.get_combobox_theme() if THEME_AVAILABLE else {"fg_color": SettingsTheme.INPUT_BACKGROUND, "border_color": SettingsTheme.INPUT_BORDER, "button_color": SettingsTheme.ACCENT_BLUE}
         )
-        self.source_lang_combo.pack(side="right", padx=(10, 0))
+        self.translation_local_model_combo.pack(side="right", padx=(10, 0))
         
-        # Target language
-        target_lang_frame = ctk.CTkFrame(lang_frame, fg_color="transparent")
-        target_lang_frame.pack(fill="x", padx=15, pady=(ITEM_SPACING, 15))
-        
-        ctk.CTkLabel(
-            target_lang_frame,
-            text="Target Language:",
-            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
-            text_color=SettingsTheme.TEXT_PRIMARY
-        ).pack(side="left")
-        
-        self.target_lang_var = tk.StringVar(value="English")
-        self.target_lang_combo = ctk.CTkComboBox(
-            target_lang_frame,
-            values=["English", "Spanish", "French", "German", "Italian", "Portuguese", "Chinese", "Japanese"],
-            variable=self.target_lang_var,
-            fg_color=SettingsTheme.INPUT_BACKGROUND,
-            border_color=SettingsTheme.INPUT_BORDER,
-            button_color=SettingsTheme.ACCENT_BLUE
-        )
-        self.target_lang_combo.pack(side="right", padx=(10, 0))
+        # Hide API key and local model sections by default
+        self.translation_api_frame.pack_forget()
+        self.translation_local_model_frame.pack_forget()
 
     def _create_animation_tab(self):
         """Create the animation settings tab."""
@@ -767,7 +800,7 @@ class SettingsTab:
                 self.config = self.default_settings.copy()
                 self.logger.info("Using default settings")
         except Exception as e:
-            self.logger.error(f"Error loading settings: {e}")
+            self.logger.exception("Error loading settings:")
             self.config = self.default_settings.copy()
 
     def _update_ui_from_settings(self):
@@ -812,21 +845,35 @@ class SettingsTab:
             self.logger.info("UI updated from settings")
             
         except Exception as e:
-            self.logger.error(f"Error updating UI from settings: {e}")
+            self.logger.exception("Error updating UI from settings:")
 
     def _on_tts_engine_changed(self, value):
-        """Handle TTS engine change."""
+        """Handle TTS engine change and show/hide API key field."""
         self.logger.info(f"TTS engine changed to: {value}")
+        
+        # Show/hide API key field based on selected engine
+        if value in ["OpenAI TTS", "Eleven Labs"]:
+            self.tts_api_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+            # Update placeholder text based on engine
+            if value == "OpenAI TTS":
+                self.tts_api_entry.configure(placeholder_text="Enter OpenAI API Key")
+            elif value == "Eleven Labs":
+                self.tts_api_entry.configure(placeholder_text="Enter Eleven Labs API Key")
+        else:
+            self.tts_api_frame.pack_forget()
+        
         # Update available models based on engine
-        if value == "TTS Coqui (Local)":
+        if value == "Local TTS":
             models = [
                 "tts_models/en/ljspeech/tacotron2-DDC",
                 "tts_models/en/ljspeech/glow-tts",
                 "tts_models/es/mai/tacotron2-DDC",
                 "tts_models/multilingual/multi-dataset/bark"
             ]
-        elif value == "OpenAI TTS (API)":
+        elif value == "OpenAI TTS":
             models = ["tts-1", "tts-1-hd"]
+        elif value == "Eleven Labs":
+            models = ["eleven_monolingual_v1", "eleven_multilingual_v2"]
         else:
             models = ["Default"]
             
@@ -835,15 +882,75 @@ class SettingsTab:
             if models:
                 self.tts_model_var.set(models[0])
 
+    def _on_translation_service_changed(self, value):
+        """Handle translation service change and show/hide API key or local model fields."""
+        self.logger.info(f"Translation service changed to: {value}")
+        
+        # Hide all conditional fields first
+        self.translation_api_frame.pack_forget()
+        self.translation_local_model_frame.pack_forget()
+        
+        # Show appropriate fields based on selected service
+        if value in ["Microsoft Translator", "DeepL"]:
+            self.translation_api_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+            # Update placeholder text based on service
+            if value == "Microsoft Translator":
+                self.translation_api_entry.configure(placeholder_text="Enter Microsoft Translator API Key")
+            elif value == "DeepL":
+                self.translation_api_entry.configure(placeholder_text="Enter DeepL API Key")
+        elif value == "Local Model":
+            self.translation_local_model_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+
+    def _validate_settings(self):
+        """Validate current settings and show errors if any."""
+        errors = []
+        
+        # Validate TTS settings
+        if hasattr(self, 'tts_engine_var') and self.tts_engine_var:
+            tts_engine = self.tts_engine_var.get()
+            if tts_engine in ["OpenAI TTS", "Eleven Labs"]:
+                if not hasattr(self, 'tts_api_var') or not self.tts_api_var.get().strip():
+                    errors.append(f"{tts_engine} requires an API key.")
+        
+        # Validate Translation settings
+        if hasattr(self, 'translation_service_var') and self.translation_service_var:
+            translation_service = self.translation_service_var.get()
+            if translation_service in ["Microsoft Translator", "DeepL"]:
+                if not hasattr(self, 'translation_api_var') or not self.translation_api_var.get().strip():
+                    errors.append(f"{translation_service} requires an API key.")
+            elif translation_service == "Local Model":
+                if hasattr(self, 'translation_local_model_var') and self.translation_local_model_var:
+                    local_model = self.translation_local_model_var.get()
+                    # Here you could add Ollama availability check
+                    # For now, just check if a model is selected
+                    if not local_model.strip():
+                        errors.append("Local Model translation requires a model selection.")
+        
+        # Show errors if any
+        if errors:
+            error_message = "Please fix the following issues:\n\n" + "\n".join(f"• {error}" for error in errors)
+            self._show_status_message(error_message, SettingsTheme.ERROR_COLOR)
+            return False
+        
+        return True
+
     def _save_settings(self):
-        """Save current settings to file."""
+        """Save current settings to file with validation."""
         try:
+            # Validate settings before saving
+            if not self._validate_settings():
+                return False
+            
             # Collect current settings from UI
             current_settings = {}
             
             # TTS Settings
             if hasattr(self, 'tts_engine_var') and self.tts_engine_var:
                 current_settings["tts_engine"] = self.tts_engine_var.get()
+                # Save API key if applicable
+                if self.tts_engine_var.get() in ["OpenAI TTS", "Eleven Labs"]:
+                    if hasattr(self, 'tts_api_var') and self.tts_api_var:
+                        current_settings["tts_api_key"] = self.tts_api_var.get()
             if hasattr(self, 'tts_model_var') and self.tts_model_var:
                 current_settings["tts_model"] = self.tts_model_var.get()
             if hasattr(self, 'tts_voice_var') and self.tts_voice_var:
@@ -858,6 +965,14 @@ class SettingsTab:
             # Translation Settings
             if hasattr(self, 'translation_service_var') and self.translation_service_var:
                 current_settings["translation_service"] = self.translation_service_var.get()
+                # Save API key if applicable
+                if self.translation_service_var.get() in ["Microsoft Translator", "DeepL"]:
+                    if hasattr(self, 'translation_api_var') and self.translation_api_var:
+                        current_settings["translation_api_key"] = self.translation_api_var.get()
+                # Save local model if applicable
+                elif self.translation_service_var.get() == "Local Model":
+                    if hasattr(self, 'translation_local_model_var') and self.translation_local_model_var:
+                        current_settings["translation_local_model"] = self.translation_local_model_var.get()
             if hasattr(self, 'source_lang_var') and self.source_lang_var:
                 current_settings["source_language"] = self.source_lang_var.get()
             if hasattr(self, 'target_lang_var') and self.target_lang_var:
@@ -887,14 +1002,47 @@ class SettingsTab:
             with open(self.settings_file, 'w', encoding='utf-8') as f:
                 json.dump(self.config, f, indent=2, ensure_ascii=False)
             
+            # Save engine settings to state manager for chat tab access
+            if self.state_manager:
+                try:
+                    engine_settings = {
+                        "tts_engine": current_settings.get("tts_engine", "System (SAPI)"),
+                        "translation_service": current_settings.get("translation_service", "Google Translate"),
+                        "tts_api_key": current_settings.get("tts_api_key", ""),
+                        "translation_api_key": current_settings.get("translation_api_key", ""),
+                        "translation_local_model": current_settings.get("translation_local_model", "llama3:8b")
+                    }
+                    self.state_manager.set_setting("engines", engine_settings)
+                    self.logger.info("Engine settings saved to state manager")
+                except Exception as e:
+                    self.logger.error(f"Failed to save engine settings to state manager: {e}")
+            
             self.logger.info(f"Settings saved to {self.settings_file}")
             
             # Show success feedback
             self._show_status_message("Settings saved successfully!", SettingsTheme.SUCCESS_COLOR)
             
+            # Notify chat tab to update engine displays
+            self._notify_chat_tab_of_engine_changes(current_settings)
+            
+            return True
+            
         except Exception as e:
             self.logger.error(f"Error saving settings: {e}")
             self._show_status_message(f"Error saving settings: {e}", SettingsTheme.ERROR_COLOR)
+            return False
+
+    def _notify_chat_tab_of_engine_changes(self, settings):
+        """Notify chat tab of engine changes to update display labels."""
+        try:
+            # If core_bridge is available, use it to communicate with chat tab
+            if self.core_bridge and hasattr(self.core_bridge, 'update_chat_engine_displays'):
+                tts_engine = settings.get("tts_engine", "System (SAPI)")
+                translation_service = settings.get("translation_service", "Google Translate")
+                self.core_bridge.update_chat_engine_displays(tts_engine, translation_service)
+                self.logger.info("Notified chat tab of engine changes")
+        except Exception as e:
+            self.logger.error(f"Failed to notify chat tab of engine changes: {e}")
 
     def _reset_settings(self):
         """Reset settings to default values."""

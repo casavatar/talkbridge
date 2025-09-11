@@ -44,10 +44,10 @@ except ImportError:
     THEME_AVAILABLE = False
 
 
-# Dialog dimensions (increased height by 20%)
-MIN_WIDTH = 500
-MIN_HEIGHT = 720  # Increased from 600 to 720 (20% increase)
-EXPANDED_HEIGHT = 780  # Increased from 650 to 780 (20% increase)
+# Dialog dimensions - optimized for content without scrolling
+MIN_WIDTH = 480
+MIN_HEIGHT = 600  # Fixed height for content to fit without scrolling
+EXPANDED_HEIGHT = 620  # Slightly larger if needed
 
 # Spacing and margins (using theme if available)
 MAIN_MARGIN = Spacing.MARGIN_MAIN if THEME_AVAILABLE else 25
@@ -58,7 +58,6 @@ BUTTON_SPACING = Spacing.SM if THEME_AVAILABLE else 10
 # Component heights (using theme if available)
 INPUT_HEIGHT = Dimensions.HEIGHT_INPUT if THEME_AVAILABLE else 40
 BUTTON_HEIGHT = Dimensions.HEIGHT_BUTTON if THEME_AVAILABLE else 45
-PROGRESS_BAR_HEIGHT = 6
 STATUS_LABEL_HEIGHT = 30
 
 # Timeouts (in milliseconds)
@@ -189,12 +188,10 @@ class LoginDialog:
         self.show_password_checkbox: Optional[ctk.CTkCheckBox] = None
         self.login_button: Optional[ctk.CTkButton] = None
         self.cancel_button: Optional[ctk.CTkButton] = None
-        self.progress_bar: Optional[ctk.CTkProgressBar] = None
         self.status_label: Optional[ctk.CTkLabel] = None
         self.logo_label: Optional[ctk.CTkLabel] = None
         
-        # Animation and timing
-        self.animation_running = False
+        # Authentication thread
         self.auth_thread: Optional[threading.Thread] = None
 
     def show(self) -> Tuple[bool, str, str]:
@@ -260,11 +257,10 @@ class LoginDialog:
     def setup_ui(self) -> None:
         """Set up the enhanced login dialog UI with proper layout."""
         try:
-            # Main container with scrollable content
-            main_frame = ctk.CTkScrollableFrame(
+            # Main container with regular frame (no scrolling needed)
+            main_frame = ctk.CTkFrame(
                 self.dialog, 
-                fg_color="transparent",
-                scrollbar_button_color=LoginTheme.BACKGROUND_SECONDARY
+                fg_color="transparent"
             )
             main_frame.pack(fill="both", expand=True, padx=MAIN_MARGIN, pady=MAIN_MARGIN)
             
@@ -274,7 +270,7 @@ class LoginDialog:
             # Form section
             self._create_form_section(main_frame)
             
-            # Status and progress section
+            # Status section (without progress bar)
             self._create_status_section(main_frame)
             
             # Initial validation
@@ -370,8 +366,11 @@ class LoginDialog:
         username_label.pack(anchor="w", pady=(0, 4))
         
         entry_style = ComponentThemes.get_input_theme() if THEME_AVAILABLE else {
+            "height": Dimensions.HEIGHT_INPUT,
             "fg_color": LoginTheme.INPUT_BACKGROUND,
-            "border_color": LoginTheme.INPUT_BORDER
+            "border_color": LoginTheme.INPUT_BORDER,
+            "corner_radius": Dimensions.RADIUS_MD,
+            "font": ctk.CTkFont(size=Typography.FONT_SIZE_BODY)
         }
         
         self.username_entry = ctk.CTkEntry(
@@ -402,8 +401,11 @@ class LoginDialog:
         password_input_frame.pack(fill="x")
         
         entry_style = ComponentThemes.get_input_theme() if THEME_AVAILABLE else {
+            "height": Dimensions.HEIGHT_INPUT,
             "fg_color": LoginTheme.INPUT_BACKGROUND,
-            "border_color": LoginTheme.INPUT_BORDER
+            "border_color": LoginTheme.INPUT_BORDER,
+            "corner_radius": Dimensions.RADIUS_MD,
+            "font": ctk.CTkFont(size=Typography.FONT_SIZE_BODY)
         }
         
         self.password_entry = ctk.CTkEntry(
@@ -465,8 +467,11 @@ class LoginDialog:
         
         # Login button with consistent styling
         button_style = ComponentThemes.get_button_theme() if THEME_AVAILABLE else {
+            "height": Dimensions.HEIGHT_BUTTON,
             "fg_color": LoginTheme.ACCENT_BLUE,
-            "hover_color": LoginTheme.ACCENT_BLUE_HOVER
+            "hover_color": LoginTheme.ACCENT_BLUE_HOVER,
+            "corner_radius": Dimensions.RADIUS_MD,
+            "font": ctk.CTkFont(size=Typography.FONT_SIZE_BUTTON)
         }
         
         self.login_button = ctk.CTkButton(
@@ -477,15 +482,18 @@ class LoginDialog:
             compound="left",
             **button_style
         )
-        self.login_button.pack(fill="x", pady=(0, BUTTON_SPACING if THEME_AVAILABLE else 10))
+        self.login_button.pack(fill="x", pady=(0, Spacing.SM))
         
         # Cancel button with secondary styling
         cancel_theme = ComponentThemes.get_button_theme("secondary") if THEME_AVAILABLE else {
+            "height": Dimensions.HEIGHT_BUTTON,
             "fg_color": "transparent",
             "text_color": LoginTheme.TEXT_SECONDARY,
-            "border_width": 2,
+            "border_width": Dimensions.BORDER_THIN,
             "border_color": LoginTheme.INPUT_BORDER,
-            "hover_color": LoginTheme.BACKGROUND_ELEVATED
+            "hover_color": LoginTheme.BACKGROUND_ELEVATED,
+            "corner_radius": Dimensions.RADIUS_MD,
+            "font": ctk.CTkFont(size=Typography.FONT_SIZE_BUTTON)
         }
         
         self.cancel_button = ctk.CTkButton(
@@ -499,26 +507,16 @@ class LoginDialog:
         self.cancel_button.pack(fill="x")
 
     def _create_status_section(self, parent):
-        """Create status and progress section."""
+        """Create status section (progress bar removed)."""
         status_frame = ctk.CTkFrame(parent, fg_color="transparent")
         status_frame.pack(fill="x", pady=MAIN_SPACING)
         
-        # Progress bar
-        self.progress_bar = ctk.CTkProgressBar(
-            status_frame,
-            height=PROGRESS_BAR_HEIGHT,
-            progress_color=LoginTheme.ACCENT_BLUE,
-            corner_radius=3
-        )
-        self.progress_bar.pack(fill="x", pady=(0, 8))
-        self.progress_bar.set(0)
-        
-        # Status label
+        # Status label with improved styling
         self.status_label = ctk.CTkLabel(
             status_frame,
             text="Ready to sign in",
             height=STATUS_LABEL_HEIGHT,
-            font=ctk.CTkFont(size=10),
+            font=ctk.CTkFont(size=Typography.FONT_SIZE_CAPTION),
             text_color=LoginTheme.TEXT_SECONDARY,
             wraplength=400
         )
@@ -624,8 +622,6 @@ class LoginDialog:
                     self.username_entry.configure(state="normal")
                 if self.password_entry and self.password_entry.winfo_exists():
                     self.password_entry.configure(state="normal")
-                if self.progress_bar and self.progress_bar.winfo_exists():
-                    self.progress_bar.set(0)
                 self.update_status(UIText.READY if THEME_AVAILABLE else "Ready to sign in")
                 
             elif state == AuthenticationState.AUTHENTICATING:
@@ -638,8 +634,7 @@ class LoginDialog:
                     self.username_entry.configure(state="disabled")
                 if self.password_entry and self.password_entry.winfo_exists():
                     self.password_entry.configure(state="disabled")
-                self.update_status(UIText.SIGNING_IN if THEME_AVAILABLE else "Authenticating...")
-                self.start_progress_animation()
+                self.update_status(UIText.SIGNING_IN if THEME_AVAILABLE else "Authenticating...", LoginTheme.ACCENT_BLUE)
                 
             elif state == AuthenticationState.SUCCESS:
                 if self.login_button and self.login_button.winfo_exists():
@@ -647,8 +642,6 @@ class LoginDialog:
                         text=UIText.AUTH_SUCCESS if THEME_AVAILABLE else "Success!", 
                         state="disabled"
                     )
-                if self.progress_bar and self.progress_bar.winfo_exists():
-                    self.progress_bar.set(1)
                 self.update_status(
                     "Authentication successful!" if THEME_AVAILABLE else "Authentication successful!", 
                     LoginTheme.TEXT_SUCCESS
@@ -664,8 +657,6 @@ class LoginDialog:
                     self.username_entry.configure(state="normal")
                 if self.password_entry and self.password_entry.winfo_exists():
                     self.password_entry.configure(state="normal")
-                if self.progress_bar and self.progress_bar.winfo_exists():
-                    self.progress_bar.set(0)
                 self.update_status("Authentication failed. Please try again.", LoginTheme.TEXT_ERROR)
                 
             elif state == AuthenticationState.TIMEOUT:
@@ -678,44 +669,10 @@ class LoginDialog:
                     self.username_entry.configure(state="normal")
                 if self.password_entry and self.password_entry.winfo_exists():
                     self.password_entry.configure(state="normal")
-                if self.progress_bar and self.progress_bar.winfo_exists():
-                    self.progress_bar.set(0)
                 self.update_status("Authentication timed out. Please try again.", LoginTheme.TEXT_ERROR)
                 
         except (tk.TclError, RuntimeError) as e:
             self.logger.warning(f"Cannot update auth state: {e}")
-
-    def start_progress_animation(self) -> None:
-        """Start progress bar animation."""
-        if not self.animation_running:
-            self.animation_running = True
-            self.animate_progress()
-
-    def animate_progress(self) -> None:
-        """Animate progress bar during authentication."""
-        try:
-            if not self.dialog or not self.dialog.winfo_exists():
-                self.animation_running = False
-                return
-                
-            if self.animation_running and self.auth_state == AuthenticationState.AUTHENTICATING:
-                if self.progress_bar and self.progress_bar.winfo_exists():
-                    current = self.progress_bar.get()
-                    if current < 0.9:
-                        self.progress_bar.set(current + 0.1)
-                    else:
-                        self.progress_bar.set(0.1)
-                
-                # Continue animation
-                try:
-                    self.dialog.after(200, self.animate_progress)
-                except (tk.TclError, RuntimeError):
-                    self.animation_running = False
-            else:
-                self.animation_running = False
-        except Exception as e:
-            self.logger.warning(f"Error in progress animation: {e}")
-            self.animation_running = False
 
     def load_saved_credentials(self) -> None:
         """Load saved credentials if remember me was checked."""

@@ -1,6 +1,1 @@
-2025-09-09 21:52:08,838 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Translator initialization failed: 'ollama'
-2025-09-09 21:52:08,839 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Translator initialization failed: 'ollama'
-2025-09-09 21:52:12,432 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] AudioCapture missing record_chunk method
-2025-09-09 21:58:37,282 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] AudioCapture missing record_chunk method - using fallback recording
-2025-09-09 21:58:37,429 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Fallback recording failed: cannot access local variable 'audio_data' where it is not associated with a value
-2025-09-09 22:00:14,826 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] AudioCapture missing record_chunk method - using fallback recording
+2025-09-11 12:02:10,640 [ERROR] talkbridge.desktop.login:248 - Error creating login dialog: 'CTkToplevel' object has no attribute 'eval'

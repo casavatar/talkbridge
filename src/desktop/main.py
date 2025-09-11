@@ -57,7 +57,7 @@ try:
 except ImportError:
     pass  # Fallback already configured above
 
-# Apply unified theme (configuration done by ui_constants.configure_ui())
+# Apply unified theme (configuration done by ui_utils)
 try:
     from src.desktop.ui.theme import get_customtkinter_theme
     theme_config = get_customtkinter_theme()

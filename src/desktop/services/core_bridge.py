@@ -558,6 +558,21 @@ class CoreBridge(QObject):
         """
         return self.services_initialized.get(service_name, False)
 
+    def update_chat_engine_displays(self, tts_engine: str, translation_service: str) -> None:
+        """Update chat tab engine displays when settings change."""
+        try:
+            # Signal that can be connected to by the chat tab to update displays
+            # For now, we'll store the values in state manager for the chat tab to pick up
+            if self.state_manager:
+                engine_settings = {
+                    "tts_engine": tts_engine,
+                    "translation_service": translation_service
+                }
+                self.state_manager.set_setting("current_engines", engine_settings)
+                self.logger.info(f"Updated engine displays: TTS={tts_engine}, Translation={translation_service}")
+        except Exception as e:
+            self.logger.error(f"Error updating chat engine displays: {e}")
+
     def cleanup(self) -> None:
         """Cleans up resources for all services."""
         try:

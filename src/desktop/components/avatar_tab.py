@@ -19,6 +19,7 @@ Requirements:
 
 import logging
 import time
+import threading
 from typing import Optional
 import tkinter as tk
 import customtkinter as ctk
@@ -270,7 +271,25 @@ class AvatarTab:
         if self.camera_active:
             self.stop_camera()
         else:
+            threading.Thread(target=self.start_camera_safe, daemon=True).start()
+
+    def start_camera_safe(self):
+        """Safely start camera in background thread with error handling."""
+        try:
             self.start_camera()
+        except Exception as e:
+            self.logger.warning(f"Camera init failed: {e}")
+            self.show_camera_unavailable_message()
+
+    def show_camera_unavailable_message(self):
+        """Display camera unavailable message to user."""
+        try:
+            # Update UI on main thread
+            self.update_status("Camera not available")
+            if hasattr(self, 'start_camera_button'):
+                self.start_camera_button.configure(text="Camera Unavailable", state="disabled")
+        except Exception as e:
+            self.logger.debug(f"Could not update camera UI: {e}")
 
     def start_camera(self) -> None:
         """Start camera capture with robust error handling and fallback options."""
@@ -342,7 +361,7 @@ class AvatarTab:
             if LOGGING_UTILS_AVAILABLE:
                 log_exception(self.logger, e, "Camera startup")
             else:
-                self.logger.error(f"Failed to start camera: {e}", exc_info=True)
+                self.logger.exception("Failed to start camera:")
             
             # Clean up any partial initialization
             if hasattr(self, 'cap') and self.cap:
@@ -542,7 +561,7 @@ class AvatarTab:
             if LOGGING_UTILS_AVAILABLE:
                 log_exception(self.logger, e, "Video frame update")
             else:
-                self.logger.error(f"Error updating video frame: {e}", exc_info=True)
+                self.logger.exception("Error updating video frame:")
             # On any major error, stop the camera gracefully
             self.stop_camera()
             self._show_camera_fallback(f"Video processing error: {str(e)[:30]}...")
@@ -583,7 +602,7 @@ class AvatarTab:
                 self.face_detected = False
                 
         except Exception as e:
-            self.logger.error(f"Face detection error: {e}")
+            self.logger.exception("Face detection error:")
             
         return frame
 

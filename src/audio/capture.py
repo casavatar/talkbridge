@@ -94,6 +94,61 @@ class AudioCapture:
             logger.error(f"Error detecting optimal sample rate: {e}, using 44100 as fallback")
             return 44100
 
+    def _validate_and_get_supported_sample_rate(self, requested_rate):
+        """
+        Validate if the requested sample rate is supported by the device.
+        If not, find and return a supported fallback rate.
+        
+        Args:
+            requested_rate: The sample rate to validate
+            
+        Returns:
+            int: A supported sample rate or None if no rate works
+        """
+        try:
+            # Get device info for debugging
+            device = self.device if self.device is not None else sd.default.device[0]
+            device_info = sd.query_devices(device)
+            logger.debug(f"Using device: {device_info['name']}, default rate: {device_info['default_samplerate']}")
+            
+            # First, try the requested rate
+            try:
+                sd.check_input_settings(
+                    device=device, 
+                    samplerate=requested_rate,
+                    channels=self.channels,
+                    dtype=np.float32
+                )
+                logger.debug(f"Requested sample rate {requested_rate} is supported")
+                return requested_rate
+            except Exception as e:
+                logger.warning(f"Requested sample rate {requested_rate} not supported: {e}")
+            
+            # Try common fallback rates in order of preference
+            fallback_rates = [44100, 48000, 22050, 16000, 8000, int(device_info['default_samplerate'])]
+            
+            for rate in fallback_rates:
+                if rate == requested_rate:  # Already tested above
+                    continue
+                try:
+                    sd.check_input_settings(
+                        device=device,
+                        samplerate=rate,
+                        channels=self.channels,
+                        dtype=np.float32
+                    )
+                    logger.info(f"Using fallback sample rate: {rate}")
+                    return rate
+                except Exception:
+                    continue
+            
+            logger.error("No supported sample rate found for the current device")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error validating sample rate: {e}")
+            return None
+
     def list_devices(self) -> Dict[str, Any]:
         """List available audio devices."""
         try:
@@ -110,11 +165,17 @@ class AudioCapture:
     def test_microphone_access(self) -> bool:
         """Test if microphone access is available."""
         try:
+            # Validate sample rate before testing
+            validated_sample_rate = self._validate_and_get_supported_sample_rate(self.sample_rate)
+            if validated_sample_rate is None:
+                logger.error("No supported sample rate found for microphone test")
+                return False
+            
             # Try to create a short test recording
             test_duration = 0.1  # 100ms test
             test_data = sd.rec(
-                int(test_duration * self.sample_rate), 
-                samplerate=self.sample_rate, 
+                int(test_duration * validated_sample_rate), 
+                samplerate=validated_sample_rate, 
                 channels=self.channels,
                 device=self.device
             )
@@ -304,9 +365,18 @@ class AudioCapture:
                         logger.info(f"Adjusting sample rate from {self.sample_rate} to {optimal_rate} for device {device}")
                         self.sample_rate = optimal_rate
             
+            # Validate and get supported sample rate
+            validated_sample_rate = self._validate_and_get_supported_sample_rate(self.sample_rate)
+            if validated_sample_rate is None:
+                logger.error("No supported sample rate found for recording")
+                raise RuntimeError("No supported sample rate available for audio recording")
+            
+            if validated_sample_rate != self.sample_rate:
+                logger.info(f"Using validated sample rate {validated_sample_rate} for recording")
+            
             recording = sd.rec(
-                int(duration * self.sample_rate),
-                samplerate=self.sample_rate,
+                int(duration * validated_sample_rate),
+                samplerate=validated_sample_rate,
                 channels=self.channels,
                 dtype=np.float32,
                 device=device
@@ -386,6 +456,74 @@ class AudioCapture:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
+    def record_chunk(self, duration: float = 0.1, sample_rate: Optional[int] = None) -> Optional[np.ndarray]:
+        """
+        Record a small chunk of audio for streaming applications.
+        
+        Args:
+            duration: Duration in seconds to record (default: 0.1s)
+            sample_rate: Sample rate to use (default: instance sample_rate)
+            
+        Returns:
+            Optional[np.ndarray]: Audio data chunk or None if recording fails
+            
+        Note:
+            This method is designed for real-time streaming where small chunks
+            are continuously captured and processed.
+        """
+        try:
+            # Validate inputs
+            if duration <= 0:
+                logger.warning(f"Invalid duration {duration}, using default 0.1s")
+                duration = 0.1
+                
+            if sample_rate is None:
+                sample_rate = self.sample_rate
+            elif not isinstance(sample_rate, int) or sample_rate <= 0:
+                logger.warning(f"Invalid sample_rate {sample_rate}, using instance rate {self.sample_rate}")
+                sample_rate = self.sample_rate
+            
+            # Check if audio system is available
+            if not hasattr(sd, 'rec') or not callable(sd.rec):
+                logger.error("SoundDevice recording not available")
+                return None
+            
+            # Validate sample rate with device before recording
+            validated_sample_rate = self._validate_and_get_supported_sample_rate(sample_rate)
+            if validated_sample_rate is None:
+                logger.error("No supported sample rate found for audio recording")
+                return None
+            
+            if validated_sample_rate != sample_rate:
+                logger.info(f"Using validated sample rate {validated_sample_rate} instead of requested {sample_rate}")
+                sample_rate = validated_sample_rate
+            
+            # Record the chunk
+            frames = int(duration * sample_rate)
+            recording = sd.rec(
+                frames,
+                samplerate=sample_rate,
+                channels=self.channels,
+                dtype=np.float32,
+                device=self.device
+            )
+            sd.wait()  # Wait until recording is finished
+            
+            # Validate recording result
+            if recording is None or len(recording) == 0:
+                logger.warning("Empty recording chunk received")
+                return None
+                
+            # Flatten if mono channel
+            if self.channels == 1 and recording.ndim > 1:
+                recording = recording.flatten()
+                
+            return recording
+            
+        except Exception as e:
+            logger.error(f"Failed to record audio chunk: {e}")
+            return None
+
 # Utility functions
 def get_default_device_info():
     """Get information about default audio devices."""
@@ -432,64 +570,6 @@ def test_audio_system():
     except Exception as e:
         print(f"❌ Audio system test failed: {e}")
         return False
-
-    def record_chunk(self, duration: float = 0.1, sample_rate: Optional[int] = None) -> Optional[np.ndarray]:
-        """
-        Record a small chunk of audio for streaming applications.
-        
-        Args:
-            duration: Duration in seconds to record (default: 0.1s)
-            sample_rate: Sample rate to use (default: instance sample_rate)
-            
-        Returns:
-            Optional[np.ndarray]: Audio data chunk or None if recording fails
-            
-        Note:
-            This method is designed for real-time streaming where small chunks
-            are continuously captured and processed.
-        """
-        try:
-            # Validate inputs
-            if duration <= 0:
-                logger.warning(f"Invalid duration {duration}, using default 0.1s")
-                duration = 0.1
-                
-            if sample_rate is None:
-                sample_rate = self.sample_rate
-            elif not isinstance(sample_rate, int) or sample_rate <= 0:
-                logger.warning(f"Invalid sample_rate {sample_rate}, using instance rate {self.sample_rate}")
-                sample_rate = self.sample_rate
-            
-            # Check if audio system is available
-            if not hasattr(sd, 'rec') or not callable(sd.rec):
-                logger.error("SoundDevice recording not available")
-                return None
-            
-            # Record the chunk
-            frames = int(duration * sample_rate)
-            recording = sd.rec(
-                frames,
-                samplerate=sample_rate,
-                channels=self.channels,
-                dtype=np.float32,
-                device=self.device
-            )
-            sd.wait()  # Wait until recording is finished
-            
-            # Validate recording result
-            if recording is None or len(recording) == 0:
-                logger.warning("Empty recording chunk received")
-                return None
-                
-            # Flatten if mono channel
-            if self.channels == 1 and recording.ndim > 1:
-                recording = recording.flatten()
-                
-            return recording
-            
-        except Exception as e:
-            logger.error(f"Failed to record audio chunk: {e}")
-            return None
 
 if __name__ == "__main__":
     test_audio_system()
