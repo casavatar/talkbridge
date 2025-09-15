@@ -364,6 +364,7 @@ class ChatTab:
         self.input_entry: Optional[ctk.CTkEntry] = None
         self.send_button: Optional[ctk.CTkButton] = None
         self.voice_button: Optional[ctk.CTkButton] = None
+        self.system_audio_button: Optional[ctk.CTkButton] = None
         self.status_label: Optional[ctk.CTkLabel] = None
         self.language_combo: Optional[ctk.CTkComboBox] = None
         self.tts_engine_display: Optional[ctk.CTkLabel] = None
@@ -388,6 +389,7 @@ class ChatTab:
         self.translation_enabled = True
         self.tts_enabled = True
         self.show_timestamps = True
+        self.system_audio_enabled = False  # System audio capture setting
         
         # State
         self.is_recording = False
@@ -606,7 +608,22 @@ class ChatTab:
             command=self.toggle_voice_input,
             **voice_theme
         )
-        self.voice_button.pack(side="left", padx=(0, 10))
+        self.voice_button.pack(side="left", padx=(0, 5))
+        
+        # System audio toggle button
+        system_audio_theme = ComponentThemes.get_button_theme() if THEME_AVAILABLE else {"fg_color": ChatTheme.ACCENT_ORANGE, "hover_color": "#ff8800", "font": ctk.CTkFont(size=12)}
+        system_audio_theme["height"] = 40
+        self.system_audio_button = ctk.CTkButton(
+            input_frame,
+            text="🔊",
+            width=35,
+            command=self.toggle_system_audio_mode,
+            **system_audio_theme
+        )
+        self.system_audio_button.pack(side="left", padx=(0, 10))
+        
+        # Update button appearance based on system audio support
+        self._update_system_audio_button_state()
         
         # Text input with enhanced styling
         input_theme = ComponentThemes.get_input_theme() if THEME_AVAILABLE else {"font": ctk.CTkFont(size=12), "fg_color": ChatTheme.INPUT_BACKGROUND, "border_color": ChatTheme.INPUT_BORDER}
@@ -860,13 +877,18 @@ class ChatTab:
             # Initialize Audio Capture with validation
             if AUDIO_AVAILABLE:
                 try:
-                    self.audio_capture = AudioCapture()
+                    # Initialize audio capture with loopback support detection
+                    self.audio_capture = AudioCapture(loopback_mode=False)  # Default to microphone mode
                     # Validate that required methods are available
                     if not hasattr(self.audio_capture, 'record_chunk'):
                         self.logger.warning("AudioCapture missing record_chunk method - voice recording may not work")
                     else:
                         self.logger.debug("AudioCapture record_chunk method available")
                     self.logger.info("Audio capture initialized")
+                    
+                    # Update system audio button state based on detection
+                    self._update_system_audio_button_state()
+                    
                 except Exception as audio_error:
                     if LOGGING_UTILS_AVAILABLE:
                         log_exception(self.logger, audio_error, "Audio capture initialization")
@@ -1056,8 +1078,11 @@ class ChatTab:
         self.voice_button.configure(text="🔴 Stop", fg_color="red", hover_color="darkred")
         self.update_status("Recording... Click Stop when finished")
         
-        # Start recording in background thread
-        threading.Thread(target=self._record_voice, daemon=True).start()
+        # Start recording in background thread - choose method based on system audio setting
+        if self.system_audio_enabled:
+            threading.Thread(target=self._record_voice_with_system_audio, daemon=True).start()
+        else:
+            threading.Thread(target=self._record_voice, daemon=True).start()
 
     def stop_voice_input(self) -> None:
         """Stops voice recording."""
@@ -1259,8 +1284,122 @@ class ChatTab:
             self.status_indicator.configure(text_color=ChatTheme.ACCENT_ORANGE)
         else:
             self.status_indicator.configure(text_color=ChatTheme.ACCENT_GREEN)
+
+    def toggle_system_audio_mode(self) -> None:
+        """Toggle system audio capture mode."""
+        self.system_audio_enabled = not self.system_audio_enabled
+        self._update_system_audio_button_state()
         
-        self.logger.info(f"Status updated: {status}")
+        mode = "system audio" if self.system_audio_enabled else "microphone"
+        self.update_status(f"Audio input mode: {mode}")
+        self.logger.info(f"Audio input mode changed to: {mode}")
+
+    def _update_system_audio_button_state(self) -> None:
+        """Update system audio button appearance based on support and state."""
+        try:
+            if self.system_audio_button:
+                # Check if system audio capture is supported
+                if AUDIO_AVAILABLE and self.audio_capture:
+                    is_supported, info_message = self.audio_capture.is_loopback_supported()
+                    
+                    if is_supported:
+                        if self.system_audio_enabled:
+                            # Active state - system audio enabled
+                            self.system_audio_button.configure(
+                                fg_color="#ff4444",  # Red when active
+                                hover_color="#ff6666",
+                                text="🔊",
+                                state="normal"
+                            )
+                        else:
+                            # Available but inactive
+                            self.system_audio_button.configure(
+                                fg_color="#666666",  # Gray when inactive
+                                hover_color="#888888",
+                                text="🔊",
+                                state="normal"
+                            )
+                    else:
+                        # Not supported
+                        self.system_audio_button.configure(
+                            fg_color="#333333",  # Dark gray when disabled
+                            hover_color="#333333",
+                            text="🚫",
+                            state="disabled"
+                        )
+                else:
+                    # Audio not available
+                    self.system_audio_button.configure(
+                        fg_color="#333333",
+                        hover_color="#333333", 
+                        text="🚫",
+                        state="disabled"
+                    )
+        except Exception as e:
+            self.logger.warning(f"Failed to update system audio button state: {e}")
+
+    def _record_voice_with_system_audio(self) -> None:
+        """Records voice input using system audio capture when enabled."""
+        try:
+            # Validate preconditions
+            if not self.audio_capture:
+                self.logger.warning("Audio capture not available")
+                self.update_status("Audio capture not available")
+                self.is_recording = False
+                return
+            
+            # Initialize audio data list
+            audio_data = []
+            sample_rate = 44100  # Higher sample rate for system audio
+            chunk_duration = 0.1
+            
+            self.logger.info(f"Starting system audio recording with sample_rate={sample_rate}")
+            
+            while self.is_recording:
+                try:
+                    # Record system audio chunks
+                    chunk = self.audio_capture.record_system_audio_chunk(
+                        duration=chunk_duration
+                    )
+                    
+                    if chunk is not None and len(chunk) > 0:
+                        audio_data.append(chunk)
+                    else:
+                        self.logger.warning("Received empty system audio chunk")
+                        
+                except Exception as chunk_error:
+                    self.logger.warning(f"System audio chunk recording failed: {chunk_error}")
+                    # Continue recording despite chunk errors
+                    
+                time.sleep(chunk_duration)  # Prevent CPU overload
+            
+            # Process recorded audio if available
+            if audio_data:
+                try:
+                    # Combine audio chunks
+                    import numpy as np
+                    full_audio = np.concatenate(audio_data)
+                    self.logger.info(f"Recorded {len(full_audio)} system audio samples")
+                    
+                    # Process with speech-to-text
+                    self._process_voice_input(full_audio, sample_rate)
+                    
+                except Exception as processing_error:
+                    self.logger.error(f"System audio processing failed: {processing_error}")
+                    self.update_status("System audio processing failed")
+            else:
+                self.logger.warning("No system audio data recorded")
+                self.update_status("No system audio data captured")
+            
+        except Exception as e:
+            if LOGGING_UTILS_AVAILABLE:
+                log_exception(self.logger, e, "System audio recording")
+            else:
+                self.logger.exception("System audio recording error:")
+            self.update_status("System audio recording failed")
+        finally:
+            self.is_recording = False
+            self.voice_button.configure(text="🎤 Voice", fg_color="green", hover_color="darkgreen")
 
     def get_conversation_history(self) -> List[dict]:
         """Gets the conversation history."""

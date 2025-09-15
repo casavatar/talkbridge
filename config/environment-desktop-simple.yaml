@@ -72,6 +72,9 @@ dependencies:
     - PySide6>=6.5.0
     - pyside6-tools>=6.5.0
     
+    # Desktop GUI Framework
+    - customtkinter>=5.2.0
+    
     # Audio processing
     - sounddevice>=0.4.5
     - soundfile>=0.12.0
@@ -86,12 +89,21 @@ dependencies:
     # TTS engine
     - TTS>=0.22.0
     
+    # Alternative TTS
+    - pyttsx3>=2.90
+    
     # Whisper for STT
     - openai-whisper>=20231117
+    
+    # Alternative STT
+    - SpeechRecognition>=3.10.0
     
     # Translation services
     - argos-translate>=1.9.0
     - googletrans>=4.0.0rc1
+    
+    # Web interface enhancements
+    - streamlit-webrtc>=0.47.0
     
     # MediaPipe for face animation
     - mediapipe>=0.10.0

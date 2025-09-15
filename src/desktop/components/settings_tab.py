@@ -603,6 +603,134 @@ class SettingsTab:
             button_color=SettingsTheme.ACCENT_BLUE
         )
         self.input_device_combo.pack(side="right", padx=(10, 0))
+        
+        # System Audio Capture Section
+        system_audio_frame = ctk.CTkFrame(audio_scroll, fg_color=SettingsTheme.BACKGROUND_SECONDARY)
+        system_audio_frame.pack(fill="x", pady=SECTION_SPACING)
+        
+        system_audio_title = ctk.CTkLabel(
+            system_audio_frame,
+            text="🔊 System Audio Capture",
+            font=ctk.CTkFont(size=SECTION_FONT_SIZE, weight="bold"),
+            text_color=SettingsTheme.TEXT_PRIMARY
+        )
+        system_audio_title.pack(anchor="w", padx=15, pady=(15, 10))
+        
+        # Enable system audio capture checkbox
+        enable_loopback_frame = ctk.CTkFrame(system_audio_frame, fg_color="transparent")
+        enable_loopback_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+        
+        self.enable_system_audio_var = tk.BooleanVar(value=False)
+        self.enable_system_audio_checkbox = ctk.CTkCheckBox(
+            enable_loopback_frame,
+            text="Capture from system audio output",
+            variable=self.enable_system_audio_var,
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
+            text_color=SettingsTheme.TEXT_PRIMARY,
+            checkmark_color=SettingsTheme.ACCENT_GREEN,
+            border_color=SettingsTheme.INPUT_BORDER,
+            command=self._on_system_audio_toggle
+        )
+        self.enable_system_audio_checkbox.pack(side="left")
+        
+        # System audio device selection
+        system_device_frame = ctk.CTkFrame(system_audio_frame, fg_color="transparent")
+        system_device_frame.pack(fill="x", padx=15, pady=ITEM_SPACING)
+        
+        ctk.CTkLabel(
+            system_device_frame,
+            text="Output Device:",
+            font=ctk.CTkFont(size=LABEL_FONT_SIZE),
+            text_color=SettingsTheme.TEXT_PRIMARY
+        ).pack(side="left")
+        
+        self.system_audio_device_var = tk.StringVar(value="Auto-detect")
+        self.system_audio_device_combo = ctk.CTkComboBox(
+            system_device_frame,
+            values=["Auto-detect"],
+            variable=self.system_audio_device_var,
+            fg_color=SettingsTheme.INPUT_BACKGROUND,
+            border_color=SettingsTheme.INPUT_BORDER,
+            button_color=SettingsTheme.ACCENT_BLUE,
+            state="disabled"  # Disabled until checkbox is enabled
+        )
+        self.system_audio_device_combo.pack(side="right", padx=(10, 0))
+        
+        # System audio status/info
+        self.system_audio_status_label = ctk.CTkLabel(
+            system_audio_frame,
+            text="System audio capture not configured",
+            font=ctk.CTkFont(size=11),
+            text_color=SettingsTheme.TEXT_MUTED
+        )
+        self.system_audio_status_label.pack(anchor="w", padx=15, pady=(5, 15))
+        
+        # Initialize system audio detection
+        self._initialize_system_audio_detection()
+
+    def _initialize_system_audio_detection(self):
+        """Initialize system audio capture detection and populate devices."""
+        try:
+            # Import audio capture for device detection
+            import sys
+            from pathlib import Path
+            sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+            from src.audio.capture import AudioCapture
+            
+            # Create audio capture instance to check support
+            audio_capture = AudioCapture()
+            is_supported, info_message = audio_capture.is_loopback_supported()
+            
+            if is_supported:
+                # Get available loopback devices
+                loopback_devices = audio_capture.get_loopback_devices()
+                device_names = ["Auto-detect"]
+                
+                for device in loopback_devices:
+                    device_name = f"{device['name']} ({device['platform']})"
+                    device_names.append(device_name)
+                
+                # Update combo box values
+                self.system_audio_device_combo.configure(values=device_names)
+                self.system_audio_status_label.configure(
+                    text=f"✅ {info_message} - {len(loopback_devices)} devices found",
+                    text_color=SettingsTheme.ACCENT_GREEN
+                )
+                
+                # Enable the checkbox
+                self.enable_system_audio_checkbox.configure(state="normal")
+                
+            else:
+                self.system_audio_status_label.configure(
+                    text=f"❌ {info_message}",
+                    text_color=SettingsTheme.ACCENT_ORANGE
+                )
+                # Keep checkbox disabled
+                self.enable_system_audio_checkbox.configure(state="disabled")
+                
+        except ImportError as e:
+            self.system_audio_status_label.configure(
+                text="❌ Audio capture module not available",
+                text_color=SettingsTheme.ACCENT_ORANGE
+            )
+            self.enable_system_audio_checkbox.configure(state="disabled")
+        except Exception as e:
+            self.system_audio_status_label.configure(
+                text=f"❌ Error checking system audio support: {str(e)[:50]}...",
+                text_color=SettingsTheme.ACCENT_ORANGE
+            )
+            self.enable_system_audio_checkbox.configure(state="disabled")
+
+    def _on_system_audio_toggle(self):
+        """Handle system audio capture toggle."""
+        is_enabled = self.enable_system_audio_var.get()
+        
+        if is_enabled:
+            self.system_audio_device_combo.configure(state="normal")
+            self.logger.info("System audio capture enabled")
+        else:
+            self.system_audio_device_combo.configure(state="disabled")
+            self.logger.info("System audio capture disabled")
 
     def _create_general_tab(self):
         """Create the general settings tab."""

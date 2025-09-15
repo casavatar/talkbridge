@@ -31,14 +31,17 @@ Functions:
 import sounddevice as sd
 import numpy as np
 import logging
-from typing import Optional, Callable, Dict, Any
+import platform
+import subprocess
+from typing import Optional, Callable, Dict, Any, List, Tuple
 
 logger = logging.getLogger(__name__)
 
 class AudioCapture:
-    def __init__(self, sample_rate=None, channels=1, device=None):
+    def __init__(self, sample_rate=None, channels=1, device=None, loopback_mode=False):
         # Validate and set device
         self.device = device
+        self.loopback_mode = loopback_mode  # Flag for system audio capture
         
         # Auto-detect optimal sample rate if not provided
         if sample_rate is None:
@@ -58,7 +61,285 @@ class AudioCapture:
         self.is_recording = False
         self.audio_buffer = []
         
-        logger.info(f"AudioCapture initialized with sample_rate={self.sample_rate}, channels={self.channels}, device={self.device}")
+        logger.info(f"AudioCapture initialized with sample_rate={self.sample_rate}, channels={self.channels}, device={self.device}, loopback_mode={self.loopback_mode}")
+
+    def get_loopback_devices(self) -> List[Dict[str, Any]]:
+        """
+        Get available loopback/output recording devices for all platforms.
+        
+        Returns:
+            List[Dict]: List of loopback devices with platform-specific info
+        """
+        loopback_devices = []
+        system = platform.system().lower()
+        
+        try:
+            devices = sd.query_devices()
+            
+            if system == "windows":
+                # Windows WASAPI loopback devices
+                for i, device_info in enumerate(devices):
+                    device_name = device_info['name'].lower()
+                    
+                    # Look for output devices that support loopback
+                    if device_info['max_output_channels'] > 0:
+                        # Common Windows output device names
+                        if any(keyword in device_name for keyword in [
+                            'speakers', 'headphones', 'output', 'realtek', 
+                            'audio', 'sound', 'stereo mix', 'what u hear'
+                        ]):
+                            loopback_devices.append({
+                                'index': i,
+                                'name': device_info['name'],
+                                'platform': 'windows',
+                                'type': 'wasapi_loopback',
+                                'channels': device_info['max_output_channels'],
+                                'sample_rate': device_info['default_samplerate'],
+                                'hostapi': device_info['hostapi']
+                            })
+                            
+            elif system == "linux":
+                # Linux PulseAudio monitor devices
+                try:
+                    # Query PulseAudio for monitor sources
+                    result = subprocess.run(
+                        ['pactl', 'list', 'sources', 'short'], 
+                        capture_output=True, text=True, timeout=5
+                    )
+                    if result.returncode == 0:
+                        lines = result.stdout.strip().split('\n')
+                        for line in lines:
+                            if 'monitor' in line.lower():
+                                parts = line.split('\t')
+                                if len(parts) >= 2:
+                                    loopback_devices.append({
+                                        'index': parts[1],  # PulseAudio source name
+                                        'name': parts[1],
+                                        'platform': 'linux',
+                                        'type': 'pulseaudio_monitor',
+                                        'channels': 2,  # Usually stereo
+                                        'sample_rate': 44100,  # Common default
+                                        'hostapi': None
+                                    })
+                except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError) as e:
+                    logger.warning(f"Failed to query PulseAudio sources: {e}")
+                
+                # Also check sounddevice for monitor devices
+                for i, device_info in enumerate(devices):
+                    device_name = device_info['name'].lower()
+                    if 'monitor' in device_name or 'loopback' in device_name:
+                        loopback_devices.append({
+                            'index': i,
+                            'name': device_info['name'],
+                            'platform': 'linux',
+                            'type': 'alsa_monitor',
+                            'channels': device_info['max_input_channels'],
+                            'sample_rate': device_info['default_samplerate'],
+                            'hostapi': device_info['hostapi']
+                        })
+                        
+            elif system == "darwin":  # macOS
+                # macOS virtual audio devices
+                for i, device_info in enumerate(devices):
+                    device_name = device_info['name'].lower()
+                    if any(keyword in device_name for keyword in [
+                        'blackhole', 'soundflower', 'loopback', 'virtual'
+                    ]):
+                        loopback_devices.append({
+                            'index': i,
+                            'name': device_info['name'],
+                            'platform': 'macos',
+                            'type': 'virtual_audio',
+                            'channels': device_info['max_input_channels'],
+                            'sample_rate': device_info['default_samplerate'],
+                            'hostapi': device_info['hostapi']
+                        })
+            
+            logger.info(f"Found {len(loopback_devices)} loopback devices on {system}")
+            return loopback_devices
+            
+        except Exception as e:
+            logger.error(f"Error detecting loopback devices: {e}")
+            return []
+
+    def is_loopback_supported(self) -> Tuple[bool, str]:
+        """
+        Check if system audio loopback recording is supported on current platform.
+        
+        Returns:
+            Tuple[bool, str]: (is_supported, info_message)
+        """
+        system = platform.system().lower()
+        
+        if system == "windows":
+            # Check for WASAPI support
+            try:
+                devices = sd.query_devices()
+                wasapi_devices = [d for d in devices if d.get('hostapi') == 2]  # WASAPI
+                if wasapi_devices:
+                    return True, "WASAPI loopback supported"
+                else:
+                    return False, "WASAPI not available"
+            except Exception:
+                return False, "Cannot detect WASAPI support"
+                
+        elif system == "linux":
+            # Check for PulseAudio
+            try:
+                result = subprocess.run(['pactl', '--version'], 
+                                      capture_output=True, timeout=2)
+                if result.returncode == 0:
+                    return True, "PulseAudio monitor sources supported"
+                else:
+                    return False, "PulseAudio not detected"
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                return False, "PulseAudio not available"
+                
+        elif system == "darwin":  # macOS
+            # Check for virtual audio devices
+            loopback_devices = self.get_loopback_devices()
+            if loopback_devices:
+                return True, f"Virtual audio devices available: {len(loopback_devices)}"
+            else:
+                return False, "Requires BlackHole or similar virtual audio driver"
+        
+        return False, f"Platform {system} not supported"
+
+    def record_system_audio_chunk(self, duration: float = 0.1, device_index: Optional[int] = None) -> Optional[np.ndarray]:
+        """
+        Record a chunk of system audio output using platform-specific loopback.
+        
+        Args:
+            duration: Duration in seconds to record
+            device_index: Specific loopback device to use
+            
+        Returns:
+            Optional[np.ndarray]: Audio data chunk or None if recording fails
+        """
+        try:
+            system = platform.system().lower()
+            
+            if system == "windows":
+                return self._record_windows_loopback(duration, device_index)
+            elif system == "linux":
+                return self._record_linux_loopback(duration, device_index)
+            elif system == "darwin":
+                return self._record_macos_loopback(duration, device_index)
+            else:
+                logger.error(f"System audio recording not supported on {system}")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Failed to record system audio chunk: {e}")
+            return None
+
+    def _record_windows_loopback(self, duration: float, device_index: Optional[int] = None) -> Optional[np.ndarray]:
+        """Record system audio on Windows using WASAPI loopback."""
+        try:
+            import sounddevice as sd
+            
+            # Find WASAPI output device for loopback
+            if device_index is None:
+                devices = sd.query_devices()
+                wasapi_devices = [d for i, d in enumerate(devices) if d.get('hostapi') == 2 and d['max_output_channels'] > 0]
+                if not wasapi_devices:
+                    logger.error("No WASAPI output devices found for loopback")
+                    return None
+                device_index = next(i for i, d in enumerate(devices) if d == wasapi_devices[0])
+            
+            # Record with WASAPI loopback (Note: requires special configuration)
+            frames = int(duration * self.sample_rate)
+            
+            # For Windows, we need to use input stream with special loopback flag
+            # This is a limitation of sounddevice - true WASAPI loopback needs lower-level access
+            logger.warning("Windows WASAPI loopback requires system configuration (Stereo Mix)")
+            
+            recording = sd.rec(
+                frames,
+                samplerate=self.sample_rate,
+                channels=2,  # Usually stereo for system audio
+                dtype=np.float32,
+                device=device_index
+            )
+            sd.wait()
+            
+            return recording
+            
+        except Exception as e:
+            logger.error(f"Windows loopback recording failed: {e}")
+            return None
+
+    def _record_linux_loopback(self, duration: float, device_name: Optional[str] = None) -> Optional[np.ndarray]:
+        """Record system audio on Linux using PulseAudio monitor."""
+        try:
+            # Find PulseAudio monitor source
+            if device_name is None:
+                try:
+                    result = subprocess.run(
+                        ['pactl', 'list', 'sources', 'short'],
+                        capture_output=True, text=True, timeout=5
+                    )
+                    if result.returncode == 0:
+                        lines = result.stdout.strip().split('\n')
+                        for line in lines:
+                            if 'monitor' in line.lower():
+                                parts = line.split('\t')
+                                if len(parts) >= 2:
+                                    device_name = parts[1]
+                                    break
+                except Exception as e:
+                    logger.warning(f"Failed to find PulseAudio monitor: {e}")
+                    return None
+            
+            if device_name is None:
+                logger.error("No PulseAudio monitor source found")
+                return None
+            
+            # Record from monitor device
+            frames = int(duration * self.sample_rate)
+            
+            recording = sd.rec(
+                frames,
+                samplerate=self.sample_rate,
+                channels=2,  # Usually stereo for system audio
+                dtype=np.float32,
+                device=device_name  # Use PulseAudio device name
+            )
+            sd.wait()
+            
+            return recording
+            
+        except Exception as e:
+            logger.error(f"Linux loopback recording failed: {e}")
+            return None
+
+    def _record_macos_loopback(self, duration: float, device_index: Optional[int] = None) -> Optional[np.ndarray]:
+        """Record system audio on macOS using virtual audio devices."""
+        try:
+            # Find virtual audio device (BlackHole, etc.)
+            if device_index is None:
+                loopback_devices = self.get_loopback_devices()
+                if not loopback_devices:
+                    logger.error("No virtual audio devices found. Install BlackHole or similar.")
+                    return None
+                device_index = loopback_devices[0]['index']
+            
+            frames = int(duration * self.sample_rate)
+            
+            recording = sd.rec(
+                frames,
+                samplerate=self.sample_rate,
+                channels=2,  # Usually stereo for system audio
+                dtype=np.float32,
+                device=device_index
+            )
+            sd.wait()
+            
+            return recording
+            
+        except Exception as e:
+            logger.error(f"macOS loopback recording failed: {e}")
+            return None
 
     def _get_optimal_sample_rate(self, device=None):
         """Get the optimal sample rate for the specified device."""
@@ -195,33 +476,8 @@ class AudioCapture:
     
     def is_output_capture_available(self) -> bool:
         """Check if system output capture is available."""
-        try:
-            devices = sd.query_devices()
-            
-            # Look for loopback/monitor devices
-            for device_info in devices:
-                device_name = device_info['name'].lower()
-                if any(keyword in device_name for keyword in [
-                    'stereo mix', 'what u hear', 'monitor', 'loopback', 
-                    'blackhole', 'soundflower'
-                ]):
-                    return True
-            
-            # On Linux, also check PulseAudio sources
-            try:
-                import subprocess
-                result = subprocess.run(['pactl', 'list', 'sources'], 
-                                      capture_output=True, text=True, timeout=5)
-                if result.returncode == 0 and 'monitor' in result.stdout.lower():
-                    return True
-            except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
-                pass
-            
-            return False
-            
-        except Exception as e:
-            logger.error(f"Error checking output capture availability: {e}")
-            return False
+        is_supported, _ = self.is_loopback_supported()
+        return is_supported
 
     def start_input_stream(self, callback: Optional[Callable] = None, device: Optional[int] = None):
         """Start capturing microphone audio continuously."""
