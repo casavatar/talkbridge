@@ -33,7 +33,7 @@ class AudioVisualizer:
         self.bars = []
         self.max_bars = 15
         self.animation_running = False
-        self.logger = logging.getLogger("talkbridge.ui.audio_visualizer")
+        self.logger = logging.getLogger("talkbridge.web.audio_visualizer")
         
     def start_animation(self) -> None:
         """Start the audio visualization animation."""

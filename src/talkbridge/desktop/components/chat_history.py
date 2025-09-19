@@ -51,7 +51,7 @@ class MessageWidget:
     def __init__(self, parent: ctk.CTkScrollableFrame, message: MessageData):
         self.parent = parent
         self.message = message
-        self.logger = logging.getLogger("talkbridge.ui.message_widget")
+        self.logger = logging.getLogger("talkbridge.web.message_widget")
         
         # Theme colors
         self._setup_theme_colors()

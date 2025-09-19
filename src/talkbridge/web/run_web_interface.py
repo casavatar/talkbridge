@@ -37,7 +37,7 @@ def main():
             print("Warning: style.css not found in assets directory")
         
         # Import and run the web interface
-        from web_interface import main as run_web_interface
+        from talkbridge.web.interface import main as run_web_interface
         
         print("🎤 Starting TalkBridge Web Interface...")
         print("📱 Open your browser and go to: http://localhost:8501")

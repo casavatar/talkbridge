@@ -13,6 +13,7 @@ import tempfile
 import os
 
 from ..ports import STTPort, AudioData, TranscriptionResult, AudioFormat
+from ...utils.language_utils import get_supported_languages
 
 try:
     from ...stt.whisper_engine import WhisperEngine
@@ -38,7 +39,7 @@ class WhisperSTTAdapter:
         try:
             self.whisper_engine = WhisperEngine(model_size=model_size, device=device)
             self._current_language = None
-            self._supported_languages = self._get_supported_languages()
+            self._supported_languages = get_supported_languages('whisper')
             self.logger.info(f"Initialized Whisper STT adapter with model: {model_size}")
         except Exception as e:
             self.logger.error(f"Failed to initialize WhisperEngine: {e}")
@@ -192,17 +193,3 @@ class WhisperSTTAdapter:
             self.logger.error(f"PCM to WAV conversion failed: {e}")
             # Return original data as fallback
             return pcm_data
-    
-    def _get_supported_languages(self) -> List[str]:
-        """Get list of languages supported by Whisper."""
-        # Whisper supports these languages
-        return [
-            'en', 'zh', 'de', 'es', 'ru', 'ko', 'fr', 'ja', 'pt', 'tr', 'pl', 'ca', 'nl',
-            'ar', 'sv', 'it', 'id', 'hi', 'fi', 'vi', 'he', 'uk', 'el', 'ms', 'cs', 'ro',
-            'da', 'hu', 'ta', 'no', 'th', 'ur', 'hr', 'bg', 'lt', 'la', 'mi', 'ml', 'cy',
-            'sk', 'te', 'fa', 'lv', 'bn', 'sr', 'az', 'sl', 'kn', 'et', 'mk', 'br', 'eu',
-            'is', 'hy', 'ne', 'mn', 'bs', 'kk', 'sq', 'sw', 'gl', 'mr', 'pa', 'si', 'km',
-            'sn', 'yo', 'so', 'af', 'oc', 'ka', 'be', 'tg', 'sd', 'gu', 'am', 'yi', 'lo',
-            'uz', 'fo', 'ht', 'ps', 'tk', 'nn', 'mt', 'sa', 'lb', 'my', 'bo', 'tl', 'mg',
-            'as', 'tt', 'haw', 'ln', 'ha', 'ba', 'jw', 'su'
-        ]

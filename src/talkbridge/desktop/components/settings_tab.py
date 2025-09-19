@@ -49,6 +49,13 @@ try:
 except ImportError:
     CONFIG_AVAILABLE = False
 
+# Import status utilities
+try:
+    from talkbridge.utils.status_utils import update_status
+    STATUS_UTILS_AVAILABLE = True
+except ImportError:
+    STATUS_UTILS_AVAILABLE = False
+
 class SettingsTheme:
     """Theme configuration for the settings tab."""
     
@@ -2101,7 +2108,12 @@ class SettingsTab:
     def update_status(self, status: str) -> None:
         """Updates the status label."""
         if self.status_label:
-            self.status_label.configure(text=status)
+            if STATUS_UTILS_AVAILABLE:
+                # Use centralized status utility
+                update_status(self.status_label, status)
+            else:
+                # Fallback to direct label update
+                self.status_label.configure(text=status)
             self.parent.update_idletasks()
 
     def _show_confirmation(self, title: str, message: str) -> bool:

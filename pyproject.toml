@@ -79,7 +79,7 @@ web = [
 [project.scripts]
 talkbridge = "talkbridge:run_app"
 talkbridge-desktop = "talkbridge.desktop.main:main"
-talkbridge-web = "talkbridge.ui.web_server:main"
+talkbridge-web = "talkbridge.web.server:run"
 
 [project.urls]
 Homepage = "https://github.com/casavatar/talkbridge"

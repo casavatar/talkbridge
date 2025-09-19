@@ -45,7 +45,7 @@ from talkbridge.utils.error_handler import (
 from talkbridge.logging_config import get_logger
 
 # Import new notification and async systems
-from talkbridge.ui.notifier import subscribe, notify_info, notify_error
+from talkbridge.web.notifier import subscribe, notify_info, notify_error
 from talkbridge.desktop.notifier_adapter import DesktopNotifier
 from talkbridge.utils.async_runner import get_task_runner, run_async, ProgressReporter
 from talkbridge.errors import ErrorCategory, handle_user_facing_error
@@ -758,31 +758,6 @@ class TalkBridgeApplication:
             self.logger.exception(f"Error showing main window: {e}")
             raise
 
-    def _initialize_core_components(self) -> bool:
-        """Initialize the application's core components with progress updates."""
-        try:
-            self.logger.info("Initializing core components...")
-            self._update_splash_status("Initializing core components...", 0.1)
-            
-            # Initialize StateManager
-            self.state_manager = StateManager()
-            self._update_splash_status("Setting up state management...", 0.3)
-            
-            if not self.state_manager.initialize():
-                raise Exception("StateManager initialization failed")
-            
-            # Initialize CoreBridge
-            self._update_splash_status("Initializing core bridge...", 0.5)
-            self.core_bridge = CoreBridge(self.state_manager)
-            
-            self._update_splash_status("Core components ready", 0.6)
-            self.logger.info("Core components initialized successfully")
-            return True
-            
-        except Exception as e:
-            self.logger.error(f"Error initializing core components: {e}")
-            return False
-
     def _initialize_services_async(self):
         """Initialize services asynchronously in background thread."""
         def initialize_services():
@@ -820,18 +795,6 @@ class TalkBridgeApplication:
             on_error=lambda error: self.logger.error(f"Async service error: {error}"),
             task_name="async_service_init"
         )
-                self.services_initialized = True
-                self._update_splash_status("All services ready!", 1.0)
-                
-                self.logger.info("Services initialized successfully")
-                
-            except Exception as e:
-                self.logger.error(f"Error initializing services: {e}")
-                self.services_initialized = False
-        
-        # Start initialization in background thread
-        init_thread = threading.Thread(target=initialize_services, daemon=True)
-        init_thread.start()
 
     def _handle_logout(self):
         """Handle user logout."""

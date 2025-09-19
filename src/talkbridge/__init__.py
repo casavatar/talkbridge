@@ -16,7 +16,7 @@ __author__ = "TalkBridge Team"
 from . import auth
 from . import stt
 from . import translation
-from . import ui
+from . import web
 from . import utils
 from . import ollama
 

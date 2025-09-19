@@ -663,9 +663,9 @@ Caching Strategy:
 - `permission_manager.py`: Role-based access control
 
 **Dependencies**:
-- `hashlib`: Password hashing
-- `secrets`: Cryptographic salt generation
-- `json`: User data storage
+- `argon2`: Secure password hashing (Argon2id)
+- `sqlite3`: Database storage
+- `os`: Environment variables for security
 - `datetime`: Session timing
 
 **Interactions**:
@@ -911,7 +911,7 @@ utils/ (Utilities)
 
 ```
 1. User Input Flow
-   ui/web_interface.py
+   web/interface.py
    ↓
    ui/components/audio_recorder.py
    ↓
@@ -952,7 +952,7 @@ utils/ (Utilities)
    Configuration Files
 
 4. Demo Mode Flow
-   ui/web_interface.py
+   web/interface.py
    ↓
    demo/demo_runner.py
    ↓

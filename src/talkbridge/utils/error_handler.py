@@ -166,7 +166,7 @@ def notify_error(message: str) -> None:
     
     # Try web UI notification
     try:
-        from talkbridge.ui.notifier import notify_error as web_notify_error
+        from talkbridge.web.notifier import notify_error as web_notify_error
         web_notify_error(message)
         logger.debug(f"Sent error notification to web UI: {message}")
         return

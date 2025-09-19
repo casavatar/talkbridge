@@ -10,6 +10,7 @@ import time
 from typing import List
 
 from ..ports import TranslationPort, TranslationResult
+from ...utils.language_utils import get_supported_languages
 
 try:
     from ...translation.translator import Translator
@@ -34,7 +35,7 @@ class TranslationAdapter:
         try:
             self.translator = Translator(service=service)
             self._service = service
-            self._supported_languages = self._get_supported_languages()
+            self._supported_languages = get_supported_languages('translation')
             self.logger.info(f"Initialized translation adapter with service: {service}")
         except Exception as e:
             self.logger.error(f"Failed to initialize Translator: {e}")
@@ -138,15 +139,3 @@ class TranslationAdapter:
             return test_result.confidence > 0
         except Exception:
             return False
-    
-    def _get_supported_languages(self) -> List[str]:
-        """Get list of languages supported by the translation service."""
-        # Common languages supported by most translation services
-        return [
-            'af', 'ar', 'az', 'be', 'bg', 'bn', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'el',
-            'en', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'ga', 'gl', 'gu', 'he', 'hi', 'hr',
-            'hu', 'hy', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'kn', 'ko', 'ky', 'la',
-            'lb', 'lo', 'lt', 'lv', 'mk', 'ml', 'mn', 'mr', 'ms', 'mt', 'my', 'ne', 'nl',
-            'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'si', 'sk', 'sl', 'sq', 'sr', 'sv', 'sw',
-            'ta', 'te', 'th', 'tl', 'tr', 'uk', 'ur', 'uz', 'vi', 'yi', 'zh', 'zu'
-        ]

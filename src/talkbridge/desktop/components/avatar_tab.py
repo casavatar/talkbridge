@@ -109,7 +109,7 @@ import customtkinter as ctk
 
 # Import notification and error handling systems
 try:
-    from talkbridge.ui.notifier import notify_error, notify_warn, notify_info
+    from talkbridge.web.notifier import notify_error, notify_warn, notify_info
     from talkbridge.errors import ErrorCategory, handle_user_facing_error
     from talkbridge.utils.async_runner import run_async, ui_thread_call
     MODERN_SYSTEMS_AVAILABLE = True
@@ -120,7 +120,7 @@ except ImportError:
 try:
     import sys
     from pathlib import Path
-    sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+    # No longer need sys.path.append - use proper package imports
     from talkbridge.logging_config import get_logger, log_exception, add_error_context
     LOGGING_UTILS_AVAILABLE = True
 except ImportError:

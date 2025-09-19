@@ -149,7 +149,7 @@ def example_integration_with_talkbridge():
     
     # Simulate integration with STT API
     try:
-        from talkbridge.ui.api.stt_api import STTAPI
+        from talkbridge.web.api.stt_api import STTAPI
         
         # Create STT API instance
         stt_api = STTAPI()

@@ -64,10 +64,10 @@ talkbridge/
 │   ├── animation/           # Avatar animation modules
 │   ├── desktop/             # Desktop application modules
 │   ├── ui/                  # Web interface modules
-│   ├── auth/                # Authentication modules
-│   ├── utils/               # Utility modules
+│   ├── auth/                # Secure SQLite authentication system
+│   ├── utils/               # Shared utility modules
 │   ├── demo/                # Demo system modules
-│   └── json/                # User management
+│   └── json/                # Legacy user management (deprecated)
 ├── test/                     # Test suite
 ├── doc/                     # Documentation
 ├── requirements*.txt        # Dependencies
@@ -111,10 +111,10 @@ talkbridge/
 - **Components**: Chat, Avatar, Settings tabs with integrated services
 
 ### Web Application
-- **Entry Point**: `src/ui/web_interface.py`
-- **Framework**: Streamlit with enhanced server
-- **Features**: Responsive design, device permissions, real-time updates
-- **Security**: HTTPS/SSL, WebSocket encryption
+- **Entry Point**: `python -m talkbridge.web`
+- **Framework**: Flask with notification system integration
+- **Features**: Responsive design, REST API, real-time notifications
+- **Security**: HTTPS/SSL, CORS support, error handling
 
 ### CLI Application
 - **Entry Point**: `src/app.py`
@@ -136,7 +136,7 @@ pip install -r requirements.txt
 ./launch_desktop.sh
 
 # Or launch web application
-streamlit run src/ui/web_interface.py
+python -m talkbridge.web
 ```
 
 ### Development Setup

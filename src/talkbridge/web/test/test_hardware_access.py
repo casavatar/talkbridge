@@ -27,9 +27,7 @@ import webbrowser
 import threading
 from pathlib import Path
 
-.parent.parent.parent))
-
-from ui.web_server import TalkBridgeWebServer
+from talkbridge.web.server import TalkBridgeWebServer
 
 def test_hardware_access():
     """Test the hardware access functionality."""

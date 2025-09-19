@@ -32,10 +32,20 @@ from pathlib import Path
 # Model Configuration
 MODEL_NAME = "base"  # Options: "tiny", "base", "small", "medium", "large"
 DEFAULT_LANGUAGE = "es"  # Default language for transcription
-SUPPORTED_LANGUAGES = [
-    "en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh",
-    "ar", "hi", "nl", "pl", "sv", "tr", "vi", "th", "cs", "da"
-]
+
+# Import centralized language support
+try:
+    from ..utils.language_utils import get_supported_languages as get_all_supported_languages
+    LANGUAGE_UTILS_AVAILABLE = True
+    # Populate SUPPORTED_LANGUAGES from centralized utility
+    SUPPORTED_LANGUAGES = get_all_supported_languages('whisper')
+except ImportError:
+    LANGUAGE_UTILS_AVAILABLE = False
+    # Fallback list if centralized utilities are not available
+    SUPPORTED_LANGUAGES = [
+        "en", "es", "fr", "de", "it", "pt", "ru", "ja", "ko", "zh",
+        "ar", "hi", "nl", "pl", "sv", "tr", "vi", "th", "cs", "da"
+    ]
 
 # Device Configuration
 DEVICE = "cpu"  # Options: "cpu", "cuda", "mps" (for Apple Silicon)
@@ -92,7 +102,10 @@ def get_default_language() -> str:
 
 def get_supported_languages() -> list:
     """Get the supported languages."""
-    return SUPPORTED_LANGUAGES.copy()
+    if LANGUAGE_UTILS_AVAILABLE:
+        return get_all_supported_languages('whisper')
+    else:
+        return SUPPORTED_LANGUAGES.copy()
 
 def get_device() -> str:
     """Get the device."""

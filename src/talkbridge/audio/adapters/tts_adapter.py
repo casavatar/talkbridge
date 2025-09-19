@@ -11,6 +11,7 @@ from typing import Optional, List
 import io
 
 from ..ports import TTSPort, SynthesisResult, AudioFormat
+from ...utils.language_utils import get_supported_languages
 
 try:
     from ...tts.synthesizer import TTSSynthesizer
@@ -37,7 +38,7 @@ class TTSAdapter:
             self.tts_synthesizer = TTSSynthesizer(engine=engine, voice=voice)
             self._engine = engine
             self._default_voice = voice
-            self._supported_languages = self._get_supported_languages()
+            self._supported_languages = get_supported_languages('tts')
             self.logger.info(f"Initialized TTS adapter with engine: {engine}")
         except Exception as e:
             self.logger.error(f"Failed to initialize TTSSynthesizer: {e}")
@@ -136,15 +137,6 @@ class TTSAdapter:
             return len(test_result.audio_data) > 0
         except Exception:
             return False
-    
-    def _get_supported_languages(self) -> List[str]:
-        """Get list of languages supported by the TTS engine."""
-        # Common languages supported by most TTS engines
-        return [
-            'ar', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fi', 'fr', 'he',
-            'hi', 'hr', 'hu', 'id', 'it', 'ja', 'ko', 'lv', 'ms', 'mt', 'nl', 'no', 'pl',
-            'pt', 'ro', 'ru', 'sk', 'sl', 'sv', 'th', 'tr', 'uk', 'vi', 'zh'
-        ]
     
     def _get_default_voices(self, language: Optional[str] = None) -> List[str]:
         """Get default voice names for common languages."""

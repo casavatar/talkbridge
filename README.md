@@ -276,7 +276,7 @@ talkbridge/
 │   ├── 🎯 Entry Points
 │   │   ├── app.py              # CLI application entry point
 │   │   ├── desktop/main.py     # Desktop application entry point
-│   │   └── ui/web_interface.py # Web application entry point
+│   │   └── web/                # Web application package
 │   │
 │   ├── 🎵 Audio Processing
 │   │   ├── audio/              # Audio capture, playback, and effects

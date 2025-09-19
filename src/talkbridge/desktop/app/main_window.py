@@ -36,6 +36,7 @@ import customtkinter as ctk
 from talkbridge.desktop.components.chat_tab import ChatTab
 from talkbridge.desktop.components.avatar_tab import AvatarTab  
 from talkbridge.desktop.components.settings_tab import SettingsTab
+from talkbridge.utils.status_utils import update_status, update_connection_status
 
 # Import unified theme
 try:
@@ -416,17 +417,17 @@ class MainWindow:
     def update_status(self, message: str, color: str = None):
         """Update status bar message."""
         if self.status_label:
-            if color is None:
-                color = MainWindowTheme.TEXT_SECONDARY
-            self.status_label.configure(text=message, text_color=color)
+            # Use centralized status utility for consistency
+            update_status(self.status_label, message, level="info" if color is None else "custom")
+            # Apply custom color if provided
+            if color is not None:
+                self.status_label.configure(text_color=color)
 
     def update_connection_status(self, connected: bool):
         """Update connection status indicator."""
         if self.connection_status:
-            if connected:
-                self.connection_status.configure(text="🟢 Connected", text_color="#4CAF50")
-            else:
-                self.connection_status.configure(text="🔴 Disconnected", text_color="#f44336")
+            # Use centralized connection status utility
+            update_connection_status(self.connection_status, connected)
 
     def show_logout_dialog(self):
         """Show logout confirmation dialog."""

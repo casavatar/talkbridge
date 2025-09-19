@@ -40,7 +40,7 @@ python src/demo/run_demo.py --config
 streamlit run src/demo/demo_ui.py
 
 # Or integrate with main web interface
-streamlit run src/ui/web_interface.py
+python -m talkbridge.web
 ```
 
 ## Demo Files

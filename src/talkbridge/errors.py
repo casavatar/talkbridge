@@ -383,7 +383,7 @@ class ErrorHandler:
             user_error: The user-facing error to notify about
         """
         try:
-            from talkbridge.ui.notifier import notify_error
+            from talkbridge.web.notifier import notify_error
             
             notify_error(
                 user_error.message,

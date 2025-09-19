@@ -227,7 +227,8 @@ UI_CONFIG = {
     
     # File paths
     "css_file": SRC_DIR / "ui" / "assets" / "style.css",
-    "users_file": SRC_DIR / "json" / "users.json",
+    # Note: users.json is deprecated - authentication now uses secure SQLite database
+    # "users_file": SRC_DIR / "json" / "users.json",  # DEPRECATED
 }
 
 # Demo Configuration

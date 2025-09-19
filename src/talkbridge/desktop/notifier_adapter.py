@@ -13,7 +13,7 @@ import customtkinter as ctk
 from typing import Optional, Dict, Any
 from datetime import datetime, timedelta
 
-from talkbridge.ui.notifier import NotifierPort, Notification, Level
+from talkbridge.web.notifier import NotifierPort, Notification, Level
 
 logger = logging.getLogger(__name__)
 

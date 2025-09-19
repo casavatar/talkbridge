@@ -32,6 +32,7 @@ from typing import Optional, Dict, Any
 from .whisper_engine import WhisperEngine, get_whisper_engine, is_model_loaded
 from .config import DEFAULT_LANGUAGE, MODEL_NAME, DEVICE
 from .audio_utils import validate_audio_bytes, validate_audio_file
+from ..utils.language_utils import get_supported_languages as get_all_supported_languages
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -224,8 +225,8 @@ def get_supported_languages() -> list:
     Returns:
         List of supported language codes
     """
-    engine = _get_engine()
-    return engine.get_supported_languages()
+    # Use centralized language utilities for consistency
+    return get_all_supported_languages('whisper')
 
 def is_language_supported(language: str) -> bool:
     """

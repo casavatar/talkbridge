@@ -92,7 +92,7 @@ class EventBus:
     
     def __init__(self):
         """Initialize the event bus."""
-        self.logger = logging.getLogger("talkbridge.ui.events")
+        self.logger = logging.getLogger("talkbridge.web.events")
         self._subscribers: Dict[str, List[Callable]] = {
             "transcript": [],
             "translation": [],
@@ -199,7 +199,7 @@ class EventHandler:
     def __init__(self, event_bus: EventBus):
         """Initialize with event bus reference."""
         self.event_bus = event_bus
-        self.logger = logging.getLogger(f"talkbridge.ui.{self.__class__.__name__.lower()}")
+        self.logger = logging.getLogger(f"talkbridge.web.{self.__class__.__name__.lower()}")
         
     def subscribe_to_events(self) -> None:
         """Override to subscribe to relevant events."""

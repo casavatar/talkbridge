@@ -30,16 +30,13 @@ help:
 
 run-dev:
 	@echo "🚀 Starting TalkBridge in development mode..."
-	conda activate talkbridge && streamlit run src/ui/web_interface.py --server.port=8000 --server.address=0.0.0.0
+	conda activate talkbridge && python -m talkbridge.web --host=0.0.0.0 --port=8000 --debug
 
 run-prod:
 	@echo "🚀 Starting TalkBridge in production mode (local)..."
-	conda activate talkbridge && streamlit run src/ui/web_interface.py \
-		--server.port=8000 \
-		--server.address=127.0.0.1 \
-		--server.maxUploadSize=200 \
-		--server.enableCORS=false \
-		--server.enableXsrfProtection=true
+	conda activate talkbridge && python -m talkbridge.web \
+		--host=127.0.0.1 \
+		--port=8000
 
 install-systemd:
 	@echo "📦 Installing systemd service..."

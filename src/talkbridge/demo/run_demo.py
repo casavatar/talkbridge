@@ -77,7 +77,7 @@ def run_web_demo():
     print("📝 To run the web demo, use:")
     print("   streamlit run src/demo/demo_ui.py")
     print("\nOr integrate with the main web interface:")
-    print("   streamlit run src/ui/web_interface.py")
+    print("   python -m talkbridge.web")
 
 def show_config():
     """Show demo configuration."""
