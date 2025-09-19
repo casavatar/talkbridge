@@ -19,8 +19,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 # Add src to path for imports
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+.parent.parent / "src"))
 
 from demo.demo_config import (
     is_demo_mode, get_demo_setting, get_demo_file_path,
@@ -37,7 +36,6 @@ from demo.demo_api import (
     get_api_instance, get_tts_api, get_stt_api, get_llm_api,
     get_translation_api, get_animation_api, get_audio_api
 )
-
 
 class TestDemoConfig(unittest.TestCase):
     """Test demo configuration functionality."""
@@ -86,7 +84,6 @@ class TestDemoConfig(unittest.TestCase):
                         path = Path(temp_dir) / f"{key}.txt"
                         if path.suffix == '.txt':
                             self.assertTrue(path.exists())
-
 
 class TestDemoRunner(unittest.TestCase):
     """Test demo runner functionality."""
@@ -235,7 +232,6 @@ class TestDemoRunner(unittest.TestCase):
         self.assertEqual(self.demo_runner.current_step, 0)
         self.assertEqual(self.demo_runner.conversation_history, [])
         self.assertFalse(self.demo_runner.is_running)
-
 
 class TestDemoAPI(unittest.TestCase):
     """Test demo API wrappers."""
@@ -387,7 +383,6 @@ class TestDemoAPI(unittest.TestCase):
         self.assertIn("format", info)
         self.assertIn("status", info)
 
-
 class TestDemoIntegration(unittest.TestCase):
     """Test demo module integration."""
     
@@ -428,7 +423,6 @@ class TestDemoIntegration(unittest.TestCase):
             
             audio_api = get_audio_api()
             self.assertIsInstance(audio_api, DemoAudioAPI)
-
 
 if __name__ == "__main__":
     unittest.main() 

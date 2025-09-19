@@ -24,7 +24,7 @@ TalkBridge is an offline AI voice assistant system that processes audio input, c
 python config/setup_conda_desktop.py
 
 # Manual setup
-conda env create -f config/environment-desktop.yml
+conda env create -f config/environment-desktop.yaml
 conda activate talkbridge-desktop
 
 # Desktop application

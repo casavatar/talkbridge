@@ -66,6 +66,35 @@ python config/error_diagnostic.py
 python config/post_install_fix.py
 ```
 
+**Problem**: Wayland display issues (Linux)
+```bash
+# Check if running on Wayland
+echo $WAYLAND_DISPLAY
+echo $XDG_SESSION_TYPE
+
+# TalkBridge automatically detects and fixes Wayland issues, but if problems persist:
+
+# Force X11 mode (temporary)
+export GDK_BACKEND=x11
+export QT_QPA_PLATFORM=xcb
+python src/desktop/main.py
+
+# Check environment info
+python -c "
+from src.desktop.ui.ui_utils import get_ui_environment_info
+import json
+print(json.dumps(get_ui_environment_info(), indent=2))
+"
+```
+
+**Wayland-specific symptoms**:
+- Blurry or pixelated text in the desktop application
+- UI elements appearing at wrong sizes
+- Window positioning problems
+- Font rendering issues
+
+**Note**: TalkBridge automatically applies Wayland fixes at startup. No manual configuration required.
+
 #### 🌐 Web Interface Issues
 
 **Problem**: Streamlit won't start
@@ -201,7 +230,7 @@ grep "audio" data/logs/app.log
 - **Web Interface**: Responsive Streamlit dashboard with real-time updates
 - **CLI Access**: Command-line interface for automation and scripting
 - **API Integration**: RESTful API for third-party integration
-- **Cross-platform**: Windows, macOS, and Linux support
+- **Cross-platform**: Windows, macOS, and Linux support with automatic Wayland optimization
 
 ### 🤖 **AI Integration**
 - **Local LLM Support**: Ollama integration with streaming responses
@@ -224,6 +253,13 @@ grep "audio" data/logs/app.log
 - **Multi-device Support**: Automatic device detection and selection
 - **Format Support**: Multiple audio formats with automatic conversion
 - **Streaming Audio**: Real-time audio streaming and processing
+
+### 🛠️ **Platform Optimizations**
+- **Wayland Support**: Automatic detection and fixes for Linux Wayland display server
+- **Display Scaling**: Intelligent scaling adjustments for high-DPI displays
+- **Font Rendering**: Enhanced text clarity across different display systems
+- **Cross-Platform UI**: Consistent user experience across Windows, macOS, and Linux
+- **Environment Detection**: Comprehensive OS and display server detection with automatic optimization
 
 ## 📁 Project Structure
 
@@ -297,6 +333,9 @@ talkbridge/
 │   │       │   └── login_dialog.py   # Authentication dialog
 │   │       ├── services/       # Backend integration
 │   │       │   └── core_bridge.py    # Service coordinator
+│   │       ├── ui/             # Platform utilities
+│   │       │   ├── ui_utils.py       # Wayland fixes and platform utilities
+│   │       │   └── theme.py          # Unified design system
 │   │       └── windows/        # Additional windows
 │   │           └── dashboard.py      # Service status dashboard
 │   │

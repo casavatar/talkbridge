@@ -1,0 +1,117 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "talkbridge"
+version = "0.1.0"
+description = "AI-powered voice interaction and conversation platform"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "TalkBridge Team", email = "team@talkbridge.ai"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers", 
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    # Core dependencies
+    "numpy>=1.21.0,<2.0.0",
+    "matplotlib>=3.5.0,<4.0.0",
+    "scipy>=1.7.0,<2.0.0",
+    "requests>=2.25.0,<3.0.0",
+    
+    # Audio processing
+    "sounddevice>=0.4.6",
+    "librosa>=0.10.0,<1.0.0",
+    "soundfile>=0.12.1",
+    
+    # Speech-to-Text (STT)
+    "openai-whisper>=20231117",
+    
+    # Machine Learning and AI
+    "torch>=2.0.0",
+    "torchaudio>=2.0.0",
+    "transformers>=4.20.0,<5.0.0",
+    
+    # Data handling
+    "pyyaml>=6.0",
+    
+    # Security and authentication
+    "argon2-cffi>=23.1.0",
+    "python-dotenv>=1.0.0",
+    
+    # Utilities
+    "python-dotenv>=1.0.0",
+    "click>=8.0.0,<9.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+]
+desktop = [
+    "customtkinter>=5.0.0",
+    "pillow>=9.0.0",
+    "pygame>=2.5.0,<3.0.0",
+]
+web = [
+    "flask>=2.0.0",
+    "uvicorn>=0.18.0",
+    "fastapi>=0.95.0",
+]
+
+[project.scripts]
+talkbridge = "talkbridge:run_app"
+talkbridge-desktop = "talkbridge.desktop.main:main"
+talkbridge-web = "talkbridge.ui.web_server:main"
+
+[project.urls]
+Homepage = "https://github.com/casavatar/talkbridge"
+Repository = "https://github.com/casavatar/talkbridge"
+Issues = "https://github.com/casavatar/talkbridge/issues"
+Documentation = "https://github.com/casavatar/talkbridge/blob/main/README.md"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["talkbridge*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md", "*.yml", "*.yaml", "*.json", "*.html", "*.css", "*.js"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+known_first_party = ["talkbridge"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true

@@ -15,7 +15,7 @@ This directory contains all the scripts and configuration files needed to run Ta
 
 ### Configuration Files
 
-- **`environment-desktop.yml`** - Main Conda environment configuration
+- **`environment-desktop.yaml`** - Main Conda environment configuration
 - **`environment-desktop-simple.yml.backup`** - Simplified configuration (backup)
 - **`config.yaml`** - Application configuration
 
@@ -147,7 +147,7 @@ python diagnostic.py --fix
 ## 📝 Notes
 
 - Scripts automatically detect the operating system
-- `environment-desktop.yml` is used preferentially over the simple version
+- `environment-desktop.yaml` is used preferentially over the simple version
 - All paths are relative to the project root directory
 - Post-installation fixes handle common Linux/Wayland compatibility issues
 - Created launcher scripts include environment fixes automatically

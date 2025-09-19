@@ -29,6 +29,13 @@ TalkBridge is a comprehensive real-time voice translation and communication plat
 - **Web Application**: Streamlit-based responsive web interface
 - **API Access**: Direct API access for integration
 - **Demo Mode**: Comprehensive simulation system
+- **Cross-Platform Compatibility**: Automatic optimization for Linux (Wayland/X11), Windows, and macOS
+
+### 🔧 Platform Optimizations
+- **Wayland Support**: Automatic detection and fixes for Wayland display server
+- **Display Scaling**: Intelligent scaling adjustments for different display configurations
+- **Font Rendering**: Enhanced text clarity across various display systems
+- **Environment Detection**: Comprehensive OS and display server detection
 
 ### 🔐 Security & Authentication
 - **Enhanced Security**: SHA-256 salted password hashing
@@ -71,7 +78,8 @@ talkbridge/
 
 ### Core Technologies
 - **Python 3.8+**: Main programming language
-- **PySide6**: Desktop GUI framework
+- **PySide6**: Desktop GUI framework with cross-platform support
+- **CustomTkinter**: Enhanced Tkinter with platform-specific optimizations
 - **Streamlit**: Web application framework
 - **FastAPI**: API backend (optional)
 

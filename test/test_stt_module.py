@@ -16,12 +16,10 @@ Date: 2024-01-01
 import unittest
 import tempfile
 import os
-import sys
 from pathlib import Path
 
 # Add src to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
+.parent.parent / "src"))
 
 class TestSTTModule(unittest.TestCase):
     """Test cases for the STT module."""
@@ -240,7 +238,6 @@ class TestSTTModule(unittest.TestCase):
         self.assertEqual(SAMPLE_RATE, 16000)
         self.assertEqual(CHANNELS, 1)
         self.assertGreater(MAX_AUDIO_DURATION, 0)
-
 
 if __name__ == "__main__":
     unittest.main() 

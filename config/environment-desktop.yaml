@@ -5,7 +5,7 @@
 # Python 3.11 for maximum compatibility with TTS, argos-translate, mediapipe
 #
 # Environment creation:
-# conda env create -f environment-desktop.yml
+# conda env create -f environment-desktop.yaml
 #
 # Activation:
 # conda activate talkbridge-desktop-env

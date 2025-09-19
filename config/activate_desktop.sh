@@ -25,6 +25,7 @@ if [ $? -eq 0 ]; then
     # Start a new shell with the environment activated
     exec bash
 else
-    echo "✗ Failed to activate environment"
-    echo "Please run: conda env create -f environment-desktop.yml"
+    echo "❌ Desktop environment not found"
+    echo "Please run: conda env create -f environment-desktop.yaml"
+    exit 1
 fi

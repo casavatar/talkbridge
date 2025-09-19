@@ -4,11 +4,10 @@ Simple test script for the animation system.
 """
 
 import time
-import sys
 import os
 
 # Add the src directory to the path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+))
 
 def test_loading_animations():
     """Test loading animations."""

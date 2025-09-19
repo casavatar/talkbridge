@@ -34,6 +34,16 @@ import argparse
 from pathlib import Path
 from typing import List, Optional, Tuple
 
+# Add the src directory to path to import centralized logging
+config_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(config_dir)
+src_dir = os.path.join(project_root, 'src')
+try:
+    from logging_config import get_logger, log_exception
+    USE_CENTRALIZED_LOGGING = True
+except ImportError:
+    USE_CENTRALIZED_LOGGING = False
+
 # Color codes for terminal output
 class Colors:
     HEADER = '\033[95m'
@@ -48,24 +58,39 @@ class Colors:
 
 def print_header(message: str) -> None:
     """Print a formatted header message."""
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.info(f"SETUP: {message}")
     print(f"\n{Colors.HEADER}{Colors.BOLD}{'='*60}{Colors.ENDC}")
     print(f"{Colors.HEADER}{Colors.BOLD}{message:^60}{Colors.ENDC}")
     print(f"{Colors.HEADER}{Colors.BOLD}{'='*60}{Colors.ENDC}\n")
 
 def print_success(message: str) -> None:
     """Print a success message."""
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.info(f"SUCCESS: {message}")
     print(f"{Colors.OKGREEN}✓ {message}{Colors.ENDC}")
 
 def print_warning(message: str) -> None:
     """Print a warning message."""
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.warning(message)
     print(f"{Colors.WARNING}⚠ {message}{Colors.ENDC}")
 
 def print_error(message: str) -> None:
     """Print an error message."""
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.error(message)
     print(f"{Colors.FAIL}✗ {message}{Colors.ENDC}")
 
 def print_info(message: str) -> None:
     """Print an info message."""
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.info(message)
     print(f"{Colors.OKBLUE}ℹ {message}{Colors.ENDC}")
 
 def run_command(command: List[str], description: str, capture_output: bool = False) -> Tuple[bool, Optional[str]]:
@@ -81,7 +106,11 @@ def run_command(command: List[str], description: str, capture_output: bool = Fal
         Tuple of (success, output)
     """
     print_info(f"Running: {description}")
-    print(f"Command: {' '.join(command)}")
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.debug(f"Command: {' '.join(command)}")
+    else:
+        print(f"Command: {' '.join(command)}")
     
     try:
         if capture_output:
@@ -117,8 +146,8 @@ def check_conda_installation() -> bool:
 def check_environment_file() -> bool:
     """Check if the environment.yml file exists."""
     # We're running from config directory, so check current directory
-    simple_env_file = Path("environment-desktop-simple.yml")
-    full_env_file = Path("environment-desktop.yml")
+    simple_env_file = Path("environment-desktop-simple.yaml")
+    full_env_file = Path("environment-desktop.yaml")
     
     if simple_env_file.exists():
         print_success(f"Environment file found: {simple_env_file}")
@@ -127,7 +156,7 @@ def check_environment_file() -> bool:
         print_success(f"Environment file found: {full_env_file}")
         return True
     else:
-        print_error("Environment file not found: environment-desktop-simple.yml or environment-desktop.yml")
+        print_error("Environment file not found: environment-desktop-simple.yaml or environment-desktop.yaml")
         return False
 
 def create_conda_environment(env_name: str = "talkbridge-desktop-env") -> bool:
@@ -154,8 +183,9 @@ def create_conda_environment(env_name: str = "talkbridge-desktop-env") -> bool:
                     "Deactivating current environment",
                     capture_output=True
                 )
-            except:
-                pass  # Ignore if deactivate fails
+            except (subprocess.CalledProcessError, FileNotFoundError, OSError) as e:
+                # Ignore if deactivate fails - environment might not be active
+                pass
             
             # Force remove with --all flag
             success, _ = run_command(
@@ -178,10 +208,10 @@ def create_conda_environment(env_name: str = "talkbridge-desktop-env") -> bool:
             return True
     
     # Create the environment - try simple version first
-    simple_env_file = Path("environment-desktop-simple.yml")
-    full_env_file = Path("environment-desktop.yml")
+    simple_env_file = Path("environment-desktop-simple.yaml")
+    full_env_file = Path("environment-desktop.yaml")
     
-    env_file_to_use = "environment-desktop-simple.yml" if simple_env_file.exists() else "environment-desktop.yml"
+    env_file_to_use = "environment-desktop-simple.yaml" if simple_env_file.exists() else "environment-desktop.yaml"
     
     print_info(f"Creating environment from: {env_file_to_use}")
     success, _ = run_command(
@@ -250,7 +280,7 @@ if %ERRORLEVEL% EQU 0 (
     echo.
 ) else (
     echo ✗ Failed to activate environment
-    echo Please run: conda env create -f environment-desktop.yml
+    echo Please run: conda env create -f environment-desktop.yaml
     pause
 )
 """
@@ -288,7 +318,7 @@ if [ $? -eq 0 ]; then
     exec bash
 else
     echo "✗ Failed to activate environment"
-    echo "Please run: conda env create -f environment-desktop.yml"
+    echo "Please run: conda env create -f environment-desktop.yaml"
 fi
 """
     
@@ -302,6 +332,11 @@ fi
 def print_installation_summary(env_name: str = "talkbridge-desktop-env") -> None:
     """Print installation summary and next steps."""
     print_header("INSTALLATION COMPLETE")
+    
+    if USE_CENTRALIZED_LOGGING:
+        logger = get_logger("talkbridge.config.setup")
+        logger.info(f"TalkBridge Desktop environment {env_name} is ready!")
+        logger.info(f"Environment details: Python 3.11, PySide6, PyTorch")
     
     print(f"{Colors.OKGREEN}🎉 TalkBridge Desktop environment is ready!{Colors.ENDC}\n")
     

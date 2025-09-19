@@ -19,7 +19,7 @@ Comprehensive overview of all modules in the TalkBridge real-time voice translat
 
 ### Audio Module (`src/audio/`)
 
-**Purpose**: Comprehensive audio processing system handling capture, playback, effects, and generation.
+**Purpose**: Comprehensive audio processing system handling capture, playback, effectwws, and generation.
 
 **Components**:
 - `capture.py`: Real-time audio capture from microphone using PyAudio with configurable parameters
@@ -306,6 +306,10 @@ manage_camera_devices() -> List[dict]
 #### Services (`src/desktop/services/`)
 - `core_bridge.py`: Service integration bridge coordinating all backend modules
 
+#### UI Utilities (`src/desktop/ui/`)
+- `ui_utils.py`: Platform-specific UI utilities and cross-platform fixes
+- `theme.py`: Unified design system and theming for CustomTkinter components
+
 #### Windows (`src/desktop/windows/`)
 - `dashboard.py`: Service status dashboard with real-time monitoring
 
@@ -323,6 +327,13 @@ manage_camera_devices() -> List[dict]
 - **Service Monitoring**: Real-time status of all backend services
 - **Authentication**: Secure login with session management
 - **Configuration**: Comprehensive settings management
+- **Platform Optimization**: Automatic detection and fixes for Wayland and other display servers
+
+**Platform-Specific Features**:
+- **Wayland Support**: Automatic detection and optimization for Wayland display server
+- **Cross-platform Compatibility**: OS-specific fixes for Linux, Windows, and macOS
+- **Display Scaling**: Intelligent scaling adjustments for different display configurations
+- **Font Rendering**: Enhanced text clarity on various display systems
 
 ### Web Interface Module (`src/ui/`)
 
@@ -389,6 +400,56 @@ manage_camera_devices() -> List[dict]
 - **Configuration Management**: Hot-reloadable configuration with validation
 - **Performance Monitoring**: System performance tracking and optimization
 - **Data Persistence**: Reliable data storage with backup and recovery
+
+### Desktop UI Utilities Module (`src/desktop/ui/`)
+
+**Purpose**: Platform-specific UI utilities and cross-platform compatibility system for desktop applications.
+
+**Components**:
+- `ui_utils.py`: Platform detection, Wayland fixes, and UI configuration utilities
+- `theme.py`: Unified design system and theming for CustomTkinter components
+
+**Key Functions** (from `ui_utils.py`):
+```python
+# Operating system and display server detection
+detect_operating_system() -> str
+is_wayland_session() -> bool
+
+# Platform-specific fixes and optimizations  
+apply_wayland_fixes() -> None
+configure_ui() -> None
+
+# Environment and diagnostic information
+get_display_info() -> dict
+get_ui_environment_info() -> dict
+
+# UI utilities for consistent display
+clean_text(text: str) -> str
+icon(name: str, size: Tuple[int, int]) -> Optional[ctk.CTkImage]
+```
+
+**Dependencies**:
+- `customtkinter`: Modern GUI framework
+- `platform`: OS detection and system information
+- `subprocess`: System command execution for display server detection
+- `os`: Environment variable management
+- `PIL` (optional): Image processing for icons
+
+**Key Features**:
+- **Wayland Detection**: Comprehensive Wayland display server detection using multiple methods
+- **Platform-Specific Fixes**: Automatic application of fixes for CustomTkinter on Wayland
+- **Environment Variable Management**: Intelligent setting of display server compatibility variables
+- **Cross-platform Support**: OS-specific optimizations for Linux, Windows, and macOS
+- **Display Scaling**: Automatic scaling adjustments to prevent blurry text and UI elements
+- **Font Rendering**: Enhanced text clarity through display server configuration
+- **Diagnostic Tools**: Comprehensive environment and fix status reporting
+
+**Wayland-Specific Fixes**:
+- Forces X11 backend through XWayland for better CustomTkinter compatibility
+- Sets explicit scaling factors to prevent fractional scaling issues
+- Configures font rendering improvements for text clarity
+- Disables problematic auto-scaling features that cause UI issues
+- Applied automatically at startup when Wayland is detected
 
 ### Authentication Module (`src/auth/`)
 

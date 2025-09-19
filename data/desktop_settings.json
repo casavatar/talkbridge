@@ -1,6 +1,6 @@
 {
   "audio": {
-    "input_device": "Default",
+    "input_device": "USB Condenser Microphone: Audio (hw:0,0)",
     "output_device": "Default",
     "sample_rate": 16000,
     "volume": 80
@@ -12,10 +12,10 @@
     "auto_speak": true
   },
   "translation": {
-    "service": "Google Translate",
+    "service": "Local Model",
     "source_lang": "Auto-detect",
     "target_lang": "English",
-    "auto_translate": true
+    "auto_translate": false
   },
   "avatar": {
     "model": "Default Avatar",

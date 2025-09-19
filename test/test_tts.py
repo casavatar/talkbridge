@@ -6,12 +6,11 @@ This script tests the TTS module functionality to ensure it works correctly.
 """
 
 import os
-import sys
 import tempfile
 from pathlib import Path
 
 # Add src to path for imports
-sys.path.append(str(Path(__file__).parent))
+.parent))
 
 def test_imports():
     """Test that all modules can be imported correctly."""

@@ -20,7 +20,7 @@ fi
 if ! conda env list | grep -q "talkbridge-desktop-env"; then
     echo -e "${RED}❌ Environment 'talkbridge-desktop-env' not found.${NC}"
     echo -e "${YELLOW}💡 Please create it first with:${NC}"
-    echo "   conda env create -f config/environment-desktop.yml"
+    echo "   conda env create -f config/environment-desktop.yaml"
     exit 1
 fi
 

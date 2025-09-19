@@ -13,7 +13,8 @@ Comprehensive overview of the TalkBridge real-time voice translation and communi
 7. [Data Pipeline](#data-pipeline)
 8. [Security Architecture](#security-architecture)
 9. [Performance Considerations](#performance-considerations)
-10. [Deployment Architecture](#deployment-architecture)
+10. [Platform Compatibility](#platform-compatibility)
+11. [Deployment Architecture](#deployment-architecture)
 
 ## System Overview
 
@@ -643,6 +644,85 @@ Application Metrics
 ├── Animation smoothness
 └── User satisfaction
 ```
+
+## Platform Compatibility
+
+### Cross-Platform Support
+
+TalkBridge is designed to run seamlessly across multiple operating systems and display environments, with automatic detection and optimization for each platform.
+
+### Supported Platforms
+
+**Operating Systems**:
+- **Linux**: Full support with automatic Wayland/X11 detection and optimization
+- **Windows**: Native Windows 10+ support with Windows-specific optimizations
+- **macOS**: macOS 10.14+ support with Retina display optimization
+
+**Display Servers (Linux)**:
+- **X11**: Traditional X Window System with standard GUI behavior
+- **Wayland**: Modern display server with automatic compatibility fixes
+
+### Platform-Specific Optimizations
+
+#### Linux Wayland Support
+```
+Wayland Detection and Fixes:
+├── Automatic Wayland session detection
+│   ├── Environment variable analysis (WAYLAND_DISPLAY, XDG_SESSION_TYPE)
+│   ├── Backend detection (GDK_BACKEND, QT_QPA_PLATFORM) 
+│   └── System query integration (loginctl)
+├── CustomTkinter compatibility fixes
+│   ├── Force X11 backend through XWayland
+│   ├── Explicit scaling factor configuration
+│   ├── Font rendering improvements
+│   └── Window behavior optimization
+└── Environment variable management
+    ├── GDK_BACKEND=x11 (Force X11 compatibility)
+    ├── QT_QPA_PLATFORM=xcb (Qt X11 backend)
+    ├── GDK_SCALE=1 (Prevent fractional scaling)
+    └── Enhanced font rendering settings
+```
+
+**Wayland Issues Addressed**:
+- **Blurry Text Rendering**: Fixed through X11 backend forcing and font configuration
+- **Scaling Problems**: Prevented by disabling fractional scaling and setting explicit factors
+- **Window Positioning**: Mitigated using XWayland compatibility layer
+- **UI Element Clarity**: Enhanced through display server standardization
+
+#### Cross-Platform UI Framework
+```
+UI Compatibility System:
+├── Platform detection utilities
+│   ├── Operating system identification
+│   ├── Display server detection (Linux)
+│   └── Display configuration analysis
+├── Automatic fix application
+│   ├── Environment variable setup
+│   ├── Scaling adjustments
+│   └── Rendering optimizations
+└── Diagnostic and monitoring tools
+    ├── Environment information reporting
+    ├── Fix status validation
+    └── Performance monitoring
+```
+
+### Implementation Details
+
+**Desktop UI Utilities** (`src/desktop/ui/ui_utils.py`):
+- `detect_operating_system()`: Cross-platform OS detection
+- `is_wayland_session()`: Comprehensive Wayland detection using multiple methods
+- `apply_wayland_fixes()`: Automatic application of Wayland-specific fixes
+- `configure_ui()`: Platform-aware UI configuration with automatic optimizations
+- `get_ui_environment_info()`: Comprehensive environment and fix status reporting
+
+**Key Features**:
+- **Automatic Detection**: Zero-configuration platform detection and optimization
+- **Backward Compatibility**: All fixes applied only when needed, maintaining compatibility
+- **Comprehensive Coverage**: Addresses common issues across different display systems
+- **Performance Optimized**: Minimal overhead with intelligent caching and detection
+- **Diagnostic Tools**: Built-in tools for troubleshooting platform-specific issues
+
+**Note**: Platform-specific fixes are applied automatically at application startup through the `configure_ui()` function, ensuring optimal performance across all supported platforms without requiring user intervention.
 
 ## Deployment Architecture
 

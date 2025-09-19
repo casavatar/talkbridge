@@ -2,8 +2,7 @@
 # ==============================================
 
 # Core GUI Framework
-customtkinter>=5.2.0
-tkinter  # Usually included with Python
+customtkinter>=5.2.1
 
 # Audio Processing
 pyaudio>=0.2.11
