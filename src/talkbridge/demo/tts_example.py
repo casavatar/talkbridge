@@ -21,11 +21,12 @@ Functions:
 - main: Run all examples.
 ======================================================================
 """
+from talkbridge.tts import VoiceCloner, TTSEngine
+
 
 import os
 from ..pathlib import Path
 
-.parent))
 
 from ..tts import synthesize_voice, setup_voice_cloning, get_synthesis_info
 

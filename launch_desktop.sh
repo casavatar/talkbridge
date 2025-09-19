@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
-# TalkBridge Desktop Launcher
+set -euo pipefai# Ensure centralized logs directory exists
+LOG_DIR="$ROOT_DIR/data/logs"
+mkdir -p "$LOG_DIR"
+echo -e "${GREEN}📄 Centralized logs directory: $LOG_DIR${NC}" TalkBridge Desktop Launcher
 # ==========================
 # Launches the desktop UI with clean paths, virtual environment support, and unified logging.
 

@@ -2,12 +2,14 @@
 """
 Simple test script for the animation system.
 """
+import pytest
+from talkbridge.animation import AudioVisualizer, LoadingAnimation
+
 
 import time
 import os
 
 # Add the src directory to the path
-))
 
 def test_loading_animations():
     """Test loading animations."""

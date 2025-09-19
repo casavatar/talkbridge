@@ -12,104 +12,127 @@ Version: 2.0
 Requirements:
 - customtkinter
 - tkinter
-- opencv-python (opti    def show_camera_unavailable_message(self):
-        """Display camera unavailable message to user."""
-        try:
-            # Update UI on main thread
-            self.update_status("Camera not available")
-            if hasattr(self, 'start_camera_button'):
-                self.start_camera_button.configure(text="Camera Unavailable", state="disabled")
-        except Exception as e:
-            self.logger.error(f"Failed to update camera unavailable message: {e}")
-    
-    def _retry_frame_read_async(self, retry_count: int = 3):
-        """Retry frame reading asynchronously without blocking UI."""
-        def retry_read():
-            for retry in range(retry_count):
-                if not self.cap or not self.cap.isOpened():
-                    return False
-                    
-                ret, frame = self.cap.read()
-                if ret and frame is not None:
-                    # Schedule frame processing on UI thread
-                    ui_thread_call(self._process_successful_frame, frame)
-                    return True
-                    
-                # Small delay between retries (in background thread)
-                import threading
-                threading.Event().wait(0.01)
-            
-            # All retries failed
-            return False
-        
-        def on_retry_complete(success):
-            if not success:
-                self.logger.error("Multiple frame read failures - stopping camera")
-                self.stop_camera()
-                self._show_camera_fallback("Camera read error")
-                if MODERN_SYSTEMS_AVAILABLE:
-                    handle_user_facing_error(
-                        ErrorCategory.AUDIO_DEVICE_ERROR,  # Using closest category
-                        details="Camera frame read failures",
-                        context="Camera"
-                    )
-        
-        def on_retry_error(error):
-            self.logger.error(f"Error during frame read retry: {error}")
-            self.stop_camera()
-            self._show_camera_fallback("Camera error")
-        
-        # Run retry logic asynchronously
-        if MODERN_SYSTEMS_AVAILABLE:
-            run_async(
-                retry_read,
-                on_success=on_retry_complete,
-                on_error=on_retry_error,
-                task_name="camera_frame_retry"
-            )
-        else:
-            # Fallback: run in separate thread
-            threading.Thread(target=lambda: on_retry_complete(retry_read()), daemon=True).start()
-    
-    def _process_successful_frame(self, frame):
-        """Process a successfully read frame (called on UI thread)."""
-        try:
-            # Flip frame horizontally for mirror effect
-            frame = cv2.flip(frame, 1)
-            
-            # Process face detection if enabled
-            if self.face_mesh and MEDIAPIPE_AVAILABLE:
-                try:
-                    frame = self.process_face_detection(frame)
-                except Exception as face_error:
-                    self.logger.warning(f"Face detection error: {face_error}")
-                    # Continue without face detection
-            
-            # Resize frame to fit canvas
-            try:
-                frame = cv2.resize(frame, (400, 300))
-            except Exception as resize_error:
-                self.logger.error(f"Frame resize error: {resize_error}")
-                return
-            
-            # Convert to display format
-            self._display_frame(frame)
-            
-        except Exception as e:
-            self.logger.error(f"Error processing frame: {e}")ediapipe (optional)
-======================================================================
+- opencv-python (optional)
+- mediapipe (optional)
 """
 
-import logging
-import time
+# Import core modules
+import asyncio
 import threading
-from typing import Optional
-import tkinter as tk
+import time
+import logging
+from typing import Optional, Tuple, Any
+from pathlib import Path
+
+# Import GUI framework
 import customtkinter as ctk
+import tkinter as tk
+from tkinter import ttk
+
+# Import centralized logging and exception handling
+from talkbridge.logging_config import get_logger, log_exception
+from talkbridge.utils.exceptions import UIError, create_ui_error
+
+# Import desktop components
+from talkbridge.desktop.ui.events import EventBus, emit_event, register_handler
+from talkbridge.desktop.ui.theme import ThemeManager
+from talkbridge.desktop.ui.controls import create_button, create_frame
+from talkbridge.desktop.ui.utilities import ui_thread_call, schedule_ui_update
+
+# Optional imports with fallbacks
+try:
+    import cv2
+    OPENCV_AVAILABLE = True
+except ImportError:
+    OPENCV_AVAILABLE = False
+    cv2 = None
+
+try:
+    import mediapipe as mp
+    MEDIAPIPE_AVAILABLE = True
+except ImportError:
+    MEDIAPIPE_AVAILABLE = False
+    mp = None
+
+# Get logger for this module
+logger = get_logger(__name__)
+
+# Check for modern systems capabilities
+try:
+    import numpy as np
+    MODERN_SYSTEMS_AVAILABLE = True
+except ImportError:
+    MODERN_SYSTEMS_AVAILABLE = False
+    logger.warning("NumPy not available. Some animation features will be disabled.")
+
+# Handle missing dependencies gracefully
+if not OPENCV_AVAILABLE:
+    logger.warning("OpenCV not available. Camera features will be disabled.")
+
+if not MEDIAPIPE_AVAILABLE:
+    logger.warning("MediaPipe not available. Face detection will be disabled.")
+
+# Constants and global variables
+DEFAULT_AVATAR_SIZE = (400, 300)
+CAMERA_FPS = 30
+DEFAULT_BACKGROUND_COLOR = "#2B2B2B"
+
+# Face detection models
+try:
+    if MEDIAPIPE_AVAILABLE:
+        mp_face_detection = mp.solutions.face_detection
+        mp_drawing = mp.solutions.drawing_utils
+except Exception as e:
+    logger.error(f"Error initializing MediaPipe components: {e}")
+
+# Global utility functions and error handling
+try:
+    from talkbridge.utils.error_recovery import handle_user_facing_error, ErrorCategory
+    ERROR_HANDLING_AVAILABLE = True
+except ImportError:
+    ERROR_HANDLING_AVAILABLE = False
+
+try:
+    from talkbridge.utils.async_utils import run_async
+    ASYNC_UTILS_AVAILABLE = True
+except ImportError:
+    ASYNC_UTILS_AVAILABLE = False
+
+try:
+    from talkbridge.utils.logging_utils import add_error_context
+    LOGGING_UTILS_AVAILABLE = True
+except ImportError:
+    LOGGING_UTILS_AVAILABLE = False
+
+# Handle missing MediaPipe gracefully
+try:
+    import mediapipe as mp
+    MEDIAPIPE_AVAILABLE = True
+except ImportError:
+    MEDIAPIPE_AVAILABLE = False
+    logger = get_logger(__name__)
+    logger.warning("Warning: MediaPipe not available. Face detection will be disabled.")
+
+class AvatarTab:
+    """
+    Avatar interface tab with CustomTkinter.
+    
+    Features:
+    - Avatar display area
+    - Webcam integration (if available)
+    - Animation controls
+    - Face sync settings
+    - Interactive animations
+    - Quality settings
+    """
+
+    def __init__(self, parent, state_manager=None, core_bridge=None):
+        """Initialize the avatar tab."""
+        self.parent = parent
 
 # Import notification and error handling systems
 try:
-    from talkbridge.web.notifier import notify_error, notify_warn, notify_info
+    from talkbridge.ui.notifier import notify_error, notify_warn, notify_info
     from talkbridge.errors import ErrorCategory, handle_user_facing_error
     from talkbridge.utils.async_runner import run_async, ui_thread_call
     MODERN_SYSTEMS_AVAILABLE = True

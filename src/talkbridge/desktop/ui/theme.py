@@ -22,6 +22,14 @@ import os
 from typing import Dict, Any
 from dataclasses import dataclass
 
+# Try to import customtkinter for theme management
+try:
+    import customtkinter as ctk
+    CUSTOMTKINTER_AVAILABLE = True
+except ImportError:
+    CUSTOMTKINTER_AVAILABLE = False
+    ctk = None
+
 @dataclass
 class ColorPalette:
     """Unified color palette for the application."""
@@ -466,6 +474,196 @@ class UXGuidelines:
     FOCUS_RING_WIDTH = 2           # Focus indicator width
     FOCUS_RING_OFFSET = 2          # Focus indicator offset
 
+class ThemeManager:
+    """Centralized theme manager for TalkBridge Desktop UI."""
+    
+    _current_theme = "dark"  # Default to dark theme
+    _current_color_theme = "blue"  # Default color theme
+    _theme_initialized = False
+    
+    @classmethod
+    def initialize(cls) -> None:
+        """Initialize the theme system. Call this once at application startup."""
+        if cls._theme_initialized:
+            return
+            
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        try:
+            # Apply font scaling based on environment
+            apply_font_scaling()
+            
+            # Set default CustomTkinter theme if available
+            if CUSTOMTKINTER_AVAILABLE:
+                cls._apply_customtkinter_theme()
+                logger.info("Theme system initialized with CustomTkinter integration")
+            else:
+                logger.warning("CustomTkinter not available, theme system initialized without UI integration")
+            
+            cls._theme_initialized = True
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize theme system: {e}")
+            cls._theme_initialized = False
+    
+    @classmethod
+    def set_theme(cls, theme: str) -> None:
+        """Apply light/dark theme globally.
+        
+        Args:
+            theme: Theme name - "light", "dark", or "system"
+        """
+        if theme not in ("light", "dark", "system"):
+            raise ValueError(f"Unsupported theme: {theme}. Supported themes: light, dark, system")
+        
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        try:
+            cls._current_theme = theme
+            
+            if CUSTOMTKINTER_AVAILABLE:
+                ctk.set_appearance_mode(theme)
+                logger.info(f"Applied theme: {theme}")
+            else:
+                logger.warning(f"CustomTkinter not available, theme '{theme}' set but not applied to UI")
+                
+        except Exception as e:
+            logger.error(f"Failed to apply theme '{theme}': {e}")
+    
+    @classmethod
+    def get_theme(cls) -> str:
+        """Get the current theme.
+        
+        Returns:
+            Current theme name
+        """
+        return cls._current_theme
+    
+    @classmethod
+    def set_color_theme(cls, color: str) -> None:
+        """Apply a global accent color theme.
+        
+        Args:
+            color: Color theme name - "blue", "green", "dark-blue", etc.
+                  See CustomTkinter documentation for available themes.
+        """
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        try:
+            cls._current_color_theme = color
+            
+            if CUSTOMTKINTER_AVAILABLE:
+                ctk.set_default_color_theme(color)
+                logger.info(f"Applied color theme: {color}")
+            else:
+                logger.warning(f"CustomTkinter not available, color theme '{color}' set but not applied to UI")
+                
+        except Exception as e:
+            logger.error(f"Failed to apply color theme '{color}': {e}")
+    
+    @classmethod
+    def apply_accent_color(cls, color: str) -> None:
+        """Apply a global accent color. Alias for set_color_theme for backward compatibility.
+        
+        Args:
+            color: Color theme name
+        """
+        cls.set_color_theme(color)
+    
+    @classmethod
+    def get_color_theme(cls) -> str:
+        """Get the current color theme.
+        
+        Returns:
+            Current color theme name
+        """
+        return cls._current_color_theme
+    
+    @classmethod
+    def _apply_customtkinter_theme(cls) -> None:
+        """Apply the current theme configuration to CustomTkinter."""
+        if not CUSTOMTKINTER_AVAILABLE:
+            return
+            
+        # Apply current appearance mode
+        ctk.set_appearance_mode(cls._current_theme)
+        
+        # Apply current color theme  
+        ctk.set_default_color_theme(cls._current_color_theme)
+    
+    @classmethod
+    def get_theme_config(cls) -> Dict[str, Any]:
+        """Get comprehensive theme configuration for manual application.
+        
+        Returns:
+            Dictionary with all theme settings
+        """
+        return {
+            "appearance_mode": cls._current_theme,
+            "color_theme": cls._current_color_theme,
+            "customtkinter_theme": get_customtkinter_theme(),
+            "color_palette": ColorPalette,
+            "typography": Typography,
+            "spacing": Spacing,
+            "dimensions": Dimensions,
+            "font_scaling": get_font_scaling_info(),
+            "customtkinter_available": CUSTOMTKINTER_AVAILABLE,
+            "theme_initialized": cls._theme_initialized
+        }
+    
+    @classmethod
+    def apply_widget_theme(cls, widget, theme_type: str = "default", variant: str = "default") -> None:
+        """Apply theme to a specific widget.
+        
+        Args:
+            widget: Widget to apply theme to
+            theme_type: Type of theme (button, input, frame, label, etc.)
+            variant: Theme variant (primary, secondary, danger, etc.)
+        """
+        try:
+            if theme_type == "button":
+                theme_config = ComponentThemes.get_button_theme(variant)
+            elif theme_type == "input":
+                theme_config = ComponentThemes.get_input_theme()
+            elif theme_type == "frame":
+                theme_config = ComponentThemes.get_frame_theme(variant)
+            elif theme_type == "label":
+                theme_config = ComponentThemes.get_label_theme(variant)
+            elif theme_type == "combobox":
+                theme_config = ComponentThemes.get_combobox_theme()
+            elif theme_type == "checkbox":
+                theme_config = ComponentThemes.get_checkbox_theme()
+            elif theme_type == "switch":
+                theme_config = ComponentThemes.get_switch_theme()
+            elif theme_type == "progressbar":
+                theme_config = ComponentThemes.get_progressbar_theme()
+            else:
+                # Fallback to default configuration
+                theme_config = {}
+            
+            apply_theme_to_widget(widget, theme_config)
+            
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Failed to apply {theme_type} theme to widget: {e}")
+    
+    @classmethod
+    def reset_theme(cls) -> None:
+        """Reset theme to default settings."""
+        cls._current_theme = "dark"
+        cls._current_color_theme = "blue"
+        cls._theme_initialized = False
+        
+        # Reset font scaling
+        reset_font_scaling()
+        
+        # Re-initialize with defaults
+        cls.initialize()
+
 def apply_theme_to_widget(widget, theme_config: Dict[str, Any]) -> None:
     """Apply theme configuration to a widget."""
     try:
@@ -610,6 +808,7 @@ __all__ = [
     'Dimensions',
     'ComponentThemes',
     'UXGuidelines',
+    'ThemeManager',
     'get_customtkinter_theme',
     'apply_theme_to_widget',
     'detect_wayland_environment',

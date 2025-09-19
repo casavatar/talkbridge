@@ -245,3 +245,127 @@ def reset_global_event_bus() -> None:
     """Reset the global event bus (useful for testing)."""
     global _global_event_bus
     _global_event_bus = None
+
+# Standalone convenience functions that work with the global event bus
+def register_handler(event_type: str, handler: Callable) -> None:
+    """Register a handler for an event type using the global event bus."""
+    event_bus = get_global_event_bus()
+    event_bus.subscribe(event_type, handler)
+
+def emit_event(event_type: str, *args, **kwargs) -> None:
+    """Emit an event using the global event bus.
+    
+    This function provides a flexible interface for emitting various event types.
+    For predefined events, you can use specific methods like:
+    - emit_event("transcript", source="mic", text="hello", language="en")
+    - emit_event("status", message="Ready", level="info")
+    
+    Args:
+        event_type: The type of event to emit ("transcript", "translation", "status", etc.)
+        *args: Positional arguments for the event
+        **kwargs: Keyword arguments for the event
+    """
+    event_bus = get_global_event_bus()
+    
+    try:
+        # Route to appropriate EventBus method based on event type
+        if event_type == "transcript":
+            # Expected kwargs: source, text, language, confidence (optional)
+            source = kwargs.get("source")
+            text = kwargs.get("text", "")
+            language = kwargs.get("language", "en")
+            confidence = kwargs.get("confidence")
+            
+            if source is None:
+                raise ValueError("transcript event requires 'source' parameter")
+            
+            event_bus.emit_transcript(source, text, language, confidence)
+            
+        elif event_type == "translation":
+            # Expected kwargs: source, original_text, source_language, target_language, translated_text
+            source = kwargs.get("source")
+            original_text = kwargs.get("original_text", "")
+            source_language = kwargs.get("source_language", "en")
+            target_language = kwargs.get("target_language", "en")
+            translated_text = kwargs.get("translated_text", "")
+            
+            if source is None:
+                raise ValueError("translation event requires 'source' parameter")
+            
+            event_bus.emit_translation(source, original_text, source_language, target_language, translated_text)
+            
+        elif event_type == "status":
+            # Expected kwargs: message, level (optional), duration (optional)
+            message = kwargs.get("message", "")
+            level = kwargs.get("level", "info")
+            duration = kwargs.get("duration")
+            
+            event_bus.emit_status(message, level, duration)
+            
+        elif event_type == "device_change":
+            # Expected kwargs: device_type, device_id (optional), device_name (optional), is_available (optional)
+            device_type = kwargs.get("device_type")
+            device_id = kwargs.get("device_id")
+            device_name = kwargs.get("device_name")
+            is_available = kwargs.get("is_available", True)
+            
+            if device_type is None:
+                raise ValueError("device_change event requires 'device_type' parameter")
+            
+            event_bus.emit_device_change(device_type, device_id, device_name, is_available)
+            
+        elif event_type == "audio_state_change":
+            # Expected kwargs: source, is_active, device_name (optional)
+            source = kwargs.get("source")
+            is_active = kwargs.get("is_active", False)
+            device_name = kwargs.get("device_name")
+            
+            if source is None:
+                raise ValueError("audio_state_change event requires 'source' parameter")
+            
+            event_bus.emit_audio_state_change(source, is_active, device_name)
+            
+        else:
+            # For unknown event types, emit directly to subscribers with provided data
+            # This allows for custom events while maintaining error handling
+            logger = logging.getLogger(__name__)
+            if args:
+                # If positional args are provided, use the first one as event data
+                event_data = args[0] if len(args) == 1 else args
+            else:
+                # Use kwargs as event data
+                event_data = kwargs
+            
+            event_bus._emit(event_type, event_data)
+            logger.debug(f"Emitted custom event '{event_type}' with data: {event_data}")
+            
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error emitting {event_type} event: {e}", exc_info=True)
+
+# Export all public components
+__all__ = [
+    # Event data classes
+    "TranscriptEvent",
+    "TranslationEvent", 
+    "StatusEvent",
+    "DeviceEvent",
+    "AudioStateEvent",
+    # Protocols and classes
+    "UIEvents",
+    "EventBus",
+    "EventHandler",
+    # Convenience functions
+    "create_transcript_event",
+    "create_status_event",
+    # Global event bus functions
+    "get_global_event_bus",
+    "reset_global_event_bus",
+    # Standalone event functions (for backward compatibility)
+    "register_handler",
+    "emit_event",
+    # Type aliases
+    "Level",
+    "AudioSource", 
+    "DeviceType"
+]

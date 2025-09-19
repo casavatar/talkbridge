@@ -4,13 +4,14 @@ TTS Module Test Script
 
 This script tests the TTS module functionality to ensure it works correctly.
 """
+import pytest
+from talkbridge.tts import TTSEngine
+
 
 import os
 import tempfile
-from pathlib import Path
 
 # Add src to path for imports
-.parent))
 
 def test_imports():
     """Test that all modules can be imported correctly."""

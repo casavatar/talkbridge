@@ -12,7 +12,7 @@ from collections import deque
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 
-from talkbridge.web.notifier import NotifierPort, Notification, Level
+from talkbridge.ui.notifier import NotifierPort, Notification, Level
 
 logger = logging.getLogger(__name__)
 

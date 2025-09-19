@@ -121,9 +121,8 @@ Thumbs.db
 *.swo
 *~
 
-# Log files
+# Log files - centralized in data/logs/
 *.log
-logs/
 data/logs/
 
 # Data files - runtime data should not be committed

@@ -550,11 +550,11 @@ class AudioCapture:
             self.stream.start()
             self.is_recording = True
             logger.info("Microphone capture started successfully")
-            print("Microphone capture initiated. Press Ctrl+C to stop.")
+            logger.info("Microphone capture initiated. Press Ctrl+C to stop.")
             
         except Exception as e:
             logger.error(f"Failed to start input stream: {e}")
-            print(f"Failed to start microphone capture: {e}")
+            logger.error(f"Failed to start microphone capture: {e}")
             raise
 
     def start_output_stream(self, callback: Optional[Callable] = None, device: Optional[int] = None):
@@ -749,7 +749,7 @@ class AudioCapture:
             self.stream = None
             self.is_recording = False
             logger.info("Audio capture stopped")
-            print("Capture stopped.")
+            logger.info("Capture stopped.")
 
     def __enter__(self):
         return self
@@ -882,36 +882,35 @@ def get_default_device_info():
 
 def test_audio_system():
     """Test the complete audio system."""
-    print("🎵 Testing Audio System...")
-    print("="*40)
+    logger.info("Testing Audio System...")
     
     try:
         # Test device listing
         capture = AudioCapture()
         devices_info = capture.list_devices()
         
-        print(f"📱 Found {len(devices_info['devices'])} audio devices")
-        print(f"🎤 Default input device: {devices_info['default_input']}")
-        print(f"🔊 Default output device: {devices_info['default_output']}")
+        logger.info(f"Found {len(devices_info['devices'])} audio devices")
+        logger.info(f"Default input device: {devices_info['default_input']}")
+        logger.info(f"Default output device: {devices_info['default_output']}")
         
         # Test microphone access
-        print("\n🎤 Testing microphone access...")
+        logger.info("Testing microphone access...")
         if capture.test_microphone_access():
-            print("✅ Microphone access successful")
+            logger.info("Microphone access successful")
         else:
-            print("❌ Microphone access failed")
+            logger.error("Microphone access failed")
             return False
         
         # Test short recording
-        print("\n📹 Testing 2-second recording...")
+        logger.info("Testing 2-second recording...")
         recording = capture.record_fixed_duration(2.0)
-        print(f"✅ Recording completed: {recording.shape} samples")
+        logger.info(f"Recording completed: {recording.shape} samples")
         
-        print("\n🎉 Audio system test completed successfully!")
+        logger.info("Audio system test completed successfully!")
         return True
         
     except Exception as e:
-        print(f"❌ Audio system test failed: {e}")
+        logger.error(f"Audio system test failed: {e}")
         return False
 
 if __name__ == "__main__":

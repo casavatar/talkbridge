@@ -27,6 +27,9 @@ import os
 import sys
 from pathlib import Path
 from typing import Dict, Any, Optional
+from .logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Get the project root directory
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -393,13 +396,12 @@ if __name__ == "__main__":
     ensure_directories()
     
     # Print configuration summary
-    print("TalkBridge Configuration")
-    print("=" * 40)
-    print(f"Project Root: {PROJECT_ROOT}")
-    print(f"Demo Mode: {is_demo_mode()}")
-    print(f"Debug Mode: {is_debug_mode()}")
-    print(f"Development Mode: {is_development_mode()}")
-    print(f"Log Level: {SYSTEM_CONFIG['log_level']}")
-    print(f"Audio Sample Rate: {AUDIO_CONFIG['sample_rate']}")
-    print(f"UI Port: {UI_CONFIG['port']}")
-    print("=" * 40) 
+    logger.info("TalkBridge Configuration")
+    logger.info(f"Project Root: {PROJECT_ROOT}")
+    logger.info(f"Demo Mode: {is_demo_mode()}")
+    logger.info(f"Debug Mode: {is_debug_mode()}")
+    logger.info(f"Development Mode: {is_development_mode()}")
+    logger.info(f"Log Level: {SYSTEM_CONFIG['log_level']}")
+    logger.info(f"Audio Sample Rate: {AUDIO_CONFIG['sample_rate']}")
+    logger.info(f"UI Port: {UI_CONFIG['port']}")
+    logger.info("=" * 40) 

@@ -23,15 +23,16 @@ Functions:
 - on_playback_end: Function on_playback_end
 ======================================================================
 """
+from talkbridge.audio import AudioGenerator, AudioSynthesizer, AudioEffects, AudioPlayer
+from talkbridge.audio.capture import AudioCapture
+
 
 import time
 import os
 
-# Add the src directory to the path
-))
-
-from ..audio import AudioGenerator, AudioSynthesizer, AudioEffects, AudioPlayer
-from audio.capture import AudioCapture
+# Import TalkBridge audio modules
+from talkbridge.audio import AudioGenerator, AudioSynthesizer, AudioEffects, AudioPlayer
+from talkbridge.audio.capture import AudioCapture
 
 def demo_audio_generator():
     """Demo the audio generator capabilities."""

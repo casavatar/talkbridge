@@ -32,9 +32,11 @@ import os
 import platform
 import subprocess
 import tkinter as tk
-import logging
 from pathlib import Path
 from typing import Optional, Tuple
+from ..logging_config import get_logger
+
+logger = get_logger(__name__)
 
 try:
     from PIL import Image
@@ -117,8 +119,6 @@ def calculate_adaptive_scaling() -> float:
     Returns:
         Appropriate scaling factor for current environment
     """
-    logger = logging.getLogger(__name__)
-    
     # Get screen DPI
     screen_dpi = detect_screen_dpi()
     logger.info(f"Detected screen DPI: {screen_dpi}")
@@ -342,8 +342,6 @@ def apply_font_scaling_for_wayland():
     Apply font scaling specifically for Wayland environments to fix text readability.
     This addresses the issue where text remains too small even after window scaling.
     """
-    logger = logging.getLogger(__name__)
-    
     try:
         # Import theme module to apply font scaling
         from .theme import apply_font_scaling, get_font_scaling_info
@@ -374,7 +372,6 @@ def apply_platform_scaling_fixes():
     is_wayland = is_wayland_session()
     
     # Log environment detection for debugging
-    logger = logging.getLogger(__name__)
     logger.info(f"Platform detection - OS: {detect_operating_system()}, Wayland: {is_wayland}")
     
     if is_linux and is_wayland:
@@ -390,7 +387,6 @@ def apply_wayland_scaling_fixes():
     This includes DPI-aware scaling for HiDPI displays to properly handle LoginDialog 
     and other modal dialogs that render too small.
     """
-    logger = logging.getLogger(__name__)
     
     try:
         # Calculate adaptive scaling factor based on DPI
@@ -465,7 +461,6 @@ def apply_standard_scaling():
     
     Uses conservative 1.0 scaling to prevent issues on other platforms.
     """
-    logger = logging.getLogger(__name__)
     
     try:
         # Conservative scaling for X11, Windows, and macOS
@@ -590,7 +585,6 @@ def set_manual_scaling_override(scaling_factor: float) -> None:
     Args:
         scaling_factor: Desired scaling factor (e.g., 1.6, 1.7, 1.8)
     """
-    logger = logging.getLogger(__name__)
     
     try:
         import tkinter as tk
@@ -625,49 +619,43 @@ def set_manual_scaling_override(scaling_factor: float) -> None:
 if __name__ == "__main__":
     # Test script for DPI detection and scaling calculation
     # logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
-    logger = logging.getLogger(__name__)
     
-    print("=== TalkBridge UI Utils - Wayland/DPI Testing ===")
-    print()
+    logger.info("=== TalkBridge UI Utils - Wayland/DPI Testing ===")
     
     # Test OS detection
-    print(f"Operating System: {detect_operating_system()}")
-    print(f"Wayland Session: {is_wayland_session()}")
-    print()
+    logger.info(f"Operating System: {detect_operating_system()}")
+    logger.info(f"Wayland Session: {is_wayland_session()}")
     
     # Test DPI detection
     try:
         dpi = detect_screen_dpi()
-        print(f"Detected Screen DPI: {dpi}")
+        logger.info(f"Detected Screen DPI: {dpi}")
     except Exception as e:
-        print(f"DPI Detection Failed: {e}")
+        logger.error(f"DPI Detection Failed: {e}")
         dpi = 96.0
     
     # Test adaptive scaling calculation
     try:
         scaling = calculate_adaptive_scaling()
-        print(f"Recommended Scaling Factor: {scaling}")
+        logger.info(f"Recommended Scaling Factor: {scaling}")
     except Exception as e:
-        print(f"Scaling Calculation Failed: {e}")
-    
-    print()
+        logger.error(f"Scaling Calculation Failed: {e}")
     
     # Test environment info
     try:
         env_info = get_ui_environment_info()
-        print("Environment Info:")
+        logger.info("Environment Info:")
         for key, value in env_info.items():
             if isinstance(value, dict):
-                print(f"  {key}:")
+                logger.info(f"  {key}:")
                 for subkey, subvalue in value.items():
-                    print(f"    {subkey}: {subvalue}")
+                    logger.info(f"    {subkey}: {subvalue}")
             else:
-                print(f"  {key}: {value}")
+                logger.info(f"  {key}: {value}")
     except Exception as e:
-        print(f"Environment Info Failed: {e}")
+        logger.error(f"Environment Info Failed: {e}")
     
-    print()
-    print("=== End Testing ===")
+    logger.info("=== End Testing ===")
 
 # Export main functions for external use
 __all__ = [

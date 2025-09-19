@@ -32,6 +32,9 @@ import sys
 import os
 from typing import Optional, Callable, List
 import math
+from ..logging_config import get_logger
+
+logger = get_logger(__name__)
 
 class LoadingAnimation:
     """
@@ -205,13 +208,12 @@ class LoadingDemo:
     @staticmethod
     def run_spinner_demo():
         """Demo spinner animations."""
-        print("Spinner Animation Demo:")
-        print("=" * 30)
+        logger.info("Spinner Animation Demo:")
         
         styles = ['dots', 'arrows', 'bars', 'dots2']
         
         for style in styles:
-            print(f"\n{style.upper()} style:")
+            logger.info(f"{style.upper()} style:")
             spinner = SpinnerAnimation(f"Loading with {style} style...", style)
             spinner.start()
             time.sleep(2)
@@ -220,8 +222,7 @@ class LoadingDemo:
     @staticmethod
     def run_progress_demo():
         """Demo progress bar."""
-        print("\nProgress Bar Demo:")
-        print("=" * 30)
+        logger.info("Progress Bar Demo:")
         
         progress = ProgressBar(100, 40, "Processing files")
         progress.start()
@@ -235,8 +236,7 @@ class LoadingDemo:
     @staticmethod
     def run_pulse_demo():
         """Demo pulse animation."""
-        print("\nPulse Animation Demo:")
-        print("=" * 30)
+        logger.info("Pulse Animation Demo:")
         
         pulse = PulseAnimation("Processing data...")
         pulse.start()
@@ -246,8 +246,7 @@ class LoadingDemo:
     @staticmethod
     def run_wave_demo():
         """Demo wave animation."""
-        print("\nWave Animation Demo:")
-        print("=" * 30)
+        logger.info("Wave Animation Demo:")
         
         wave = WaveAnimation("Loading modules...")
         wave.start()

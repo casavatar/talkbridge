@@ -19,6 +19,9 @@ Functions:
 - main: Run all tests.
 ======================================================================
 """
+import pytest
+from talkbridge.stt.whisper_engine import WhisperEngine
+
 
 import sys
 import os
@@ -62,8 +65,7 @@ def test_talkbridge_whisper():
     print("=" * 50)
     
     try:
-                , '..', '..')))
-        from stt.whisper_engine import WhisperEngine
+        from talkbridge.stt.whisper_engine import WhisperEngine
         
         engine = WhisperEngine()
         print("✅ WhisperEngine imported successfully")

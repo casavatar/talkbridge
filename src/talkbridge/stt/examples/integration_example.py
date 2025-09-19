@@ -26,6 +26,7 @@ Functions:
 import os
 from pathlib import Path
 
+from talkbridge.logging_config import get_logger
 from talkbridge.stt import (
     transcribe_audio,
     transcribe_file,
@@ -35,30 +36,32 @@ from talkbridge.stt import (
     create_test_audio
 )
 
+logger = get_logger(__name__)
+
 def example_basic_transcription():
     """Example of basic audio transcription."""
-    print("=== Basic Transcription Example ===")
+    logger.info("=== Basic Transcription Example ===")
     
     # Create test audio
-    print("Creating test audio...")
+    logger.info("Creating test audio...")
     audio_bytes = create_test_audio(duration=2.0)
     
     # Transcribe audio
-    print("Transcribing audio...")
+    logger.info("Transcribing audio...")
     try:
         text = transcribe_audio(audio_bytes, language="es")
-        print(f"Transcribed text: {text}")
+        logger.info("Transcribed text: %s", text)
     except Exception as e:
-        print(f"Transcription failed: {e}")
+        logger.error("Transcription failed: %s", e)
     
-    print()
+    logger.info("Basic transcription example completed")
 
 def example_file_transcription():
     """Example of file-based transcription."""
-    print("=== File Transcription Example ===")
+    logger.info("=== File Transcription Example ===")
     
     # Create test audio file
-    print("Creating test audio file...")
+    logger.info("Creating test audio file...")
     audio_bytes = create_test_audio(duration=3.0)
     
     # Save to temporary file
@@ -69,66 +72,66 @@ def example_file_transcription():
     
     try:
         # Transcribe file
-        print("Transcribing audio file...")
+        logger.info("Transcribing audio file...")
         text = transcribe_file(temp_file, language="en")
-        print(f"Transcribed text: {text}")
+        logger.info("Transcribed text: %s", text)
     except Exception as e:
-        print(f"File transcription failed: {e}")
+        logger.error("File transcription failed: %s", e)
     finally:
         # Clean up
         if os.path.exists(temp_file):
             os.unlink(temp_file)
     
-    print()
+    logger.info("File transcription example completed")
 
 def example_model_management():
     """Example of model management."""
-    print("=== Model Management Example ===")
+    logger.info("=== Model Management Example ===")
     
     # Load model explicitly
-    print("Loading Whisper model...")
+    logger.info("Loading Whisper model...")
     success = load_model("base")
-    print(f"Model loading: {'Success' if success else 'Failed'}")
+    logger.info("Model loading: %s", "Success" if success else "Failed")
     
     # Get model information
     info = get_model_info()
-    print(f"Model info: {info}")
+    logger.info("Model info: %s", info)
     
     # Get supported languages
     languages = get_supported_languages()
-    print(f"Supported languages: {languages[:5]}...")  # Show first 5
+    logger.info("Supported languages: %s...", languages[:5])  # Show first 5
     
-    print()
+    logger.info("Model management example completed")
 
 def example_error_handling():
     """Example of error handling."""
-    print("=== Error Handling Example ===")
+    logger.info("=== Error Handling Example ===")
     
     # Test with invalid audio
-    print("Testing with invalid audio data...")
+    logger.info("Testing with invalid audio data...")
     try:
         text = transcribe_audio(b"", language="es")
-        print(f"Result: {text}")
+        logger.info("Result: %s", text)
     except ValueError as e:
-        print(f"Expected error: {e}")
+        logger.warning("Expected error: %s", e)
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logger.error("Unexpected error: %s", e)
     
     # Test with small audio
-    print("Testing with small audio data...")
+    logger.info("Testing with small audio data...")
     try:
         text = transcribe_audio(b"small", language="es")
-        print(f"Result: {text}")
+        logger.info("Result: %s", text)
     except ValueError as e:
-        print(f"Expected error: {e}")
+        logger.warning("Expected error: %s", e)
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logger.error("Unexpected error: %s", e)
     
-    print()
+    logger.info("Error handling example completed")
 
 def example_language_support():
     """Example of language support."""
-    print("=== Language Support Example ===")
+    logger.info("=== Language Support Example ===")
     
     from talkbridge.stt import is_language_supported
     
@@ -137,13 +140,13 @@ def example_language_support():
     
     for lang in test_languages:
         supported = is_language_supported(lang)
-        print(f"Language '{lang}': {'Supported' if supported else 'Not supported'}")
+        logger.info("Language '%s': %s", lang, 'Supported' if supported else 'Not supported')
     
-    print()
+    logger.info("Language support example completed")
 
 def example_integration_with_talkbridge():
     """Example of integration with TalkBridge components."""
-    print("=== TalkBridge Integration Example ===")
+    logger.info("=== TalkBridge Integration Example ===")
     
     # Simulate integration with STT API
     try:
@@ -155,27 +158,27 @@ def example_integration_with_talkbridge():
         # Test transcription
         audio_bytes = create_test_audio(duration=1.5)
         text = stt_api.transcribe_audio(audio_bytes, language="es")
-        print(f"STT API transcription: {text}")
+        logger.info("STT API transcription: %s", text)
         
         # Test supported languages
         languages = stt_api.get_supported_languages()
-        print(f"STT API languages: {len(languages)} supported")
+        logger.info("STT API languages: %d supported", len(languages))
         
         # Test engine status
         status = stt_api.get_engine_status()
-        print(f"Engine status: {status}")
+        logger.info("Engine status: %s", status)
         
     except ImportError as e:
-        print(f"Could not import STT API: {e}")
+        logger.warning("Could not import STT API: %s", e)
     except Exception as e:
-        print(f"Integration test failed: {e}")
+        logger.error("Integration test failed: %s", e)
     
-    print()
+    logger.info("TalkBridge integration example completed")
 
 def main():
     """Run all examples."""
-    print("STT Module Integration Examples")
-    print("=" * 50)
+    logger.info("STT Module Integration Examples")
+    logger.info("=" * 50)
     
     # Run examples
     example_basic_transcription()
@@ -185,7 +188,7 @@ def main():
     example_language_support()
     example_integration_with_talkbridge()
     
-    print("All examples completed!")
+    logger.info("All examples completed!")
 
 if __name__ == "__main__":
     main() 

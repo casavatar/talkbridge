@@ -20,13 +20,13 @@ Functions:
 - main: Run all animation examples.
 ======================================================================
 """
+from talkbridge.animation import FaceSync
+
 
 import os
-from ..pathlib import Path
 
-.parent))
-
-from ..animation import FaceSync
+# Import TalkBridge animation modules
+from talkbridge.animation import FaceSync
 
 def example_webcam_face_sync():
     """Example of webcam-based face sync."""

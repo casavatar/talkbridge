@@ -17,17 +17,18 @@ Test Categories:
 - UI error notification integration
 - Log file creation and rotation
 """
+import pytest
+from talkbridge.errors import ErrorCategory, handle_user_facing_error
+
 
 import unittest
 import tempfile
 import shutil
-from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 import logging
 import os
 
 # Add src to path for imports
-.parent.parent))
 
 from talkbridge.logging_config import (
     configure_logging, get_logger, log_exception, get_log_statistics,
@@ -371,7 +372,7 @@ def run_error_handling_demo():
         print(f"   {key}: {value}")
     
     print("\n✅ Error handling demo completed!")
-    print("Check logs/talkbridge.log for detailed error logs.")
+    print("Check data/logs/talkbridge.log for detailed error logs.")
 
 if __name__ == "__main__":
     # Run the demo first

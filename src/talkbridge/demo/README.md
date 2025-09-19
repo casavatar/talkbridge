@@ -157,7 +157,7 @@ demo_runner.reset_demo()
 The demo system includes comprehensive error handling:
 
 - Graceful fallbacks for missing files
-- Error logging to `logs/errors.log`
+- Error logging to `data/logs/errors.log`
 - User-friendly error messages
 - Automatic file creation for missing samples
 
@@ -279,6 +279,6 @@ This demo module is part of the TalkBridge project and follows the same license 
 
 For issues and questions:
 1. Check the troubleshooting section
-2. Review the error logs in `logs/errors.log`
+2. Review the error logs in `data/logs/errors.log`
 3. Test with `python src/demo/run_demo.py --test`
 4. Create an issue in the project repository 

@@ -32,6 +32,14 @@ from datetime import datetime
 _config_lock = threading.Lock()
 _logging_configured = False
 
+# Centralized log directory - All logs go to data/logs/
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+LOG_DIR = PROJECT_ROOT / "data" / "logs"
+LOG_FILE = LOG_DIR / "talkbridge.log"
+
+# Ensure log directory exists
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # Project-wide logger names
 LOGGER_NAMES = {
     "main": "talkbridge",
@@ -61,7 +69,7 @@ LOG_LEVELS = {
 DEFAULT_CONFIG = {
     "console_level": "INFO",
     "file_level": "DEBUG", 
-    "log_dir": "logs",
+    "log_dir": str(LOG_DIR),  # Use centralized log directory
     "log_file": "talkbridge.log",
     "max_file_size": 10 * 1024 * 1024,  # 10MB
     "backup_count": 5,
@@ -92,7 +100,7 @@ class TalkBridgeLogger:
         Args:
             console_level: Console output level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
             file_level: File output level  
-            log_dir: Directory for log files (defaults to 'logs')
+            log_dir: Directory for log files (defaults to 'data/logs')
             development_mode: Enable more verbose logging for development
             force_reconfigure: Force reconfiguration even if already configured
         """
@@ -106,7 +114,7 @@ class TalkBridgeLogger:
             self.config.update({
                 "console_level": console_level,
                 "file_level": file_level,
-                "log_dir": log_dir or self.config["log_dir"]
+                "log_dir": log_dir or str(LOG_DIR)  # Always use centralized LOG_DIR if not specified
             })
             
             # Adjust for development mode

@@ -45,7 +45,7 @@ from talkbridge.utils.error_handler import (
 from talkbridge.logging_config import get_logger
 
 # Import new notification and async systems
-from talkbridge.web.notifier import subscribe, notify_info, notify_error
+from talkbridge.ui.notifier import subscribe, notify_info, notify_error
 from talkbridge.desktop.notifier_adapter import DesktopNotifier
 from talkbridge.utils.async_runner import get_task_runner, run_async, ProgressReporter
 from talkbridge.errors import ErrorCategory, handle_user_facing_error

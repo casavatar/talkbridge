@@ -31,7 +31,12 @@ import time
 import threading
 from typing import Dict, List, Optional, Callable, Any
 from dataclasses import dataclass
+
+from talkbridge.logging_config import get_logger
+from talkbridge.ui import notifier
 from .ollama_client import OllamaClient
+
+logger = get_logger(__name__)
 
 @dataclass
 class ModelInfo:
@@ -92,7 +97,8 @@ class OllamaModelManager:
             return list(self.models_cache.values())
             
         except Exception as e:
-            print(f"Error listing models: {e}")
+            logger.error("Error listing models: %s", e)
+            notifier.notify_error(f"Failed to list Ollama models: {e}")
             return []
     
     def get_model_info(self, model_name: str) -> Optional[ModelInfo]:
@@ -116,9 +122,8 @@ class OllamaModelManager:
                     details=model_data
                 )
         except Exception as e:
-            print(f"Error getting model info for {model_name}: {e}")
-        
-        return None
+            logger.error("Error getting model info for %s: %s", model_name, e)
+            return None
     
     def install_model(self, model_name: str, 
                      progress_callback: Optional[Callable[[str], None]] = None) -> bool:
@@ -133,27 +138,31 @@ class OllamaModelManager:
             True if successful, False otherwise
         """
         try:
-            print(f"Installing model: {model_name}")
+            logger.info("Installing model: %s", model_name)
+            notifier.notify_info(f"Installing Ollama model: {model_name}")
             
             def progress_handler(status: str):
                 if progress_callback:
                     progress_callback(status)
                 else:
-                    print(f"Progress: {status}")
+                    logger.debug("Progress: %s", status)
             
             success = self.client.pull_model(model_name, progress_handler)
             
             if success:
-                print(f"Successfully installed model: {model_name}")
+                logger.info("Successfully installed model: %s", model_name)
+                notifier.notify_info(f"Successfully installed model: {model_name}")
                 # Refresh cache
                 self.list_models(force_refresh=True)
             else:
-                print(f"Failed to install model: {model_name}")
+                logger.error("Failed to install model: %s", model_name)
+                notifier.notify_error(f"Failed to install model: {model_name}")
             
             return success
             
         except Exception as e:
-            print(f"Error installing model {model_name}: {e}")
+            logger.error("Error installing model %s: %s", model_name, e)
+            notifier.notify_error(f"Error installing model {model_name}: {e}")
             return False
     
     def remove_model(self, model_name: str) -> bool:
@@ -167,21 +176,25 @@ class OllamaModelManager:
             True if successful, False otherwise
         """
         try:
-            print(f"Removing model: {model_name}")
+            logger.info("Removing model: %s", model_name)
+            notifier.notify_info(f"Removing Ollama model: {model_name}")
             success = self.client.delete_model(model_name)
             
             if success:
-                print(f"Successfully removed model: {model_name}")
+                logger.info("Successfully removed model: %s", model_name)
+                notifier.notify_info(f"Successfully removed model: {model_name}")
                 # Remove from cache
                 if model_name in self.models_cache:
                     del self.models_cache[model_name]
             else:
-                print(f"Failed to remove model: {model_name}")
+                logger.error("Failed to remove model: %s", model_name)
+                notifier.notify_error(f"Failed to remove model: {model_name}")
             
             return success
             
         except Exception as e:
-            print(f"Error removing model {model_name}: {e}")
+            logger.error("Error removing model %s: %s", model_name, e)
+            notifier.notify_error(f"Error removing model {model_name}: {e}")
             return False
     
     def model_exists(self, model_name: str) -> bool:
@@ -286,20 +299,24 @@ class OllamaModelManager:
                 for key, value in parameters.items():
                     modelfile_content += f"PARAMETER {key} {value}\n"
             
-            print(f"Creating custom model: {name}")
+            logger.info("Creating custom model: %s", name)
+            notifier.notify_info(f"Creating custom Ollama model: {name}")
             success = self.client.create_model(name, modelfile_content)
             
             if success:
-                print(f"Successfully created custom model: {name}")
+                logger.info("Successfully created custom model: %s", name)
+                notifier.notify_info(f"Successfully created custom model: {name}")
                 # Refresh cache
                 self.list_models(force_refresh=True)
             else:
-                print(f"Failed to create custom model: {name}")
+                logger.error("Failed to create custom model: %s", name)
+                notifier.notify_error(f"Failed to create custom model: {name}")
             
             return success
             
         except Exception as e:
-            print(f"Error creating custom model {name}: {e}")
+            logger.error("Error creating custom model %s: %s", name, e)
+            notifier.notify_error(f"Error creating custom model {name}: {e}")
             return False
     
     def test_model(self, model_name: str, test_prompt: str = "Hello, how are you?") -> Dict[str, Any]:
@@ -314,7 +331,7 @@ class OllamaModelManager:
             Test results dictionary
         """
         try:
-            print(f"Testing model: {model_name}")
+            logger.info("Testing model: %s", model_name)
             start_time = time.time()
             
             response = self.client.generate(model_name, test_prompt)
@@ -358,7 +375,7 @@ class OllamaModelManager:
         results = {}
         
         for model_name in models:
-            print(f"\nTesting model: {model_name}")
+            logger.info("Testing model: %s", model_name)
             results[model_name] = self.test_model(model_name, test_prompt)
         
         return results
@@ -413,11 +430,13 @@ class OllamaModelManager:
             with open(filename, 'w') as f:
                 json.dump(model_data, f, indent=2)
             
-            print(f"Exported model list to: {filename}")
+            logger.info(f"Exported model list to: {filename}")
+            notifier.notify_info(f"Model list exported to {filename}")
             return True
             
         except Exception as e:
-            print(f"Error exporting model list: {e}")
+            logger.error(f"Error exporting model list: {e}")
+            notifier.notify_error(f"Failed to export model list: {e}")
             return False
     
     def import_model_list(self, filename: str) -> List[str]:
@@ -439,16 +458,18 @@ class OllamaModelManager:
             for model_info in model_data:
                 model_name = model_info['name']
                 if not self.model_exists(model_name):
-                    print(f"Installing model from list: {model_name}")
+                    logger.info(f"Installing model from list: {model_name}")
+                    notifier.notify_info(f"Installing model: {model_name}")
                     if self.install_model(model_name):
                         installed_models.append(model_name)
                 else:
-                    print(f"Model already exists: {model_name}")
+                    logger.info(f"Model already exists: {model_name}")
             
             return installed_models
             
         except Exception as e:
-            print(f"Error importing model list: {e}")
+            logger.error(f"Error importing model list: {e}")
+            notifier.notify_error(f"Failed to import model list: {e}")
             return []
 
 if __name__ == "__main__":
@@ -457,13 +478,13 @@ if __name__ == "__main__":
     
     # List models
     models = manager.list_models()
-    print(f"Available models: {[model.name for model in models]}")
+    logger.info(f"Available models: {[model.name for model in models]}")
     
     # Get summary
     summary = manager.get_models_summary()
-    print(f"Models summary: {summary}")
+    logger.info(f"Models summary: {summary}")
     
     # Test a model if available
     if models:
         test_result = manager.test_model(models[0].name)
-        print(f"Test result: {test_result}") 
+        logger.info(f"Test result: {test_result}") 

@@ -29,6 +29,7 @@ import string
 from datetime import datetime
 from pathlib import Path
 from talkbridge.logging_config import get_logger
+from talkbridge.ui.notifier import notifier
 
 logger = get_logger(__name__)
 
@@ -152,22 +153,22 @@ def generate_users_json():
         users_data[username] = user_data
         passwords[username] = password
         
-        print(f"✅ Created user: {username}")
-        print(f"   Role: {config['role']}")
-        print(f"   Email: {config['email']}")
-        print(f"   Password: {password}")
-        print(f"   Salt: {user_data['salt'][:8]}...")
-        print(f"   Security Level: {user_data['security_level']}")
-        print()
+        logger.info(f"Created user: {username}")
+        logger.info(f"   Role: {config['role']}")
+        logger.info(f"   Email: {config['email']}")
+        logger.debug(f"   Salt: {user_data['salt'][:8]}...")
+        logger.info(f"   Security Level: {user_data['security_level']}")
+        
+        # Notify user of account creation
+        notifier.notify_info(f"Created user '{username}' with role '{config['role']}'")
     
     # Save to users.json
     json_file = Path(__file__).parent / "users.json"
     with open(json_file, 'w') as f:
         json.dump(users_data, f, indent=2)
     
-    print("=" * 50)
-    print(f"💾 Saved secure users to: {json_file}")
-    print()
+    logger.info(f"Saved secure users to: {json_file}")
+    notifier.notify_info(f"Users database saved to {json_file}")
     
     # Save passwords to a separate file for reference (development only)
     passwords_file = Path(__file__).parent / "passwords_dev_only.txt"
@@ -179,19 +180,20 @@ def generate_users_json():
         for username, password in passwords.items():
             f.write(f"{username}: {password}\n")
     
-    print(f"📝 Saved passwords to: {passwords_file}")
-    print("⚠️  WARNING: Delete passwords_dev_only.txt in production!")
-    print()
+    logger.info(f"Saved passwords to: {passwords_file}")
+    notifier.notify_warn("WARNING: Delete passwords_dev_only.txt in production!")
     
     # Print summary
-    print("🎯 Summary:")
-    print(f"   Total users created: {len(users_data)}")
-    print(f"   Roles: {set(config['role'] for config in users_to_create.values())}")
-    print(f"   Security levels: {set(user_data['security_level'] for user_data in users_data.values())}")
-    print()
-    print("🔐 All users require password change on first login!")
-    print("🔒 Account locking enabled after 5 failed attempts!")
-    print("✅ Enhanced security with salted password hashing!")
+    logger.info("Generation Summary:")
+    logger.info(f"   Total users created: {len(users_data)}")
+    logger.info(f"   Roles: {set(config['role'] for config in users_to_create.values())}")
+    logger.info(f"   Security levels: {set(user_data['security_level'] for user_data in users_data.values())}")
+    logger.info("Security features enabled:")
+    logger.info("- All users require password change on first login")
+    logger.info("- Account locking enabled after 5 failed attempts")
+    logger.info("- Enhanced security with salted password hashing")
+    
+    notifier.notify_info(f"Successfully generated {len(users_data)} secure user accounts")
 
 if __name__ == "__main__":
     generate_users_json() 

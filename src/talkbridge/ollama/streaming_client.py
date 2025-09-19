@@ -33,6 +33,10 @@ import queue
 from typing import Dict, List, Optional, Callable, Any, Generator
 from dataclasses import dataclass
 from .ollama_client import OllamaClient
+from ..logging_config import get_logger
+from ..ui.notifier import notifier
+
+logger = get_logger(__name__)
 
 @dataclass
 class StreamingEvent:
@@ -127,7 +131,7 @@ class OllamaStreamingClient:
                 elif event_type == 'error':
                     callback.on_error(data)
             except Exception as e:
-                print(f"Error in callback {callback.__class__.__name__}: {e}")
+                logger.error(f"Error in callback {callback.__class__.__name__}: {e}")
     
     def stream_generate(self, model: str, prompt: str,
                        system: Optional[str] = None,
@@ -258,7 +262,7 @@ class OllamaStreamingClient:
             options: Generation options (optional)
         """
         if self.current_stream_thread and self.current_stream_thread.is_alive():
-            print("Stream already in progress")
+            logger.warning("Stream already in progress")
             return
         
         def stream_worker():
@@ -266,7 +270,7 @@ class OllamaStreamingClient:
                 for chunk in self.stream_generate(model, prompt, system, options):
                     pass  # Chunks are handled by callbacks
             except Exception as e:
-                print(f"Background stream error: {e}")
+                logger.error(f"Background stream error: {e}")
         
         self.current_stream_thread = threading.Thread(target=stream_worker)
         self.current_stream_thread.start()
@@ -297,7 +301,7 @@ class OllamaStreamingClient:
         while True:
             try:
                 event = self.event_queue.get(timeout=timeout)
-                print(f"Event: {event.event_type} - {event.data}")
+                logger.debug(f"Event: {event.event_type} - {event.data}")
                 self.event_queue.task_done()
             except queue.Empty:
                 break
@@ -328,26 +332,26 @@ class ConsoleStreamingCallback(StreamingCallback):
         """Called when streaming starts."""
         self.start_time = time.time()
         timestamp = f"[{time.strftime('%H:%M:%S')}] " if self.show_timestamps else ""
-        print(f"{timestamp}🚀 Starting stream with model: {model}")
-        print(f"{timestamp}📝 Prompt: {prompt[:100]}{'...' if len(prompt) > 100 else ''}")
-        print(f"{timestamp}💬 Response:")
+        logger.info(f"Starting stream with model: {model}")
+        logger.info(f"Prompt: {prompt[:100]}{'...' if len(prompt) > 100 else ''}")
+        logger.info("Response streaming started")
     
     def on_chunk(self, chunk: str):
         """Called for each response chunk."""
-        print(chunk, end='', flush=True)
+        logger.debug(f"Received chunk: {len(chunk)} characters")
     
     def on_end(self, full_response: str):
         """Called when streaming ends."""
         if self.start_time:
             duration = time.time() - self.start_time
             timestamp = f"[{time.strftime('%H:%M:%S')}] " if self.show_timestamps else ""
-            print(f"\n{timestamp}✅ Stream completed in {duration:.2f}s")
-            print(f"{timestamp}📊 Response length: {len(full_response)} characters")
+            logger.info(f"Stream completed in {duration:.2f}s")
+            logger.info(f"Response length: {len(full_response)} characters")
     
     def on_error(self, error: str):
         """Called when an error occurs."""
         timestamp = f"[{time.strftime('%H:%M:%S')}] " if self.show_timestamps else ""
-        print(f"\n{timestamp}❌ Error: {error}")
+        logger.error(f"Streaming error: {error}")
 
 class FileStreamingCallback(StreamingCallback):
     """File-based streaming callback."""
@@ -417,7 +421,7 @@ class PerformanceStreamingCallback(StreamingCallback):
         self.chunks_received = 0
         self.total_chars = 0
         self.chunk_times = []
-        print(f"Performance monitoring started for model: {model}")
+        logger.info(f"Performance monitoring started for model: {model}")
     
     def on_chunk(self, chunk: str):
         """Called for each response chunk."""
@@ -431,16 +435,16 @@ class PerformanceStreamingCallback(StreamingCallback):
             duration = time.time() - self.start_time
             avg_chunk_time = sum(self.chunk_times) / len(self.chunk_times) if self.chunk_times else 0
             
-            print(f"\nPerformance Summary:")
-            print(f"  Total time: {duration:.2f}s")
-            print(f"  Chunks received: {self.chunks_received}")
-            print(f"  Total characters: {self.total_chars}")
-            print(f"  Average chunk time: {avg_chunk_time:.3f}s")
-            print(f"  Characters per second: {self.total_chars / duration:.1f}")
+            logger.info("Performance Summary:")
+            logger.info(f"  Total time: {duration:.2f}s")
+            logger.info(f"  Chunks received: {self.chunks_received}")
+            logger.info(f"  Total characters: {self.total_chars}")
+            logger.info(f"  Average chunk time: {avg_chunk_time:.3f}s")
+            logger.info(f"  Characters per second: {self.total_chars / duration:.1f}")
     
     def on_error(self, error: str):
         """Called when an error occurs."""
-        print(f"Performance monitoring error: {error}")
+        logger.error(f"Performance monitoring error: {error}")
 
 if __name__ == "__main__":
     # Test the streaming client
@@ -452,14 +456,14 @@ if __name__ == "__main__":
     
     # Test streaming
     try:
-        print("Testing streaming generation...")
+        logger.info("Testing streaming generation...")
         for chunk in client.stream_generate("llama2", "Hello, how are you?"):
             pass  # Chunks are handled by callbacks
         
-        print("\nTesting streaming chat...")
+        logger.info("Testing streaming chat...")
         messages = [{"role": "user", "content": "What is the capital of France?"}]
         for chunk in client.stream_chat("llama2", messages):
             pass  # Chunks are handled by callbacks
             
     except Exception as e:
-        print(f"Streaming test error: {e}") 
+        logger.error(f"Streaming test error: {e}") 

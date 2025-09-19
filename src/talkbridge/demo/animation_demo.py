@@ -21,16 +21,18 @@ Functions:
 - demo_audio_callback: Function demo_audio_callback
 ======================================================================
 """
+from talkbridge.animation import AudioVisualizer, LoadingAnimation, InteractiveAnimations
+from talkbridge.animation.loading_animation import SpinnerAnimation, ProgressBar, PulseAnimation, WaveAnimation
+from talkbridge.animation.interactive_animations import ParticleSystem, GeometricAnimation, WaveformAnimation
+
 
 import time
 import os
 
-# Add the src directory to the path
-))
-
-from ..animation import AudioVisualizer, LoadingAnimation, InteractiveAnimations
-from animation.loading_animation import SpinnerAnimation, ProgressBar, PulseAnimation, WaveAnimation
-from animation.interactive_animations import ParticleSystem, GeometricAnimation, WaveformAnimation
+# Import TalkBridge animation modules
+from talkbridge.animation import AudioVisualizer, LoadingAnimation, InteractiveAnimations
+from talkbridge.animation.loading_animation import SpinnerAnimation, ProgressBar, PulseAnimation, WaveAnimation
+from talkbridge.animation.interactive_animations import ParticleSystem, GeometricAnimation, WaveformAnimation
 
 def demo_audio_visualizer():
     """Demo the audio visualizer animations."""

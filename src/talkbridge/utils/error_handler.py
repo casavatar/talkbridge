@@ -166,7 +166,7 @@ def notify_error(message: str) -> None:
     
     # Try web UI notification
     try:
-        from talkbridge.web.notifier import notify_error as web_notify_error
+        from talkbridge.ui.notifier import notify_error as web_notify_error
         web_notify_error(message)
         logger.debug(f"Sent error notification to web UI: {message}")
         return
@@ -217,7 +217,7 @@ class ErrorHandler:
         Returns:
             List of error log lines (most recent first)
         """
-        log_file = os.path.join(os.path.dirname(__file__), '..', '..', 'logs', 'talkbridge.log')
+        log_file = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'logs', 'talkbridge.log')
         if not os.path.exists(log_file):
             return []
         

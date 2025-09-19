@@ -265,7 +265,7 @@ class AsyncTaskRunner:
     def _send_progress_notification(self, progress: TaskProgress) -> None:
         """Send progress notification via notifier system."""
         try:
-            from talkbridge.web.notifier import notify_info
+            from talkbridge.ui.notifier import notify_info
             
             percentage = progress.percentage
             message = f"{progress.message} ({percentage:.0f}%)"

@@ -38,11 +38,12 @@ from talkbridge.logging_config import get_logger
 
 # Import notification system
 try:
-    from ..web.notifier import notify, Level
-    from .notifier_adapter import WebNotificationBuffer, create_notification_routes
+    from ..ui.notifier import notifier, notify, Level, subscribe
+    from .notifier_adapter import WebNotifier, create_flask_routes
     NOTIFICATIONS_AVAILABLE = True
 except ImportError:
     NOTIFICATIONS_AVAILABLE = False
+    notifier = None
 
 logger = get_logger(__name__)
 
@@ -68,14 +69,15 @@ class TalkBridgeWebServer:
         self.server_thread = None
         self.is_running = False
         
-        # Initialize notification buffer
-        self.notification_buffer = None
+        # Initialize web notifier and subscribe to centralized notifier
+        self.web_notifier = None
         if NOTIFICATIONS_AVAILABLE:
             try:
-                self.notification_buffer = WebNotificationBuffer()
-                logger.info("Web server integrated with notification system")
+                self.web_notifier = WebNotifier()
+                subscribe(self.web_notifier)
+                logger.info("Web server integrated with centralized notification system")
             except Exception as e:
-                logger.warning(f"Failed to initialize notification buffer: {e}")
+                logger.warning(f"Failed to initialize web notifier: {e}")
         
         self._setup_flask_app()
     
@@ -101,8 +103,8 @@ class TalkBridgeWebServer:
         self._setup_routes()
         
         # Set up notification routes if available
-        if NOTIFICATIONS_AVAILABLE and self.notification_buffer:
-            create_notification_routes(self.app, self.notification_buffer)
+        if NOTIFICATIONS_AVAILABLE and self.web_notifier:
+            create_flask_routes(self.app, self.web_notifier)
     
     def _setup_routes(self):
         """Set up Flask routes."""
@@ -211,7 +213,9 @@ class TalkBridgeWebServer:
             logger.info(f"Opened browser to: {url}")
         except Exception as e:
             logger.warning(f"Could not open browser automatically: {e}")
-            print(f"\nPlease open your browser and navigate to: http://{self.host}:{self.port}")
+            logger.info(f"Please open your browser and navigate to: http://{self.host}:{self.port}")
+            if notifier:
+                notifier.notify_info(f"Web server running at http://{self.host}:{self.port}")
     
     def stop(self):
         """Stop the web server."""
@@ -232,8 +236,10 @@ class TalkBridgeWebServer:
 def run():
     """Main function to run the web server."""
     if not FLASK_AVAILABLE:
-        print("❌ Flask is not available. Install with: pip install flask flask-cors")
-        print("   Or install the full requirements: pip install -r requirements.txt")
+        logger.error("Flask is not available. Install with: pip install flask flask-cors")
+        logger.error("   Or install the full requirements: pip install -r requirements.txt")
+        if notifier:
+            notifier.notify_error("Flask not available. Please install dependencies.")
         return
     
     import argparse
@@ -250,16 +256,19 @@ def run():
     server = TalkBridgeWebServer(host=args.host, port=args.port, debug=args.debug)
     
     if server.start(open_browser=not args.no_browser):
-        print(f"\n🎤 TalkBridge Web Server")
-        print(f"📍 Server running at: http://{args.host}:{args.port}")
-        print(f"🔔 Notifications: {'Enabled' if NOTIFICATIONS_AVAILABLE else 'Disabled'}")
-        print(f"\n📋 Features:")
-        print(f"   • RESTful API for TalkBridge services")
-        print(f"   • Real-time notifications via REST/WebSocket")
-        print(f"   • Static file serving and templating")
-        print(f"   • CORS support for cross-origin requests")
-        print(f"   • Health monitoring and error handling")
-        print(f"\n🛑 Press Ctrl+C to stop the server")
+        logger.info("TalkBridge Web Server")
+        logger.info(f"Server running at: http://{args.host}:{args.port}")
+        logger.info(f"Notifications: {'Enabled' if NOTIFICATIONS_AVAILABLE else 'Disabled'}")
+        logger.info("Features:")
+        logger.info("   • RESTful API for TalkBridge services")
+        logger.info("   • Real-time notifications via REST/WebSocket")
+        logger.info("   • Static file serving and templating")
+        logger.info("   • CORS support for cross-origin requests")
+        logger.info("   • Health monitoring and error handling")
+        logger.info("Press Ctrl+C to stop the server")
+        
+        if notifier:
+            notifier.notify_info(f"Web server started at http://{args.host}:{args.port}")
         
         try:
             # Keep the main thread alive (unless in debug mode)
@@ -268,11 +277,15 @@ def run():
                     import time
                     time.sleep(1)
         except KeyboardInterrupt:
-            print("\n🛑 Stopping server...")
+            logger.info("Stopping server...")
             server.stop()
-            print("✅ Server stopped")
+            logger.info("Server stopped")
+            if notifier:
+                notifier.notify_info("Web server stopped")
     else:
-        print("❌ Failed to start web server")
+        logger.error("Failed to start web server")
+        if notifier:
+            notifier.notify_error("Failed to start web server")
         sys.exit(1)
 
 if __name__ == "__main__":

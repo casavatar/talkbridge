@@ -20,12 +20,14 @@ Functions:
 - main: Run all face sync demos.
 ======================================================================
 """
+from talkbridge.animation.face_sync import FaceSync
+from talkbridge.audio.capture import AudioCapture
+
 
 import os
 import tempfile
 from ..pathlib import Path
 
-.parent))
 
 from ..face_sync import FaceSync
 

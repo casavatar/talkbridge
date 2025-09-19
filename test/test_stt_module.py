@@ -12,14 +12,15 @@ Tests the new STT module functionality including:
 Author: TalkBridge QA Team
 Date: 2024-01-01
 """
+import pytest
+from talkbridge.stt import STTEngine
+
 
 import unittest
 import tempfile
 import os
-from pathlib import Path
 
 # Add src to path for imports
-.parent.parent / "src"))
 
 class TestSTTModule(unittest.TestCase):
     """Test cases for the STT module."""

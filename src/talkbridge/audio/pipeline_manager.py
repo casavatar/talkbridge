@@ -52,7 +52,7 @@ except ImportError as e:
 
 # Import notification system and async utilities
 try:
-    from ..web.notifier import notify, Level
+    from ..ui.notifier import notify, Level
     from ..errors import UserFacingError, ErrorCategory
     from ..utils.async_runner import AsyncTaskRunner
     UI_INTEGRATION_AVAILABLE = True

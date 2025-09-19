@@ -23,13 +23,14 @@ Functions:
 - main: Main demo function.
 ======================================================================
 """
+from talkbridge.ollama import OllamaClient
+
 
 import time
 import os
 import json
 
 # Add the src directory to the path
-))
 
 from ..ollama import OllamaClient, OllamaModelManager, ConversationManager, PromptEngineer, OllamaStreamingClient
 from ollama.streaming_client import ConsoleStreamingCallback, FileStreamingCallback, PerformanceStreamingCallback

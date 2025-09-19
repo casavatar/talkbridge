@@ -27,15 +27,12 @@ Functions:
 """
 
 import os
-import logging
 from typing import Optional, Dict, Any
 from pathlib import Path
 import time
+from ..logging_config import get_logger
 
-# Configure logging
-# Logging configuration is handled by src/desktop/logging_config.py
-# logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 try:
     import argostranslate.package
@@ -396,28 +393,24 @@ if __name__ == "__main__":
         "This is a test of the translation system."
     ]
     
-    print("Testing offline translation module...")
-    print("=" * 50)
+    logger.info("Testing offline translation module...")
     
     translator = OfflineTranslator()
     
     if not translator.is_available():
-        print("ERROR: No translation engines available!")
-        print("Please install required packages:")
-        print("  pip install argos-translate")
-        print("  pip install transformers torch")
+        logger.error("No translation engines available!")
+        logger.error("Please install required packages:")
+        logger.error("  pip install argos-translate")
+        logger.error("  pip install transformers torch")
         exit(1)
     
-    print(f"Available engines: argos={translator.argos_available}, huggingface={translator.hf_available}")
-    print(f"Preferred engine: {translator.preferred_engine}")
-    print()
+    logger.info(f"Available engines: argos={translator.argos_available}, huggingface={translator.hf_available}")
+    logger.info(f"Preferred engine: {translator.preferred_engine}")
     
     for text in test_texts:
         try:
             translated = translator.translate_to_spanish(text)
-            print(f"Original: {text}")
-            print(f"Translated: {translated}")
-            print("-" * 30)
+            logger.info(f"Original: {text}")
+            logger.info(f"Translated: {translated}")
         except TranslationError as e:
-            print(f"Translation failed: {e}")
-            print("-" * 30) 
+            logger.error(f"Translation failed: {e}") 

@@ -9,17 +9,18 @@ Author: TalkBridge Team
 Date: 2024-01-01
 Version: 1.0.0
 """
+import pytest
+from talkbridge.demo import animation_demo
+
 
 import unittest
 import tempfile
 import os
 import json
 import time
-from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 # Add src to path for imports
-.parent.parent / "src"))
 
 from demo.demo_config import (
     is_demo_mode, get_demo_setting, get_demo_file_path,
