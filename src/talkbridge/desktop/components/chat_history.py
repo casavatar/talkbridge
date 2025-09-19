@@ -17,8 +17,6 @@ from typing import List, Optional, Dict, Any
 from pathlib import Path
 import customtkinter as ctk
 
-.parent.parent.parent))
-
 from talkbridge.desktop.ui.events import EventBus, EventHandler, TranscriptEvent, TranslationEvent, AudioSource
 from talkbridge.desktop.ui.ui_utils import clean_text, strip_variation_selectors
 from talkbridge.desktop.ui.theme import (

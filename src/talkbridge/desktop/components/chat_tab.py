@@ -24,8 +24,6 @@ from typing import Optional
 from pathlib import Path
 import customtkinter as ctk
 
-.parent.parent.parent))
-
 # Import centralized logging and exception handling
 from talkbridge.logging_config import get_logger, log_exception
 from talkbridge.utils.exceptions import UIError, create_ui_error

@@ -17,8 +17,6 @@ from typing import Optional, Dict, List
 from pathlib import Path
 import customtkinter as ctk
 
-.parent.parent.parent))
-
 from talkbridge.desktop.ui.events import EventBus, EventHandler, StatusEvent, Level
 from talkbridge.desktop.ui.theme import (
     ColorPalette, Typography, Spacing, Dimensions

@@ -26,8 +26,6 @@ Functions:
 import os
 from pathlib import Path
 
-.parent.parent.parent))
-
 from talkbridge.stt import (
     transcribe_audio,
     transcribe_file,

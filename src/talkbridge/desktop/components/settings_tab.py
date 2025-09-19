@@ -22,9 +22,6 @@ from pathlib import Path
 import tkinter as tk
 import customtkinter as ctk
 
-# Import backend modules
-.parent.parent.parent))
-
 # Import unified theme
 try:
     from talkbridge.desktop.ui.theme import (
@@ -821,7 +818,6 @@ class SettingsTab:
         try:
             # Import audio capture for device detection
             from pathlib import Path
-            .parent.parent.parent))
             from talkbridge.audio.capture import AudioCapture
             
             # Create audio capture instance to check support
