@@ -126,12 +126,13 @@ Thumbs.db
 logs/
 data/logs/
 
-# Data files (optional, uncomment if needed)
-# data/
-# *.csv
-# *.json
-# *.sqlite
-# *.db
+# Data files - runtime data should not be committed
+data/
+*.sqlite
+*.db
+data/users.db
+data/app_state.json
+data/desktop_settings.json
 
 # Audio/Video files (optional, uncomment if needed)
 # *.wav
@@ -155,6 +156,12 @@ config/secrets.yaml
 config/local.yaml
 .env.local
 .env.production
+
+# Runtime cache and temporary files
+*.cache
+.cache/
+__pycache__/
+.pytest_cache/
 
 # Conda environments
 conda-meta/

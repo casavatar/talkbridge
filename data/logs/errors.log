@@ -1,9 +1,0 @@
-2025-09-17 17:04:13,595 [ERROR] src.ollama.ollama_client:213 - Error in chat: 404 Client Error: Not Found for url: http://localhost:11434/api/chat
-2025-09-17 18:32:32,703 [ERROR] talkbridge.desktop.mainwindow:301 - Error initializing chat tab: customtkinter.windows.widgets.ctk_combobox.CTkComboBox() got multiple values for keyword argument 'height'
-2025-09-17 18:34:26,359 [ERROR] talkbridge.desktop.mainwindow:301 - Error initializing chat tab: customtkinter.windows.widgets.ctk_combobox.CTkComboBox() got multiple values for keyword argument 'height'
-2025-09-17 18:48:31,484 [ERROR] talkbridge.desktop.mainwindow:301 - Error initializing chat tab: customtkinter.windows.widgets.ctk_combobox.CTkComboBox() got multiple values for keyword argument 'height'
-2025-09-17 19:28:04,180 [ERROR] talkbridge.desktop.mainwindow:301 - Error initializing chat tab: customtkinter.windows.widgets.ctk_combobox.CTkComboBox() got multiple values for keyword argument 'height'
-2025-09-17 19:28:11,801 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Audio pipeline manager not available
-2025-09-17 19:28:12,547 [ERROR] talkbridge.desktop.chat:72 - [ChatTab] Audio pipeline manager not available
-2025-09-17 19:29:14,341 [ERROR] talkbridge.desktop.mainwindow:301 - Error initializing chat tab: customtkinter.windows.widgets.ctk_combobox.CTkComboBox() got multiple values for keyword argument 'height'
-2025-09-17 19:46:27,564 [ERROR] talkbridge.desktop.mainwindow:301 - Error initializing chat tab: customtkinter.windows.widgets.ctk_combobox.CTkComboBox() got multiple values for keyword argument 'height'
