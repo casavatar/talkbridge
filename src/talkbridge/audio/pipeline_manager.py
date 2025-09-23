@@ -250,46 +250,60 @@ class PipelineManager:
             return self.available_devices
         
         try:
-            # Get input devices (microphones)
+            # Get device information from AudioCapture
             temp_capture = AudioCapture()
             devices_info = temp_capture.list_devices()
             
             # Clear existing devices
             self.available_devices = {'input': [], 'system_loopback': []}
             
-            # Process input devices
-            if 'input_devices' in devices_info:
-                for device in devices_info['input_devices']:
-                    device_info = DeviceInfo(
-                        index=device.get('index', -1),
-                        name=device.get('name', 'Unknown Device'),
-                        channels=device.get('channels', 1),
-                        sample_rate=device.get('sample_rate', 16000),
-                        is_input=True
-                    )
-                    # Exclude monitor/loopback devices from input list
-                    if not any(keyword in device_info.name.lower() 
-                              for keyword in ['monitor', 'loopback', 'output']):
-                        self.available_devices['input'].append(device_info)
+            # Process all devices from sd.query_devices()
+            all_devices = devices_info.get('devices', [])
+            self.logger.info(f"Detected audio devices: {len(all_devices)}")
             
-            # Process output devices for system audio loopback
-            if 'output_devices' in devices_info:
-                for device in devices_info['output_devices']:
-                    device_name = device.get('name', 'Unknown Device')
-                    # Look for loopback or monitor devices
-                    if any(keyword in device_name.lower() 
-                          for keyword in ['monitor', 'loopback', 'stereo mix', 'what u hear']):
+            for i, device in enumerate(all_devices):
+                device_name = device.get('name', f'Unknown Device {i}')
+                max_input_channels = device.get('max_input_channels', 0)
+                max_output_channels = device.get('max_output_channels', 0)
+                
+                # Log device details for debugging
+                self.logger.debug(f"Device {i}: {device_name} "
+                                f"(in:{max_input_channels}, out:{max_output_channels})")
+                
+                # Add as input device if it has input channels
+                if max_input_channels > 0:
+                    # Exclude monitor/loopback devices from regular input list
+                    if not any(keyword in device_name.lower() 
+                              for keyword in ['monitor', 'loopback', 'output']):
                         device_info = DeviceInfo(
-                            index=device.get('index', -1),
+                            index=i,
                             name=device_name,
-                            channels=device.get('channels', 2),
-                            sample_rate=device.get('sample_rate', 44100),
-                            is_input=False
+                            channels=max_input_channels,
+                            sample_rate=device.get('default_samplerate', 16000),
+                            is_input=True
                         )
-                        self.available_devices['system_loopback'].append(device_info)
+                        self.available_devices['input'].append(device_info)
+                
+                # Add as system loopback device if it's a monitor/loopback device
+                if any(keyword in device_name.lower() 
+                      for keyword in ['monitor', 'loopback', 'stereo mix', 'what u hear']):
+                    device_info = DeviceInfo(
+                        index=i,
+                        name=device_name,
+                        channels=max_output_channels if max_output_channels > 0 else 2,
+                        sample_rate=device.get('default_samplerate', 44100),
+                        is_input=False
+                    )
+                    self.available_devices['system_loopback'].append(device_info)
             
             self.logger.info(f"Found {len(self.available_devices['input'])} input devices")
             self.logger.info(f"Found {len(self.available_devices['system_loopback'])} loopback devices")
+            
+            # Log device names for debugging
+            for device in self.available_devices['input']:
+                self.logger.info(f"Microphone: {device.name}")
+            for device in self.available_devices['system_loopback']:
+                self.logger.info(f"System Audio: {device.name}")
             
             return self.available_devices
             

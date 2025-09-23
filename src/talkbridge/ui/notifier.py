@@ -95,7 +95,7 @@ def unsubscribe(handler: NotifierPort) -> None:
             logger.debug(f"Unsubscribed notification handler: {type(handler).__name__}")
 
 
-def notify(level: Level, message: str, *, details: str | None = None, context: str | None = None) -> None:
+def notify(level: Level, message: str, *, details: str | None = None, context: str | None = None, category: str | None = None) -> None:
     """
     Send a notification to all subscribed handlers.
     
@@ -104,7 +104,12 @@ def notify(level: Level, message: str, *, details: str | None = None, context: s
         message: User-facing message
         details: Optional technical details
         context: Optional context/category
+        category: Optional category (alias for context for backward compatibility)
     """
+    # Use category as context if provided (backward compatibility)
+    if category is not None and context is None:
+        context = category
+    
     note = Notification(level, message, details, context)
     
     # Create a snapshot of subscribers to avoid holding lock during notification

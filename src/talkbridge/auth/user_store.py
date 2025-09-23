@@ -48,10 +48,11 @@ class UserStore:
         # Ensure data directory exists
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # Initialize Argon2 password hasher with secure parameters
+        # Initialize Argon2 password hasher with optimized parameters
+        # Balanced for security and performance
         self.ph = PasswordHasher(
-            time_cost=3,      # Number of iterations
-            memory_cost=65536,  # Memory usage in KiB (64 MB)
+            time_cost=2,      # Number of iterations (reduced from 3 for better performance)
+            memory_cost=32768,  # Memory usage in KiB (32 MB, reduced from 64 MB)
             parallelism=1,    # Number of parallel threads
             hash_len=32,      # Length of hash in bytes
             salt_len=16       # Length of salt in bytes
@@ -259,6 +260,9 @@ class UserStore:
         Returns:
             User data dict if authentication successful, None otherwise
         """
+        import time
+        auth_start_time = time.time()
+        
         try:
             with sqlite3.connect(self.db_path) as conn:
                 conn.row_factory = sqlite3.Row
@@ -270,15 +274,21 @@ class UserStore:
                 
                 user_row = cursor.fetchone()
                 if not user_row:
-                    logger.warning(f"Authentication failed for user: {username} (not found or locked)")
+                    db_duration = time.time() - auth_start_time
+                    logger.warning(f"Authentication failed for user: {username} (not found or locked) - DB lookup: {db_duration:.3f}s")
                     return None
                 
-                # Verify password
+                # Verify password (this is the slow operation)
+                verify_start_time = time.time()
                 if not self._verify_password(password, user_row['password_hash'], user_row['salt']):
                     # Update failed login attempts
                     self._update_failed_login(username)
-                    logger.warning(f"Authentication failed for user: {username} (invalid password)")
+                    verify_duration = time.time() - verify_start_time
+                    total_duration = time.time() - auth_start_time
+                    logger.warning(f"Authentication failed for user: {username} (invalid password) - Verify: {verify_duration:.3f}s, Total: {total_duration:.3f}s")
                     return None
+                
+                verify_duration = time.time() - verify_start_time
                 
                 # Get user permissions
                 perm_cursor = conn.execute("""
@@ -301,14 +311,17 @@ class UserStore:
                 user_data = dict(user_row)
                 user_data['permissions'] = permissions
                 
-                logger.info(f"Successful authentication for user: {username}")
+                total_duration = time.time() - auth_start_time
+                logger.info(f"Successful authentication for user: {username} - Verify: {verify_duration:.3f}s, Total: {total_duration:.3f}s")
                 return user_data
                 
         except sqlite3.Error as e:
-            logger.error(f"Database error during authentication for {username}: {e}")
+            total_duration = time.time() - auth_start_time
+            logger.error(f"Database error during authentication for {username} after {total_duration:.3f}s: {e}")
             return None
         except Exception as e:
-            logger.error(f"Authentication error for {username}: {e}")
+            total_duration = time.time() - auth_start_time
+            logger.error(f"Authentication error for {username} after {total_duration:.3f}s: {e}")
             return None
     
     def _update_failed_login(self, username: str) -> None:

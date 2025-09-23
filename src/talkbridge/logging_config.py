@@ -137,6 +137,7 @@ class TalkBridgeLogger:
             # Create handlers
             self._create_console_handler()
             self._create_file_handler()
+            self._create_error_handler()
             
             # Configure project loggers
             self._configure_project_loggers()
@@ -182,6 +183,27 @@ class TalkBridgeLogger:
         
         # Add to root logger  
         logging.getLogger().addHandler(file_handler)
+        
+    def _create_error_handler(self) -> None:
+        """Create and configure dedicated error handler for warnings and errors."""
+        error_log_path = Path(self.config["log_dir"]) / "errors.log"
+        
+        error_handler = logging.handlers.RotatingFileHandler(
+            filename=error_log_path,
+            maxBytes=self.config["max_file_size"],
+            backupCount=self.config["backup_count"],
+            encoding='utf-8'
+        )
+        error_handler.setLevel(logging.WARNING)  # Capture WARNING and ERROR
+        
+        error_formatter = logging.Formatter(
+            fmt="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+            datefmt=self.config["date_format"]
+        )
+        error_handler.setFormatter(error_formatter)
+        
+        # Add to root logger
+        logging.getLogger().addHandler(error_handler)
         
     def _configure_project_loggers(self) -> None:
         """Configure all project-specific loggers."""

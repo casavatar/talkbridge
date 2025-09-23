@@ -34,7 +34,7 @@ from typing import Dict, List, Optional, Callable, Any, Generator
 from dataclasses import dataclass
 from .ollama_client import OllamaClient
 from ..logging_config import get_logger
-from ..ui.notifier import notifier
+from ..ui.notifier import notify_error, notify_warn, notify_success
 
 logger = get_logger(__name__)
 

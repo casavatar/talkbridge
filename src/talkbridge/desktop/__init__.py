@@ -19,10 +19,11 @@ __email__ = "support@talkbridge.com"
 
 # Verify critical units
 try:
-    from PySide6.QtWidgets import QApplication
-    PYSIDE6_AVAILABLE = True
+    import customtkinter as ctk
+    import tkinter as tk
+    CUSTOMTKINTER_AVAILABLE = True
 except ImportError:
-    PYSIDE6_AVAILABLE = False
+    CUSTOMTKINTER_AVAILABLE = False
 
 try:
     import yaml
@@ -31,13 +32,13 @@ except ImportError:
     YAML_AVAILABLE = False
 
 # Dependency status
-DEPENDENCIES_OK = PYSIDE6_AVAILABLE and YAML_AVAILABLE
+DEPENDENCIES_OK = CUSTOMTKINTER_AVAILABLE and YAML_AVAILABLE
 
 if not DEPENDENCIES_OK:
     import warnings
     missing = []
-    if not PYSIDE6_AVAILABLE:
-        missing.append("PySide6")
+    if not CUSTOMTKINTER_AVAILABLE:
+        missing.append("customtkinter")
     if not YAML_AVAILABLE:
         missing.append("PyYAML")
 
@@ -47,11 +48,26 @@ if not DEPENDENCIES_OK:
         ImportWarning
     )
 
+# Main module availability check (don't import, just check if it exists)
+if DEPENDENCIES_OK:
+    try:
+        import importlib.util
+        main_spec = importlib.util.find_spec("talkbridge.desktop.main")
+        MAIN_AVAILABLE = main_spec is not None
+    except ImportError:
+        MAIN_AVAILABLE = False
+else:
+    MAIN_AVAILABLE = False
+
 __all__ = [
     "__version__",
     "__author__", 
     "__email__",
     "DEPENDENCIES_OK",
-    "PYSIDE6_AVAILABLE",
-    "YAML_AVAILABLE"
+    "CUSTOMTKINTER_AVAILABLE",
+    "YAML_AVAILABLE",
+    "MAIN_AVAILABLE"
 ]
+
+# Note: main is not imported automatically to prevent duplicate import issues
+# when using python -m talkbridge.desktop.main

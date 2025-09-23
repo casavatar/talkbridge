@@ -33,7 +33,7 @@ class TranslationAdapter:
             raise ImportError("Translator module not available")
         
         try:
-            self.translator = Translator(service=service)
+            self.translator = Translator()  # Use default config_path
             self._service = service
             self._supported_languages = get_supported_languages('translation')
             self.logger.info(f"Initialized translation adapter with service: {service}")

@@ -105,6 +105,90 @@ class AudioCapture:
             except Exception as e:
                 logger.debug(f"Could not query audio device information: {e}")
 
+    def initialize_device_by_index(self, device_index: int | str | None = "auto", samplerate: int = 44100, channels: int = 1) -> bool:
+        """
+        Initialize audio device by index or device hint.
+        
+        Args:
+            device_index: Device index (int), device name (str), None, or "auto" for default
+            samplerate: Sample rate for the device
+            channels: Number of audio channels
+            
+        Returns:
+            bool: True if initialization successful, False otherwise
+        """
+        try:
+            devices = sd.query_devices()
+            
+            # Handle different device_index types
+            if device_index == "auto" or device_index is None:
+                # Use default input device
+                default_device = sd.default.device[0] if sd.default.device else None
+                selected_index = default_device
+                logger.info("Using auto-selected default input device")
+            elif isinstance(device_index, int):
+                # Direct device index
+                if 0 <= device_index < len(devices):
+                    selected_index = device_index
+                else:
+                    logger.error(f"Device index {device_index} out of range (0-{len(devices)-1})")
+                    return False
+            elif isinstance(device_index, str):
+                # Device name lookup
+                matches = [i for i, d in enumerate(devices) if device_index.lower() in d["name"].lower()]
+                if not matches:
+                    logger.error(f"No device found matching: {device_index}")
+                    return False
+                selected_index = matches[0]
+                logger.info(f"Found device match: {devices[selected_index]['name']}")
+            else:
+                logger.error(f"Invalid device_index type: {type(device_index)}")
+                return False
+            
+            # Validate the selected device has input channels
+            device_info = devices[selected_index]
+            if device_info.get('max_input_channels', 0) <= 0:
+                logger.error(f"Device {selected_index} ({device_info['name']}) has no input channels")
+                return False
+            
+            # Update instance variables
+            self.device = selected_index
+            self.sample_rate = samplerate
+            self.channels = min(channels, device_info.get('max_input_channels', 1))
+            
+            # Log selected device details
+            logger.info(f"Selected audio device {selected_index}: {device_info['name']}")
+            logger.info(f"Device details - Input channels: {device_info.get('max_input_channels', 0)}, "
+                       f"Output channels: {device_info.get('max_output_channels', 0)}, "
+                       f"Default SR: {device_info.get('default_samplerate', 'Unknown')}")
+            
+            # Set sounddevice defaults
+            sd.default.device = selected_index
+            sd.default.samplerate = self.sample_rate
+            sd.default.channels = self.channels
+            
+            # Test device accessibility
+            try:
+                test_frames = int(0.01 * self.sample_rate)  # 10ms test
+                test_recording = sd.rec(
+                    test_frames,
+                    samplerate=self.sample_rate,
+                    channels=self.channels,
+                    dtype=np.float32,
+                    device=selected_index
+                )
+                sd.wait()
+                logger.info(f"Device initialization test successful - recorded {len(test_recording)} frames")
+                return True
+                
+            except Exception as e:
+                logger.error(f"Device initialization test failed: {e}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Failed to initialize device: {e}", exc_info=True)
+            return False
+
     def get_loopback_devices(self) -> List[Dict[str, Any]]:
         """
         Get available loopback/output recording devices for all platforms.
@@ -740,6 +824,35 @@ class AudioCapture:
         audio_data = np.concatenate(self.audio_buffer, axis=0)
         self.audio_buffer.clear()
         return audio_data
+
+    def capture_chunk(self, duration: float = 0.1) -> Optional[np.ndarray]:
+        """
+        Capture one audio chunk from the device for real-time processing.
+        
+        This method is used by the pipeline manager for continuous audio capture
+        and processing. It internally uses the record_chunk method.
+        
+        Args:
+            duration: Duration in seconds to capture (default: 0.1s)
+            
+        Returns:
+            Optional[np.ndarray]: Audio data chunk or None if capture fails
+        """
+        try:
+            # Use the existing record_chunk implementation
+            audio_data = self.record_chunk(duration=duration, sample_rate=self.sample_rate)
+            
+            if audio_data is not None:
+                logger.debug(f"Captured audio chunk: {audio_data.shape}, "
+                           f"max: {np.max(np.abs(audio_data)):.4f}")
+                return audio_data
+            else:
+                logger.warning("No audio data captured in chunk")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Failed to capture audio chunk: {e}")
+            return None
 
     def stop(self):
         """Stop audio capture."""

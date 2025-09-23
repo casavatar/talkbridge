@@ -80,15 +80,17 @@ class UIServices:
     def _initialize_pipeline_manager(self) -> None:
         """Initialize the audio pipeline manager with callbacks."""
         try:
-            self._pipeline_manager = PipelineManager()
+            # Pass transcript and translation callbacks to constructor
+            self._pipeline_manager = PipelineManager(
+                on_transcript=self._on_transcript,
+                on_translation=self._on_translation,
+                on_status=self._on_pipeline_status
+            )
             
-            # Wire pipeline callbacks to event bus
+            # Set additional callbacks via set_callbacks method
             self._pipeline_manager.set_callbacks(
-                status_callback=self._on_pipeline_status,
                 error_callback=self._on_pipeline_error,
-                data_callback=None,  # No raw data to UI
-                transcript_callback=self._on_transcript,
-                translation_callback=self._on_translation
+                data_callback=None  # No raw data to UI
             )
             
             self.logger.info("Pipeline manager initialized successfully")
@@ -312,7 +314,17 @@ class UIServices:
             if not self.pipeline_manager:
                 return []
             
-            devices = self.pipeline_manager.list_input_devices()
+            device_infos = self.pipeline_manager.list_input_devices()
+            devices = []
+            for device_info in device_infos:
+                devices.append({
+                    'index': device_info.index,
+                    'name': device_info.name,
+                    'channels': device_info.channels,
+                    'sample_rate': device_info.sample_rate,
+                    'is_input': device_info.is_input
+                })
+            
             self.logger.debug(f"Found {len(devices)} input devices")
             return devices
             
@@ -327,7 +339,17 @@ class UIServices:
             if not self.pipeline_manager:
                 return []
             
-            devices = self.pipeline_manager.list_system_loopbacks()
+            device_infos = self.pipeline_manager.list_system_loopbacks()
+            devices = []
+            for device_info in device_infos:
+                devices.append({
+                    'index': device_info.index,
+                    'name': device_info.name,
+                    'channels': device_info.channels,
+                    'sample_rate': device_info.sample_rate,
+                    'is_input': device_info.is_input
+                })
+            
             self.logger.debug(f"Found {len(devices)} loopback devices")
             return devices
             

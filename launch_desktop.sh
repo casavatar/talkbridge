@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-set -euo pipefai# Ensure centralized logs directory exists
-LOG_DIR="$ROOT_DIR/data/logs"
-mkdir -p "$LOG_DIR"
-echo -e "${GREEN}📄 Centralized logs directory: $LOG_DIR${NC}" TalkBridge Desktop Launcher
-# ==========================
-# Launches the desktop UI with clean paths, virtual environment support, and unified logging.
+set -euo pipefail
+
+# TalkBridge Desktop Launcher (Conda Environment)
+# ===============================================
+# Launches the desktop UI using conda environment with unified logging.
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -17,33 +16,59 @@ NC='\033[0m' # No Color
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$ROOT_DIR"
 
-echo -e "${GREEN}🚀 Launching TalkBridge Desktop...${NC}"
+echo -e "${GREEN}🚀 Launching TalkBridge Desktop with Conda...${NC}"
 echo -e "${BLUE}📁 Project root: $ROOT_DIR${NC}"
 
-# Check for virtual environment
-VENV_DIR="$ROOT_DIR/.venv"
-if [ -d "$VENV_DIR" ]; then
-    echo -e "${GREEN}🔧 Activating virtual environment...${NC}"
-    source "$VENV_DIR/bin/activate"
-    echo -e "${GREEN}✅ Virtual environment activated: $VENV_DIR${NC}"
-else
-    echo -e "${RED}❌ Virtual environment not found at $VENV_DIR${NC}"
-    echo -e "${YELLOW}� Run the following commands to set up:${NC}"
-    echo -e "${YELLOW}   python3 -m venv .venv${NC}"
-    echo -e "${YELLOW}   source .venv/bin/activate${NC}"
-    echo -e "${YELLOW}   pip install -r requirements.txt${NC}"
+# Conda environment configuration
+CONDA_ENV="talkbridge-desktop-env"
+CONDA_BASE="/home/ingek/miniconda3"
+
+echo -e "${BLUE}🐍 Conda environment: $CONDA_ENV${NC}"
+echo -e "${BLUE}📂 Conda base: $CONDA_BASE${NC}"
+
+# Check if conda environment exists
+if [ ! -d "$CONDA_BASE/envs/$CONDA_ENV" ]; then
+    echo -e "${RED}❌ Conda environment $CONDA_ENV not found at $CONDA_BASE/envs/$CONDA_ENV${NC}"
+    echo -e "${YELLOW}👉 Create it with: conda create -n $CONDA_ENV python=3.11${NC}"
+    echo -e "${YELLOW}👉 Then install dependencies: conda activate $CONDA_ENV && pip install -r requirements.txt${NC}"
     exit 1
 fi
 
-# Ensure logs directory exists
-LOG_DIR="$ROOT_DIR/logs"
-mkdir -p "$LOG_DIR"
-echo -e "${GREEN}� Logs directory: $LOG_DIR${NC}"
+# Initialize conda in this shell
+if [ -f "$CONDA_BASE/etc/profile.d/conda.sh" ]; then
+    echo -e "${GREEN}🔧 Initializing conda...${NC}"
+    source "$CONDA_BASE/etc/profile.d/conda.sh"
+else
+    echo -e "${RED}❌ conda.sh not found at $CONDA_BASE/etc/profile.d/conda.sh${NC}"
+    echo -e "${YELLOW}👉 Cannot initialize conda. Please check your conda installation.${NC}"
+    exit 1
+fi
 
-# Check if the desktop module can be imported
-if ! python -c "import talkbridge.desktop.main" 2>/dev/null; then
-    echo -e "${RED}❌ Cannot import talkbridge.desktop.main${NC}"
+# Activate conda environment
+echo -e "${GREEN}🔄 Activating conda environment: $CONDA_ENV${NC}"
+conda activate "$CONDA_ENV"
+
+# Verify we're in the correct environment
+CURRENT_ENV=$(conda info --envs | grep '\*' | awk '{print $1}')
+if [ "$CURRENT_ENV" != "$CONDA_ENV" ]; then
+    echo -e "${RED}❌ Failed to activate $CONDA_ENV. Current environment: $CURRENT_ENV${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✅ Conda environment activated: $CONDA_ENV${NC}"
+echo -e "${BLUE}🐍 Python path: $(which python)${NC}"
+
+# Ensure logs directory exists
+LOG_DIR="$ROOT_DIR/data/logs"
+mkdir -p "$LOG_DIR"
+echo -e "${GREEN}📄 Logs directory: $LOG_DIR${NC}"
+
+# Check if the desktop module can be imported (without importing main.py directly)
+echo -e "${BLUE}🔍 Checking TalkBridge desktop module...${NC}"
+if ! python -c "import talkbridge.desktop" 2>/dev/null; then
+    echo -e "${RED}❌ Cannot import talkbridge.desktop${NC}"
     echo -e "${YELLOW}👉 Make sure you've installed the package with:${NC}"
+    echo -e "${YELLOW}   conda activate $CONDA_ENV${NC}"
     echo -e "${YELLOW}   pip install -e .${NC}"
     exit 1
 fi

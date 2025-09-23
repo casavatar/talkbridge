@@ -37,7 +37,7 @@ class WhisperSTTAdapter:
             raise ImportError("WhisperEngine module not available")
         
         try:
-            self.whisper_engine = WhisperEngine(model_size=model_size, device=device)
+            self.whisper_engine = WhisperEngine(model_name=model_size, device=device)
             self._current_language = None
             self._supported_languages = get_supported_languages('whisper')
             self.logger.info(f"Initialized Whisper STT adapter with model: {model_size}")

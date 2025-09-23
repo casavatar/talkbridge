@@ -174,6 +174,9 @@ class AuthManager:
         Returns:
             Tuple of (success, user_data, message)
         """
+        import time
+        auth_start_time = time.time()
+        
         if not username or not password:
             logger.warning("Authentication attempt with empty credentials")
             return False, None, "Username and password are required"
@@ -191,23 +194,26 @@ class AuthManager:
             # Attempt authentication
             user_data = self.user_store.authenticate_user(username, password)
             
+            auth_duration = time.time() - auth_start_time
+            
             if user_data:
                 # Clear rate limiting on successful login
                 self._clear_rate_limit(username)
                 
                 # Check if account requires password change
                 if user_data.get('requires_password_change', False):
-                    logger.info(f"Successful authentication for {username} (password change required)")
+                    logger.info(f"Successful authentication for {username} (password change required) in {auth_duration:.2f}s")
                     return True, user_data, "Password change required"
                 
-                logger.info(f"Successful authentication for user: {username}")
+                logger.info(f"Successful authentication for user: {username} in {auth_duration:.2f}s")
                 return True, user_data, "Authentication successful"
             else:
-                logger.warning(f"Failed authentication attempt for user: {username}")
+                logger.warning(f"Failed authentication attempt for user: {username} in {auth_duration:.2f}s")
                 return False, None, "Invalid username or password"
                 
         except Exception as e:
-            logger.error(f"Authentication error for user {username}: {e}")
+            auth_duration = time.time() - auth_start_time
+            logger.error(f"Authentication error for user {username} after {auth_duration:.2f}s: {e}")
             return False, None, "Authentication system error"
     
     def create_user(self, username: str, password: str, role: str = "user",
@@ -492,6 +498,20 @@ class AuthManager:
                 "requires_special": True
             }
         }
+    
+    def authenticate_simple(self, username: str, password: str) -> bool:
+        """
+        Simple authentication method that returns only boolean result.
+        
+        Args:
+            username: Username to authenticate
+            password: Plain text password
+            
+        Returns:
+            True if authentication successful, False otherwise
+        """
+        success, _, _ = self.authenticate(username, password)
+        return success
 
 
 # Backward compatibility functions for legacy code

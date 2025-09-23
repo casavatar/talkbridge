@@ -657,7 +657,7 @@ class LoginDialog:
             elif state == AuthenticationState.TIMEOUT:
                 if self.login_button and self.login_button.winfo_exists():
                     self.login_button.configure(
-                        text=UIText.AUTH_TIMEOUT if THEME_AVAILABLE else "Request timed out", 
+                        text="Request timed out", 
                         state="normal"
                     )
                 if self.username_entry and self.username_entry.winfo_exists():
@@ -721,70 +721,119 @@ class LoginDialog:
     def login(self) -> None:
         """Handle login button click."""
         if self.auth_state == AuthenticationState.AUTHENTICATING:
+            self.logger.info("Login attempt ignored - authentication already in progress")
             return
             
         self.username = self.username_entry.get().strip()
         self.password = self.password_entry.get().strip()
         
         if not self.username or not self.password:
+            self.logger.warning("Login attempt with empty credentials")
             self.update_status("Please fill in all fields", LoginTheme.TEXT_ERROR)
             return
             
-        # Perform authentication synchronously to avoid threading issues
+        self.logger.info(f"Starting authentication for user: {self.username}")
+        
+        # Perform authentication asynchronously to avoid UI blocking
         self.set_auth_state(AuthenticationState.AUTHENTICATING)
         
-        # Use after_idle to perform authentication in the next event loop iteration
-        self.dialog.after_idle(self._perform_authentication)
+        # Start authentication in background thread
+        auth_thread = threading.Thread(target=self._authenticate_async, daemon=True)
+        auth_thread.start()
+        
+        # Set up timeout monitoring
+        self._setup_auth_timeout()
 
-    def _perform_authentication(self) -> None:
-        """Perform authentication synchronously in the main thread."""
+    def _authenticate_async(self) -> None:
+        """Perform authentication in background thread."""
+        import time
+        auth_start_time = time.time()
+        
         try:
-            # Disable UI during authentication
-            self.login_button.configure(state="disabled")
-            self.cancel_button.configure(state="disabled")
-            self.username_entry.configure(state="disabled")
-            self.password_entry.configure(state="disabled")
+            self.logger.info(f"Starting background authentication for user: {self.username}")
             
-            # Update UI to show authentication in progress
-            if self.dialog:
-                self.dialog.update_idletasks()
+            # Update status to show progress
+            if self.dialog and self.dialog.winfo_exists():
+                self.dialog.after(0, lambda: self.update_status("Verifying credentials...", LoginTheme.ACCENT_BLUE))
             
-            # Perform authentication
-            success = self.auth_manager.authenticate(self.username, self.password)
+            # Perform authentication (returns tuple: success, user_data, message)
+            success, user_data, message = self.auth_manager.authenticate(self.username, self.password)
             
-            # Re-enable UI
-            self.login_button.configure(state="normal")
-            self.cancel_button.configure(state="normal")
-            self.username_entry.configure(state="normal")
-            self.password_entry.configure(state="normal")
+            auth_duration = time.time() - auth_start_time
+            self.logger.info(f"Authentication completed in {auth_duration:.2f} seconds for user: {self.username}")
             
-            # Handle authentication result
-            self._on_auth_complete(success)
+            # Store user data for successful logins
+            if success and user_data:
+                self.auth_result = AuthenticationResult(
+                    success=True,
+                    message=message,
+                    username=self.username,
+                    state=AuthenticationState.SUCCESS
+                )
+            
+            # Schedule UI update on main thread
+            if self.dialog and self.dialog.winfo_exists():
+                self.dialog.after(0, lambda: self._on_auth_complete_thread_safe(success, message))
             
         except Exception as e:
-            self.logger.error(f"Authentication error: {e}")
-            # Re-enable UI on error
-            self.login_button.configure(state="normal")
-            self.cancel_button.configure(state="normal")
-            self.username_entry.configure(state="normal")
-            self.password_entry.configure(state="normal")
-            
-            self._on_auth_error(str(e))
+            auth_duration = time.time() - auth_start_time
+            self.logger.error(f"Background authentication error after {auth_duration:.2f} seconds: {e}")
+            # Schedule error handling on main thread
+            if self.dialog and self.dialog.winfo_exists():
+                self.dialog.after(0, lambda: self._on_auth_complete_thread_safe(False, f"Authentication system error: {str(e)}"))
+    
+    def _setup_auth_timeout(self) -> None:
+        """Set up authentication timeout monitoring."""
+        # Set a longer timeout for authentication (30 seconds for slower systems)
+        auth_timeout = 30000  # 30 seconds in milliseconds
+        
+        def auth_timeout_handler():
+            """Handle authentication timeout."""
+            if self.auth_state == AuthenticationState.AUTHENTICATING:
+                self.logger.warning(f"Authentication timeout for user: {self.username}")
+                self.set_auth_state(AuthenticationState.TIMEOUT)
+                timeout_message = (
+                    "Authentication is taking longer than expected. "
+                    "This may be due to system load or network issues. "
+                    "Please try again."
+                )
+                self._on_auth_complete_thread_safe(False, timeout_message)
+        
+        # Schedule timeout
+        self.dialog.after(auth_timeout, auth_timeout_handler)
+    
+    def _on_auth_complete_thread_safe(self, success: bool, message: str = "") -> None:
+        """Thread-safe wrapper for authentication completion."""
+        try:
+            # Only process if still in authenticating state (not timed out)
+            if self.auth_state == AuthenticationState.AUTHENTICATING:
+                self._on_auth_complete(success, message)
+        except Exception as e:
+            self.logger.error(f"Error in thread-safe auth completion: {e}")
+    def _perform_authentication(self) -> None:
+        """Legacy synchronous authentication method - kept for compatibility."""
+        self.logger.warning("Using legacy synchronous authentication - consider using async method")
+        self._authenticate_async()
 
     def _authenticate(self) -> None:
         """Perform authentication in separate thread - DEPRECATED."""
         # This method is now deprecated in favor of synchronous authentication
         pass
 
-    def _on_auth_complete(self, success: bool) -> None:
+    def _on_auth_complete(self, success: bool, message: str = "") -> None:
         """Handle authentication completion on main thread."""
         try:
             if not self.dialog or not self.dialog.winfo_exists():
                 self.logger.warning("Dialog no longer exists in auth completion")
                 return
                 
+            # Re-enable UI elements first
+            self._re_enable_ui()
+                
             if success:
+                self.logger.info(f"Authentication successful for user: {self.username}")
                 self.set_auth_state(AuthenticationState.SUCCESS)
+                self.update_status(message or "Authentication successful!", LoginTheme.TEXT_SUCCESS)
                 self.save_credentials()
                 self.result = True
                 
@@ -795,13 +844,32 @@ class LoginDialog:
                     self.logger.warning(f"Cannot schedule dialog destruction: {e}")
                     self._safe_destroy_dialog()  # Try to destroy immediately
             else:
+                self.logger.warning(f"Authentication failed for user: {self.username} - {message}")
                 self.set_auth_state(AuthenticationState.FAILED)
+                self.update_status(message or "Authentication failed. Please try again.", LoginTheme.TEXT_ERROR)
                 if self.password_entry and self.password_entry.winfo_exists():
                     self.password_entry.delete(0, 'end')
                     self.password_entry.focus()
                     
         except Exception as e:
             self.logger.error(f"Error in auth completion handler: {e}")
+    
+    def _re_enable_ui(self) -> None:
+        """Re-enable UI elements after authentication."""
+        try:
+            if self.login_button and self.login_button.winfo_exists():
+                self.login_button.configure(
+                    text=UIText.SIGN_IN_BUTTON if THEME_AVAILABLE else "Sign In",
+                    state="normal"
+                )
+            if self.cancel_button and self.cancel_button.winfo_exists():
+                self.cancel_button.configure(state="normal")
+            if self.username_entry and self.username_entry.winfo_exists():
+                self.username_entry.configure(state="normal")
+            if self.password_entry and self.password_entry.winfo_exists():
+                self.password_entry.configure(state="normal")
+        except (tk.TclError, RuntimeError) as e:
+            self.logger.warning(f"Error re-enabling UI: {e}")
 
     def _safe_destroy_dialog(self) -> None:
         """Safely destroy the dialog with error handling."""
