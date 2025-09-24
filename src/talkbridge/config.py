@@ -31,10 +31,12 @@ from .logging_config import get_logger
 
 logger = get_logger(__name__)
 
-# Get the project root directory
-PROJECT_ROOT = Path(__file__).parent.parent
+# Get the project root directory using robust resolver
+from .utils.project_root import get_project_root, get_data_dir
+
+PROJECT_ROOT = get_project_root()
 SRC_DIR = PROJECT_ROOT / "src"
-DATA_DIR = PROJECT_ROOT / "data"
+DATA_DIR = get_data_dir()  # Uses environment override if available
 DOCS_DIR = PROJECT_ROOT / "doc"
 TEST_DIR = PROJECT_ROOT / "test"
 

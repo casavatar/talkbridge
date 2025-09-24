@@ -123,6 +123,97 @@ def _safe_execute(fn: Callable, *args, **kwargs) -> None:
     except Exception as e:
         logger.error(f"Error in UI thread callback {fn.__name__}: {e}")
 
+def ui_safe_call(widget: Union["ctk.CTk", "tk.Tk", "ctk.CTkBaseClass", "tk.Widget"], func: Callable, *args, **kwargs) -> None:
+    """
+    Safely schedule a Tkinter call if the main loop is alive.
+    
+    This function ensures UI operations are always performed on the main thread
+    by using the widget's .after() method to schedule the call, with robust
+    error handling for destroyed widgets and inactive main loops.
+    
+    Args:
+        widget: The Tkinter/CustomTkinter widget to use for scheduling
+        func: Function to call safely on the main thread  
+        *args: Positional arguments for the function
+        **kwargs: Keyword arguments for the function
+        
+    Example:
+        # Safe UI update from background thread
+        ui_safe_call(dialog, dialog.destroy)
+        ui_safe_call(label, label.configure, text="New text")
+    """
+    if not widget:
+        logger.warning("ui_safe_call skipped: widget is None")
+        return
+        
+    try:
+        # Check if widget and root are valid before scheduling
+        if hasattr(widget, 'winfo_exists'):
+            try:
+                if not widget.winfo_exists():
+                    logger.warning("ui_safe_call skipped: widget no longer exists.")
+                    return
+            except RuntimeError:
+                logger.warning("ui_safe_call skipped: widget already destroyed.")
+                return
+        
+        # Get the root window to check main loop status
+        try:
+            if hasattr(widget, 'winfo_toplevel'):
+                root = widget.winfo_toplevel()
+                if not root or not root.winfo_exists():
+                    logger.warning("ui_safe_call skipped: main loop not running.")
+                    return
+        except (RuntimeError, AttributeError):
+            logger.warning("ui_safe_call skipped: cannot access main loop.")
+            return
+        
+        # Check if we're already on the main thread
+        if threading.current_thread() is threading.main_thread():
+            # On main thread, execute directly after widget validation
+            func(*args, **kwargs)
+        else:
+            # On background thread, schedule for main thread execution
+            if hasattr(widget, 'after'):
+                try:
+                    widget.after(0, lambda: _safe_execute_on_widget(widget, func, *args, **kwargs))
+                    logger.debug(f"Scheduled UI safe call for {func.__name__} on widget {type(widget).__name__}")
+                except RuntimeError as e:
+                    # Catch "main thread is not in main loop"
+                    logger.error("ui_safe_call failed: %s", e)
+                    # Emergency fallback: log instead of crashing
+                    try:
+                        func(*args, **kwargs)
+                        logger.warning(f"Emergency fallback execution succeeded for {func.__name__}")
+                    except Exception as inner:
+                        logger.error("Fallback execution failed: %s", inner)
+            else:
+                logger.warning(f"Widget {type(widget).__name__} doesn't have .after() method")
+    except Exception as e:
+        logger.error(f"UI safe call failed for {func.__name__}: {e}", exc_info=True)
+
+def _safe_execute_on_widget(widget: Union["ctk.CTk", "tk.Tk", "ctk.CTkBaseClass", "tk.Widget"], func: Callable, *args, **kwargs) -> None:
+    """Safely execute a function on a widget with existence check."""
+    try:
+        # Ensure widget validity before executing
+        if not widget:
+            logger.warning("Cannot execute on None widget")
+            return
+            
+        if hasattr(widget, 'winfo_exists'):
+            try:
+                if widget.winfo_exists():
+                    func(*args, **kwargs)
+                else:
+                    logger.debug(f"Widget destroyed before execution of {func.__name__}")
+            except RuntimeError as e:
+                logger.warning(f"Widget destroyed during {func.__name__} check: {e}")
+        else:
+            # Widget doesn't have winfo_exists (might be CTk root), try directly
+            func(*args, **kwargs)
+    except Exception as e:
+        logger.error(f"UI execution failed: {e}", exc_info=True)
+
 def schedule_ui_update(
     interval_ms: int, 
     fn: Callable, 

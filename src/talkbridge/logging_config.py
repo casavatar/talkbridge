@@ -32,9 +32,12 @@ from datetime import datetime
 _config_lock = threading.Lock()
 _logging_configured = False
 
+# Import robust project root resolver
+from .utils.project_root import get_project_root, get_logs_dir
+
 # Centralized log directory - All logs go to data/logs/
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-LOG_DIR = PROJECT_ROOT / "data" / "logs"
+PROJECT_ROOT = get_project_root()
+LOG_DIR = get_logs_dir()
 LOG_FILE = LOG_DIR / "talkbridge.log"
 
 # Ensure log directory exists

@@ -40,7 +40,10 @@ try:
     ARGOS_AVAILABLE = True
 except ImportError:
     ARGOS_AVAILABLE = False
-    logger.warning("argos-translate not available. Install with: pip install argos-translate")
+    # Log warning only once per session
+    if not hasattr(logger, '_argos_warning_logged'):
+        logger.warning("argos-translate not available. Install with: pip install argos-translate")
+        logger._argos_warning_logged = True
 
 try:
     from transformers import MarianMTModel, MarianTokenizer

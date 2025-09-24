@@ -457,10 +457,20 @@ class TalkBridgeApplication:
             retry_dialog.resizable(False, False)
             retry_dialog.configure(fg_color=ApplicationTheme.BACKGROUND_MAIN)
             retry_dialog.transient(self.root)
-            retry_dialog.grab_set()
             
             # Center dialog
             self._center_dialog(retry_dialog, 350, 200)
+            
+            # Ensure dialog is visible before grabbing focus
+            retry_dialog.update_idletasks()  # Process pending display updates
+            retry_dialog.deiconify()  # Ensure window is visible
+            
+            # Safe grab_set with error handling
+            try:
+                retry_dialog.grab_set()
+            except Exception as grab_error:
+                self.logger.warning(f"Failed to set dialog grab: {grab_error}")
+                # Continue without grab_set - dialog will still be modal via transient
             
             result = [False]  # Use list to modify from inner function
             

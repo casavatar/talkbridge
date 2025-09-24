@@ -45,8 +45,9 @@ except ImportError:
     Xtts = None
     TTS_AVAILABLE = False
     logger = get_logger(__name__) if 'get_logger' in globals() else None
-    if logger:
+    if logger and not hasattr(logger, '_tts_warning_logged'):
         logger.warning("TTS library not available. Voice cloning features will be disabled.")
+        logger._tts_warning_logged = True
 
 from .config import get_config, get_model_config
 

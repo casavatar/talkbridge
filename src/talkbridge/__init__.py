@@ -96,13 +96,57 @@ from .logging_config import configure_logging
 configure_logging(development_mode=True)
 
 def handle_exception(exc_type, exc_value, exc_traceback):
-    """Handle uncaught exceptions by logging them to errors.log"""
-    logger = logging.getLogger("talkbridge")
+    """Handle uncaught exceptions by logging them to errors.log with recursion protection"""
+    import traceback
+    
+    # Handle keyboard interrupts gracefully without logging
     if issubclass(exc_type, KeyboardInterrupt):
-        # Don't log keyboard interrupts - they're user-initiated
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+    
+    # Prevent recursion by using a simple flag
+    if hasattr(handle_exception, '_in_progress'):
+        # If we're already handling an exception, use emergency fallback
+        try:
+            sys.__stderr__.write(
+                f"[EMERGENCY] Recursion detected in exception handler\n"
+                f"Original exception: {exc_type.__name__}: {exc_value}\n"
+                f"{''.join(traceback.format_tb(exc_traceback))}\n"
+            )
+            sys.__stderr__.flush()
+        except:
+            pass  # Even emergency fallback failed, give up gracefully
+        return
+    
+    # Set recursion protection flag
+    handle_exception._in_progress = True
+    
+    try:
+        # Attempt to log the exception normally
+        logger = logging.getLogger("talkbridge")
+        logger.critical(
+            "Uncaught exception", 
+            exc_info=(exc_type, exc_value, exc_traceback)
+        )
+    except Exception as log_error:
+        # Logging failed - use emergency stderr fallback
+        try:
+            sys.__stderr__.write(
+                f"[FATAL] Failed to log exception: {log_error}\n"
+                f"Original exception: {exc_type.__name__}: {exc_value}\n"
+                f"{''.join(traceback.format_tb(exc_traceback))}\n"
+            )
+            sys.__stderr__.flush()
+        except:
+            # Even stderr fallback failed - last resort
+            try:
+                print(f"CRITICAL ERROR: {exc_type.__name__}: {exc_value}", file=sys.__stdout__)
+            except:
+                pass  # Complete failure - can't do anything more
+    finally:
+        # Always clear the recursion protection flag
+        if hasattr(handle_exception, '_in_progress'):
+            delattr(handle_exception, '_in_progress')
 
 # Set the exception handler
 sys.excepthook = handle_exception
@@ -116,7 +160,7 @@ class StderrLogger:
         self.original_stderr = sys.stderr
         
     def write(self, message):
-        """Write stderr messages to logger"""
+        """Write stderr messages to logger with recursion protection"""
         if message.strip():
             # Filter out common noise but keep real errors
             msg = message.strip()
@@ -124,7 +168,17 @@ class StderrLogger:
                 'error', 'failed', 'exception', 'warning', 'critical',
                 'portaudio', 'alsa', 'tensorflow', 'invalid'
             ]):
-                self.logger.error(msg)
+                # Prevent recursion when logging stderr messages
+                try:
+                    self.logger.error(msg)
+                except Exception:
+                    # If logging fails, write directly to original stderr
+                    try:
+                        self.original_stderr.write(f"[STDERR] {msg}\n")
+                        self.original_stderr.flush()
+                    except Exception:
+                        # Complete fallback failure - ignore silently to prevent recursion
+                        pass
                 
     def flush(self):
         """Required for file-like interface"""

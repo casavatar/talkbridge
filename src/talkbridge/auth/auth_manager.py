@@ -178,13 +178,13 @@ class AuthManager:
         auth_start_time = time.time()
         
         if not username or not password:
-            logger.warning("Authentication attempt with empty credentials")
+            logger.error("Authentication attempt with empty credentials")
             return False, None, "Username and password are required"
         
         # Check rate limiting
         is_limited, wait_time = self._is_rate_limited(username)
         if is_limited:
-            logger.warning(f"Rate limited authentication attempt for user: {username} (wait {wait_time}s)")
+            logger.error(f"Rate limited authentication attempt for user: {username} (wait {wait_time}s)")
             return False, None, f"Too many failed attempts. Try again in {wait_time} seconds."
         
         # Record this attempt for rate limiting
@@ -208,7 +208,7 @@ class AuthManager:
                 logger.info(f"Successful authentication for user: {username} in {auth_duration:.2f}s")
                 return True, user_data, "Authentication successful"
             else:
-                logger.warning(f"Failed authentication attempt for user: {username} in {auth_duration:.2f}s")
+                logger.error(f"Failed authentication attempt for user: {username} in {auth_duration:.2f}s")
                 return False, None, "Invalid username or password"
                 
         except Exception as e:

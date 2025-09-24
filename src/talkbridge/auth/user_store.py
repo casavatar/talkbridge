@@ -20,6 +20,7 @@ import sqlite3
 import os
 import stat
 import secrets
+import time
 from pathlib import Path
 from typing import Dict, Optional, List, Tuple
 from datetime import datetime
@@ -27,8 +28,105 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError, HashingError
 
 from talkbridge.logging_config import get_logger
+from talkbridge.ui.notifier import notify_error
 
 logger = get_logger(__name__)
+
+
+def ensure_db_exists(db_path: Path) -> None:
+    """
+    Ensure database file exists, create if missing.
+    
+    Args:
+        db_path: Path to the database file
+        
+    Raises:
+        ConnectionError: If unable to create database
+    """
+    try:
+        if not db_path.exists():
+            logger.warning("Database file not found at %s. Creating new database...", db_path)
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Create empty database with basic structure
+            conn = sqlite3.connect(str(db_path))
+            conn.close()
+            logger.info("Created new database at %s", db_path)
+    except Exception as e:
+        error_msg = f"Failed to create database at {db_path}: {e}"
+        logger.error(error_msg, exc_info=True)
+        notify_error(f"Database creation failed: {e}")
+        raise ConnectionError(error_msg) from e
+
+
+def get_db_connection(db_path: Path, retries: int = 3, retry_delay: float = 0.5) -> sqlite3.Connection:
+    """
+    Get a database connection with retry logic and comprehensive error handling.
+    
+    Args:
+        db_path: Path to the database file
+        retries: Number of retry attempts (default: 3)
+        retry_delay: Delay between retries in seconds (default: 0.5)
+        
+    Returns:
+        SQLite connection object
+        
+    Raises:
+        ConnectionError: If connection fails after all retries
+    """
+    # Ensure database exists first
+    ensure_db_exists(db_path)
+    
+    for attempt in range(1, retries + 1):
+        try:
+            logger.debug("Attempting database connection (attempt %d/%d): %s", attempt, retries, db_path)
+            
+            # Check file permissions and existence
+            if not db_path.exists():
+                raise sqlite3.Error(f"Database file does not exist: {db_path}")
+            
+            if not os.access(db_path, os.R_OK | os.W_OK):
+                raise sqlite3.Error(f"Insufficient permissions for database file: {db_path}")
+            
+            # Attempt connection with timeout
+            conn = sqlite3.connect(str(db_path), timeout=10.0)
+            
+            # Test the connection with a simple query
+            cursor = conn.execute("SELECT 1")
+            cursor.fetchone()
+            cursor.close()
+            
+            logger.debug("Database connection successful: %s", db_path)
+            return conn
+            
+        except sqlite3.Error as e:
+            logger.error(
+                "Database connection failed (attempt %d/%d): %s - Error: %s",
+                attempt, retries, db_path, e, exc_info=True
+            )
+            
+            if attempt == retries:
+                error_msg = f"Database connection failed after {retries} attempts: {e}"
+                logger.error(error_msg)
+                notify_error(f"Database connection failed: {e}")
+                raise ConnectionError(error_msg) from e
+            else:
+                logger.info("Retrying database connection in %.1f seconds...", retry_delay)
+                time.sleep(retry_delay)
+                
+        except Exception as e:
+            logger.error(
+                "Unexpected error during database connection (attempt %d/%d): %s",
+                attempt, retries, e, exc_info=True
+            )
+            
+            if attempt == retries:
+                error_msg = f"Unexpected database error after {retries} attempts: {e}"
+                logger.error(error_msg)
+                notify_error(f"Database system error: {e}")
+                raise ConnectionError(error_msg) from e
+            else:
+                time.sleep(retry_delay)
 
 
 class UserStore:
@@ -41,8 +139,9 @@ class UserStore:
         Args:
             db_path: Path to the SQLite database file
         """
-        # Get the project root directory (going up from src/talkbridge/auth to project root)
-        project_root = Path(__file__).parent.parent.parent.parent
+        # Get the project root directory using robust resolver
+        from ..utils.project_root import get_project_root
+        project_root = get_project_root()
         self.db_path = project_root / db_path
         
         # Ensure data directory exists
@@ -82,8 +181,11 @@ class UserStore:
     
     def _init_database(self) -> None:
         """Initialize the SQLite database with secure schema."""
+        # Ensure database exists first
+        ensure_db_exists(self.db_path)
+        
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 conn.execute("PRAGMA foreign_keys = ON")
                 
                 # Create users table
@@ -127,7 +229,8 @@ class UserStore:
                 logger.info(f"Database initialized at {self.db_path}")
                 
         except sqlite3.Error as e:
-            logger.error(f"Failed to initialize database: {e}")
+            logger.error(f"Failed to initialize database: {e}", exc_info=True)
+            notify_error(f"Database initialization failed: {str(e)}")
             raise
     
     def _set_secure_permissions(self) -> None:
@@ -208,7 +311,7 @@ class UserStore:
             # Hash password with Argon2id + pepper
             password_hash, salt = self._hash_password(password)
             
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 # Check if user already exists
                 cursor = conn.execute("SELECT id FROM users WHERE username = ?", (username,))
                 if cursor.fetchone():
@@ -243,7 +346,8 @@ class UserStore:
                 return True
                 
         except sqlite3.Error as e:
-            logger.error(f"Database error creating user {username}: {e}")
+            logger.error(f"Database error creating user {username}: {e}", exc_info=True)
+            notify_error(f"Failed to create user {username}: {str(e)}")
             return False
         except Exception as e:
             logger.error(f"Failed to create user {username}: {e}")
@@ -264,7 +368,7 @@ class UserStore:
         auth_start_time = time.time()
         
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 conn.row_factory = sqlite3.Row
                 
                 # Get user data
@@ -275,7 +379,7 @@ class UserStore:
                 user_row = cursor.fetchone()
                 if not user_row:
                     db_duration = time.time() - auth_start_time
-                    logger.warning(f"Authentication failed for user: {username} (not found or locked) - DB lookup: {db_duration:.3f}s")
+                    logger.debug(f"Authentication failed for user: {username} (not found or locked) - DB lookup: {db_duration:.3f}s")
                     return None
                 
                 # Verify password (this is the slow operation)
@@ -285,7 +389,7 @@ class UserStore:
                     self._update_failed_login(username)
                     verify_duration = time.time() - verify_start_time
                     total_duration = time.time() - auth_start_time
-                    logger.warning(f"Authentication failed for user: {username} (invalid password) - Verify: {verify_duration:.3f}s, Total: {total_duration:.3f}s")
+                    logger.debug(f"Authentication failed for user: {username} (invalid password) - Verify: {verify_duration:.3f}s, Total: {total_duration:.3f}s")
                     return None
                 
                 verify_duration = time.time() - verify_start_time
@@ -317,7 +421,8 @@ class UserStore:
                 
         except sqlite3.Error as e:
             total_duration = time.time() - auth_start_time
-            logger.error(f"Database error during authentication for {username} after {total_duration:.3f}s: {e}")
+            logger.error(f"Database error during authentication for {username} after {total_duration:.3f}s: {e}", exc_info=True)
+            notify_error(f"Database authentication error for {username}: {str(e)}")
             return None
         except Exception as e:
             total_duration = time.time() - auth_start_time
@@ -327,7 +432,7 @@ class UserStore:
     def _update_failed_login(self, username: str) -> None:
         """Update failed login attempts and potentially lock account."""
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 # Increment failed attempts
                 conn.execute("""
                     UPDATE users SET 
@@ -351,7 +456,8 @@ class UserStore:
                 conn.commit()
                 
         except sqlite3.Error as e:
-            logger.error(f"Failed to update failed login for {username}: {e}")
+            logger.error(f"Failed to update failed login for {username}: {e}", exc_info=True)
+            notify_error(f"Failed to update login attempts for {username}: {str(e)}")
     
     def unlock_user(self, username: str) -> bool:
         """
@@ -364,7 +470,7 @@ class UserStore:
             True if successful, False otherwise
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 cursor = conn.execute("""
                     UPDATE users SET 
                         account_locked = FALSE,
@@ -382,7 +488,8 @@ class UserStore:
                     return False
                     
         except sqlite3.Error as e:
-            logger.error(f"Failed to unlock user {username}: {e}")
+            logger.error(f"Failed to unlock user {username}: {e}", exc_info=True)
+            notify_error(f"Failed to unlock user {username}: {str(e)}")
             return False
     
     def change_password(self, username: str, new_password: str) -> bool:
@@ -399,7 +506,7 @@ class UserStore:
         try:
             password_hash, salt = self._hash_password(new_password)
             
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 cursor = conn.execute("""
                     UPDATE users SET 
                         password_hash = ?,
@@ -418,7 +525,8 @@ class UserStore:
                     return False
                     
         except Exception as e:
-            logger.error(f"Failed to change password for {username}: {e}")
+            logger.error(f"Failed to change password for {username}: {e}", exc_info=True)
+            notify_error(f"Failed to change password for {username}: {str(e)}")
             return False
     
     def get_user(self, username: str) -> Optional[Dict]:
@@ -432,7 +540,7 @@ class UserStore:
             User data dict if found, None otherwise
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 conn.row_factory = sqlite3.Row
                 
                 cursor = conn.execute("SELECT * FROM users WHERE username = ?", (username,))
@@ -452,7 +560,8 @@ class UserStore:
                 return user_data
                 
         except sqlite3.Error as e:
-            logger.error(f"Failed to get user {username}: {e}")
+            logger.error(f"Failed to get user {username}: {e}", exc_info=True)
+            notify_error(f"Failed to retrieve user {username}: {str(e)}")
             return None
     
     def list_users(self) -> List[Dict]:
@@ -463,7 +572,7 @@ class UserStore:
             List of user data dicts
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 conn.row_factory = sqlite3.Row
                 
                 cursor = conn.execute("""
@@ -488,7 +597,8 @@ class UserStore:
                 return users
                 
         except sqlite3.Error as e:
-            logger.error(f"Failed to list users: {e}")
+            logger.error(f"Failed to list users: {e}", exc_info=True)
+            notify_error(f"Failed to list users: {str(e)}")
             return []
     
     def delete_user(self, username: str) -> bool:
@@ -502,7 +612,7 @@ class UserStore:
             True if successful, False otherwise
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_db_connection(self.db_path) as conn:
                 cursor = conn.execute("DELETE FROM users WHERE username = ?", (username,))
                 
                 if cursor.rowcount > 0:
@@ -514,5 +624,6 @@ class UserStore:
                     return False
                     
         except sqlite3.Error as e:
-            logger.error(f"Failed to delete user {username}: {e}")
+            logger.error(f"Failed to delete user {username}: {e}", exc_info=True)
+            notify_error(f"Failed to delete user {username}: {str(e)}")
             return False

@@ -93,10 +93,11 @@ class StateManager(QObject):
 
         self.logger = logging.getLogger("talkbridge.desktop.state")
 
-        # Important paths
-        self.project_root = Path(__file__).parent.parent.parent.parent
+        # Important paths using robust resolver
+        from ...utils.project_root import get_project_root, get_data_dir
+        self.project_root = get_project_root()
         self.config_dir = self.project_root / "config"
-        self.data_dir = self.project_root / "data"
+        self.data_dir = get_data_dir()
         self.state_file = self.data_dir / "app_state.json"
 
         # Configurations

@@ -1,4 +1,4 @@
-.PHONY: help run-dev run-prod install-systemd install-nginx tls restart logs status clean health-check
+.PHONY: help run-dev run-prod install-systemd install-nginx tls restart logs status clean health-check validate-paths
 
 # Variables
 DOMAIN ?= localhost
@@ -23,6 +23,7 @@ help:
 	@echo "  make status          Check service status"
 	@echo "  make health-check    Test application health"
 	@echo "  make clean           Clean up temporary files"
+	@echo "  make validate-paths  Validate code for correct path usage"
 	@echo ""
 	@echo "Usage with custom domain:"
 	@echo "  make install-nginx DOMAIN=mi-dominio.com"
@@ -98,6 +99,11 @@ clean:
 	find . -type d -name "__pycache__" -delete
 	rm -rf .streamlit/logs/*
 	@echo "✅ Cleanup completed"
+
+validate-paths:
+	@echo "🔍 Validating code path usage..."
+	python tools/ci_guard_paths.py
+	@echo "✅ Path validation completed"
 
 # Deployment sequence
 deploy: install-systemd install-nginx restart

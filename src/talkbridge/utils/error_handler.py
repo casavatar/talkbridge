@@ -217,8 +217,9 @@ class ErrorHandler:
         Returns:
             List of error log lines (most recent first)
         """
-        log_file = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'data', 'logs', 'talkbridge.log')
-        if not os.path.exists(log_file):
+        from .project_root import get_logs_dir
+        log_file = get_logs_dir() / 'talkbridge.log'
+        if not log_file.exists():
             return []
         
         try:

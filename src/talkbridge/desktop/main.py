@@ -29,8 +29,11 @@ from pathlib import Path
 from typing import Optional, Tuple
 import customtkinter as ctk
 
+# Import robust project root resolver early
+from talkbridge.utils.project_root import get_project_root, get_logs_dir
+
 # Early configuration of error suppression
-project_root = Path(__file__).parent.parent.parent
+project_root = get_project_root()
 
 # Import logging protection early
 from talkbridge.logging_config import get_logger, mark_logging_configured, ensure_error_logging
@@ -77,8 +80,8 @@ def setup_application_logging(log_level: int = logging.INFO) -> None:
     Args:
         log_level: The logging level to use for general logging
     """
-    # Set up logging directory
-    log_dir = project_root / "data" / "logs"
+    # Set up logging directory using robust resolver
+    log_dir = get_logs_dir()
     log_dir.mkdir(parents=True, exist_ok=True)
     
     # Define log files
