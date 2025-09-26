@@ -77,9 +77,9 @@ web = [
 ]
 
 [project.scripts]
-talkbridge = "talkbridge:run_app"
-talkbridge-desktop = "talkbridge.desktop.main:main"
-talkbridge-web = "talkbridge.web.server:run"
+talkbridge = "src.app:run_app"
+talkbridge-desktop = "src.desktop.main:main"
+talkbridge-web = "src.web.server:run"
 
 [project.urls]
 Homepage = "https://github.com/casavatar/talkbridge"
@@ -89,7 +89,7 @@ Documentation = "https://github.com/casavatar/talkbridge/blob/main/README.md"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["talkbridge*"]
+include = ["*"]
 
 [tool.setuptools.package-data]
 "*" = ["*.txt", "*.md", "*.yml", "*.yaml", "*.json", "*.html", "*.css", "*.js"]
@@ -102,7 +102,7 @@ include = '\.pyi?$'
 [tool.isort]
 profile = "black"
 line_length = 100
-known_first_party = ["talkbridge"]
+known_first_party = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["test"]

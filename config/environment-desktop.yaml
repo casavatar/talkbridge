@@ -1,8 +1,9 @@
-# TalkBridge Desktop Conda Environment - FULL COMPATIBILITY
-# ==========================================================
+# TalkBridge Desktop Conda Environment - OPTIMIZED FOR DESKTOP
+# ============================================================
 # 
-# UPDATED for complete dependency compatibility with ALL features
-# Python 3.11 for maximum compatibility with TTS, argos-translate, mediapipe
+# Conda environment specifically for TalkBridge Desktop application
+# Python 3.11 for maximum compatibility with TTS, mediapipe, and ML packages
+# Excludes web frameworks (Flask, Streamlit) - Desktop only
 #
 # Environment creation:
 # conda env create -f environment-desktop.yaml
@@ -12,130 +13,69 @@
 #
 # Post-installation verification:
 # python -c "import sys; print(f'Python {sys.version}')"
-# python -c "import PySide6, TTS, transformers, mediapipe; print('All dependencies OK!')"
+# python -c "import customtkinter, torch, librosa, mediapipe; print('All dependencies OK!')"
 
 name: talkbridge-desktop-env
 channels:
-  - pytorch
   - conda-forge
+  - pytorch
   - defaults
-
 dependencies:
-  # Python base (3.11 for compatibility with TTS, argos-translate, mediapipe)
   - python=3.11
-  
-  # ===== CORE DEPENDENCIES =====
-  - numpy>=1.21.0,<2.0.0
-  - matplotlib>=3.5.0,<4.0.0
-  - scipy>=1.7.0,<2.0.0
-  - requests>=2.25.0,<3.0.0
-  
-  # ===== AUDIO PROCESSING =====
-  - sounddevice>=0.4.5,<1.0.0
-  - librosa>=0.10.0,<1.0.0
-  - soundfile>=0.12.0,<1.0.0
-  - ffmpeg
-  
-  # ===== MACHINE LEARNING & AI =====
-  - pytorch>=1.12.0,<2.0.0
-  - torchaudio>=0.12.0,<1.0.0
-  - transformers>=4.20.0,<5.0.0
-  - sentencepiece>=0.1.96,<1.0.0
-  
-  # ===== COMPUTER VISION =====
-  - opencv>=4.8.0,<5.0.0
-  - pillow>=9.0.0,<11.0.0
-  
-  # ===== WEB INTERFACE =====
-  - streamlit>=1.28.0,<2.0.0
-  - plotly>=5.0.0,<6.0.0
-  
-  # ===== SECURITY =====
-  - cryptography>=3.4.0,<4.0.0
-  - bcrypt>=4.0.0,<5.0.0
-  
-  # ===== DATA HANDLING =====
-  - pandas>=1.3.0,<2.0.0
-  - pyyaml>=6.0,<7.0
-  - jsonschema>=4.0.0,<5.0.0
-  
-  # ===== LOGGING =====
-  - colorlog>=6.7.0,<7.0.0
-  
-  # ===== UTILITIES =====
-  - python-dotenv>=0.19.0,<1.0.0
-  - click>=8.0.0,<9.0.0
-  - rich>=12.0.0,<14.0.0
-  - tqdm>=4.64.0,<5.0.0
-  - psutil
-  
-  # ===== DEVELOPMENT TOOLS =====
-  - pytest>=7.0.0,<8.0.0
-  - black>=22.0.0,<24.0.0
-  - isort>=5.10.0,<6.0.0
-  - flake8>=5.0.0,<7.0.0
-  - mypy>=1.0.0,<2.0.0
-  
-  # ===== PIP DEPENDENCIES (not available in conda) =====
   - pip
-  
+
+  # Core scientific stack
+  - numpy
+  - scipy
+  - matplotlib
+
+  # Audio / Media
+  - ffmpeg
+  - libsndfile
+  - pydub
+
+  # GUI / Desktop (conda only for what exists)
+  - pyside6
+  - pyqt
+
+  # PyTorch CPU only (no ROCm on Windows)
+  - pytorch
+  - torchaudio
+  - cpuonly
+
+  # Utilities
+  - python-dotenv
+  - rich
+  - colorlog
+  - click
+  - tqdm
+  - typeguard
+  - pydantic>=2
+
+  # Dev / Testing
+  - pytest
+  - pytest-qt
+  - pytest-cov
+  - black
+  - git
+
   - pip:
-    # ===== GUI FRAMEWORK =====
-    # PySide6 - Consistent with project codebase
-    - PySide6>=6.5.0
-    - pyside6-tools>=6.5.0
-    
-    # ===== DESKTOP GUI FRAMEWORK =====
-    # CustomTkinter - Required for desktop components
-    - customtkinter>=5.2.0
-    
-    # ===== STT (Speech-to-Text) =====
-    - openai-whisper>=20231117
-    
-    # ===== ALTERNATIVE STT OPTIONS =====
-    - SpeechRecognition>=3.10.0
-    
-    # ===== TTS (Text-to-Speech) - REQUIRES Python <= 3.11 =====
-    - TTS>=0.22.0
-    
-    # ===== ALTERNATIVE TTS OPTIONS =====
-    - pyttsx3>=2.90
-    - elevenlabs>=0.2.0  # Optional premium TTS
-    
-    # ===== TRANSLATION - REQUIRES Python <= 3.11 =====
-    - argos-translate>=1.9.0
-    - googletrans>=4.0.0rc1
-    - translate>=3.6.0
-    
-    # ===== COMPUTER VISION & ANIMATION - REQUIRES Python <= 3.11 =====
-    - mediapipe>=0.10.0,<1.0.0
-    
-    # ===== WEB INTERFACE SPECIFIC =====
-    - streamlit-webrtc>=0.47.0,<1.0.0
-    
-    # ===== WEB COMMUNICATION =====
-    - websocket-client>=1.6.0
-    
-    # ===== ADDITIONAL SECURITY =====
-    - passlib>=1.7.0,<2.0.0
-    
-    # ===== ADDITIONAL LOGGING =====
-    - structlog>=22.0.0,<23.0.0
-    - loguru>=0.7.0
-    
-    # ===== ADDITIONAL AUDIO PROCESSING =====
-    - pygame>=2.5.0,<3.0.0
-    - pydub>=0.25.0,<1.0.0
-    - webrtcvad>=2.0.0,<3.0.0
-    
-    # ===== DEVELOPMENT DEPENDENCIES =====
-    - pytest-cov>=4.0.0,<5.0.0
-    - pytest-qt>=4.2.0
-    - pytest-mock>=3.11.0
-    - coverage>=7.2.0
-    
-    # ===== COMPATIBILITY =====
-    - typing-extensions>=4.7.0
-    - python-dateutil>=2.8.0
-    - typeguard>=3.0.0
-    - pydantic>=2.0.0
+      # GUI package (pip only)
+      - customtkinter
+
+      # HuggingFace / Speech
+      - "transformers>=4.39"
+      - tokenizers==0.15.*
+      - sentencepiece
+      - TTS==0.22.*
+      - webrtcvad
+
+      # Translation
+      - deep-translator
+      - argostranslate
+
+      # Vision / Audio
+      - opencv-python>=4.10
+      - mediapipe>=0.10
+      - pillow>=10.3
+      - pygame>=2.6

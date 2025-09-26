@@ -65,8 +65,8 @@ echo -e "${GREEN}📄 Logs directory: $LOG_DIR${NC}"
 
 # Check if the desktop module can be imported (without importing main.py directly)
 echo -e "${BLUE}🔍 Checking TalkBridge desktop module...${NC}"
-if ! python -c "import talkbridge.desktop" 2>/dev/null; then
-    echo -e "${RED}❌ Cannot import talkbridge.desktop${NC}"
+if ! python -c "import sys; sys.path.insert(0, 'src'); import desktop" 2>/dev/null; then
+    echo -e "${RED}❌ Cannot import desktop module from src/${NC}"
     echo -e "${YELLOW}👉 Make sure you've installed the package with:${NC}"
     echo -e "${YELLOW}   conda activate $CONDA_ENV${NC}"
     echo -e "${YELLOW}   pip install -e .${NC}"
@@ -78,5 +78,6 @@ echo -e "${GREEN}🎯 Starting TalkBridge Desktop Application...${NC}"
 echo -e "${BLUE}📊 Logs will be written to: $LOG_DIR/desktop.log${NC}"
 echo ""
 
-exec python -m talkbridge.desktop.main "$@" \
+export PYTHONPATH="src:$PYTHONPATH"
+exec python -m desktop.main "$@" \
     2>&1 | tee "$LOG_DIR/desktop.log"

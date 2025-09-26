@@ -1,0 +1,91 @@
+# TalkBridge Web Conda Environment - LIGHTWEIGHT WEB DEPLOYMENT
+# =============================================================
+# 
+# Conda environment specifically for TalkBridge Web application
+# Python 3.11 for compatibility, optimized for lightweight deployment
+# Includes Flask + Streamlit frameworks, excludes desktop/audio/ML packages
+#
+# Environment creation:
+# conda env create -f environment-web.yaml
+#
+# Activation:
+# conda activate talkbridge-web-env
+#
+# Post-installation verification:
+# python -c "import sys; print(f'Python {sys.version}')"
+# python -c "import flask, streamlit, requests; print('All web dependencies OK!')"
+
+name: talkbridge-web-env
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Python base (3.11 for compatibility)
+  - python=3.11.9
+  
+  # ===== CORE WEB DEPENDENCIES =====
+  - requests=2.31.0
+  - urllib3=2.0.7
+  - certifi=2023.11.17
+  
+  # ===== WEB FRAMEWORKS =====
+  - flask=3.0.0
+  - jinja2=3.1.2
+  - werkzeug=3.0.1
+  
+  # ===== SECURITY & AUTHENTICATION =====
+  - cryptography=41.0.7
+  - bcrypt=4.1.2
+  
+  # ===== DATA HANDLING =====
+  - pyyaml=6.0.1
+  - python-dotenv=1.0.0
+  - click=8.1.7
+  
+  # ===== JSON & API =====
+  - jsonschema=4.20.0
+  
+  # ===== UTILITIES =====
+  - psutil=5.9.6
+  
+  # ===== DEVELOPMENT TOOLS (WEB WORKFLOW) =====
+  - pytest=7.4.3
+  - black=23.11.0
+  
+  # ===== PIP DEPENDENCIES (not available in conda) =====
+  - pip=23.3.1
+  
+  - pip:   
+    # ===== WEB FRAMEWORKS (STREAMLIT) =====
+    - streamlit==1.28.2
+    - streamlit-webrtc==0.47.1
+    
+    # ===== FLASK EXTENSIONS =====
+    - flask-cors==4.0.0
+    
+    # ===== WEB SERVER (PRODUCTION) =====
+    - gunicorn==21.2.0
+    - uvicorn==0.24.0
+    
+    # ===== WEBSOCKETS & REAL-TIME =====
+    - websockets==12.0
+    - websocket-client==1.6.4
+    
+    # ===== OLLAMA LLM INTEGRATION (LIGHTWEIGHT) =====
+    - ollama==0.1.8
+    
+    # ===== WEB-SPECIFIC UTILITIES =====
+    - streamlit-ace==0.1.1
+    - streamlit-option-menu==0.3.6
+    
+    # ===== LIGHTWEIGHT TRANSLATION (WEB ONLY) =====
+    - googletrans==3.1.0a0
+    
+    # ===== ADDITIONAL SECURITY =====
+    - passlib==1.7.4
+    - argon2-cffi==23.1.0
+    
+    # ===== WEB TESTING =====
+    - pytest-flask==1.3.0
+    - pytest-mock==3.12.0

@@ -1,0 +1,501 @@
+#!/usr/bin/env python3
+"""
+TalkBridge Ollama - Streaming Client
+====================================
+
+Cliente para conexiones externas
+
+Author: TalkBridge Team
+Date: 2025-08-19
+Version: 1.0
+
+Requirements:
+- requests
+======================================================================
+Functions:
+- on_start: Called when streaming starts.
+- on_chunk: Called for each response chunk.
+- on_end: Called when streaming ends.
+- on_error: Called when an error occurs.
+- __init__: Initialize streaming client.
+- add_callback: Add a streaming callback.
+- remove_callback: Remove a streaming callback.
+- _notify_callbacks: Notify all callbacks of an event.
+- stream_generate: Stream generate text from Ollama.
+- stream_chat: Stream chat with Ollama model.
+======================================================================
+"""
+
+import json
+import time
+import threading
+import queue
+from typing import Dict, List, Optional, Callable, Any, Generator
+from dataclasses import dataclass
+from .ollama_client import OllamaClient
+from ..logging_config import get_logger
+
+# Optional UI notifier imports with fallback
+try:
+    from ..ui.notifier import notify_error, notify_warn, notify_success
+except ImportError:
+    # Create dummy functions if UI module is not available
+    def notify_error(msg: str, **kw) -> None:
+        pass
+    def notify_warn(msg: str, **kw) -> None:
+        pass
+    def notify_success(msg: str, **kw) -> None:
+        pass
+
+logger = get_logger(__name__)
+
+@dataclass
+class StreamingEvent:
+    """Streaming event data class."""
+    event_type: str  # 'start', 'chunk', 'end', 'error'
+    data: Any
+    timestamp: float
+    metadata: Optional[Dict[str, Any]] = None
+
+class StreamingCallback:
+    """Base class for streaming callbacks."""
+    
+    def on_start(self, prompt: str, model: str):
+        """Called when streaming starts."""
+        pass
+    
+    def on_chunk(self, chunk: str):
+        """Called for each response chunk."""
+        pass
+    
+    def on_end(self, full_response: str):
+        """Called when streaming ends."""
+        pass
+    
+    def on_error(self, error: str):
+        """Called when an error occurs."""
+        pass
+
+class OllamaStreamingClient:
+    """
+    Real-time streaming client for Ollama interactions.
+    """
+    
+    def __init__(self, client: Optional[OllamaClient] = None):
+        """
+        Initialize streaming client.
+        
+        Args:
+            client: Ollama client instance
+        """
+        self.client = client or OllamaClient()
+        self.callbacks: List[StreamingCallback] = []
+        self.event_queue = queue.Queue()
+        self.is_streaming = False
+        self.current_stream_thread = None
+        
+    def add_callback(self, callback: StreamingCallback):
+        """
+        Add a streaming callback.
+        
+        Args:
+            callback: Callback instance
+        """
+        self.callbacks.append(callback)
+    
+    def remove_callback(self, callback: StreamingCallback):
+        """
+        Remove a streaming callback.
+        
+        Args:
+            callback: Callback instance
+        """
+        if callback in self.callbacks:
+            self.callbacks.remove(callback)
+    
+    def _notify_callbacks(self, event_type: str, data: Any):
+        """
+        Notify all callbacks of an event.
+        
+        Args:
+            event_type: Type of event
+            data: Event data
+        """
+        event = StreamingEvent(
+            event_type=event_type,
+            data=data,
+            timestamp=time.time()
+        )
+        
+        # Add to event queue
+        self.event_queue.put(event)
+        
+        # Notify callbacks
+        for callback in self.callbacks:
+            try:
+                if event_type == 'start':
+                    # Handle start event safely
+                    if isinstance(data, dict):
+                        prompt = data.get('prompt', '')
+                        model = data.get('model', '')
+                        callback.on_start(prompt, model)
+                    else:
+                        logger.warning(f"Invalid start data format: {type(data)}")
+                elif event_type == 'chunk':
+                    # Ensure chunk is a string
+                    chunk_str = str(data) if data is not None else ""
+                    callback.on_chunk(chunk_str)
+                elif event_type == 'end':
+                    # Ensure response is a string
+                    response_str = str(data) if data is not None else ""
+                    callback.on_end(response_str)
+                elif event_type == 'error':
+                    # Ensure error is a string
+                    error_str = str(data) if data is not None else "Unknown error"
+                    callback.on_error(error_str)
+            except Exception as e:
+                logger.error(f"Error in callback {callback.__class__.__name__}: {e}")
+    
+    def stream_generate(self, model: str, prompt: str,
+                       system: Optional[str] = None,
+                       options: Optional[Dict[str, Any]] = None) -> Generator[str, None, None]:
+        """
+        Stream generate text from Ollama.
+        
+        Args:
+            model: Model name
+            prompt: Input prompt
+            system: System message (optional)
+            options: Generation options (optional)
+            
+        Yields:
+            Response chunks
+        """
+        self.is_streaming = True
+        full_response = ""
+        
+        try:
+            # Notify start
+            self._notify_callbacks('start', {
+                'prompt': prompt,
+                'model': model,
+                'system': system,
+                'options': options
+            })
+            
+            # Stream response
+            stream_response = self.client.generate(model, prompt, system, options, stream=True)
+            if stream_response:
+                for chunk in stream_response:
+                    if chunk:  # Check if chunk is not None
+                        full_response += chunk
+                        self._notify_callbacks('chunk', chunk)
+                        yield chunk
+            
+            # Notify end
+            self._notify_callbacks('end', full_response)
+            
+        except Exception as e:
+            error_msg = f"Error in streaming generation: {e}"
+            self._notify_callbacks('error', error_msg)
+            raise
+        
+        finally:
+            self.is_streaming = False
+    
+    def stream_chat(self, model: str, messages: List[Dict[str, str]],
+                   options: Optional[Dict[str, Any]] = None) -> Generator[str, None, None]:
+        """
+        Stream chat with Ollama model.
+        
+        Args:
+            model: Model name
+            messages: List of message dictionaries
+            options: Generation options (optional)
+            
+        Yields:
+            Response chunks
+        """
+        self.is_streaming = True
+        full_response = ""
+        
+        try:
+            # Notify start
+            self._notify_callbacks('start', {
+                'messages': messages,
+                'model': model,
+                'options': options
+            })
+            
+            # Stream response
+            stream_response = self.client.chat(model, messages, options, stream=True)
+            if stream_response:
+                for chunk in stream_response:
+                    if chunk:  # Check if chunk is not None
+                        full_response += chunk
+                        self._notify_callbacks('chunk', chunk)
+                        yield chunk
+            
+            # Notify end
+            self._notify_callbacks('end', full_response)
+            
+        except Exception as e:
+            error_msg = f"Error in streaming chat: {e}"
+            self._notify_callbacks('error', error_msg)
+            raise
+        
+        finally:
+            self.is_streaming = False
+    
+    def stream_with_callback(self, model: str, prompt: str,
+                           callback: StreamingCallback,
+                           system: Optional[str] = None,
+                           options: Optional[Dict[str, Any]] = None) -> str:
+        """
+        Stream with a specific callback.
+        
+        Args:
+            model: Model name
+            prompt: Input prompt
+            callback: Callback instance
+            system: System message (optional)
+            options: Generation options (optional)
+            
+        Returns:
+            Full response
+        """
+        # Temporarily add callback
+        self.add_callback(callback)
+        
+        try:
+            full_response = ""
+            for chunk in self.stream_generate(model, prompt, system, options):
+                full_response += chunk
+            
+            return full_response
+            
+        finally:
+            # Remove callback
+            self.remove_callback(callback)
+    
+    def start_background_stream(self, model: str, prompt: str,
+                              system: Optional[str] = None,
+                              options: Optional[Dict[str, Any]] = None):
+        """
+        Start streaming in background thread.
+        
+        Args:
+            model: Model name
+            prompt: Input prompt
+            system: System message (optional)
+            options: Generation options (optional)
+        """
+        if self.current_stream_thread and self.current_stream_thread.is_alive():
+            logger.warning("Stream already in progress")
+            return
+        
+        def stream_worker():
+            try:
+                for chunk in self.stream_generate(model, prompt, system, options):
+                    if not self.is_streaming:  # Check if streaming was stopped
+                        break
+                    pass  # Chunks are handled by callbacks
+            except Exception as e:
+                logger.error(f"Background stream error: {e}")
+                self._notify_callbacks('error', f"Background stream error: {e}")
+        
+        self.current_stream_thread = threading.Thread(target=stream_worker)
+        self.current_stream_thread.start()
+    
+    def stop_background_stream(self):
+        """Stop background streaming."""
+        self.is_streaming = False
+        if self.current_stream_thread:
+            self.current_stream_thread.join(timeout=1.0)
+            self.current_stream_thread = None
+    
+    def get_event_queue(self) -> queue.Queue:
+        """
+        Get the event queue for processing events.
+        
+        Returns:
+            Event queue
+        """
+        return self.event_queue
+    
+    def process_events(self, timeout: Optional[float] = None):
+        """
+        Process events from the queue.
+        
+        Args:
+            timeout: Timeout for queue operations
+        """
+        while True:
+            try:
+                event = self.event_queue.get(timeout=timeout)
+                logger.debug(f"Event: {event.event_type} - {event.data}")
+                self.event_queue.task_done()
+            except queue.Empty:
+                break
+    
+    def clear_event_queue(self):
+        """Clear the event queue."""
+        while not self.event_queue.empty():
+            try:
+                self.event_queue.get_nowait()
+                self.event_queue.task_done()
+            except queue.Empty:
+                break
+
+class ConsoleStreamingCallback(StreamingCallback):
+    """Console-based streaming callback."""
+    
+    def __init__(self, show_timestamps: bool = False):
+        """
+        Initialize console callback.
+        
+        Args:
+            show_timestamps: Whether to show timestamps
+        """
+        self.show_timestamps = show_timestamps
+        self.start_time = None
+    
+    def on_start(self, prompt: str, model: str):
+        """Called when streaming starts."""
+        self.start_time = time.time()
+        timestamp = f"[{time.strftime('%H:%M:%S')}] " if self.show_timestamps else ""
+        logger.info(f"Starting stream with model: {model}")
+        logger.info(f"Prompt: {prompt[:100]}{'...' if len(prompt) > 100 else ''}")
+        logger.info("Response streaming started")
+    
+    def on_chunk(self, chunk: str):
+        """Called for each response chunk."""
+        logger.debug(f"Received chunk: {len(chunk)} characters")
+    
+    def on_end(self, full_response: str):
+        """Called when streaming ends."""
+        if self.start_time:
+            duration = time.time() - self.start_time
+            timestamp = f"[{time.strftime('%H:%M:%S')}] " if self.show_timestamps else ""
+            logger.info(f"Stream completed in {duration:.2f}s")
+            logger.info(f"Response length: {len(full_response)} characters")
+    
+    def on_error(self, error: str):
+        """Called when an error occurs."""
+        timestamp = f"[{time.strftime('%H:%M:%S')}] " if self.show_timestamps else ""
+        logger.error(f"Streaming error: {error}")
+
+class FileStreamingCallback(StreamingCallback):
+    """File-based streaming callback."""
+    
+    def __init__(self, filename: str, append: bool = True):
+        """
+        Initialize file callback.
+        
+        Args:
+            filename: Output filename
+            append: Whether to append to existing file
+        """
+        self.filename = filename
+        self.append = append
+        self.current_response = ""
+        self.start_time = None
+    
+    def on_start(self, prompt: str, model: str):
+        """Called when streaming starts."""
+        self.start_time = time.time()
+        self.current_response = ""
+        
+        mode = 'a' if self.append else 'w'
+        with open(self.filename, mode) as f:
+            f.write(f"\n{'='*50}\n")
+            f.write(f"Stream started at: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Model: {model}\n")
+            f.write(f"Prompt: {prompt}\n")
+            f.write(f"{'='*50}\n")
+            f.write("Response:\n")
+    
+    def on_chunk(self, chunk: str):
+        """Called for each response chunk."""
+        self.current_response += chunk
+        with open(self.filename, 'a') as f:
+            f.write(chunk)
+            f.flush()
+    
+    def on_end(self, full_response: str):
+        """Called when streaming ends."""
+        if self.start_time:
+            duration = time.time() - self.start_time
+            with open(self.filename, 'a') as f:
+                f.write(f"\n\n{'='*50}\n")
+                f.write(f"Stream completed in {duration:.2f}s\n")
+                f.write(f"Response length: {len(full_response)} characters\n")
+                f.write(f"{'='*50}\n")
+    
+    def on_error(self, error: str):
+        """Called when an error occurs."""
+        with open(self.filename, 'a') as f:
+            f.write(f"\nERROR: {error}\n")
+
+class PerformanceStreamingCallback(StreamingCallback):
+    """Performance monitoring streaming callback."""
+    
+    def __init__(self):
+        """Initialize performance callback."""
+        self.start_time = None
+        self.chunks_received = 0
+        self.total_chars = 0
+        self.chunk_times = []
+    
+    def on_start(self, prompt: str, model: str):
+        """Called when streaming starts."""
+        self.start_time = time.time()
+        self.chunks_received = 0
+        self.total_chars = 0
+        self.chunk_times = []
+        logger.info(f"Performance monitoring started for model: {model}")
+    
+    def on_chunk(self, chunk: str):
+        """Called for each response chunk."""
+        self.chunks_received += 1
+        self.total_chars += len(chunk)
+        self.chunk_times.append(time.time())
+    
+    def on_end(self, full_response: str):
+        """Called when streaming ends."""
+        if self.start_time:
+            duration = time.time() - self.start_time
+            avg_chunk_time = sum(self.chunk_times) / len(self.chunk_times) if self.chunk_times else 0
+            
+            logger.info("Performance Summary:")
+            logger.info(f"  Total time: {duration:.2f}s")
+            logger.info(f"  Chunks received: {self.chunks_received}")
+            logger.info(f"  Total characters: {self.total_chars}")
+            logger.info(f"  Average chunk time: {avg_chunk_time:.3f}s")
+            logger.info(f"  Characters per second: {self.total_chars / duration:.1f}")
+    
+    def on_error(self, error: str):
+        """Called when an error occurs."""
+        logger.error(f"Performance monitoring error: {error}")
+
+if __name__ == "__main__":
+    # Test the streaming client
+    client = OllamaStreamingClient()
+    
+    # Add console callback
+    console_callback = ConsoleStreamingCallback(show_timestamps=True)
+    client.add_callback(console_callback)
+    
+    # Test streaming
+    try:
+        logger.info("Testing streaming generation...")
+        for chunk in client.stream_generate("llama2", "Hello, how are you?"):
+            pass  # Chunks are handled by callbacks
+        
+        logger.info("Testing streaming chat...")
+        messages = [{"role": "user", "content": "What is the capital of France?"}]
+        for chunk in client.stream_chat("llama2", messages):
+            pass  # Chunks are handled by callbacks
+            
+    except Exception as e:
+        logger.error(f"Streaming test error: {e}") 
