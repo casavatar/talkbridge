@@ -7,8 +7,21 @@ Dedicated component for rendering chat messages and conversation flow.
 Handles message bubbles, timestamps, language indicators, and auto-scrolling.
 
 Author: TalkBridge Team
-Date: 2025-09-18
-Version: 1.0
+Date: 2025-09-26  
+Version: 1.1 - Enhanced with robust null safety
+
+Features:
+- Safe handling of optional translation text
+- Proper null checks for UI components
+- Thread-safe UI operations
+- Robust error handling and logging
+- Type-safe message widget creation
+
+Bug Fixes (v1.1):
+- Fixed None handling for translation text in message rendering
+- Added null safety checks for scroll_frame operations
+- Enhanced error logging and graceful degradation
+- Improved type annotations for better IDE support
 """
 
 import logging
@@ -17,9 +30,9 @@ from typing import List, Optional, Dict, Any
 from pathlib import Path
 import customtkinter as ctk
 
-from talkbridge.desktop.ui.events import EventBus, EventHandler, TranscriptEvent, TranslationEvent, AudioSource
-from talkbridge.desktop.ui.ui_utils import clean_text, strip_variation_selectors
-from talkbridge.desktop.ui.theme import (
+from src.desktop.ui.events import EventBus, EventHandler, TranscriptEvent, TranslationEvent, AudioSource
+from src.desktop.ui.ui_utils import clean_text, strip_variation_selectors
+from src.desktop.ui.theme import (
     ColorPalette, Typography, Spacing, Dimensions, 
     ComponentThemes, UIText
 )
@@ -49,7 +62,7 @@ class MessageWidget:
     def __init__(self, parent: ctk.CTkScrollableFrame, message: MessageData):
         self.parent = parent
         self.message = message
-        self.logger = logging.getLogger("talkbridge.web.message_widget")
+        self.logger = logging.getLogger("talkbridge.desktop.message_widget")
         
         # Theme colors
         self._setup_theme_colors()
@@ -191,7 +204,8 @@ class MessageWidget:
         trans_lang_indicator.pack(anchor="w", pady=(0, 2))
         
         # Translation text
-        trans_height = max(40, min(80, len(self.message.translation) // 50 * 15 + 40))
+        translation_text_content = self.message.translation or ""
+        trans_height = max(40, min(80, len(translation_text_content) // 50 * 15 + 40))
         
         translation_text = ctk.CTkTextbox(
             translation_frame,
@@ -204,7 +218,7 @@ class MessageWidget:
         )
         translation_text.pack(fill="both", expand=True)
         
-        clean_translation = strip_variation_selectors(self.message.translation)
+        clean_translation = strip_variation_selectors(translation_text_content)
         translation_text.insert("1.0", clean_translation)
         translation_text.configure(state="disabled")
     
@@ -230,6 +244,9 @@ class ChatHistory(EventHandler):
         super().__init__(event_bus)
         self.parent = parent
         
+        # Logger
+        self.logger = logging.getLogger("talkbridge.desktop.chat_history")
+        
         # Message storage
         self.messages: List[MessageData] = []
         self.message_widgets: List[MessageWidget] = []
@@ -239,8 +256,8 @@ class ChatHistory(EventHandler):
         self.max_messages = 100  # Limit for performance
         
         # UI components
-        self.main_frame = None
-        self.scroll_frame = None
+        self.main_frame: Optional[ctk.CTkFrame] = None
+        self.scroll_frame: Optional[ctk.CTkScrollableFrame] = None
         self.setup_ui()
         
         # Subscribe to events
@@ -350,6 +367,11 @@ class ChatHistory(EventHandler):
     
     def _add_message(self, message: MessageData) -> None:
         """Internal method to add a message and create its widget."""
+        # Ensure UI is initialized
+        if not self.scroll_frame:
+            self.logger.error("Cannot add message: scroll_frame not initialized")
+            return
+            
         # Limit message history for performance
         if len(self.messages) >= self.max_messages:
             self._remove_oldest_message()
@@ -379,6 +401,11 @@ class ChatHistory(EventHandler):
     
     def _refresh_message_widget(self, message: MessageData) -> None:
         """Refresh a specific message widget."""
+        # Ensure UI is initialized
+        if not self.scroll_frame:
+            self.logger.error("Cannot refresh message: scroll_frame not initialized")
+            return
+            
         # Find the widget for this message
         for i, msg in enumerate(self.messages):
             if msg.id == message.id and i < len(self.message_widgets):
@@ -392,9 +419,13 @@ class ChatHistory(EventHandler):
     
     def _scroll_to_bottom(self) -> None:
         """Scroll to the bottom of the conversation."""
+        if not self.scroll_frame:
+            self.logger.debug("Cannot scroll: scroll_frame not initialized")
+            return
+            
         try:
             # Schedule scroll after UI update
-            self.scroll_frame.after(10, lambda: self.scroll_frame._parent_canvas.yview_moveto(1.0))
+            self.scroll_frame.after(10, lambda: self.scroll_frame._parent_canvas.yview_moveto(1.0) if self.scroll_frame else None)
         except Exception as e:
             self.logger.debug(f"Scroll error (likely during initialization): {e}")
     

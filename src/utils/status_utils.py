@@ -12,12 +12,14 @@ try:
     import customtkinter as ctk
     CUSTOMTKINTER_AVAILABLE = True
 except ImportError:
+    ctk = None  # type: ignore
     CUSTOMTKINTER_AVAILABLE = False
 
 try:
     import tkinter as tk
     TKINTER_AVAILABLE = True
 except ImportError:
+    tk = None  # type: ignore
     TKINTER_AVAILABLE = False
 
 
@@ -77,13 +79,14 @@ def update_status(label: Union[str, object],
     try:
         # Try customtkinter first
         if hasattr(label, 'configure') and hasattr(label, 'cget'):
-            if CUSTOMTKINTER_AVAILABLE and isinstance(label, (ctk.CTkLabel, ctk.CTkButton)):
+            if CUSTOMTKINTER_AVAILABLE and ctk is not None and isinstance(label, (ctk.CTkLabel, ctk.CTkButton)):
                 _update_customtkinter_widget(label, text, color)
             elif TKINTER_AVAILABLE and hasattr(label, 'config'):
                 _update_tkinter_widget(label, text, color)
             else:
-                # Generic widget with configure method
-                label.configure(text=text)
+                # Generic widget with configure method - add type checking
+                if hasattr(label, 'configure'):
+                    label.configure(text=text)  # type: ignore
         else:
             # Fallback to string representation
             logging.getLogger("talkbridge.status").info(f"Status update: {text}")
@@ -171,9 +174,9 @@ def create_status_label(parent, initial_text: str = "Ready", **kwargs):
     }
     default_kwargs.update(kwargs)
     
-    if CUSTOMTKINTER_AVAILABLE:
+    if CUSTOMTKINTER_AVAILABLE and ctk is not None:
         return ctk.CTkLabel(parent, **default_kwargs)
-    elif TKINTER_AVAILABLE:
+    elif TKINTER_AVAILABLE and tk is not None:
         # Convert customtkinter args to tkinter args
         tk_kwargs = {
             'text': default_kwargs.get('text', initial_text),

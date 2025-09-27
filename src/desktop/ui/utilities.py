@@ -10,7 +10,11 @@ import logging
 import queue
 import threading
 import weakref
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import customtkinter
+    import tkinter
 
 # Try to import customtkinter for UI operations
 try:
@@ -27,7 +31,7 @@ logger = logging.getLogger(__name__)
 # Global registry for UI roots (weak references to avoid memory leaks)
 _ui_roots: list = []
 
-def register_ui_root(root: Union["ctk.CTk", "tk.Tk"]) -> None:
+def register_ui_root(root: Union["customtkinter.CTk", "tkinter.Tk"]) -> None:
     """
     Register a UI root for thread-safe callbacks.
     
@@ -40,7 +44,7 @@ def register_ui_root(root: Union["ctk.CTk", "tk.Tk"]) -> None:
         _ui_roots.append(weakref.ref(root))
         logger.debug(f"Registered UI root: {type(root).__name__}")
 
-def _get_active_ui_root() -> Optional[Union["ctk.CTk", "tk.Tk"]]:
+def _get_active_ui_root() -> Optional[Union["customtkinter.CTk", "tkinter.Tk"]]:
     """Get an active UI root for scheduling callbacks."""
     global _ui_roots
     
@@ -123,7 +127,7 @@ def _safe_execute(fn: Callable, *args, **kwargs) -> None:
     except Exception as e:
         logger.error(f"Error in UI thread callback {fn.__name__}: {e}")
 
-def ui_safe_call(widget: Union["ctk.CTk", "tk.Tk", "ctk.CTkBaseClass", "tk.Widget"], func: Callable, *args, **kwargs) -> None:
+def ui_safe_call(widget: Union["customtkinter.CTk", "tkinter.Tk", "customtkinter.CTkBaseClass", "tkinter.Widget"], func: Callable, *args, **kwargs) -> None:
     """
     Safely schedule a Tkinter call if the main loop is alive.
     
@@ -192,7 +196,7 @@ def ui_safe_call(widget: Union["ctk.CTk", "tk.Tk", "ctk.CTkBaseClass", "tk.Widge
     except Exception as e:
         logger.error(f"UI safe call failed for {func.__name__}: {e}", exc_info=True)
 
-def _safe_execute_on_widget(widget: Union["ctk.CTk", "tk.Tk", "ctk.CTkBaseClass", "tk.Widget"], func: Callable, *args, **kwargs) -> None:
+def _safe_execute_on_widget(widget: Union["customtkinter.CTk", "tkinter.Tk", "customtkinter.CTkBaseClass", "tkinter.Widget"], func: Callable, *args, **kwargs) -> None:
     """Safely execute a function on a widget with existence check."""
     try:
         # Ensure widget validity before executing
@@ -219,7 +223,7 @@ def schedule_ui_update(
     fn: Callable, 
     *args, 
     repeat: bool = True,
-    root: Optional[Union["ctk.CTk", "tk.Tk"]] = None,
+    root: Optional[Union["customtkinter.CTk", "tkinter.Tk"]] = None,
     **kwargs
 ) -> Optional[str]:
     """
@@ -274,7 +278,7 @@ def schedule_ui_update(
         logger.error(f"Failed to schedule UI update: {e}")
         return None
 
-def cancel_ui_update(timer_id: str, root: Optional[Union["ctk.CTk", "tk.Tk"]] = None) -> bool:
+def cancel_ui_update(timer_id: str, root: Optional[Union["customtkinter.CTk", "tkinter.Tk"]] = None) -> bool:
     """
     Cancel a scheduled UI update.
     

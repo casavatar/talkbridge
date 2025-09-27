@@ -28,18 +28,22 @@ Functions:
 
 import os
 from pathlib import Path
+from typing import List, Optional, Callable, Any
 
 # Model Configuration
 MODEL_NAME = "base"  # Options: "tiny", "base", "small", "medium", "large"
 DEFAULT_LANGUAGE = "es"  # Default language for transcription
 
-# Import centralized language support
+# Import centralized language support with proper typing
+get_all_supported_languages: Optional[Callable[[str], List[str]]] = None
+
 try:
     from ..utils.language_utils import get_supported_languages as get_all_supported_languages
     LANGUAGE_UTILS_AVAILABLE = True
     # Populate SUPPORTED_LANGUAGES from centralized utility
     SUPPORTED_LANGUAGES = get_all_supported_languages('whisper')
 except ImportError:
+    get_all_supported_languages = None
     LANGUAGE_UTILS_AVAILABLE = False
     # Fallback list if centralized utilities are not available
     SUPPORTED_LANGUAGES = [
@@ -100,9 +104,9 @@ def get_default_language() -> str:
     """Get the default language."""
     return DEFAULT_LANGUAGE
 
-def get_supported_languages() -> list:
+def get_supported_languages() -> List[str]:
     """Get the supported languages."""
-    if LANGUAGE_UTILS_AVAILABLE:
+    if LANGUAGE_UTILS_AVAILABLE and get_all_supported_languages is not None:
         return get_all_supported_languages('whisper')
     else:
         return SUPPORTED_LANGUAGES.copy()
@@ -151,7 +155,7 @@ def get_model_cache_enabled() -> bool:
     """Get the model cache enabled setting."""
     return MODEL_CACHE_ENABLED
 
-def get_supported_formats() -> list:
+def get_supported_formats() -> List[str]:
     """Get the supported formats."""
     return SUPPORTED_FORMATS.copy()
 

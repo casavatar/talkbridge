@@ -51,7 +51,7 @@ class ProgressReporter:
         with self._lock:
             self._callbacks.append(callback)
     
-    def update(self, current: int = None, message: str = None, stage: str = None) -> None:
+    def update(self, current: Optional[int] = None, message: Optional[str] = None, stage: Optional[str] = None) -> None:
         """Update progress information."""
         with self._lock:
             if current is not None:
@@ -75,7 +75,7 @@ class ProgressReporter:
                 except Exception as e:
                     logger.error(f"Error in progress callback: {e}")
     
-    def increment(self, amount: int = 1, message: str = None, stage: str = None) -> None:
+    def increment(self, amount: int = 1, message: Optional[str] = None, stage: Optional[str] = None) -> None:
         """Increment progress by amount."""
         with self._lock:
             self.update(self.current + amount, message, stage)
@@ -89,7 +89,7 @@ class ProgressReporter:
 class TaskResult:
     """Container for task execution results."""
     
-    def __init__(self, success: bool, result: Any = None, error: Exception = None):
+    def __init__(self, success: bool, result: Any = None, error: Optional[Exception] = None):
         self.success = success
         self.result = result
         self.error = error
@@ -142,11 +142,11 @@ class AsyncTaskRunner:
         self,
         task_func: Callable,
         *args,
-        on_success: Callable[[Any], None] = None,
-        on_error: Callable[[Exception], None] = None,
-        on_complete: Callable[[TaskResult], None] = None,
-        on_progress: Callable[[TaskProgress], None] = None,
-        task_name: str = None,
+        on_success: Optional[Callable[[Any], None]] = None,
+        on_error: Optional[Callable[[Exception], None]] = None,
+        on_complete: Optional[Callable[[TaskResult], None]] = None,
+        on_progress: Optional[Callable[[TaskProgress], None]] = None,
+        task_name: Optional[str] = None,
         notify_progress: bool = False,
         **kwargs
     ) -> str:
@@ -218,9 +218,9 @@ class AsyncTaskRunner:
         self,
         task_id: str,
         future: Future,
-        on_success: Callable = None,
-        on_error: Callable = None,
-        on_complete: Callable = None
+        on_success: Optional[Callable] = None,
+        on_error: Optional[Callable] = None,
+        on_complete: Optional[Callable] = None
     ) -> None:
         """Handle task completion and schedule UI callbacks."""
         try:
@@ -313,7 +313,7 @@ class AsyncTaskRunner:
         with self._lock:
             return [tid for tid, future in self._active_tasks.items() if not future.done()]
     
-    def wait_for_completion(self, timeout: float = None) -> None:
+    def wait_for_completion(self, timeout: Optional[float] = None) -> None:
         """
         Wait for all active tasks to complete.
         
@@ -366,10 +366,10 @@ def get_task_runner() -> AsyncTaskRunner:
 def run_async(
     task_func: Callable,
     *args,
-    on_success: Callable = None,
-    on_error: Callable = None,
-    on_progress: Callable = None,
-    task_name: str = None,
+    on_success: Optional[Callable] = None,
+    on_error: Optional[Callable] = None,
+    on_progress: Optional[Callable] = None,
+    task_name: Optional[str] = None,
     **kwargs
 ) -> str:
     """
@@ -399,10 +399,10 @@ def run_async(
 
 
 def async_task(
-    on_success: Callable = None,
-    on_error: Callable = None,
-    on_progress: Callable = None,
-    task_name: str = None,
+    on_success: Optional[Callable] = None,
+    on_error: Optional[Callable] = None,
+    on_progress: Optional[Callable] = None,
+    task_name: Optional[str] = None,
     notify_progress: bool = False
 ):
     """
@@ -466,7 +466,7 @@ class ProgressContext:
             # Report error
             self.progress.update(message="Failed", stage="Error")
     
-    def step(self, message: str = None) -> None:
+    def step(self, message: Optional[str] = None) -> None:
         """Advance to next step with auto-increment."""
         if self.auto_increment:
             self._steps += 1

@@ -59,8 +59,8 @@ class UserSession:
 class ApplicationState:
     """Global application state."""
     user_session: Optional[UserSession] = None
-    services: Dict[str, ServiceStatus] = None
-    ui_preferences: Dict[str, Any] = None
+    services: Optional[Dict[str, ServiceStatus]] = None
+    ui_preferences: Optional[Dict[str, Any]] = None
     last_save_time: Optional[str] = None
 
     def __post_init__(self):
@@ -213,6 +213,10 @@ class StateManager(QObject):
         """Initializes default service states."""
         service_names = ["tts", "audio", "translation", "ollama", "animation", "camera"]
 
+        # Ensure services dictionary is initialized
+        if self.app_state.services is None:
+            self.app_state.services = {}
+
         for service_name in service_names:
             if service_name not in self.app_state.services:
                 self.app_state.services[service_name] = ServiceStatus(
@@ -331,9 +335,17 @@ class StateManager(QObject):
                     else:
                         value = bool(value)
                 elif isinstance(default, int):
-                    value = int(value)
+                    # Safe int conversion with type checking
+                    if isinstance(value, (str, int, float)):
+                        value = int(value)
+                    else:
+                        value = default
                 elif isinstance(default, float):
-                    value = float(value)
+                    # Safe float conversion with type checking
+                    if isinstance(value, (str, int, float)):
+                        value = float(value)
+                    else:
+                        value = default
                 # String values don't need conversion
             except (ValueError, TypeError):
                 # If conversion fails, return the default
@@ -362,6 +374,8 @@ class StateManager(QObject):
         Returns:
             ServiceStatus: Service status or None if not found
         """
+        if self.app_state.services is None:
+            return None
         return self.app_state.services.get(service_name)
 
     def set_service_status(self, service_name: str, status: str,
@@ -385,6 +399,10 @@ class StateManager(QObject):
                 metadata=metadata or {}
             )
 
+            # Ensure services dictionary is initialized
+            if self.app_state.services is None:
+                self.app_state.services = {}
+
             self.app_state.services[service_name] = service_status
 
             # Emit signals
@@ -401,6 +419,8 @@ class StateManager(QObject):
 
     def get_all_service_statuses(self) -> Dict[str, ServiceStatus]:
         """Returns the status of all services."""
+        if self.app_state.services is None:
+            return {}
         return self.app_state.services.copy()
 
     def set_user_session(self, username: str, is_authenticated: bool = True,
@@ -493,7 +513,7 @@ class StateManager(QObject):
         """Serializes the application state to a dictionary."""
         return {
             "user_session": asdict(state.user_session) if state.user_session else None,
-            "services": {name: asdict(status) for name, status in state.services.items()},
+            "services": {name: asdict(status) for name, status in state.services.items()} if state.services else {},
             "ui_preferences": state.ui_preferences,
             "last_save_time": state.last_save_time
         }

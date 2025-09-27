@@ -12,12 +12,14 @@ This directory contains the TalkBridge web interface components with hardware ac
 ## Features
 
 ### ✅ Guaranteed Hardware Access
+
 - **Automatic Permission Requests**: Requests microphone and webcam access on application load
 - **Graceful Error Handling**: Comprehensive error handling for permission denials
 - **Real-time Status Monitoring**: Live updates of permission and stream status
 - **Device Enumeration**: Lists all available audio and video devices
 
 ### 🎤 Microphone Access
+
 - Echo cancellation enabled
 - Noise suppression
 - Auto gain control
@@ -25,6 +27,7 @@ This directory contains the TalkBridge web interface components with hardware ac
 - Mono channel support
 
 ### 📹 Webcam Access
+
 - HD video support (640x480 ideal, up to 1280x720)
 - Configurable frame rate (30fps ideal)
 - Front-facing camera preference
@@ -55,6 +58,7 @@ Click **Allow** to grant access.
 ### 3. Verify Hardware Access
 
 The interface will show:
+
 - ✅ **Green badges** for granted permissions
 - 📹 **Live camera feed** when webcam access is granted
 - 🎤 **Audio status indicator** when microphone access is granted
@@ -124,12 +128,14 @@ function App() {
 ## Browser Compatibility
 
 ### ✅ Supported Browsers
+
 - **Chrome** 53+ (Full support)
 - **Firefox** 36+ (Full support)
 - **Safari** 11+ (Full support)
 - **Edge** 79+ (Full support)
 
 ### 🔧 Required Features
+
 - `navigator.mediaDevices.getUserMedia()`
 - `navigator.permissions.query()`
 - `navigator.mediaDevices.enumerateDevices()`
@@ -172,11 +178,13 @@ if (devices.videoInputs.length === 0) {
 ## Security Considerations
 
 ### HTTPS Requirement
+
 - **Production**: Must use HTTPS for hardware access
 - **Development**: Localhost is allowed without HTTPS
 - **Testing**: Use `http://localhost:8080` for development
 
 ### Permission Persistence
+
 - Permissions are remembered by the browser
 - Users can revoke permissions in browser settings
 - Application gracefully handles permission changes
@@ -186,19 +194,22 @@ if (devices.videoInputs.length === 0) {
 ### Permission Issues
 
 1. **Check Browser Settings**
-   ```
+
+   ```config
    Chrome: Settings > Privacy and Security > Site Settings > Camera/Microphone
    Firefox: about:preferences#privacy > Permissions > Camera/Microphone
    Safari: Safari > Preferences > Websites > Camera/Microphone
    ```
 
 2. **Clear Site Data**
-   ```
+
+   ```config
    Chrome: Settings > Privacy and Security > Clear browsing data
    Firefox: about:preferences#privacy > Clear Data
    ```
 
 3. **Check Device Connection**
+
    - Ensure microphone/camera is properly connected
    - Check if device is being used by another application
    - Try refreshing the page
@@ -302,6 +313,7 @@ async def handle_media_stream(websocket, path):
 ## Performance Optimization
 
 ### Stream Management
+
 ```javascript
 // Stop unused streams to save resources
 hardwareManager.stopStream('video'); // Stop video when not needed
@@ -312,6 +324,7 @@ await hardwareManager.requestWebcamAccess();
 ```
 
 ### Memory Management
+
 ```javascript
 // Clean up on page unload
 window.addEventListener('beforeunload', () => {
@@ -322,6 +335,7 @@ window.addEventListener('beforeunload', () => {
 ## Testing
 
 ### Manual Testing
+
 1. Start the web server: `python web_server.py`
 2. Open browser to `http://localhost:8080/templates/index.html`
 3. Grant permissions when prompted
@@ -329,6 +343,7 @@ window.addEventListener('beforeunload', () => {
 5. Test permission revocation and re-granting
 
 ### Automated Testing
+
 Run the test suite from the test directory:
 
 ```bash
@@ -336,17 +351,17 @@ cd test
 python test_hardware_access.py
 ```
 
-
-
 ## Deployment
 
 ### Production Setup
+
 1. **HTTPS Required**: Deploy with SSL certificate
 2. **Domain Setup**: Configure proper domain name
 3. **CORS Configuration**: Set appropriate CORS headers
 4. **Error Monitoring**: Implement error tracking
 
 ### Environment Variables
+
 ```bash
 # Production environment
 export TALKBRIDGE_HOST=0.0.0.0
@@ -366,4 +381,4 @@ For issues with hardware access:
 
 ## License
 
-This hardware access solution is part of the TalkBridge project and follows the same licensing terms. 
+This hardware access solution is part of the TalkBridge project and follows the same licensing terms.

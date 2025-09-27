@@ -19,6 +19,7 @@ Features:
 """
 
 import os
+import logging
 from typing import Dict, Any
 from dataclasses import dataclass
 
@@ -523,7 +524,7 @@ class ThemeManager:
         try:
             cls._current_theme = theme
             
-            if CUSTOMTKINTER_AVAILABLE:
+            if CUSTOMTKINTER_AVAILABLE and ctk is not None:
                 ctk.set_appearance_mode(theme)
                 logger.info(f"Applied theme: {theme}")
             else:
@@ -555,7 +556,7 @@ class ThemeManager:
         try:
             cls._current_color_theme = color
             
-            if CUSTOMTKINTER_AVAILABLE:
+            if CUSTOMTKINTER_AVAILABLE and ctk is not None:
                 ctk.set_default_color_theme(color)
                 logger.info(f"Applied color theme: {color}")
             else:
@@ -585,7 +586,7 @@ class ThemeManager:
     @classmethod
     def _apply_customtkinter_theme(cls) -> None:
         """Apply the current theme configuration to CustomTkinter."""
-        if not CUSTOMTKINTER_AVAILABLE:
+        if not CUSTOMTKINTER_AVAILABLE or ctk is None:
             return
             
         # Apply current appearance mode
@@ -672,7 +673,7 @@ def apply_theme_to_widget(widget, theme_config: Dict[str, Any]) -> None:
                 widget.configure(**{key: value})
     except Exception as e:
         import logging
-        logger = logging.getLogger("talkbridge.theme")
+        logger = logging.getLogger("src.theme")
         logger.warning(f"Could not apply theme configuration: {e}")
 
 def detect_wayland_environment() -> bool:

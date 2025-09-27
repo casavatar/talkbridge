@@ -13,7 +13,7 @@ import customtkinter as ctk
 from typing import Optional, Dict, Any
 from datetime import datetime, timedelta
 
-from talkbridge.ui.notifier import NotifierPort, Notification, Level
+from src.ui.notifier import NotifierPort, Notification, Level
 
 logger = logging.getLogger(__name__)
 
@@ -330,7 +330,7 @@ class DesktopNotifier(NotifierPort):
             logger.error(f"Error in notification pump: {e}")
     
     def show_notification_directly(self, level: Level, message: str, 
-                                 details: str = None, context: str = None) -> None:
+                                 details: Optional[str] = None, context: Optional[str] = None) -> None:
         """
         Show a notification directly (for testing or immediate display).
         

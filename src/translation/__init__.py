@@ -18,6 +18,7 @@ Functions:
 ======================================================================
 """
 
+from typing import Optional, Any
 from .translator import Translator
 from .offline_translator import OfflineTranslator, translate_to_spanish, TranslationError
 
@@ -27,12 +28,14 @@ try:
     import argostranslate.package
     ARGOS_TRANSLATE_AVAILABLE = True
 except ImportError:
+    argostranslate = None  # type: ignore
     ARGOS_TRANSLATE_AVAILABLE = False
 
 try:
     from deep_translator import GoogleTranslator as DeepGoogleTranslator
     DEEP_TRANSLATE_AVAILABLE = True
 except ImportError:
+    DeepGoogleTranslator = None  # type: ignore
     DEEP_TRANSLATE_AVAILABLE = False
 
 # Create a general translate_text function that the API expects
@@ -61,14 +64,14 @@ def translate_text(text: str, source_lang: str = "en", target_lang: str = "es") 
             return translator.translate_to_spanish(text, source_lang)  # Fallback to Spanish for now
     except Exception as e:
         # If offline translation fails, try Argos Translate
-        if ARGOS_TRANSLATE_AVAILABLE:
+        if ARGOS_TRANSLATE_AVAILABLE and argostranslate is not None:
             try:
                 # Use argos-translate for translation
                 translated_text = argostranslate.translate.translate(text, source_lang, target_lang)
                 return translated_text
             except Exception as argos_error:
                 # If argos fails, try Deep Translator
-                if DEEP_TRANSLATE_AVAILABLE:
+                if DEEP_TRANSLATE_AVAILABLE and DeepGoogleTranslator is not None:
                     try:
                         deep_translator = DeepGoogleTranslator(source=source_lang, target=target_lang)
                         result = deep_translator.translate(text)
@@ -77,7 +80,7 @@ def translate_text(text: str, source_lang: str = "en", target_lang: str = "es") 
                         raise TranslationError(f"Translation failed: {e}. Argos failed: {argos_error}. Deep Translator failed: {deep_error}")
                 else:
                     raise TranslationError(f"Translation failed: {e}. Argos Translate failed: {argos_error}. No other fallback available.")
-        elif DEEP_TRANSLATE_AVAILABLE:
+        elif DEEP_TRANSLATE_AVAILABLE and DeepGoogleTranslator is not None:
             try:
                 deep_translator = DeepGoogleTranslator(source=source_lang, target=target_lang)
                 result = deep_translator.translate(text)

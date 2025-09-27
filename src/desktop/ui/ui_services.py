@@ -203,7 +203,10 @@ class UIServices:
                                          "Audio system not ready.")
                 return False
             
-            result = self.pipeline_manager.start_mic_stream(device_index, device_hint)
+            # Handle None device_index - convert to appropriate value for pipeline
+            resolved_device_index = device_index if device_index is not None else -1
+            
+            result = self.pipeline_manager.start_mic_stream(resolved_device_index, device_hint)
             if result:
                 self._mic_active = True
                 self.logger.info(f"Microphone started (device: {device_hint})")
@@ -258,7 +261,10 @@ class UIServices:
                 self.event_bus.emit_status("Audio pipeline not available", "error")
                 return False
             
-            result = self.pipeline_manager.start_system_stream(device_index, device_hint)
+            # Handle None device_index - convert to appropriate value for pipeline
+            resolved_device_index = device_index if device_index is not None else -1
+            
+            result = self.pipeline_manager.start_system_stream(resolved_device_index, device_hint)
             if result:
                 self._system_active = True
                 self.logger.info(f"System audio started (device: {device_hint})")
@@ -398,15 +404,19 @@ class UIServices:
             self.logger.debug(f"Sending chat message: {message[:50]}...")
             self.event_bus.emit_status("Processing AI response...", "info")
             
-            response = await self.ollama_client.chat(message, model=model)
+            # Format message for Ollama client - it expects a messages list format
+            messages = [{"role": "user", "content": message}]
+            # Ensure we get a non-streaming response (string or None)
+            response = self.ollama_client.chat(model=model, messages=messages, stream=False)
             
-            if response:
+            # Handle the response - it should be a string or None when stream=False
+            if response and isinstance(response, str):
                 self.logger.debug(f"Received AI response: {response[:50]}...")
                 self.event_bus.emit_status("AI response received", "success", duration=2.0)
+                return response
             else:
                 self.event_bus.emit_status("No AI response received", "warning")
-            
-            return response
+                return None
             
         except Exception as e:
             self.logger.error(f"Error in chat: {e}")

@@ -54,7 +54,7 @@ class ServiceCard(QWidget):
     action_triggered = Signal(str)  # service_name
 
     def __init__(self, service_name: str, title: str, description: str,
-                 icon_name: str = None, parent=None):
+                 icon_name: Optional[str] = None, parent=None):
         super().__init__(parent)
 
         self.service_name = service_name
@@ -198,7 +198,7 @@ class ServiceCard(QWidget):
         self.setStyleSheet(style)
 
     def update_status(self, status: str, error_message: str = "",
-                     metadata: Dict[str, Any] = None) -> None:
+                     metadata: Optional[Dict[str, Any]] = None) -> None:
         """
         Updates the card status.
 
@@ -216,7 +216,8 @@ class ServiceCard(QWidget):
 
         # Update status text
         status_text = self._get_status_text(status)
-        self.status_label.setText(status_text)
+        if self.status_label:
+            self.status_label.setText(status_text)
 
         # Update action button
         self._update_action_button(status)
@@ -235,7 +236,8 @@ class ServiceCard(QWidget):
         }
 
         color = color_map.get(status, "#888888")
-        self.status_indicator.setStyleSheet(f"color: {color};")
+        if self.status_indicator:
+            self.status_indicator.setStyleSheet(f"color: {color};")
 
     def _get_status_text(self, status: str) -> str:
         """Converts the status to readable text."""
@@ -251,6 +253,9 @@ class ServiceCard(QWidget):
 
     def _update_action_button(self, status: str) -> None:
         """Updates the text and state of the action button."""
+        if not self.action_button:
+            return
+            
         if status == "connected":
             self.action_button.setText("Configure")
             self.action_button.setEnabled(True)
@@ -264,9 +269,13 @@ class ServiceCard(QWidget):
             self.action_button.setText("Connect")
             self.action_button.setEnabled(True)
 
-    def _update_details(self, error_message: str, metadata: Dict[str, Any] = None) -> None:
+    def _update_details(self, error_message: str, metadata: Optional[Dict[str, Any]] = None) -> None:
         """Updates the details information."""
+        if not self.details_label:
+            return
+            
         details_parts = []
+        metadata = metadata or {}
 
         if error_message:
             details_parts.append(f"Error: {error_message[:50]}...")
@@ -285,7 +294,7 @@ class ServiceCard(QWidget):
 class QuickActionButton(QPushButton):
     """Styled quick action button."""
 
-    def __init__(self, title: str, icon_name: str = None, parent=None):
+    def __init__(self, title: str, icon_name: Optional[str] = None, parent=None):
         super().__init__(title, parent)
 
         self.setMinimumSize(120, 60)
@@ -572,7 +581,7 @@ class Dashboard(QWidget):
             service_name: Service name
             status: New status
         """
-        if service_name in self.service_cards:
+        if service_name in self.service_cards and self.state_manager:
             # Get additional status information
             service_status = self.state_manager.get_service_status(service_name)
 
@@ -604,7 +613,8 @@ class Dashboard(QWidget):
         else:
             user_text = "No active session"
 
-        self.user_info_label.setText(user_text)
+        if self.user_info_label:
+            self.user_info_label.setText(user_text)
 
     def update_dashboard(self) -> None:
         """Periodically updates dashboard information."""
@@ -640,11 +650,13 @@ class Dashboard(QWidget):
             if errors > 0:
                 stats_text += f" | {errors} with errors"
 
-            self.stats_label.setText(stats_text)
+            if self.stats_label:
+                self.stats_label.setText(stats_text)
 
         except Exception as e:
             self.logger.warning(f"Error updating statistics: {e}")
-            self.stats_label.setText("Error loading statistics")
+            if self.stats_label:
+                self.stats_label.setText("Error loading statistics")
 
     def refresh_all_services(self) -> None:
         """Updates the status of all services."""

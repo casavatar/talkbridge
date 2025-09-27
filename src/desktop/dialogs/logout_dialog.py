@@ -1,171 +1,165 @@
 #!/usr/bin/env python3
 """
-TalkBridge Desktop - Logout Dialog (CustomTkinter)
-==================================================
+TalkBridge Desktop - Logout Dialog (Centralized UI)
+===================================================
 
-Simple logout confirmation dialog with CustomTkinter styling.
+Logout confirmation dialog using centralized UI components for consistent
+styling and maintainability.
 
-Author: TalkBridge Team
-Date: 2025-09-03
-Version: 2.0
+Author: TalkBridge Team  
+Date: 2025-01-26
+Version: 3.0 (Centralized)
 
-Requirements:
-- customtkinter
-- tkinter
+Features:
+- Uses centralized ConfirmationDialog widget
+- Consistent theme-based styling
+- Proper error handling and logging
+- Maintainable through centralized components
 ======================================================================
 """
 
 import logging
-import customtkinter as ctk
-import tkinter as tk
-from typing import Optional
+from typing import Optional, Any
+
+# Import centralized UI components
+try:
+    from ..ui.widgets import ConfirmationDialog
+    from ..ui.theme import ColorPalette
+    CENTRALIZED_UI_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Could not import centralized UI components: {e}")
+    # Create dummy classes for type hints
+    ConfirmationDialog = None
+    ColorPalette = None
+    CENTRALIZED_UI_AVAILABLE = False
 
 class LogoutDialog:
     """
-    Simple logout confirmation dialog.
+    Logout confirmation dialog using centralized UI components.
+    
+    This dialog provides a consistent confirmation interface that follows
+    the established design system. It uses the ConfirmationDialog widget
+    for standardized appearance and behavior.
     
     Features:
-    - Modern CustomTkinter styling
-    - Clear confirmation message
-    - Yes/No options with appropriate styling
+    - Centralized theme-based styling  
+    - Consistent confirmation workflow
+    - Proper error handling and logging
+    - Warning icon with appropriate colors
+    - Maintains backward compatibility
+    
+    Usage:
+        dialog = LogoutDialog(parent_window)
+        if dialog.show():
+            # User confirmed logout
+            perform_logout_actions()
+        else:
+            # User cancelled or closed dialog
+            logger.info("Logout cancelled")
     """
 
-    def __init__(self, parent: ctk.CTk):
-        """Initialize the logout dialog."""
+    def __init__(self, parent: Any):
+        """Initialize the logout dialog.
+        
+        Args:
+            parent: Parent window widget (CTk instance or compatible)
+        """
         self.parent = parent
         self.logger = logging.getLogger("talkbridge.desktop.logout")
         
-        # Dialog state
+        # Dialog configuration
+        self.title = "Logout Confirmation"
+        self.message = "Are you sure you want to logout?\nAll unsaved changes will be lost."
+        self.icon = "⚠️"
+        self.confirm_text = "Logout"
+        self.cancel_text = "Cancel"
+        
+        # State tracking
         self.result = False
-        self.dialog: Optional[ctk.CTkToplevel] = None
+        
+        self.logger.debug("Initialized LogoutDialog with centralized components")
 
     def show(self) -> bool:
         """
-        Show the logout dialog and return user choice.
+        Show the logout confirmation dialog and return user choice.
         
         Returns:
-            bool: True if user confirmed logout, False otherwise
+            bool: True if user confirmed logout, False if cancelled or error occurred
         """
         self.logger.info("Showing logout confirmation dialog")
         
-        # Create dialog window
-        self.dialog = ctk.CTkToplevel(self.parent)
-        self.dialog.title("Logout Confirmation")
-        self.dialog.geometry("400x200")
-        self.dialog.resizable(False, False)
+        if not CENTRALIZED_UI_AVAILABLE:
+            self.logger.error("Centralized UI components not available - falling back to basic dialog")
+            return self._show_fallback_dialog()
         
-        # Center on parent
-        self._center_dialog()
-        
-        # Configure dialog
-        self.dialog.configure(fg_color="#1e1e1e")
-        self.dialog.transient(self.parent)
-        self.dialog.grab_set()
-        
-        # Setup UI
-        self._setup_ui()
-        
-        # Focus on dialog
-        self.dialog.focus()
-        
-        # Wait for dialog to close
-        self.dialog.wait_window()
-        
-        return self.result
-
-    def _setup_ui(self):
-        """Set up the dialog UI."""
-        # Main container
-        main_frame = ctk.CTkFrame(self.dialog, fg_color="transparent")
-        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Icon and title
-        title_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
-        title_frame.pack(fill="x", pady=(0, 20))
-        
-        # Warning icon
-        icon_label = ctk.CTkLabel(
-            title_frame,
-            text="⚠️",
-            font=ctk.CTkFont(size=32),
-            text_color="#ff9800"
-        )
-        icon_label.pack(pady=(0, 10))
-        
-        # Title
-        title_label = ctk.CTkLabel(
-            title_frame,
-            text="Logout Confirmation",
-            font=ctk.CTkFont(size=18, weight="bold"),
-            text_color="#ffffff"
-        )
-        title_label.pack()
-        
-        # Message
-        message_label = ctk.CTkLabel(
-            main_frame,
-            text="Are you sure you want to logout?\nAll unsaved changes will be lost.",
-            font=ctk.CTkFont(size=12),
-            text_color="#cccccc",
-            justify="center"
-        )
-        message_label.pack(pady=(0, 30))
-        
-        # Buttons
-        button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
-        button_frame.pack(fill="x")
-        
-        # Cancel button
-        cancel_button = ctk.CTkButton(
-            button_frame,
-            text="Cancel",
-            width=120,
-            height=35,
-            fg_color="transparent",
-            text_color="#ffffff",
-            border_width=2,
-            border_color="#555555",
-            hover_color="#3c3c3c",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            command=self._cancel
-        )
-        cancel_button.pack(side="left", padx=(0, 10))
-        
-        # Logout button
-        logout_button = ctk.CTkButton(
-            button_frame,
-            text="Logout",
-            width=120,
-            height=35,
-            fg_color="#f44336",
-            hover_color="#d32f2f",
-            font=ctk.CTkFont(size=12, weight="bold"),
-            command=self._confirm
-        )
-        logout_button.pack(side="right")
-        
-        # Focus on cancel button by default
-        cancel_button.focus()
-
-    def _center_dialog(self):
-        """Center the dialog on its parent window."""
-        if self.parent:
-            parent_x = self.parent.winfo_x()
-            parent_y = self.parent.winfo_y()
-            parent_width = self.parent.winfo_width()
-            parent_height = self.parent.winfo_height()
+        try:
+            # Create centralized confirmation dialog
+            if ConfirmationDialog is not None and ColorPalette is not None:
+                dialog = ConfirmationDialog(
+                    parent=self.parent,
+                    title=self.title,
+                    message=self.message,
+                    confirm_text=self.confirm_text,
+                    cancel_text=self.cancel_text,
+                    icon=self.icon,
+                    icon_color=ColorPalette.WARNING,  # Use theme warning color
+                    dialog_width=400,
+                    dialog_height=200
+                )
+            else:
+                raise ImportError("ConfirmationDialog or ColorPalette not available")
             
-            dialog_x = parent_x + (parent_width - 400) // 2
-            dialog_y = parent_y + (parent_height - 200) // 2
+            # Show dialog and get result
+            result = dialog.show()
             
-            self.dialog.geometry(f"400x200+{dialog_x}+{dialog_y}")
+            # Handle result (True/False/None)
+            if result is True:
+                self.logger.info("User confirmed logout")
+                self.result = True
+                return True
+            elif result is False:
+                self.logger.info("User cancelled logout")
+                self.result = False
+                return False
+            else:
+                # None indicates dialog was closed without decision
+                self.logger.info("Logout dialog closed without decision")
+                self.result = False
+                return False
+                
+        except Exception as e:
+            self.logger.error(f"Failed to show centralized logout dialog: {e}")
+            return self._show_fallback_dialog()
 
-    def _confirm(self):
-        """Handle logout confirmation."""
-        self.result = True
-        self.dialog.destroy()
-
-    def _cancel(self):
-        """Handle logout cancellation."""
-        self.result = False
-        self.dialog.destroy()
+    def _show_fallback_dialog(self) -> bool:
+        """
+        Fallback dialog implementation for when centralized components fail.
+        
+        This maintains backward compatibility by providing a basic dialog
+        when the centralized UI system is unavailable.
+        
+        Returns:
+            bool: True if user confirmed, False otherwise
+        """
+        self.logger.warning("Using fallback dialog implementation")
+        
+        try:
+            import tkinter as tk
+            from tkinter import messagebox
+            
+            # Simple messagebox fallback
+            result = messagebox.askyesno(
+                title=self.title,
+                message=self.message,
+                icon="warning"
+            )
+            
+            self.result = bool(result)
+            self.logger.info(f"Fallback dialog result: {self.result}")
+            return self.result
+            
+        except Exception as e:
+            self.logger.error(f"Fallback dialog failed: {e}")
+            # Ultimate fallback - assume user wants to cancel
+            self.result = False
+            return False

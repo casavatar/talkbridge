@@ -42,6 +42,7 @@ try:
     from PIL import Image
     PIL_AVAILABLE = True
 except ImportError:
+    Image = None
     PIL_AVAILABLE = False
 
 def detect_operating_system() -> str:
@@ -242,11 +243,17 @@ def icon(name: str, size: Tuple[int, int] = (18, 18)) -> Optional[ctk.CTkImage]:
         icon_path = project_root / "src" / "desktop" / "resources" / f"{name}.png"
         
         if icon_path.exists():
-            return ctk.CTkImage(Image.open(icon_path), size=size)
+            if PIL_AVAILABLE and Image is not None:
+                return ctk.CTkImage(Image.open(icon_path), size=size)
+            else:
+                return None
         else:
             # Create a simple colored square as placeholder
-            placeholder = Image.new('RGBA', size, (100, 100, 100, 255))
-            return ctk.CTkImage(placeholder, size=size)
+            if PIL_AVAILABLE and Image is not None:
+                placeholder = Image.new('RGBA', size, (100, 100, 100, 255))
+                return ctk.CTkImage(placeholder, size=size)
+            else:
+                return None
             
     except Exception:
         return None  # Silent fallback
@@ -399,7 +406,8 @@ def apply_wayland_scaling_fixes():
             # Try to get existing root or create a temporary one
             import tkinter as tk
             try:
-                root = tk._default_root
+                # Try to access _default_root safely
+                root = getattr(tk, '_default_root', None)
                 if root is None:
                     # Create temporary root for scaling configuration
                     temp_root = tk.Tk()
@@ -435,7 +443,8 @@ def apply_wayland_scaling_fixes():
             
             # Apply fallback scaling
             try:
-                root = tk._default_root
+                # Try to access _default_root safely
+                root = getattr(tk, '_default_root', None)
                 if root is None:
                     temp_root = tk.Tk()
                     temp_root.withdraw()
@@ -592,7 +601,8 @@ def set_manual_scaling_override(scaling_factor: float) -> None:
         
         # Apply Tk scaling
         try:
-            root = tk._default_root
+            # Try to access _default_root safely
+            root = getattr(tk, '_default_root', None)
             if root is None:
                 temp_root = tk.Tk()
                 temp_root.withdraw()
@@ -669,7 +679,9 @@ __all__ = [
     'get_ui_environment_info',
     'verify_scaling_fixes',
     'set_manual_scaling_override',
-    'clean_text_for_display'
+    'clean_text',
+    'icon',
+    'strip_variation_selectors'
 ]
 
 # Icon name mappings for common UI elements

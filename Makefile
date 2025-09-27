@@ -31,11 +31,11 @@ help:
 
 run-dev:
 	@echo "🚀 Starting TalkBridge in development mode..."
-	conda activate talkbridge && python -m talkbridge.web --host=0.0.0.0 --port=8000 --debug
+	conda activate talkbridge && python -m src.web --host=0.0.0.0 --port=8000 --debug
 
 run-prod:
 	@echo "🚀 Starting TalkBridge in production mode (local)..."
-	conda activate talkbridge && python -m talkbridge.web \
+	conda activate talkbridge && python -m src.web \
 		--host=127.0.0.1 \
 		--port=8000
 

@@ -27,6 +27,7 @@ pip install -r requirements.txt
 ```
 
 The TTS module requires these additional packages:
+
 - `TTS>=0.22.0` - Coqui TTS framework
 - `librosa>=0.10.0` - Audio processing
 - `torchaudio>=0.12.0` - Audio operations
@@ -97,6 +98,7 @@ print(f"Device: {info['device']}")
 Main function for text-to-speech synthesis.
 
 **Parameters:**
+
 - `text` (str): Text to synthesize
 - `output_path` (str, optional): Path to save audio file
 - `reference_samples` (List[str], optional): Audio files for voice cloning
@@ -104,6 +106,7 @@ Main function for text-to-speech synthesis.
 - `clone_voice` (bool): Whether to use voice cloning (default: True)
 
 **Returns:**
+
 - `bytes` or `str`: Audio data as bytes or file path
 
 #### `setup_voice_cloning(reference_samples)`
@@ -111,9 +114,11 @@ Main function for text-to-speech synthesis.
 Pre-configure voice cloning for better performance.
 
 **Parameters:**
+
 - `reference_samples` (List[str]): Audio file paths for voice cloning
 
 **Returns:**
+
 - `bool`: True if setup was successful
 
 #### `get_synthesis_info()`
@@ -121,6 +126,7 @@ Pre-configure voice cloning for better performance.
 Get information about the current synthesis setup.
 
 **Returns:**
+
 - `dict`: System information including model name, device, etc.
 
 #### `list_available_models()`
@@ -128,6 +134,7 @@ Get information about the current synthesis setup.
 Get list of available TTS models.
 
 **Returns:**
+
 - `List[str]`: Available model names
 
 ### VoiceCloner Class
@@ -260,6 +267,7 @@ python tts_demo.py
 ```
 
 This will:
+
 - Show system information
 - Demonstrate basic synthesis
 - Create demo voice samples
@@ -278,4 +286,4 @@ When contributing to the TTS module:
 2. Add comprehensive error handling
 3. Include docstrings for new functions
 4. Test on both Windows and macOS
-5. Update this README for new features 
+5. Update this README for new features

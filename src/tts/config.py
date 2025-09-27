@@ -22,7 +22,7 @@ Functions:
 """
 
 import os
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 # Default TTS model configuration
 DEFAULT_MODEL = "tts_models/multilingual/multi-dataset/your_tts"
@@ -117,7 +117,7 @@ def get_config() -> Dict[str, Any]:
         "models": MODEL_CONFIGS
     }
 
-def get_model_config(model_name: str = None) -> Dict[str, Any]:
+def get_model_config(model_name: Optional[str] = None) -> Dict[str, Any]:
     """
     Get configuration for a specific model.
     
@@ -127,10 +127,10 @@ def get_model_config(model_name: str = None) -> Dict[str, Any]:
     Returns:
         Dict[str, Any]: Model-specific configuration
     """
-    if model_name is None:
-        model_name = DEFAULT_MODEL
+    # Use default model if model_name is None
+    effective_model_name: str = model_name if model_name is not None else DEFAULT_MODEL
     
-    return MODEL_CONFIGS.get(model_name, MODEL_CONFIGS[DEFAULT_MODEL])
+    return MODEL_CONFIGS.get(effective_model_name, MODEL_CONFIGS[DEFAULT_MODEL])
 
 def update_config(updates: Dict[str, Any]) -> None:
     """

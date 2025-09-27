@@ -127,7 +127,7 @@ def synthesize_voice(text: str,
 def _synthesize_default_voice(text: str,
                              output_path: Optional[str] = None,
                              language: str = "en",
-                             voice_cloner: VoiceCloner = None) -> Union[bytes, str]:
+                             voice_cloner: Optional[VoiceCloner] = None) -> Union[bytes, str]:
     """
     Synthesize speech using the default voice (no cloning).
     
@@ -140,13 +140,20 @@ def _synthesize_default_voice(text: str,
     Returns:
         Union[bytes, str]: Audio data as bytes or file path
     """
+    # Ensure we have a valid voice cloner instance
     if voice_cloner is None:
-        voice_cloner = _get_voice_cloner()
+        effective_voice_cloner = _get_voice_cloner()
+    else:
+        effective_voice_cloner = voice_cloner
+    
+    # Check if TTS model is properly loaded
+    if effective_voice_cloner.tts is None:
+        raise RuntimeError("TTS model is not loaded. Cannot synthesize speech.")
     
     try:
         if output_path:
             # Save to file
-            voice_cloner.tts.tts_to_file(
+            effective_voice_cloner.tts.tts_to_file(
                 text=text,
                 language=language,
                 file_path=output_path
@@ -155,7 +162,7 @@ def _synthesize_default_voice(text: str,
             return output_path
         else:
             # Return audio as bytes
-            audio_data = voice_cloner.tts.tts(
+            audio_data = effective_voice_cloner.tts.tts(
                 text=text,
                 language=language
             )

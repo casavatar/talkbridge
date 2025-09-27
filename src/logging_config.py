@@ -335,9 +335,9 @@ def log_exception(
     # TODO: Integrate with UI notification system when notify_ui=True
     # This will be implemented in the UI integration task
 
-def add_error_context(logger: logging.Logger, component: str) -> None:
+def add_component_context(logger: logging.Logger, component: str) -> None:
     """
-    Add error context to a logger for better traceability.
+    Add component context to a logger for better traceability.
     
     Args:
         logger: Logger instance
@@ -345,7 +345,7 @@ def add_error_context(logger: logging.Logger, component: str) -> None:
         
     Example:
         logger = get_logger(__name__)
-        add_error_context(logger, "AudioCapture")
+        add_component_context(logger, "AudioCapture")
     """
     # This function can be enhanced to add custom filters or adapters
     # For now, it serves as a placeholder for future enhancements
@@ -448,11 +448,12 @@ def add_error_context(logger: logging.Logger, context: str = "") -> None:
             enhanced_msg = f"[{context}] {msg}"
         else:
             enhanced_msg = msg
-        return logger._original_error(enhanced_msg, *args, **kwargs)
+        original_error = getattr(logger, '_original_error', logger.error)
+        return original_error(enhanced_msg, *args, **kwargs)
     
     # Store original error method and replace with enhanced version
     if not hasattr(logger, '_original_error'):
-        logger._original_error = logger.error
+        setattr(logger, '_original_error', logger.error)
         logger.error = error_with_context
 
 # Initialize logging on import with safe defaults

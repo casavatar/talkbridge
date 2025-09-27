@@ -13,12 +13,12 @@ Version: 1.0
 
 import logging
 import time
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Callable
 from pathlib import Path
 import customtkinter as ctk
 
-from talkbridge.desktop.ui.events import EventBus, EventHandler, StatusEvent, Level
-from talkbridge.desktop.ui.theme import (
+from src.desktop.ui.events import EventBus, EventHandler, StatusEvent, Level
+from src.desktop.ui.theme import (
     ColorPalette, Typography, Spacing, Dimensions
 )
 
@@ -26,7 +26,7 @@ class ToastNotification:
     """Individual toast notification widget."""
     
     def __init__(self, parent: ctk.CTkFrame, message: str, level: Level = "info",
-                 duration: Optional[float] = None, on_dismiss: Optional[callable] = None):
+                 duration: Optional[float] = None, on_dismiss: Optional[Callable[['ToastNotification'], None]] = None):
         self.parent = parent
         self.message = message
         self.level = level
@@ -160,7 +160,7 @@ class ToastNotification:
     def dismiss(self) -> None:
         """Dismiss the toast notification."""
         # Cancel timer if still pending
-        if self.dismiss_timer:
+        if self.dismiss_timer and self.container is not None:
             try:
                 self.container.after_cancel(self.dismiss_timer)
             except Exception:
@@ -229,7 +229,7 @@ class StatusToast(EventHandler):
              duration: Optional[float] = None) -> None:
         """Show a toast notification."""
         # Ensure container is visible
-        if not self.toast_container.winfo_viewable():
+        if self.toast_container is not None and not self.toast_container.winfo_viewable():
             self.toast_container.pack(side="top", fill="x", padx=10, pady=5)
         
         # Limit number of active toasts
@@ -238,13 +238,17 @@ class StatusToast(EventHandler):
             oldest_toast.dismiss()
         
         # Create new toast
-        toast = ToastNotification(
-            self.toast_container,
-            message=message,
-            level=level,
-            duration=duration,
-            on_dismiss=self._on_toast_dismissed
-        )
+        if self.toast_container is not None:
+            toast = ToastNotification(
+                self.toast_container,
+                message=message,
+                level=level,
+                duration=duration,
+                on_dismiss=self._on_toast_dismissed
+            )
+        else:
+            self.logger.error("Cannot create toast: toast_container is None")
+            return
         
         self.active_toasts.append(toast)
         self.logger.debug(f"Added toast (total: {len(self.active_toasts)})")
@@ -256,7 +260,7 @@ class StatusToast(EventHandler):
             self.logger.debug(f"Removed toast (remaining: {len(self.active_toasts)})")
         
         # Hide container if no toasts remain
-        if not self.active_toasts:
+        if not self.active_toasts and self.toast_container is not None:
             self.toast_container.pack_forget()
     
     def show_info(self, message: str, duration: Optional[float] = None) -> None:
@@ -287,7 +291,8 @@ class StatusToast(EventHandler):
         self.active_toasts.clear()
         
         # Hide container
-        self.toast_container.pack_forget()
+        if self.toast_container is not None:
+            self.toast_container.pack_forget()
     
     def get_active_count(self) -> int:
         """Get number of active toasts."""

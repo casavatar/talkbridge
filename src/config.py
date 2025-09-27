@@ -347,7 +347,7 @@ DEV_CONFIG = {
 }
 
 # Environment-specific configurations
-def get_config(env: str = None) -> Dict[str, Any]:
+def get_config(env: Optional[str] = None) -> Dict[str, Any]:
     """
     Get configuration for a specific environment.
     

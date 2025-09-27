@@ -29,7 +29,7 @@ Functions:
 import os
 import logging
 import tempfile
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Dict, Any, Union, List
 from pathlib import Path
 
 from .config import (
@@ -96,7 +96,7 @@ class WhisperEngine:
         """
         self.model_name = model_name
         self.device = self._detect_device(device)
-        self.model = None
+        self.model: Optional[Union[Any, MockWhisperModel]] = None
         self.is_loaded = False
         
         # Create cache directory
@@ -191,6 +191,12 @@ class WhisperEngine:
         Returns:
             Transcribed text as string
         """
+        if not audio_path or not isinstance(audio_path, str):
+            raise ValueError("Invalid audio path provided")
+        
+        if not os.path.exists(audio_path):
+            raise FileNotFoundError(f"Audio file not found: {audio_path}")
+        
         return self.transcribe_file(audio_path, language)
     
     def transcribe_audio_bytes(self, audio_bytes: bytes, 
@@ -205,6 +211,9 @@ class WhisperEngine:
         Returns:
             Transcribed text as string
         """
+        if not isinstance(audio_bytes, bytes):
+            raise TypeError("audio_bytes must be of type bytes")
+        
         if not self.is_loaded:
             if not self.load_model():
                 raise RuntimeError("Failed to load Whisper model")
@@ -331,10 +340,17 @@ class WhisperEngine:
                 logger.info(f"Transcribing file: {file_path}")
                 
                 # Perform transcription
+                if self.model is None:
+                    raise RuntimeError("Whisper model is not loaded")
+                
                 result = self.model.transcribe(processed_file, **options)
                 
-                # Extract text from result
-                transcribed_text = result.get("text", "").strip()
+                # Extract text from result - handle both string and list cases
+                text_result = result.get("text", "")
+                if isinstance(text_result, list):
+                    transcribed_text = " ".join(str(item) for item in text_result).strip()
+                else:
+                    transcribed_text = str(text_result).strip()
                 
                 # Log transcription result
                 if LOG_TRANSCRIPTION:
@@ -391,6 +407,9 @@ class WhisperEngine:
                 logger.info(f"Transcribing file with metadata: {file_path}")
                 
                 # Perform transcription
+                if self.model is None:
+                    raise RuntimeError("Whisper model is not loaded")
+                
                 result = self.model.transcribe(processed_file, **options)
                 
                 # Add additional metadata
@@ -409,7 +428,7 @@ class WhisperEngine:
             logger.error(f"Transcription with metadata failed: {e}")
             raise
     
-    def get_supported_languages(self) -> list:
+    def get_supported_languages(self) -> List[str]:
         """
         Get list of supported languages.
         

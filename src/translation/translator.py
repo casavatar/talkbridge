@@ -20,10 +20,26 @@ Functions:
 
 import requests
 import time
-import yaml
+from typing import Optional, Tuple
+
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    yaml = None  # type: ignore
+    YAML_AVAILABLE = False
+
 
 class Translator:
-    def __init__(self, config_path="config/config.yaml"):
+    def __init__(self, config_path: str = "config/config.yaml") -> None:
+        # Set default values
+        self.base_url = "http://localhost:11434"
+        self.model = "llama2"
+        
+        if not YAML_AVAILABLE or yaml is None:
+            print("Warning: YAML module not available, using default Ollama settings")
+            return
+            
         try:
             with open(config_path, 'r') as f:
                 config = yaml.safe_load(f)
@@ -33,13 +49,14 @@ class Translator:
                 
             self.base_url = config['ollama']['base_url'].rstrip("/")
             self.model = config['ollama']['model']
-        except (FileNotFoundError, KeyError, yaml.YAMLError) as e:
+        except (FileNotFoundError, KeyError) as e:
             # Fallback to default values if config is missing or invalid
             print(f"Warning: Config issue ({e}), using default Ollama settings")
-            self.base_url = "http://localhost:11434"
-            self.model = "llama2"
+        except Exception as e:
+            # Handle YAML errors and other exceptions
+            print(f"Warning: Config parsing error ({e}), using default Ollama settings")
 
-    def translate(self, text, source_lang, target_lang):
+    def translate(self, text: str, source_lang: str, target_lang: str) -> Tuple[Optional[str], Optional[float]]:
         prompt = (
             f"Translate the following text from {source_lang} to {target_lang}:\n"
             f"Text: \"{text}\""

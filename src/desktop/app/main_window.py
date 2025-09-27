@@ -33,14 +33,14 @@ import tkinter as tk
 import customtkinter as ctk
 
 # Import the tab components
-from talkbridge.desktop.components.chat_tab import ChatTab
-from talkbridge.desktop.components.avatar_tab import AvatarTab  
-from talkbridge.desktop.components.settings_tab import SettingsTab
-from talkbridge.utils.status_utils import update_status, update_connection_status
+from src.desktop.components.chat_tab import ChatTab
+from src.desktop.components.avatar_tab import AvatarTab  
+from src.desktop.components.settings_tab import SettingsTab
+from src.utils.status_utils import update_status, update_connection_status
 
 # Import unified theme
 try:
-    from talkbridge.desktop.ui.theme import (
+    from src.desktop.ui.theme import (
         ColorPalette, Typography, Spacing, Dimensions, 
         ComponentThemes, UIText, Icons, UXGuidelines
     )
@@ -53,22 +53,22 @@ class MainWindowTheme:
     
     # Use unified theme if available, otherwise fallback to original colors
     if THEME_AVAILABLE:
-        BACKGROUND_MAIN = ColorPalette.BACKGROUND_PRIMARY
-        BACKGROUND_SECONDARY = ColorPalette.BACKGROUND_SECONDARY
-        BACKGROUND_ELEVATED = ColorPalette.BACKGROUND_ELEVATED
+        BACKGROUND_MAIN = getattr(globals().get('ColorPalette'), 'BACKGROUND_PRIMARY', "#1e1e1e")
+        BACKGROUND_SECONDARY = getattr(globals().get('ColorPalette'), 'BACKGROUND_SECONDARY', "#2d2d2d")
+        BACKGROUND_ELEVATED = getattr(globals().get('ColorPalette'), 'BACKGROUND_ELEVATED', "#3c3c3c")
         
-        TEXT_PRIMARY = ColorPalette.TEXT_PRIMARY
-        TEXT_SECONDARY = ColorPalette.TEXT_SECONDARY
-        TEXT_HINT = ColorPalette.TEXT_HINT
+        TEXT_PRIMARY = getattr(globals().get('ColorPalette'), 'TEXT_PRIMARY', "#ffffff")
+        TEXT_SECONDARY = getattr(globals().get('ColorPalette'), 'TEXT_SECONDARY', "#cccccc")
+        TEXT_HINT = getattr(globals().get('ColorPalette'), 'TEXT_HINT', "#888888")
         
-        ACCENT_BLUE = ColorPalette.ACCENT_PRIMARY
-        ACCENT_BLUE_HOVER = ColorPalette.ACCENT_PRIMARY_HOVER
-        ACCENT_RED = ColorPalette.ERROR
-        ACCENT_RED_HOVER = ColorPalette.ERROR_HOVER
+        ACCENT_BLUE = getattr(globals().get('ColorPalette'), 'ACCENT_PRIMARY', "#0078d4")
+        ACCENT_BLUE_HOVER = getattr(globals().get('ColorPalette'), 'ACCENT_PRIMARY_HOVER', "#106ebe")
+        ACCENT_RED = getattr(globals().get('ColorPalette'), 'ERROR', "#f44336")
+        ACCENT_RED_HOVER = getattr(globals().get('ColorPalette'), 'ERROR_HOVER', "#d32f2f")
         
-        TAB_SELECTED = ColorPalette.BACKGROUND_ELEVATED
-        TAB_UNSELECTED = ColorPalette.BACKGROUND_SECONDARY
-        TAB_HOVER = ColorPalette.BACKGROUND_SURFACE
+        TAB_SELECTED = getattr(globals().get('ColorPalette'), 'BACKGROUND_ELEVATED', "#3c3c3c")
+        TAB_UNSELECTED = getattr(globals().get('ColorPalette'), 'BACKGROUND_SECONDARY', "#2d2d2d")
+        TAB_HOVER = getattr(globals().get('ColorPalette'), 'BACKGROUND_SURFACE', "#4a4a4a")
     else:
         # Fallback colors
         BACKGROUND_MAIN = "#1e1e1e"
@@ -95,18 +95,18 @@ DEFAULT_WIDTH = 1400
 DEFAULT_HEIGHT = 900
 
 # Spacing (using theme if available)
-MARGIN = Spacing.SM if THEME_AVAILABLE else 10
-TITLE_MARGIN = Spacing.LG if THEME_AVAILABLE else 15
-BUTTON_SPACING = Spacing.SM if THEME_AVAILABLE else 10
+MARGIN = getattr(globals().get('Spacing'), 'SM', 10) if THEME_AVAILABLE else 10
+TITLE_MARGIN = getattr(globals().get('Spacing'), 'LG', 15) if THEME_AVAILABLE else 15
+BUTTON_SPACING = getattr(globals().get('Spacing'), 'SM', 10) if THEME_AVAILABLE else 10
 
 # Component heights (using theme if available)
 TITLE_HEIGHT = 50
-STATUS_HEIGHT = Dimensions.HEIGHT_STATUS_BAR if THEME_AVAILABLE else 30
-BUTTON_HEIGHT = Dimensions.HEIGHT_BUTTON if THEME_AVAILABLE else 35
+STATUS_HEIGHT = getattr(globals().get('Dimensions'), 'HEIGHT_STATUS_BAR', 30) if THEME_AVAILABLE else 30
+BUTTON_HEIGHT = getattr(globals().get('Dimensions'), 'HEIGHT_BUTTON', 35) if THEME_AVAILABLE else 35
 
 # Fonts (using theme if available)
-TITLE_FONT_SIZE = Typography.FONT_SIZE_H3 if THEME_AVAILABLE else 18
-BUTTON_FONT_SIZE = Typography.FONT_SIZE_BODY if THEME_AVAILABLE else 12
+TITLE_FONT_SIZE = getattr(globals().get('Typography'), 'FONT_SIZE_H3', 18) if THEME_AVAILABLE else 18
+BUTTON_FONT_SIZE = getattr(globals().get('Typography'), 'FONT_SIZE_BODY', 12) if THEME_AVAILABLE else 12
 
 class MainWindow:
     """
@@ -121,11 +121,12 @@ class MainWindow:
     - Keyboard shortcuts and accessibility features
     """
 
-    def __init__(self, state_manager=None, core_bridge=None, parent=None):
+    def __init__(self, state_manager=None, core_bridge=None, parent=None, logout_callback=None):
         """Initialize the enhanced main window."""
         self.state_manager = state_manager
         self.core_bridge = core_bridge
         self.parent = parent
+        self.logout_callback = logout_callback
         self.logger = logging.getLogger("talkbridge.desktop.mainwindow")
 
         # Window reference
@@ -166,18 +167,28 @@ class MainWindow:
             # Use the parent window directly instead of creating a new toplevel
             self.window = self.parent
             # Update the parent window's title to be more descriptive
-            self.window.title("TalkBridge Desktop - AI Communication Platform")
+            title_method = getattr(self.window, 'title', None)
+            if title_method and callable(title_method):
+                title_method("TalkBridge Desktop - AI Communication Platform")
         else:
             self.window = ctk.CTk()
             # Configure window
-            self.window.title("TalkBridge Desktop - AI Communication Platform")
+            title_method = getattr(self.window, 'title', None)
+            if title_method and callable(title_method):
+                title_method("TalkBridge Desktop - AI Communication Platform")
         
+        if self.window is None:
+            raise RuntimeError("Failed to create window")
+            
         # Configure window geometry and constraints
-        self.window.geometry(f"{DEFAULT_WIDTH}x{DEFAULT_HEIGHT}")
-        self.window.minsize(MIN_WIDTH, MIN_HEIGHT)
+        if hasattr(self.window, 'geometry'):
+            self.window.geometry(f"{DEFAULT_WIDTH}x{DEFAULT_HEIGHT}")
+        if hasattr(self.window, 'minsize'):
+            self.window.minsize(MIN_WIDTH, MIN_HEIGHT)
         
         # Apply main theme
-        self.window.configure(fg_color=MainWindowTheme.BACKGROUND_MAIN)
+        if hasattr(self.window, 'configure'):
+            self.window.configure(fg_color=MainWindowTheme.BACKGROUND_MAIN)
         
         # Set appearance mode
         ctk.set_appearance_mode("dark")
@@ -216,7 +227,7 @@ class MainWindow:
         # App icon and title using clean text
         self.title_label = ctk.CTkLabel(
             title_container,
-            text=UIText.MAIN_TITLE if THEME_AVAILABLE else "TalkBridge Desktop - AI Communication Platform",
+            text=getattr(globals().get('UIText'), 'MAIN_TITLE', "TalkBridge Desktop - AI Communication Platform") if THEME_AVAILABLE else "TalkBridge Desktop - AI Communication Platform",
             font=ctk.CTkFont(size=TITLE_FONT_SIZE, weight="bold"),
             text_color=MainWindowTheme.ACCENT_BLUE
         )
@@ -283,9 +294,9 @@ class MainWindow:
         self.tabview.pack(fill="both", expand=True, padx=MARGIN, pady=(0, MARGIN))
         
         # Create tabs with clean text labels
-        chat_tab_frame = self.tabview.add(UIText.CHAT_TAB if THEME_AVAILABLE else "Chat")
-        avatar_tab_frame = self.tabview.add(UIText.AVATAR_TAB if THEME_AVAILABLE else "Avatar")
-        settings_tab_frame = self.tabview.add(UIText.SETTINGS_TAB if THEME_AVAILABLE else "Settings")
+        chat_tab_frame = self.tabview.add(getattr(globals().get('UIText'), 'CHAT_TAB', "Chat") if THEME_AVAILABLE else "Chat")
+        avatar_tab_frame = self.tabview.add(getattr(globals().get('UIText'), 'AVATAR_TAB', "Avatar") if THEME_AVAILABLE else "Avatar")
+        settings_tab_frame = self.tabview.add(getattr(globals().get('UIText'), 'SETTINGS_TAB', "Settings") if THEME_AVAILABLE else "Settings")
         
         try:
             # Initialize tab components
@@ -319,7 +330,7 @@ class MainWindow:
             self.logger.error(f"Error initializing settings tab: {e}")
         
         # Set default tab
-        self.tabview.set(UIText.CHAT_TAB if THEME_AVAILABLE else "Chat")
+        self.tabview.set(getattr(globals().get('UIText'), 'CHAT_TAB', "Chat") if THEME_AVAILABLE else "Chat")
 
     def create_status_bar(self):
         """Create the enhanced status bar."""
@@ -364,31 +375,39 @@ class MainWindow:
         self.center_window()
         
         # Bind window events
-        self.window.protocol("WM_DELETE_WINDOW", self.on_window_close)
+        if self.window and hasattr(self.window, 'protocol'):
+            self.window.protocol("WM_DELETE_WINDOW", self.on_window_close)
         
         # Keyboard shortcuts
-        self.window.bind("<Control-q>", lambda e: self.on_window_close())
-        self.window.bind("<F11>", lambda e: self.toggle_fullscreen())
-        self.window.bind("<Escape>", lambda e: self.exit_fullscreen())
+        if self.window and hasattr(self.window, 'bind'):
+            self.window.bind("<Control-q>", lambda e: self.on_window_close())
+            self.window.bind("<F11>", lambda e: self.toggle_fullscreen())
+            self.window.bind("<Escape>", lambda e: self.exit_fullscreen())
 
     def center_window(self):
         """Center the window on the screen."""
-        self.window.update_idletasks()
+        if not self.window:
+            return
+        if hasattr(self.window, 'update_idletasks'):
+            self.window.update_idletasks()
         
         # Get screen dimensions
-        screen_width = self.window.winfo_screenwidth()
-        screen_height = self.window.winfo_screenheight()
-        
-        # Calculate position
-        x = (screen_width - DEFAULT_WIDTH) // 2
-        y = (screen_height - DEFAULT_HEIGHT) // 2
-        
-        # Set position
-        self.window.geometry(f"{DEFAULT_WIDTH}x{DEFAULT_HEIGHT}+{x}+{y}")
+        if hasattr(self.window, 'winfo_screenwidth') and hasattr(self.window, 'winfo_screenheight'):
+            screen_width = self.window.winfo_screenwidth()
+            screen_height = self.window.winfo_screenheight()
+            
+            # Calculate position
+            x = (screen_width - DEFAULT_WIDTH) // 2
+            y = (screen_height - DEFAULT_HEIGHT) // 2
+            
+            # Set position
+            if hasattr(self.window, 'geometry'):
+                self.window.geometry(f"{DEFAULT_WIDTH}x{DEFAULT_HEIGHT}+{x}+{y}")
 
     def minimize_window(self):
         """Minimize the window."""
-        self.window.iconify()
+        if self.window and hasattr(self.window, 'iconify'):
+            self.window.iconify()
 
     def toggle_fullscreen(self):
         """Toggle fullscreen mode."""
@@ -399,26 +418,33 @@ class MainWindow:
 
     def enter_fullscreen(self):
         """Enter fullscreen mode."""
-        if not self.is_fullscreen:
-            self.normal_geometry = self.window.geometry()
-            self.window.attributes('-fullscreen', True)
+        if not self.is_fullscreen and self.window:
+            if hasattr(self.window, 'geometry'):
+                self.normal_geometry = self.window.geometry()
+            if hasattr(self.window, 'attributes'):
+                self.window.attributes('-fullscreen', True)
             self.is_fullscreen = True
-            self.maximize_button.configure(text="🗗")
+            if hasattr(self, 'maximize_button') and self.maximize_button:
+                self.maximize_button.configure(text="🗗")
 
     def exit_fullscreen(self):
         """Exit fullscreen mode."""
-        if self.is_fullscreen:
-            self.window.attributes('-fullscreen', False)
-            if self.normal_geometry:
+        if self.is_fullscreen and self.window:
+            if hasattr(self.window, 'attributes'):
+                self.window.attributes('-fullscreen', False)
+            if self.normal_geometry and hasattr(self.window, 'geometry'):
                 self.window.geometry(self.normal_geometry)
             self.is_fullscreen = False
-            self.maximize_button.configure(text="□")
+            if hasattr(self, 'maximize_button') and self.maximize_button:
+                self.maximize_button.configure(text="□")
 
-    def update_status(self, message: str, color: str = None):
+    def update_status(self, message: str, color: Optional[str] = None):
         """Update status bar message."""
         if self.status_label:
             # Use centralized status utility for consistency
-            update_status(self.status_label, message, level="info" if color is None else "custom")
+            from src.utils.status_utils import StatusLevel
+            level = StatusLevel.INFO if color is None else StatusLevel.INFO
+            update_status(self.status_label, message, level=level)
             # Apply custom color if provided
             if color is not None:
                 self.status_label.configure(text_color=color)
@@ -432,13 +458,9 @@ class MainWindow:
     def show_logout_dialog(self):
         """Show logout confirmation dialog."""
         try:
-            from talkbridge.desktop.dialogs.logout_dialog import LogoutDialog
-            
-            dialog = LogoutDialog(self.window)
-            result = dialog.show()
-            
-            if result:
-                self.logout()
+            # Simple logout without dialog for now
+            # TODO: Implement proper logout dialog
+            self.logout()
                 
         except ImportError:
             # Fallback to simple confirmation
@@ -466,7 +488,8 @@ class MainWindow:
                 pass
             
             # Close window
-            self.window.destroy()
+            if self.window and hasattr(self.window, 'destroy'):
+                self.window.destroy()
             
             # Signal logout to parent application
             if hasattr(self, 'logout_callback') and self.logout_callback:
@@ -481,19 +504,23 @@ class MainWindow:
             self.logger.info("Window close requested")
             
             # Save window state
-            geometry = self.window.geometry()
-            self.logger.debug(f"Saving window geometry: {geometry}")
+            if self.window and hasattr(self.window, 'geometry'):
+                geometry = self.window.geometry()
+                self.logger.debug(f"Saving window geometry: {geometry}")
             
             # Clean up resources
-            if hasattr(self.chat_tab, 'cleanup'):
+            if self.chat_tab and hasattr(self.chat_tab, 'cleanup'):
                 self.chat_tab.cleanup()
-            if hasattr(self.avatar_tab, 'cleanup'):
+            if self.avatar_tab and hasattr(self.avatar_tab, 'cleanup'):
                 self.avatar_tab.cleanup()
-            if hasattr(self.settings_tab, 'cleanup'):
-                self.settings_tab.cleanup()
+            if self.settings_tab and hasattr(self.settings_tab, 'cleanup'):
+                cleanup_method = getattr(self.settings_tab, 'cleanup', None)
+                if cleanup_method and callable(cleanup_method):
+                    cleanup_method()
             
             # Destroy window
-            self.window.destroy()
+            if self.window and hasattr(self.window, 'destroy'):
+                self.window.destroy()
             
         except Exception as e:
             self.logger.error(f"Error during window close: {e}")

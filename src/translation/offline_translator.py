@@ -31,6 +31,7 @@ from typing import Optional, Dict, Any
 from pathlib import Path
 import time
 from ..logging_config import get_logger
+from ..utils.exceptions import TranslationError
 
 logger = get_logger(__name__)
 
@@ -39,19 +40,25 @@ try:
     import argostranslate.translate
     ARGOS_AVAILABLE = True
 except ImportError:
+    argostranslate = None  # type: ignore
     ARGOS_AVAILABLE = False
-    # Log warning only once per session
-    if not hasattr(logger, '_argos_warning_logged'):
+    # Log warning only once per session using a module-level variable
+    _argos_warning_logged = False
+    if not _argos_warning_logged:
         logger.warning("argos-translate not available. Install with: pip install argos-translate")
-        logger._argos_warning_logged = True
+        _argos_warning_logged = True
 
 try:
     from transformers import MarianMTModel, MarianTokenizer
     import torch
     HF_AVAILABLE = True
 except ImportError:
+    MarianMTModel = None  # type: ignore
+    MarianTokenizer = None  # type: ignore
+    torch = None  # type: ignore
     HF_AVAILABLE = False
     logger.warning("transformers not available. Install with: pip install transformers torch")
+
 
 class OfflineTranslator:
     """
@@ -130,6 +137,10 @@ class OfflineTranslator:
             bool: True if successful, False otherwise
         """
         try:
+            if not ARGOS_AVAILABLE or argostranslate is None:
+                logger.error("argos-translate not available for model download")
+                return False
+                
             # Get available packages
             available_packages = argostranslate.package.get_available_packages()
             
@@ -172,6 +183,10 @@ class OfflineTranslator:
             return self._argos_models[model_key]
         
         try:
+            if not ARGOS_AVAILABLE or argostranslate is None:
+                logger.error("argos-translate not available for model loading")
+                return None
+                
             # Try to load existing model
             model = argostranslate.translate.get_installed_languages()
             source_lang_obj = None
@@ -220,6 +235,10 @@ class OfflineTranslator:
             return self._hf_models[model_key]
         
         try:
+            if not HF_AVAILABLE or MarianTokenizer is None or MarianMTModel is None:
+                logger.error("transformers not available for model loading")
+                return None
+                
             model_name = self.supported_pairs["huggingface"].get(model_key)
             if not model_name:
                 logger.error(f"No HuggingFace model found for {model_key}")
@@ -319,6 +338,10 @@ class OfflineTranslator:
             Translated text or None if failed
         """
         try:
+            if not HF_AVAILABLE or torch is None:
+                logger.error("torch not available for HuggingFace translation")
+                return None
+                
             model_data = self._load_hf_model(source_lang, target_lang)
             if model_data is None:
                 return None
@@ -360,10 +383,6 @@ class OfflineTranslator:
             True if at least one engine is available
         """
         return self.argos_available or self.hf_available
-
-class TranslationError(Exception):
-    """Custom exception for translation errors."""
-    pass
 
 # Convenience function for quick translation
 def translate_to_spanish(text: str, source_lang: str = "en") -> str:

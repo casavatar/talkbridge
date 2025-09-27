@@ -34,37 +34,41 @@ import tkinter as tk
 import customtkinter as ctk
 from PIL import Image, ImageDraw, ImageFont
 
-from talkbridge.desktop.app.state_manager import StateManager
-from talkbridge.desktop.dialogs.login_dialog import LoginDialog
-from talkbridge.desktop.app.main_window import MainWindow
-from talkbridge.desktop.services.core_bridge import CoreBridge
-from talkbridge.utils.error_handler import (
+from src.desktop.app.state_manager import StateManager
+from src.desktop.dialogs.login_dialog import LoginDialog
+from src.desktop.app.main_window import MainWindow
+from src.desktop.services.core_bridge import CoreBridge
+from src.utils.error_handler import (
     RetryableError, CriticalError, UserNotificationError,
     handle_error, retry_with_backoff, notify_error
 )
-from talkbridge.logging_config import get_logger
+from src.logging_config import get_logger
 
 # Import new notification and async systems
-from talkbridge.ui.notifier import subscribe, notify_info, notify_error
-from talkbridge.desktop.notifier_adapter import DesktopNotifier
-from talkbridge.utils.async_runner import get_task_runner, run_async, ProgressReporter
-from talkbridge.errors import ErrorCategory, handle_user_facing_error
+from src.ui.notifier import subscribe, notify_info, notify_error
+from src.desktop.notifier_adapter import DesktopNotifier
+from src.utils.async_runner import get_task_runner, run_async, ProgressReporter
+from src.errors import ErrorCategory, handle_user_facing_error
 
-# Import unified theme
+# Import unified theme with fallbacks
 try:
-    from talkbridge.desktop.ui.theme import (
+    from src.desktop.ui.theme import (
         ColorPalette, Typography, Spacing, Dimensions, 
         ComponentThemes, UIText, Icons, UXGuidelines
     )
     THEME_AVAILABLE = True
 except ImportError:
+    # Define fallback when theme is not available
+    ColorPalette = None  # type: ignore
+    UIText = None  # type: ignore
+    Icons = None  # type: ignore
     THEME_AVAILABLE = False
 
 class ApplicationTheme:
     """Theme configuration for the application."""
     
     # Use unified theme if available, otherwise fallback to original colors
-    if THEME_AVAILABLE:
+    if THEME_AVAILABLE and ColorPalette is not None:
         BACKGROUND_MAIN = ColorPalette.BACKGROUND_PRIMARY
         BACKGROUND_SECONDARY = ColorPalette.BACKGROUND_SECONDARY
         BACKGROUND_SPLASH = ColorPalette.BACKGROUND_PRIMARY
@@ -273,6 +277,9 @@ class TalkBridgeApplication:
 
     def _center_splash_screen(self):
         """Center splash screen on the display."""
+        if self.splash_window is None:
+            return
+            
         # Get screen dimensions
         screen_width = self.splash_window.winfo_screenwidth()
         screen_height = self.splash_window.winfo_screenheight()
@@ -299,27 +306,30 @@ class TalkBridgeApplication:
         logo_frame.pack(fill="x", pady=(0, 20))
         
         # App logo using clean text instead of emoji
+        logo_text = getattr(Icons, 'ROBOT', 'AI') if THEME_AVAILABLE and Icons is not None else "AI"
         logo_label = ctk.CTkLabel(
             logo_frame,
-            text=Icons.ROBOT if THEME_AVAILABLE else "AI",
+            text=logo_text,
             font=ctk.CTkFont(size=SplashConstants.LOGO_SIZE, weight="bold"),
             text_color=ApplicationTheme.ACCENT_BLUE
         )
         logo_label.pack(pady=(0, 10))
         
         # App title
+        title_text = getattr(UIText, 'APP_NAME', 'TalkBridge Desktop') if THEME_AVAILABLE and UIText is not None else "TalkBridge Desktop"
         title_label = ctk.CTkLabel(
             logo_frame,
-            text=UIText.APP_NAME if THEME_AVAILABLE else "TalkBridge Desktop",
+            text=title_text,
             font=ctk.CTkFont(size=SplashConstants.TITLE_FONT_SIZE, weight="bold"),
             text_color=ApplicationTheme.TEXT_PRIMARY
         )
         title_label.pack()
         
         # Subtitle
+        subtitle_text = getattr(UIText, 'APP_SUBTITLE', 'AI-Powered Communication Platform') if THEME_AVAILABLE and UIText is not None else "AI-Powered Communication Platform"
         subtitle_label = ctk.CTkLabel(
             logo_frame,
-            text=UIText.APP_SUBTITLE if THEME_AVAILABLE else "AI-Powered Communication Platform",
+            text=subtitle_text,
             font=ctk.CTkFont(size=SplashConstants.SUBTITLE_FONT_SIZE),
             text_color=ApplicationTheme.TEXT_SECONDARY
         )
@@ -377,7 +387,7 @@ class TalkBridgeApplication:
         if self.splash_animation_running:
             self.root.after(100, self._animate_splash_progress)
 
-    def _update_splash_status(self, message: str, progress: float = None):
+    def _update_splash_status(self, message: str, progress: Optional[float] = None):
         """Update splash screen status message and progress."""
         if self.splash_status_label:
             self.splash_status_label.configure(text=message)
@@ -836,7 +846,9 @@ class TalkBridgeApplication:
             
             # Clean up components
             if self.main_window and hasattr(self.main_window, 'cleanup'):
-                self.main_window.cleanup()
+                cleanup_method = getattr(self.main_window, 'cleanup', None)
+                if cleanup_method and callable(cleanup_method):
+                    cleanup_method()
             
             if self.core_bridge and hasattr(self.core_bridge, 'cleanup'):
                 self.core_bridge.cleanup()

@@ -17,8 +17,8 @@ from typing import Optional, Callable, List, Dict, Any
 from pathlib import Path
 import customtkinter as ctk
 
-from talkbridge.desktop.ui.events import EventBus, EventHandler
-from talkbridge.desktop.ui.theme import (
+from src.desktop.ui.events import EventBus, EventHandler
+from src.desktop.ui.theme import (
     ColorPalette, Typography, Spacing, Dimensions, 
     ComponentThemes
 )
@@ -42,6 +42,7 @@ class AIActions(EventHandler):
         """Initialize AI actions component."""
         super().__init__(event_bus)
         self.parent = parent
+        self.logger = logging.getLogger("talkbridge.desktop.ai_actions")
         
         # Callbacks
         self.on_send_message = on_send_message  # (message, model) -> None
@@ -260,11 +261,14 @@ class AIActions(EventHandler):
     
     def _on_tts_toggle(self) -> None:
         """Handle TTS toggle."""
-        self.tts_enabled = self.tts_toggle.get()
-        self.logger.info(f"TTS enabled: {self.tts_enabled}")
-        
-        if self.on_tts_toggle:
-            self.on_tts_toggle(self.tts_enabled)
+        if self.tts_toggle and hasattr(self.tts_toggle, 'get'):
+            tts_value = self.tts_toggle.get()
+            # Ensure boolean conversion
+            self.tts_enabled = bool(tts_value) if isinstance(tts_value, (int, str)) else tts_value
+            self.logger.info(f"TTS enabled: {self.tts_enabled}")
+            
+            if self.on_tts_toggle:
+                self.on_tts_toggle(self.tts_enabled)
     
     def _on_enter_pressed(self, event) -> None:
         """Handle Enter key press in input field."""
@@ -279,14 +283,19 @@ class AIActions(EventHandler):
         self.logger.info(f"Quick prompt selected: {prompt}")
         
         # Set the prompt in the input field
-        self.input_entry.delete(0, "end")
-        self.input_entry.insert(0, prompt)
+        if self.input_entry and hasattr(self.input_entry, 'delete') and hasattr(self.input_entry, 'insert'):
+            self.input_entry.delete(0, "end")
+            self.input_entry.insert(0, prompt)
         
         # Optionally send immediately or let user modify
         # For now, just populate the field
     
     def _send_message(self) -> None:
         """Send the current message."""
+        if not self.input_entry or not hasattr(self.input_entry, 'get'):
+            self.logger.error("Input entry not available")
+            return
+            
         message = self.input_entry.get().strip()
         
         if not message:
@@ -300,7 +309,8 @@ class AIActions(EventHandler):
         self.logger.info(f"Sending message: {message[:50]}...")
         
         # Clear input
-        self.input_entry.delete(0, "end")
+        if hasattr(self.input_entry, 'delete'):
+            self.input_entry.delete(0, "end")
         
         # Set processing state
         self.set_processing(True)
@@ -314,24 +324,31 @@ class AIActions(EventHandler):
         self.is_processing = processing
         
         if processing:
-            self.send_button.configure(
-                text="...",
-                state="disabled",
-                fg_color="#666666"
-            )
-            self.processing_indicator.configure(text="🤖 Processing...")
-            self.input_entry.configure(state="disabled")
+            if self.send_button and hasattr(self.send_button, 'configure'):
+                self.send_button.configure(
+                    text="...",
+                    state="disabled",
+                    fg_color="#666666"
+                )
+            if self.processing_indicator and hasattr(self.processing_indicator, 'configure'):
+                self.processing_indicator.configure(text="🤖 Processing...")
+            if self.input_entry and hasattr(self.input_entry, 'configure'):
+                self.input_entry.configure(state="disabled")
         else:
-            self.send_button.configure(
-                text="Send",
-                state="normal",
-                fg_color="#0078d4"
-            )
-            self.processing_indicator.configure(text="")
-            self.input_entry.configure(state="normal")
+            if self.send_button and hasattr(self.send_button, 'configure'):
+                self.send_button.configure(
+                    text="Send",
+                    state="normal",
+                    fg_color="#0078d4"
+                )
+            if self.processing_indicator and hasattr(self.processing_indicator, 'configure'):
+                self.processing_indicator.configure(text="")
+            if self.input_entry and hasattr(self.input_entry, 'configure'):
+                self.input_entry.configure(state="normal")
             
             # Focus back to input
-            self.input_entry.focus()
+            if self.input_entry and hasattr(self.input_entry, 'focus'):
+                self.input_entry.focus()
     
     def add_quick_prompt(self, prompt: str) -> None:
         """Add a custom quick prompt."""
@@ -350,8 +367,10 @@ class AIActions(EventHandler):
     def _recreate_quick_prompts(self) -> None:
         """Recreate quick prompt buttons after changes."""
         # Clear existing buttons
-        for widget in self.quick_prompts_frame.winfo_children():
-            widget.destroy()
+        if self.quick_prompts_frame and hasattr(self.quick_prompts_frame, 'winfo_children'):
+            for widget in self.quick_prompts_frame.winfo_children():
+                if hasattr(widget, 'destroy'):
+                    widget.destroy()
         
         # Recreate buttons
         current_row = None
@@ -374,22 +393,27 @@ class AIActions(EventHandler):
     
     def set_input_text(self, text: str) -> None:
         """Set text in the input field."""
-        self.input_entry.delete(0, "end")
-        self.input_entry.insert(0, text)
+        if self.input_entry and hasattr(self.input_entry, 'delete') and hasattr(self.input_entry, 'insert'):
+            self.input_entry.delete(0, "end")
+            self.input_entry.insert(0, text)
     
     def get_input_text(self) -> str:
         """Get current text in the input field."""
-        return self.input_entry.get()
+        if self.input_entry and hasattr(self.input_entry, 'get'):
+            return self.input_entry.get()
+        return ""
     
     def clear_input(self) -> None:
         """Clear the input field."""
-        self.input_entry.delete(0, "end")
+        if self.input_entry and hasattr(self.input_entry, 'delete'):
+            self.input_entry.delete(0, "end")
     
     def set_model(self, model: str) -> None:
         """Set the AI model programmatically."""
         if model in self.available_models:
             self.current_model = model
-            self.model_combo.set(model)
+            if self.model_combo and hasattr(self.model_combo, 'set'):
+                self.model_combo.set(model)
             self.logger.info(f"AI model set to: {model}")
     
     def get_model(self) -> str:
@@ -399,18 +423,20 @@ class AIActions(EventHandler):
     def set_tts_enabled(self, enabled: bool) -> None:
         """Set TTS enabled state programmatically."""
         self.tts_enabled = enabled
-        if enabled:
-            self.tts_toggle.select()
-        else:
-            self.tts_toggle.deselect()
+        if self.tts_toggle and hasattr(self.tts_toggle, 'select') and hasattr(self.tts_toggle, 'deselect'):
+            if enabled:
+                self.tts_toggle.select()
+            else:
+                self.tts_toggle.deselect()
     
     def is_tts_enabled(self) -> bool:
         """Check if TTS is enabled."""
-        return self.tts_enabled
+        return bool(self.tts_enabled)
     
     def focus_input(self) -> None:
         """Focus the input field."""
-        self.input_entry.focus()
+        if self.input_entry and hasattr(self.input_entry, 'focus'):
+            self.input_entry.focus()
     
     def cleanup(self) -> None:
         """Clean up resources."""

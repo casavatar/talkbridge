@@ -41,6 +41,7 @@ try:
     from ...tts.synthesizer import synthesize_voice
     TTS_AVAILABLE = True
 except ImportError:
+    synthesize_voice = None
     TTS_AVAILABLE = False
     logging.warning("TTS module not available")
 
@@ -48,6 +49,7 @@ try:
     from ...audio.capture import AudioCapture
     AUDIO_AVAILABLE = True
 except ImportError:
+    AudioCapture = None
     AUDIO_AVAILABLE = False
     logging.warning("Audio Capture module not available")
 
@@ -116,7 +118,7 @@ class TTSService(QObject):
     def __init__(self, state_manager=None, parent=None):
         super().__init__(parent)
         self.state_manager = state_manager
-        self.logger = logging.getLogger("talkbridge.desktop.tts")
+        self.logger = logging.getLogger("src.desktop.tts")
         self.thread_pool = QThreadPool()
         self.is_available = TTS_AVAILABLE
         
@@ -186,6 +188,9 @@ class TTSService(QObject):
                 voice_settings = self._get_default_voice_settings()
 
             # Call core module
+            if not TTS_AVAILABLE or synthesize_voice is None:
+                raise RuntimeError("TTS module not available or synthesize_voice function not found")
+            
             if output_path:
                 synthesize_voice(text, output_path, **voice_settings)
                 # Read generated file
@@ -244,11 +249,11 @@ class AudioService(QObject):
     def __init__(self, state_manager=None, parent=None):
         super().__init__(parent)
         self.state_manager = state_manager
-        self.logger = logging.getLogger("talkbridge.desktop.audio")
+        self.logger = logging.getLogger("src.desktop.audio")
         self.is_available = AUDIO_AVAILABLE
         
-        # Audio components
-        self.audio_capture: Optional[AudioCapture] = None
+        # Audio components  
+        self.audio_capture: Optional[Any] = None
         self.is_recording = False
         
         # Timer for audio polling
@@ -269,6 +274,10 @@ class AudioService(QObject):
             return False
         
         try:
+            # Check if AudioCapture is available
+            if not AUDIO_AVAILABLE or AudioCapture is None:
+                raise RuntimeError("AudioCapture module not available")
+            
             # Get audio config
             audio_config = self._get_audio_config()
 
@@ -297,6 +306,13 @@ class AudioService(QObject):
                 return False
         
         try:
+            if not self.audio_capture:
+                raise RuntimeError("Audio capture not initialized")
+            
+            # Check if start_recording method exists
+            if not hasattr(self.audio_capture, 'start_recording'):
+                raise AttributeError("AudioCapture object missing start_recording method")
+            
             self.audio_capture.start_recording()
             self.is_recording = True
             
@@ -329,7 +345,15 @@ class AudioService(QObject):
             # Stop timer
             self.audio_timer.stop()
             
-            # Stop capture
+            # Stop capture with null checking
+            if not self.audio_capture:
+                self.logger.warning("Audio capture not initialized during stop")
+                return b""
+            
+            if not hasattr(self.audio_capture, 'stop_recording'):
+                self.logger.error("AudioCapture object missing stop_recording method")
+                return b""
+            
             audio_data = self.audio_capture.stop_recording()
             self.is_recording = False
             
@@ -391,7 +415,7 @@ class CoreBridge(QObject):
         super().__init__(parent)
         
         self.state_manager = state_manager
-        self.logger = logging.getLogger("talkbridge.desktop.bridge")
+        self.logger = logging.getLogger("src.desktop.bridge")
         
         # Services
         self.tts_service: Optional[TTSService] = None

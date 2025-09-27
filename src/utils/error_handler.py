@@ -136,9 +136,11 @@ def retry_with_backoff(
                     delay = min(delay * backoff_factor, max_delay)
             
             # This should never be reached, but just in case
-            raise last_exception
+            if last_exception is not None:
+                raise last_exception
+            raise RuntimeError("Unexpected error: no exception to re-raise")
         
-        return wrapper
+        return wrapper  # type: ignore
     return decorator
 
 def notify_error(message: str) -> None:
@@ -151,14 +153,13 @@ def notify_error(message: str) -> None:
     # Try desktop notification first - look for active toast manager
     try:
         # Check if we're in desktop mode and can access the event bus
-        from ..desktop.ui.events import EventBus, StatusEvent
-        event_bus = EventBus.get_instance()
-        event = StatusEvent(
+        from ..desktop.ui.events import get_global_event_bus
+        event_bus = get_global_event_bus()
+        event_bus.emit_status(
             message=message,
             level="error",
             duration=8.0  # Longer duration for errors
         )
-        event_bus.emit("status", event)
         logger.debug(f"Sent error notification to desktop UI: {message}")
         return
     except (ImportError, AttributeError, Exception) as e:

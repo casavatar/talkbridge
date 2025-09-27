@@ -229,8 +229,8 @@ class ErrorHandler:
     def create_user_error(
         self, 
         error_category: str, 
-        details: str = None,
-        original_exception: Exception = None,
+        details: Optional[str] = None,
+        original_exception: Optional[Exception] = None,
         **kwargs
     ) -> UserFacingError:
         """
@@ -409,9 +409,9 @@ def get_error_handler() -> ErrorHandler:
 
 def handle_user_facing_error(
     error_category: str,
-    details: str = None,
-    original_exception: Exception = None,
-    context: str = None,
+    details: Optional[str] = None,
+    original_exception: Optional[Exception] = None,
+    context: Optional[str] = None,
     notify: bool = True
 ) -> UserFacingError:
     """

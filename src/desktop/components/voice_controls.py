@@ -19,8 +19,8 @@ import sys
 import tkinter as tk
 import customtkinter as ctk
 
-from talkbridge.desktop.ui.events import EventBus, EventHandler, AudioStateEvent
-from talkbridge.desktop.ui.theme import (
+from src.desktop.ui.events import EventBus, EventHandler, AudioStateEvent
+from src.desktop.ui.theme import (
     ColorPalette, Typography, Spacing, Dimensions, 
     ComponentThemes
 )
@@ -33,7 +33,7 @@ class AudioVisualizer:
         self.bars = []
         self.max_bars = 15
         self.animation_running = False
-        self.logger = logging.getLogger("talkbridge.web.audio_visualizer")
+        self.logger = logging.getLogger("src.desktop.audio_visualizer")
         
     def start_animation(self) -> None:
         """Start the audio visualization animation."""
@@ -373,19 +373,24 @@ class VoiceControls(EventHandler):
         
         if event.source == "mic":
             self.mic_recording = event.is_active
-            self.mic_button.set_recording_state(event.is_active)
-            self.mic_toggle.select() if event.is_active else self.mic_toggle.deselect()
+            if self.mic_button is not None:
+                self.mic_button.set_recording_state(event.is_active)
+            if self.mic_toggle is not None:
+                self.mic_toggle.select() if event.is_active else self.mic_toggle.deselect()
         elif event.source == "system":
             self.system_recording = event.is_active
-            self.system_button.set_recording_state(event.is_active)
-            self.system_toggle.select() if event.is_active else self.system_toggle.deselect()
+            if self.system_button is not None:
+                self.system_button.set_recording_state(event.is_active)
+            if self.system_toggle is not None:
+                self.system_toggle.select() if event.is_active else self.system_toggle.deselect()
         
         # Update visualizer
         any_recording = self.mic_recording or self.system_recording
-        if any_recording and not self.audio_visualizer.animation_running:
-            self.audio_visualizer.start_animation()
-        elif not any_recording and self.audio_visualizer.animation_running:
-            self.audio_visualizer.stop_animation()
+        if self.audio_visualizer is not None:
+            if any_recording and not self.audio_visualizer.animation_running:
+                self.audio_visualizer.start_animation()
+            elif not any_recording and self.audio_visualizer.animation_running:
+                self.audio_visualizer.stop_animation()
         
         # Update status
         self._update_status()
@@ -416,17 +421,19 @@ class VoiceControls(EventHandler):
     
     def _on_mic_toggle(self) -> None:
         """Handle microphone toggle switch."""
-        if self.mic_toggle.get():
-            self._on_mic_start_request()
-        else:
-            self._on_mic_stop_request()
+        if self.mic_toggle is not None:
+            if self.mic_toggle.get():
+                self._on_mic_start_request()
+            else:
+                self._on_mic_stop_request()
     
     def _on_system_toggle(self) -> None:
         """Handle system audio toggle switch."""
-        if self.system_toggle.get():
-            self._on_system_start_request()
-        else:
-            self._on_system_stop_request()
+        if self.system_toggle is not None:
+            if self.system_toggle.get():
+                self._on_system_start_request()
+            else:
+                self._on_system_stop_request()
     
     def _update_status(self) -> None:
         """Update status display."""
@@ -443,19 +450,24 @@ class VoiceControls(EventHandler):
             status = "Ready to record"
             color = "#cccccc"
         
-        self.status_label.configure(text=status, text_color=color)
+        if self.status_label is not None:
+            self.status_label.configure(text=status, text_color=color)
     
     def set_mic_enabled(self, enabled: bool) -> None:
         """Enable or disable microphone controls."""
-        self.mic_button.set_enabled(enabled)
-        state = "normal" if enabled else "disabled"
-        self.mic_toggle.configure(state=state)
+        if self.mic_button is not None:
+            self.mic_button.set_enabled(enabled)
+        if self.mic_toggle is not None:
+            state = "normal" if enabled else "disabled"
+            self.mic_toggle.configure(state=state)
     
     def set_system_enabled(self, enabled: bool) -> None:
         """Enable or disable system audio controls."""
-        self.system_button.set_enabled(enabled)
-        state = "normal" if enabled else "disabled"
-        self.system_toggle.configure(state=state)
+        if self.system_button is not None:
+            self.system_button.set_enabled(enabled)
+        if self.system_toggle is not None:
+            state = "normal" if enabled else "disabled"
+            self.system_toggle.configure(state=state)
     
     def cleanup(self) -> None:
         """Clean up resources."""

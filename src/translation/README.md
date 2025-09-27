@@ -15,6 +15,7 @@ This module provides **completely offline** translation capabilities using local
 ## Supported Languages
 
 ### Primary Engine (argos-translate)
+
 - English → Spanish
 - Spanish → English
 - French → Spanish
@@ -23,6 +24,7 @@ This module provides **completely offline** translation capabilities using local
 - Portuguese → Spanish
 
 ### Fallback Engine (HuggingFace MarianMT)
+
 - English → Spanish
 - Spanish → English
 - French → Spanish
@@ -97,13 +99,16 @@ for source_lang, text in texts:
 Convenience function for translating text to Spanish.
 
 **Parameters:**
+
 - `text`: Text to translate
 - `source_lang`: Source language code (default: "en")
 
 **Returns:**
+
 - Translated text in Spanish
 
 **Raises:**
+
 - `TranslationError`: If translation fails
 
 ### Class
@@ -113,6 +118,7 @@ Convenience function for translating text to Spanish.
 Main translation class with advanced features.
 
 **Constructor:**
+
 ```python
 OfflineTranslator(
     preferred_engine: str = "argos",
@@ -132,6 +138,7 @@ OfflineTranslator(
 ### Model Cache Location
 
 Models are cached in:
+
 - **macOS/Linux**: `~/.cache/talkbridge/translation_models/`
 - **Windows**: `%USERPROFILE%\.cache\talkbridge\translation_models\`
 
@@ -260,6 +267,7 @@ python src/translation_demo.py
 ```
 
 This will:
+
 - Show system information
 - Test basic translation
 - Measure performance
@@ -271,11 +279,13 @@ This will:
 ### Common Issues
 
 1. **ImportError: No module named 'argostranslate'**
+
    ```bash
    pip install argos-translate
    ```
 
 2. **ImportError: No module named 'transformers'**
+
    ```bash
    pip install transformers torch sentencepiece
    ```
@@ -323,8 +333,9 @@ This module is part of the talkbridge project.
 ## Changelog
 
 ### Version 1.0.0
+
 - Initial release
 - Support for argos-translate and HuggingFace engines
 - Offline translation capabilities
 - Comprehensive error handling
-- Performance optimization 
+- Performance optimization

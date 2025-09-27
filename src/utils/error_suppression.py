@@ -78,14 +78,20 @@ def suppress_ml_warnings():
     # Configure MediaPipe logging after importing
     try:
         import mediapipe as mp
-        if hasattr(mp.logging, 'absl'):
-            mp.logging.absl.logging.set_verbosity(mp.logging.absl.logging.ERROR)
+        # Use getattr to safely access logging attribute
+        mp_logging = getattr(mp, 'logging', None)
+        if mp_logging is not None:
+            absl_logging = getattr(mp_logging, 'absl', None)
+            if absl_logging is not None:
+                logging_module = getattr(absl_logging, 'logging', None)
+                if logging_module is not None and hasattr(logging_module, 'set_verbosity'):
+                    logging_module.set_verbosity(getattr(logging_module, 'ERROR', 3))
     except (ImportError, AttributeError):
         pass
     
     # Configure TensorFlow logging after importing
     try:
-        import tensorflow as tf
+        import tensorflow as tf  # type: ignore
         tf.get_logger().setLevel('ERROR')
         tf.autograph.set_verbosity(0)
         
@@ -302,10 +308,10 @@ def create_safe_qthread(worker_class, *args, **kwargs):
         tuple: (thread, worker, cleanup_func)
     """
     try:
-        from PySide6.QtCore import QThread
+        from PySide6.QtCore import QThread  # type: ignore
     except ImportError:
         try:
-            from PyQt6.QtCore import QThread
+            from PyQt6.QtCore import QThread  # type: ignore
         except ImportError:
             raise ImportError("Neither PySide6 nor PyQt6 are available")
     

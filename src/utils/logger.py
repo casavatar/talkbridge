@@ -64,7 +64,23 @@ class ConversationEntry:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ConversationEntry':
         """Create entry from dictionary format."""
-        return cls(**data)
+        # Create a copy to avoid modifying original data
+        converted_data = data.copy()
+        
+        # Convert string numeric fields to proper types
+        if 'confidence_score' in converted_data and converted_data['confidence_score'] is not None:
+            try:
+                converted_data['confidence_score'] = float(converted_data['confidence_score']) if converted_data['confidence_score'] != '' else None
+            except (ValueError, TypeError):
+                converted_data['confidence_score'] = None
+                
+        if 'processing_time_ms' in converted_data and converted_data['processing_time_ms'] is not None:
+            try:
+                converted_data['processing_time_ms'] = float(converted_data['processing_time_ms']) if converted_data['processing_time_ms'] != '' else None
+            except (ValueError, TypeError):
+                converted_data['processing_time_ms'] = None
+        
+        return cls(**converted_data)
 
 class ConversationLogger:
     """Thread-safe conversation logger for real-time conversation tracking."""
@@ -110,6 +126,7 @@ class ConversationLogger:
                    language_from: str = "en",
                    language_to: str = "es",
                    confidence_score: Optional[float] = None,
+                   processing_time_ms: Optional[float] = None,
                    entry_type: str = "user_input") -> ConversationEntry:
         """Log a conversation message with all relevant information."""
         # Validate required fields
@@ -126,6 +143,11 @@ class ConversationLogger:
         # Create timestamp
         timestamp = datetime.now().isoformat()
         
+        # Calculate processing time
+        processing_time_calculated = (time.time() - start_time) * 1000
+        # Use provided processing_time_ms or the calculated one
+        final_processing_time = processing_time_ms if processing_time_ms is not None else processing_time_calculated
+        
         # Create conversation entry
         entry = ConversationEntry(
             timestamp=timestamp,
@@ -138,16 +160,13 @@ class ConversationLogger:
             language_from=language_from,
             language_to=language_to,
             confidence_score=confidence_score,
+            processing_time_ms=final_processing_time,
             entry_type=entry_type
         )
         
         # Thread-safe addition to entries list
         with self._lock:
             self._entries.append(entry)
-            
-            # Calculate processing time
-            processing_time = (time.time() - start_time) * 1000
-            entry.processing_time_ms = processing_time
             
             # Check if buffer is full and auto-save if needed
             if len(self._entries) >= self._buffer_size:
@@ -470,7 +489,13 @@ if __name__ == "__main__":
     
     # Log entries
     for entry_data in entries:
-        conv_logger.log_message(**entry_data)
+        conv_logger.log_message(
+            original_text=entry_data["original_text"],
+            translated_text=entry_data["translated_text"],
+            model_response=entry_data["model_response"],
+            speaker_id=entry_data.get("speaker_id"),
+            session_id=entry_data.get("session_id")
+        )
     
     # Get conversation log
     log_entries = conv_logger.get_conversation_log()

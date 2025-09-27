@@ -40,14 +40,16 @@ try:
     TTS_AVAILABLE = True
 except ImportError:
     # Make TTS optional
-    TTS = None
-    XttsConfig = None
-    Xtts = None
+    TTS = None  # type: ignore
+    XttsConfig = None  # type: ignore
+    Xtts = None  # type: ignore
     TTS_AVAILABLE = False
-    logger = get_logger(__name__) if 'get_logger' in globals() else None
-    if logger and not hasattr(logger, '_tts_warning_logged'):
+    # Use module-level variable instead of logger attribute
+    _tts_warning_logged = False
+    if not _tts_warning_logged:
+        logger = get_logger(__name__)
         logger.warning("TTS library not available. Voice cloning features will be disabled.")
-        logger._tts_warning_logged = True
+        _tts_warning_logged = True
 
 from .config import get_config, get_model_config
 
@@ -66,7 +68,7 @@ class VoiceCloner:
     - Synthesize speech with cloned voices
     """
     
-    def __init__(self, model_name: str = None):
+    def __init__(self, model_name: Optional[str] = None):
         """
         Initialize the voice cloner with a pre-trained model.
         
@@ -100,12 +102,17 @@ class VoiceCloner:
     )
     def _load_model(self):
         """Load the TTS model and move it to the appropriate device with retry logic."""
+        if not TTS_AVAILABLE or TTS is None:
+            raise ImportError("TTS library not available for model loading")
+            
         try:
             logger.info(f"Loading TTS model: {self.model_name}")
             self.tts = TTS(model_name=self.model_name)
             
             # Move model to device
-            if hasattr(self.tts, 'synthesizer') and hasattr(self.tts.synthesizer, 'to'):
+            if (hasattr(self.tts, 'synthesizer') and 
+                self.tts.synthesizer is not None and 
+                hasattr(self.tts.synthesizer, 'to')):
                 self.tts.synthesizer.to(self.device)
             
             logger.info(f"Model loaded successfully on {self.device}")
@@ -122,7 +129,7 @@ class VoiceCloner:
             raise RuntimeError(f"Could not load TTS model: {e}") from e
     
     def clone_voice_from_samples(self, audio_samples: List[Union[str, Path]], 
-                                sample_rate: int = None) -> bool:
+                                sample_rate: Optional[int] = None) -> bool:
         """
         Clone a voice from reference audio samples.
         
@@ -193,6 +200,10 @@ class VoiceCloner:
         if not hasattr(self, 'reference_samples') or not self.reference_samples:
             raise RuntimeError("No voice cloned. Call clone_voice_from_samples() first")
         
+        # Check if TTS model is loaded
+        if self.tts is None:
+            raise RuntimeError("TTS model is not loaded. Cannot synthesize speech.")
+            
         try:
             # Use the first reference sample for voice cloning
             reference_sample = self.reference_samples[0]
@@ -234,8 +245,19 @@ class VoiceCloner:
     
     def get_available_models(self) -> List[str]:
         """Get list of available TTS models."""
+        if not TTS_AVAILABLE or TTS is None:
+            logger.error("TTS library not available for listing models")
+            return []
+            
         try:
-            return TTS().list_models()
+            model_manager = TTS().list_models()
+            # Convert ModelManager to list if it's not already
+            if hasattr(model_manager, 'list_tts_models'):
+                return list(model_manager.list_tts_models())
+            elif isinstance(model_manager, list):
+                return model_manager
+            else:
+                return list(str(model_manager).split('\n'))
         except Exception as e:
             logger.error(f"Failed to get available models: {e}")
             return []
